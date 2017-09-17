@@ -4,9 +4,11 @@
 {% block barra %}
 	<ul class="sidebar sidebar-1">
 		<font size="2">
-			<li><a href="#" class="current"><font color="tomato">Propietario</font></a></li>
+			<li><a href="#" class="current"><font color="white">Propietario</font></a></li>
 			<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour">Consultar estado de mis tramites</a></li>
+			<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne">Pago de permiso de construccion</a></li>
 			<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne">Modificar mis datos personales</a></li>
+			<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne">Modificar fuentes y colores</a></li>
 		</font>
 	</ul>
 {% endblock %}
@@ -36,7 +38,29 @@
 				</div>
 			</div>
 		</div>
-
+		<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+		<div class="panel panel-custom">
+			<div class="panel-heading panel-heading-custom box" role="tab" id="headingFour">
+				<h5 class="panel-title">
+					<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+						<font color="#ffffff" size="2">Pago de permiso de construccion</font>
+					</a>
+				</h5>
+			</div>
+	<div id="collapseFour" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFour">
+				<div class="panel-body">
+					<div class="container-fluid">
+						<div class="row">
+							<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+								{% block contenido_pago_permiso %}
+									{% include "persona/propietario/pago_permiso.html" with pagos_de_propietario=ctxtramitespropietario %}
+								{% endblock %}
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
 		<div class="panel panel-custom">
 			<div class="panel-heading panel-heading-custom box" role="tab" id="headingOne">
 			  <h5 class="panel-title">

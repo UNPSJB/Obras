@@ -137,7 +137,8 @@ class FormularioUsuarioPersona(FormularioPersona):
         ('2', 'administrativo'),
         ('3', 'visador'),
         ('4', 'inspector'),
-        ('7', 'jefeinspector')}
+        ('7', 'jefeinspector'),
+        ('8', 'cajero')}
 
     grupo = forms.TypedMultipleChoiceField(grupos)
 
@@ -155,12 +156,21 @@ class FormularioUsuarioPersona(FormularioPersona):
         datos = self.cleaned_data
         persona.usuario = Usuario.objects.create_user(username=datos['usuario'], email=datos['mail'], password=datos['password'],)
 
+    #    grupos = {
+     #       ('1', 'director'),
+      #      ('2', 'administrativo'),
+       #     ('3', 'visador'),
+        #    ('4', 'inspector'),
+         #   ('7', 'jefeinspector')}
+
+#Agrego el grupo de cajero
         grupos = {
             ('1', 'director'),
             ('2', 'administrativo'),
             ('3', 'visador'),
             ('4', 'inspector'),
-            ('7', 'jefeinspector')}
+            ('7', 'jefeinspector'),
+            ('8', 'cajero')}
 
         grupo_post = datos['grupo']
 

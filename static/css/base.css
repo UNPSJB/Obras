@@ -3,30 +3,29 @@
 /* opciones generales */
 
 .color1 {
-	background: #34495e;
+	background: #336699;
 	color:#fff;
 }
 
 .color2 {
-	background: #0098db;
+	background: #336699;
 	color:#ffffff;
 }
 
 .color3 {
-	background:#5cbde7;
+	background:#336699;
 	color:#fff;
 }
 
 footer {
-	background:#268e37;
+	background:#336699;
 	color:#fff;
 }
 
 section {
-	background:#5cbde7;
+	background:#336699;
 	color:#fff;
 }
-
 /* degradado de color de fondo */
 
 
@@ -41,20 +40,20 @@ body {
 	font-family: 'Lato';*/
 
 	background:  /*#f8f9f9s;*/
-		radial-gradient(circle at 1.98% 14.97%, #556270, transparent 100%),
-		radial-gradient(circle at 98.02% 52.96%, #FF6B6B, transparent 100%),
-		radial-gradient(circle at 50% 50%, #4a2735, #4a2735 100%);
+		radial-gradient(circle at 1.98% 14.97%,#6699CC, transparent 100%),
+		radial-gradient(circle at 98.02% 52.96%,  	#66CCFF, transparent 100%),
+		radial-gradient(circle at 50% 50%, #66CCFF,#66CCFF 100%);
 }
-
 
 /* color del nav igual al del header*/
 
 .navbar{
-        border-color: #2c3e50 !important;
+      /*  border-color: #2c3e50 !important;*/
+      border-color: #428bca !important; /*borde de abajo de obras particulares*/
 }
 
 header{
-	background:#2c3e50;
+	background:#2c3e50;   /*banda azul donde esta el logo del municipio*/
 	/*background:#04142b;*/
 	color: #ffffff;
 	transition: 0.5s;
@@ -66,14 +65,14 @@ img.logo {
 
 }
 
-/* eso es para modifical el header cuando top */
+/* eso es para modificar el header cuando top */
 
 header.sticky {
 	position: fixed;
 	left: 0; right: 0;
 	height: 60px;
 	padding: 0px 0 10px 0;
-	box-shadow: 0 5px 15px black;
+	box-shadow: 0 5px 15px black; /*palabras*/
 	text-shadow: 0 0 20px black;
 }
 
@@ -82,21 +81,21 @@ header.sticky {
 
 }
 
-/* configuracion panel gris*/
+/* configuracion panel gris o con #336699*/
 
 .panel-group > .panel {
-    border-color: #444444;
+    border-color: #2c3e50;
     border-radius: 0px;
-    background:#444444;
+    background:#2c3e50;
 }
-
+/*color del panel central  #336699*/
 .panel-custom {
-    border-color: #444444;
+    border-color: #2c3e50;
     border-radius: 0px;
-    background:#444444;
+    background:#2c3e50;/*color de panel central*/
 }
 .panel-custom > .panel-heading-custom {
-    background: #444444;
+    background: #2c3e50;
     border-radius: 0px;
 }
 
@@ -112,13 +111,13 @@ header.sticky {
 }
 
 .box:hover {
-  background-color: #3a3a3a;
+  background-color:#336699;  /*transiciones en propietario y otros en consultas panel central*/
   cursor: pointer;
 }
 
 
 label {
-	color: tomato;
+	color: white;   /*usuario*/
 }
 
 a:link {
@@ -136,7 +135,7 @@ a:link {
 .sidebar {
 	width: 200px;
 	margin-right: 35px;
-	background-color: #444;
+	background-color: #2c3e50;/*panel de consulta pago modificacion en por ej el propietario*/
 	list-style-type: none;
 	padding-left: 0;
 }
@@ -146,7 +145,7 @@ a:link {
 	box-sizing: border-box; }
 
 .sidebar li a:hover {
-	color: tomato; }
+	color: white; }   /*transiciones entre consultar estados de mis tramites hasta modificar datos*/
 
 /* sidebar 1 */
 
@@ -159,14 +158,16 @@ a:link {
 
 .sidebar-1 li a:hover,
 .sidebar-1 li a.current {
-	background-color: #3a3a3a;
-	border-left: 5px solid tomato;
+	/*background-color: #3a3a3a;*/
+	background-color: #336699;     /*donde dice registrarse*/
+	border-left: 5px solid blue;
 }
 
 .sidebar-1 li a:focus{
-	color: tomato;
-	background-color: #3a3a3a;
-	border-left: 5px solid tomato;
+	color: white;
+	/*background-color: #3a3a3a;*/
+	background-color:#2c3e50; /*transicion de color celeste a azul oscuro*/
+	border-left: 5px solid blue;
 }
 
 /*Subemu lateral*/
