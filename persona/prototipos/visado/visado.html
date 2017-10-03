@@ -1,0 +1,477 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Visado</title>
+    <!-- Insertamos el archivo CSS compilado y comprimido -->
+    <link rel="stylesheet" href="bootstrap-3.3.7-dist/css/bootstrap.min.css"> 
+    <!-- Theme opcional -->
+    <link rel="stylesheet" href="bootstrap-3.3.7-dist/css/bootstrap-theme.min.css">
+	<link rel="stylesheet" href="estilo3.css">
+</head>
+<body>
+	<div class="container">
+    <div class="container">
+		<div>
+			<header>
+			<div> <p>Formulario de visado</p> </div>
+			</header>
+				<div role="tabs">
+					<ul class="nav nav-tabs">
+						<li class="active"><a href="#Planta" aria-controls="Planta" role="tab" data-toggle="tab">Planta</a><li>
+						<li><a href="#Corte" aria-controls="Corte" role="tab" data-toggle="tab">Corte</a></li>
+						<li><a href="#Fachadas" aria-controls="Corte" role="tab" data-toggle="tab">Fachadas</a></li>
+						<li><a href="#Estructuras" aria-controls="Estructuras" role="tab" data-toggle="tab">Estructura</a></li>
+						<li><a href="#Planta_de_Techo" aria-controls="Planta_de_Techo" role="tab" data-toggle="tab">Planta de Techo</a></li>
+					</ul>
+				<div class="tab-content">
+					<div role="tabs" class="tab-pane active" id="Planta">
+						<div>
+							<ul class="list-group">
+								<li class="list-group-item">
+									Linea Municipal y Ejes medianeros (identificacion y leyenda)
+									<div class="material-switch pull-right">
+										<input id="lineamunicipal" name="someSwitchOption001" type="checkbox" />
+										<label for="lineamunicipal" class="label-lineamunicipal"></label>
+									</div>
+								</li>
+								<li class="list-group-item">
+									Denominacion y Numeracion de Locales (nombre y número)
+									<div class="material-switch pull-right">
+										<input id="denominacion" name="someSwitchOption001" type="checkbox" />
+										<label for="denominacion" class="label-denominacion"></label>
+									</div>
+								</li>
+								<li class="list-group-item">
+									Identificacion de Cortes (con Letras y Numeros)
+									<div class="material-switch pull-right">
+										<input id="identificacion" name="someSwitchOption001" type="checkbox" />
+										<label for="identificacion" class="label-identificacion"></label>
+									</div>
+								</li>
+								<li class="list-group-item">
+									Diferenciacion de Superficie Existente, a Demoler, a Construir
+									<div class="material-switch pull-right">
+										<input id="diferenciacion" name="someSwitchOption001" type="checkbox" />
+										<label for="diferenciacion" class="label-diferenciacion"></label>
+									</div>
+								</li>
+								<li class="list-group-item">
+									Espesores de muros
+									<div class="material-switch pull-right">
+										<input id="muros" name="someSwitchOption001" type="checkbox" />
+										<label for="muros" class="label-muros"></label>
+									</div>
+								</li>
+								<li class="list-group-item">
+									Acotacion de Locales y Espacios Exteriores
+									<div class="material-switch pull-right">
+										<input id="acotacion" name="someSwitchOption001" type="checkbox" />
+										<label for="acotacion" class="label-acotacion"></label>
+									</div>
+								</li>
+								<li class="list-group-item">
+									Cotas de Nivel Interior y Exterior
+									<div class="material-switch pull-right">
+										<input id="cotas" name="someSwitchOption001" type="checkbox" />
+										<label for="cotas" class="label-cotas"></label>
+									</div>
+								</li>
+								<li class="list-group-item">
+									Altura de Cercos Divisorios de Predios Existentes y/o Proyectados
+									<div class="material-switch pull-right">
+										<input id="cercos" name="someSwitchOption001" type="checkbox" />
+										<label for="cercos" class="label-cercos"></label>
+									</div>
+								</li>
+								<li class="list-group-item">
+									Altura de Barandas y Antepechos
+									<div class="material-switch pull-right">
+										<input id="barandas" name="someSwitchOption001" type="checkbox" />
+										<label for="barandas" class="label-barandas"></label>
+									</div>
+								</li>
+								<li class="list-group-item">
+									Proyeccion Tanque de Agua
+									<div class="material-switch pull-right">
+										<input id="tanque" name="someSwitchOption001" type="checkbox" />
+										<label for="tanque" class="label-tanque"></label>
+									</div>
+								</li>
+								<li class="list-group-item">
+									Saliente de Fachadas, Cotas (Marquesinas, Balcones, Voladizos)
+									<div class="material-switch pull-right">
+										<input id="saliente" name="someSwitchOption001" type="checkbox" />
+										<label for="saliente" class="label-saliente"></label>
+									</div>
+								</li>
+								<li class="list-group-item">
+									Equipamientos Sanitarios (Cocinas, Baños y Lavaderos)
+									<div class="material-switch pull-right">
+										<input id="equipamientos" name="someSwitchOption001" type="checkbox" />
+										<label for="equipamientos" class="label-equipamientos"></label>
+									</div>	
+								</li>
+								<li class="list-group-item">
+									Escaleras Reglamentarias (Alzada y Pedada)
+									<div class="material-switch pull-right">
+										<input id="escaleras" name="someSwitchOption001" type="checkbox" />
+										<label for="escaleras" class="label-escaleras"></label>
+									</div>
+								</li>
+								<li class="list-group-item">
+									Ancho y Pendiente de Vereda
+									<div class="material-switch pull-right">
+										<input id="vereda" name="someSwitchOption001" type="checkbox" />
+										<label for="vereda" class="label-vereda"></label>
+									</div>
+								</li>
+								<li class="list-group-item">
+									Canteros en Vereda (Ubicacion, Dimensiones y Acotacion)
+									<div class="material-switch pull-right">
+										<input id="canteros" name="someSwitchOption001" type="checkbox" />
+										<label for="canteros" class="label-canteros"></label>
+									</div>
+								</li>
+								<li class="list-group-item">
+									Planilla de Resumen de Superficie 
+									<div class="material-switch pull-right">
+										<input id="superficie" name="someSwitchOption001" type="checkbox" />
+										<label for="superficie" class="label-superficie"></label>
+									</div>
+								</li>
+								<li class="list-group-item">
+									Memoria Descriptiva de la Obra Relevada 
+									<div class="material-switch pull-right">
+										<input id="relevada" name="someSwitchOption001" type="checkbox" />
+										<label for="relevada" class="label-relevada"></label>
+									</div>
+								</li>	  
+							</ul>
+						</div>
+					</div>
+					<div role="tabs" class="tab-pane" id="Corte">
+					<div>
+							<ul class="list-group">
+								<li class="list-group-item">
+									Linea Municipal y Ejes medianeros (identificacion y leyenda)
+									<div class="material-switch pull-right">
+										<input id="lineamunicipal1" name="someSwitchOption001" type="checkbox" />
+										<label for="lineamunicipal1" class="label-lineamunicipal"></label>
+									</div>
+								</li>								
+								<li class="list-group-item">
+									Diferenciacion de Superficie Existente, a Demoler, a Construir
+									<div class="material-switch pull-right">
+										<input id="diferenciacion1" name="someSwitchOption001" type="checkbox" />
+										<label for="diferenciacion1" class="label-diferenciacion"></label>
+									</div>
+								</li>
+								<li class="list-group-item">
+									Acotacion Alt. Fachada, Arranque de Techos, Bases de Tanque, Cumbrera
+									<div class="material-switch pull-right">
+										<input id="acotacion1" name="someSwitchOption001" type="checkbox" />
+										<label for="acotacion1" class="label-acotacion"></label>
+									</div>
+								</li>
+								<li class="list-group-item">
+									Cotas de Nivel Interior y Exterior
+									<div class="material-switch pull-right">
+										<input id="cotas1" name="someSwitchOption001" type="checkbox" />
+										<label for="cotas1" class="label-cotas"></label>
+									</div>
+								</li>
+								<li class="list-group-item">
+									Bases con Cotas de Fundacion, Referencias
+									<div class="material-switch pull-right">
+										<input id="bases1" name="someSwitchOption001" type="checkbox" />
+										<label for="bases1" class="label-cotas"></label>
+									</div>
+								</li>
+								<li class="list-group-item">
+									Desagües Reglamentarios
+									<div class="material-switch pull-right">
+										<input id="desagues1" name="someSwitchOption001" type="checkbox" />
+										<label for="desagues1" class="label-desagues"></label>
+									</div>
+								</li>
+								<li class="list-group-item">
+									Altura de Cercos Divisorios de Predios Existentes y/o Proyectados
+									<div class="material-switch pull-right">
+										<input id="cercos1" name="someSwitchOption001" type="checkbox" />
+										<label for="cercos1" class="label-cercos"></label>
+									</div>
+								</li>
+								<li class="list-group-item">
+									Altura de Barandas y Antepechos
+									<div class="material-switch pull-right">
+										<input id="barandas1" name="someSwitchOption001" type="checkbox" />
+										<label for="barandas1" class="label-barandas"></label>
+									</div>
+								</li>
+								<li class="list-group-item">
+									Tanque de Reserva, Indicativo (Ubicacion y Cota de Apoyo)
+									<div class="material-switch pull-right">
+										<input id="tanque1" name="someSwitchOption001" type="checkbox" />
+										<label for="tanque1" class="label-tanque"></label>
+									</div>
+								</li>
+								<li class="list-group-item">
+									Chimeneas, Conductos (Ubicacion, Cotas, Dimensiones)
+
+									<div class="material-switch pull-right">
+										<input id="chimeneas1" name="someSwitchOption001" type="checkbox" />
+										<label for="chimeneas1" class="label-chimeneas"></label>
+									</div>
+								</li>
+								<li class="list-group-item">
+									Saliente de Fachadas, Cotas (Marquesinas, Balcones, Voladizos)
+									<div class="material-switch pull-right">
+										<input id="saliente1" name="someSwitchOption001" type="checkbox" />
+										<label for="saliente1" class="label-saliente"></label>
+									</div>
+								</li>
+								<li class="list-group-item">
+									Equipamientos Sanitarios (Cocinas, Baños y Lavaderos)
+									<div class="material-switch pull-right">
+										<input id="equipamientos1" name="someSwitchOption001" type="checkbox" />
+										<label for="equipamientos1" class="label-equipamientos"></label>
+									</div>	
+								</li>
+								<li class="list-group-item">
+									Especificacion de Materiales/Terminaciones
+									<div class="material-switch pull-right">
+										<input id="especificacion1" name="someSwitchOption001" type="checkbox" />
+										<label for="especificacion1" class="label-especificacion"></label>
+									</div>
+								</li>
+								<li class="list-group-item">
+									Escaleras Reglamentarias (Alzada y Pedada)
+									<div class="material-switch pull-right">
+										<input id="escaleras1" name="someSwitchOption001" type="checkbox" />
+										<label for="escaleras1" class="label-escaleras"></label>
+									</div>
+								</li>
+								<li class="list-group-item">
+									Ancho y Pendiente de Vereda
+									<div class="material-switch pull-right">
+										<input id="vereda1" name="someSwitchOption001" type="checkbox" />
+										<label for="vereda1" class="label-vereda"></label>
+									</div>
+								</li>
+								  
+							</ul>
+						</div>
+					
+					</div>
+					<div role="tabs" class="tab-pane" id="Fachadas">
+						<ul class="list-group">
+								<li class="list-group-item">
+									Linea Municipal y Ejes medianeros (identificacion y leyenda)
+									<div class="material-switch pull-right">
+										<input id="lineamunicipal2" name="someSwitchOption001" type="checkbox" />
+										<label for="lineamunicipal2" class="label-lineamunicipal"></label>
+									</div>
+								</li>								
+								<li class="list-group-item">
+									Acotacion Alt. Fachada, Arranque de Techos, Bases de Tanque, Cumbrera
+									<div class="material-switch pull-right">
+										<input id="acotacion2" name="someSwitchOption001" type="checkbox" />
+										<label for="acotacion2" class="label-acotacion"></label>
+									</div>
+								</li>
+								<li class="list-group-item">
+									Cotas de Nivel Interior y Exterior
+									<div class="material-switch pull-right">
+										<input id="cotas2" name="someSwitchOption001" type="checkbox" />
+										<label for="cotas2" class="label-cotas"></label>
+									</div>
+								</li>
+								<li class="list-group-item">
+									Desagües Reglamentarios
+									<div class="material-switch pull-right">
+										<input id="desagues2" name="someSwitchOption001" type="checkbox" />
+										<label for="desagues2" class="label-desagues"></label>
+									</div>
+								</li>
+								<li class="list-group-item">
+									Altura de Barandas y Antepechos
+									<div class="material-switch pull-right">
+										<input id="barandas2" name="someSwitchOption001" type="checkbox" />
+										<label for="barandas2" class="label-barandas"></label>
+									</div>
+								</li>
+								<li class="list-group-item">
+									Tanque de Reserva, Indicativo (Ubicacion y Cota de Apoyo)
+									<div class="material-switch pull-right">
+										<input id="tanque2" name="someSwitchOption001" type="checkbox" />
+										<label for="tanque2" class="label-tanque"></label>
+									</div>
+								</li>
+								<li class="list-group-item">
+									Chimeneas, Conductos (Ubicacion, Cotas, Dimensiones)
+
+									<div class="material-switch pull-right">
+										<input id="chimeneas2" name="someSwitchOption001" type="checkbox" />
+										<label for="chimeneas2" class="label-chimeneas"></label>
+									</div>
+								</li>													  
+							</ul>					
+					</div>
+					<div role="tabs" class="tab-pane" id="Estructuras">
+						<ul class="list-group">
+								<li class="list-group-item">
+									Linea Municipal y Ejes medianeros (identificacion y leyenda)
+									<div class="material-switch pull-right">
+										<input id="lineamunicipal3" name="someSwitchOption001" type="checkbox" />
+										<label for="lineamunicipal3" class="label-lineamunicipal"></label>
+									</div>
+								</li>								
+								<li class="list-group-item">
+									Identificacion de Cortes (con Letras y Numeros)
+									<div class="material-switch pull-right">
+										<input id="identificacion2" name="someSwitchOption001" type="checkbox" />
+										<label for="identificacion2" class="label-identificacion"></label>
+									</div>
+								</li>
+								<li class="list-group-item">
+									Escaleras Reglamentarias (Alzada y Pedada)
+									<div class="material-switch pull-right">
+										<input id="escaleras2" name="someSwitchOption001" type="checkbox" />
+										<label for="escaleras2" class="label-escaleras"></label>
+									</div>
+								</li>
+								<li class="list-group-item">
+									Planos de Fundaciones, Columnas, Entrepisos, Losas, etc.
+									<div class="material-switch pull-right">
+										<input id="planos2" name="someSwitchOption001" type="checkbox" />
+										<label for="planos2" class="label-planos"></label>
+									</div>
+								</li>
+								<li class="list-group-item">
+									Planilla de Calculo de Elementos Estructurales
+									<div class="material-switch pull-right">
+										<input id="elementos2" name="someSwitchOption001" type="checkbox" />
+										<label for="elementos2" class="label-elementos"></label>
+									</div>
+								</li>																			  
+						</ul>
+					</div>
+					<div role="tabs" class="tab-pane" id="Planta_de_Techo">
+						<ul class="list-group">
+								<li class="list-group-item">
+									Linea Municipal y Ejes medianeros (identificacion y leyenda)
+									<div class="material-switch pull-right">
+										<input id="lineamunicipal4" name="someSwitchOption001" type="checkbox" />
+										<label for="lineamunicipal4" class="label-lineamunicipal"></label>
+									</div>
+								</li>								
+								<li class="list-group-item">
+									Diferenciacion de Superficie Existente, a Demoler, a Construir
+									<div class="material-switch pull-right">
+										<input id="diferenciacion4" name="someSwitchOption001" type="checkbox" />
+										<label for="diferenciacion4" class="label-diferenciacion"></label>
+									</div>
+								</li>
+								<li class="list-group-item">
+									Tipo de Cubierta /o Azotea; Accesible, Inaccesible
+									<div class="material-switch pull-right">
+										<input id="cubierta4" name="someSwitchOption001" type="checkbox" />
+										<label for="cubierta4" class="label-cubierta"></label>
+									</div>
+								</li>
+								<li class="list-group-item">
+									Desagües Reglamentarios
+									<div class="material-switch pull-right">
+										<input id="desagues3" name="someSwitchOption001" type="checkbox" />
+										<label for="desagues3" class="label-desagues"></label>
+									</div>
+								</li>
+								<li class="list-group-item">
+									Tanque de Reserva, Indicativo (Ubicacion y Cota de Apoyo)
+									<div class="material-switch pull-right">
+										<input id="tanque4" name="someSwitchOption001" type="checkbox" />
+										<label for="tanque4" class="label-danger"></label>
+									</div>
+								</li>
+								<li class="list-group-item">
+									Chimeneas, Conductos (Ubicacion, Cotas, Dimensiones)
+									<div class="material-switch pull-right">
+										<input id="chimeneas4" name="someSwitchOption001" type="checkbox" />
+										<label for="chimeneas4" class="label-chimeneas"></label>
+									</div>
+								</li>
+								<li class="list-group-item">
+									Pendiente de Techos
+									<div class="material-switch pull-right">
+										<input id="techos4" name="someSwitchOption001" type="checkbox" />
+										<label for="techos4" class="label-techos"></label>
+									</div>
+								</li>
+								<li class="list-group-item">
+									Saliente de Fachadas, Cotas (Marquesinas, Balcones, Voladizos)
+									<div class="material-switch pull-right">
+										<input id="saliente4" name="someSwitchOption001" type="checkbox" />
+										<label for="saliente4" class="label-saliente"></label>
+									</div>
+								</li>
+						</ul>
+					</div>
+
+                </div>
+
+        </div>
+     </div>
+	 
+<div>
+<header>
+<h4> Balance de Superficie<h4>
+</header>
+<ul class="list-group">
+								<li class="list-group-item">
+									FOS y FOT aplicado
+									<div class="material-switch pull-right">
+										<input id="fos" name="someSwitchOption001" type="checkbox" />
+										<label for="fos" class="label-lineamunicipal"></label>
+									</div>
+								</li>
+								<li class="list-group-item">
+									Computo Geometrico por Planta o Nivel
+									<div class="material-switch pull-right">
+										<input id="computo" name="someSwitchOption001" type="checkbox" />
+										<label for="computo" class="label-computo"></label>
+									</div>
+								</li>
+								<li class="list-group-item">
+									Superficie Construida Segun Tipo (Cubierta o Semicubierta) y Uso
+									<div class="material-switch pull-right">
+										<input id="superficie4" name="someSwitchOption001" type="checkbox" />
+										<label for="superficie4" class="label-superficie"></label>
+									</div>
+								</li>
+								<li class="list-group-item">
+									Memoria Descriptiva de la Obra Relevada
+									<div class="material-switch pull-right">
+										<input id="relevada4" name="someSwitchOption001" type="checkbox" />
+										<label for="relevada4" class="label-relevada"></label>
+									</div>
+								</li>
+								<li class="list-group-item">
+									Planilla de Locales
+									<div class="material-switch pull-right">
+										<input id="muros" name="someSwitchOption001" type="checkbox" />
+										<label for="muros" class="label-muros"></label>
+									</div>
+								</li>
+			</ul>
+
+</div>
+</div>
+</div>
+</div>
+  <script src="https://code.jquery.com/jquery-1.11.3.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+
+
+
+</body>
+</html>

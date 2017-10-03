@@ -1,0 +1,94 @@
+body {
+    background-color: #195d6b;
+}
+
+.h4, h4 {
+    font-size: 18px;
+    color: #bdb4de;
+}
+h1 {
+    color: white;
+    text-align: center;
+}
+
+p {
+    font-family: serif;
+    font-size: 28px;
+    font: oblique;
+    text-align: center;
+    color: #bdb4de;
+}
+
+.nav-tabs {
+    border-bottom: 1px solid #2b0b90;
+    background-color: #8ee8ad;
+}
+.nav-tabs>li.active>a, .nav-tabs>li.active>a:focus, .nav-tabs>li.active>a:hover {
+    color: #555;
+    cursor: default;
+    background-color: #c7e4bb;
+    border: 1px solid #2b0b8f;
+    border-bottom-color: #41a6bb;
+}
+
+.list-group-item {
+    position: relative;
+    display: block;
+    padding: 10px 15px;
+    margin-bottom: -1px;
+    background-color: #c7e4bb;
+    border: 1px solid #ddd;
+}
+
+.material-switch > input[type="checkbox"] {
+  display: none;
+}
+
+.material-switch > label {
+  cursor: pointer;
+  height: 0px;
+  position: relative;
+  width: 35px;
+  color: #13230e;
+  background-color: #1de818;
+  box-shadow: 0 0 #544b13;
+}
+
+.material-switch > label::before {
+    background: rgb(247, 9, 9);
+    box-shadow: inset 0px 0px 10px rgba(253, 6, 6, 0.4);
+    border-radius: 8px;
+    content: '';
+    height: 16px;
+    margin-top: -8px;
+    position: absolute;
+    opacity: 0.6;
+    transition: all 0.4s ease-in-out;
+    width: 40px;
+}
+
+.material-switch > label::after {
+  background: rgb(255, 255, 255);
+  border-radius: 16px;
+  box-shadow: 0px 0px 5px rgba(0, 0, 0, 0.3);
+  content: '';
+  height: 24px;
+  left: -4px;
+  margin-top: -8px;
+  position: absolute;
+  top: -4px;
+  transition: all 0.3s ease-in-out;
+  width: 24px;
+}
+
+.material-switch > input[type="checkbox"]:checked + label::before {
+  background: inherit;
+  opacity: 0.5;
+}
+
+.material-switch > input[type="checkbox"]:checked + label::after {
+  background: inherit;
+  left: 20px;
+}
+
+
