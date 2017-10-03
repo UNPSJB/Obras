@@ -7,7 +7,7 @@
 {% block barra %}
 	<ul class="sidebar sidebar-1">
 		<font size="2">
-			<li><a href="#" class="current"><font color="tomato">Director</font></a></li>
+			<li><a href="#" class="current"><font color="white">Director</font></a></li>
 			<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="false" aria-controls="collapseFive" onclick='mostrarSubmenu("tareasUsuario"),opcionesUsuario("nada")'>Usuarios <span class="caret"></span></a></li>
 				<ul class="sidebar sidebar-2" style="display:none;" id="tareasUsuario">
 					<li><a href="#" onclick='opcionesUsuario("alta_usuario")'>Crear Usuario</a></li>
@@ -17,6 +17,7 @@
 				<ul class="sidebar sidebar-2" style="display:none;" id="tareasTramite">
 					<li><a href="#" onclick='opcionesDatosTramite("alta_tipo_documento")'>Crear tipo de documento</a></li>
 					<li><a href="#" onclick='opcionesDatosTramite("alta_tipo_de_obra")'>Crear tipo de obra</a></li>
+					<li><a href="#" onclick='opcionesDatosTramite("alta_tipo_de_obra")'>Crear tipo de pago</a></li>
 				</ul>
 			<!--<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree" onclick='mostrarSubmenu("sin_submenu")'>Otorgar final de obra</a></li>-->
 			<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseSix" aria-expanded="false" aria-controls="collapseSix" onclick='mostrarSubmenu("sin_submenu")'>Modificar mis datos personales</a></li>
@@ -129,6 +130,7 @@
 									<option selected value="nada"> ¿Que desea hacer? </option>
 									<option value="alta_tipo_documento">Crear tipo de documento</option>
 									<option value="alta_tipo_de_obra">Crear tipo de obra</option>
+									<option value="alta_tipo_de_obra">Crear tipo de pago</option>
 								</select>
 							</div>
 						</div>
@@ -187,6 +189,34 @@
 			</div>
 		</div>
 	  </div>
+
+		<!--		<div class="container-fluid" id="alta_tipo_de_pago" style="display: none;">
+					<div class="row">
+						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+							<hr>
+							<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4" style="display:none">
+								{% block alta_tipo_de_pago %}
+
+								{% endblock %}
+							</div>
+							<form method="post" enctype="multipart/form-data"> {% csrf_token %}
+								<div id="nombre_tipo_pago" class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+								</div>
+								<div id="desc_tipo_pago" class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+								</div>
+								<div id="boton_tipo_pago" class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="right">
+									<button class="btn btn-danger btn-sm" type="reset" title="Borrar datos del formulario">
+										Limpiar
+									</button>
+								</div>
+								<br>
+							</form>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	  </div>-->
 		<!--
 	  <div class="panel">
 		<div class="panel-heading box" role="tab" id="headingThree">
@@ -282,6 +312,7 @@
 	</div>
 
 {% endblock %}
+
 
 {% block scripts %}
 
