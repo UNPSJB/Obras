@@ -77,7 +77,8 @@ class Tramite(models.Model):
             return False
 
     @classmethod
-    def new(cls, usuario, propietario, profesional, medidas, tipo_obra, domicilio, documentos, parcela, circunscripcion, sector, manzana):
+    def new(cls, usuario, propietario, profesional, tipo_obra, medidas, domicilio, parcela, circunscripcion, sector, manzana, documentos):        
+        
         if any(map(lambda d: d.tipo_documento.requerido != TipoDocumento.INICIAR, documentos)):
             raise Exception("Un documento no es de tipo iniciar")
         t = cls(
