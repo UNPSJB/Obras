@@ -34,7 +34,7 @@ class FormularioIniciarTramite(forms.ModelForm):
         self.fields['medidas'].widget.attrs['placeholder'] = "Ingresar Medidas en m2"
         self.fields['profesional'].widget.attrs['placeholder'] = "Ingresar DNI del Profesional"
         #-------------------------------------------------------------------------------------        
-        self.fields['parcela'].widget.attrs['placeholder'] = "Datos catastrales"
+        self.fields['parcela'].widget.attrs['placeholder'] = "Parcela"
         self.fields['circunscripcion'].widget.attrs['placeholder'] = "Datos catastrales"
         self.fields['manzana'].widget.attrs['placeholder'] = "Datos catastrales"
         self.fields['sector'].widget.attrs['placeholder'] = "Datos catastrales"
