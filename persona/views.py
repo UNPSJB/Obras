@@ -4,6 +4,7 @@ from django.contrib.auth.decorators import  login_required
 
 from .forms import *
 from django.contrib import messages
+from pago.forms import *
 from tipos.forms import *
 from obras_particulares.views import *
 from tramite.forms import FormularioIniciarTramite
@@ -648,12 +649,15 @@ def mostrar_director(request):
             values[form_name] = KlassForm()
     return render(request, 'persona/director/director.html', values)
 
-FORMS_DIRECTOR = {(k.NAME, k.SUBMIT): k for k in [
+FORMS_DIRECTOR = {(k.NAME, k.SUBMIT): k for k in {
     FormularioTipoDocumento,
-    FormularioUsuarioPersona,  #este formulario no se necesitaria, solo se dan de alta visador, inspector y administrativo
+    FormularioUsuarioPersona,
+# este formulario no se necesitaria, solo se dan de alta visador, inspector y administrativo
     FormularioTipoObra,
     FormularioTipoDocumento,
-]}
+    FormularioTipoPago,
+
+}}
 
 def cambiar_usuario_de_grupo(request):
     contexto = {

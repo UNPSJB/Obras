@@ -1,0 +1,53 @@
+from pago.models import *
+from crispy_forms.helper import FormHelper
+from django import forms
+
+from tramite.models import *
+from .models import *
+
+
+class FormularioTipoPago(forms.ModelForm):
+    NAME = 'tipo_pago_form'
+    SUBMIT = 'tipo_de_pago_submit'
+
+    class Meta:
+        model = Tipo_Pago
+        fields = ('nombre',)
+
+    def __init__(self, *args, **kwargs):
+        super(FormularioTipoPago, self).__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        # self.helper.form_class = 'form-horizontal'
+        # self.helper.add_input(Submit('tipo_pago_submit', 'Guardar'))
+        self.fields['nombre'].widget.attrs['placeholder'] = "Ingresar Nombre"
+
+
+class FormularioPago(forms.ModelForm):
+    NAME = 'pago_form'
+    SUBMIT = 'pago_submit'
+
+    class Meta:
+        model = Pago
+        fields = (
+            'tipoPago',
+            'cuota',
+            'valor',
+            'cantidadCuotas',)#,'fecha']
+
+    def __init__(self, *args, **kwargs):
+        super(FormularioPago, self).__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        # self.helper.add_input(Submit(self.SUBMIT, 'Guardar Tramite'))
+        self.helper.form_tag = False
+        self.fields['tipoPago'].widget.attrs['placeholder'] = "Ingresar Tipo de Pago"
+        self.fields['cuota'].widget.attrs['placeholder'] = "cuota"
+        self.fields['valor'].widget.attrs['placeholder'] = "Importe"
+        self.fields['cantidadCuotas'].widget.attrs['placeholder'] = "Ingresar fecha"
+       # self.fields['fecha'].widget.attrs['placeholder'] = "Ingresar fecha"
+
+        # -------------------------------------------------------------------------------------
+
+    # def save(self, commit=True, pago=None):
+    #     FormularioPago, self.save(commit=False)
+    #     pago.save()
+    #     return pago
