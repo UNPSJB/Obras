@@ -859,4 +859,20 @@ def mostrar_cajero(request):
 #movil ---------------------------------------------------------------------------------------------------------
 
 def movil_login(request):        
-    return render(request, 'movil/Templates/login.html', contexto)
+    return render(request, 'movil/templates/login.html', contexto)
+
+def movil_inspector(request):
+    #return render(request, 'persona/movil/inspector.html')
+    return render(request, 'persona/movil/planilla_inspeccion.html')
+
+def frente_o_fachada(request):    
+    return render(request,'persona/movil/frente_o_fachada.html')    
+
+def paredes(request):    
+    return render(request,'persona/movil/paredes.html')    
+
+def cocinas(request):    
+    return render(request,'persona/movil/cocinas.html')    
+
+def techos(request):    
+    return render(request,'persona/movil/techos.html')                

@@ -72,4 +72,14 @@ urlpatterns = [
     url(r'^reporte_tramites_director_pdf/$', login_required(ReporteTramitesDirectorPdf.as_view()), name="reporte_tramites_director_pdf"),
     url(r'^vista_de_usuarios$', views.ver_listado_todos_usuarios, name="vista_de_usuarios"),
 
+    #cajero -------------------------------------------------------------------------------------------------------
+    url(r'^cajero$', views.mostrar_cajero, name="cajero"),
+
+    #movil -------------------------------------------------------------------------------------------------------
+    url(r'^movil$', views.movil_inspector, name="movil_inspector"),
+    url(r'^frente$', views.frente_o_fachada, name="frente_o_fachada"),
+    url(r'^paredes$', views.paredes, name="paredes"),
+    url(r'^techos$', views.techos, name="techos"),
+    url(r'^cocinas$', views.cocinas, name="cocinas"),
+
 ]
