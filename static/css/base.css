@@ -174,7 +174,7 @@ a:link {
 
 .sidebar-2 li a {
 	color: white;
-	background-color: #5E5E65;
+	background-color: #336699;
 	box-sizing: border-box; }
 
 
@@ -185,17 +185,17 @@ a:link {
 	transition: all 400ms ease;
 }
 
-.sidebar-2 li a:hover,
+.sidebar-2 li a:hover,     /*transiciones en panel de izquierda */
 .sidebar-2 li a.current {
-	color: tomato;
-	background-color: #3a3a3a;
-	border-left: 3px solid tomato;
+	color: white;
+	background-color: #336699;
+	border-left: 3px blue;
 }
 
 .sidebar-2 li a:focus{
-	color: tomato;
-	background-color: #3a3a3a;
-	border-left: 3px solid tomato;
+	color: white;
+	background-color: #2c3e50;
+	border-left: 3px blue;
 }
 
 /* validar contraseña */

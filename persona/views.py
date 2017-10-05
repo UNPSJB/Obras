@@ -104,6 +104,7 @@ def documentos_de_estado(request, pk_estado):
 @grupo_requerido('profesional')
 def mostrar_profesional(request):
     usuario = request.user
+    #raise Exception(usuario.persona.profesional)
     tipos_de_documentos_requeridos = TipoDocumento.get_tipos_documentos_para_momento(TipoDocumento.INICIAR)
     FormularioDocumentoSet = FormularioDocumentoSetFactory(tipos_de_documentos_requeridos)
     inicial = metodo(tipos_de_documentos_requeridos)
@@ -125,7 +126,19 @@ def mostrar_profesional(request):
             lista=[]
             for docForm in documento_set:
                lista.append(docForm.save(commit=False))
-            Tramite.new(usuario, propietario, usuario.persona.profesional,request.POST['tipo_obra'],request.POST['medidas'],request.POST['domicilio'],lista)
+            Tramite.new(
+                usuario, 
+                propietario, 
+                usuario.persona.profesional,
+                request.POST['tipo_obra'],
+                request.POST['medidas'],
+                request.POST['domicilio'],                
+                request.POST['parcela'],
+                request.POST['circunscripcion'],
+                request.POST['manzana'],
+                request.POST['sector'],
+                lista
+            )
             tramite_form = FormularioIniciarTramite(initial={'profesional':usuario.persona.profesional.pk})
             propietario_form = None
         else:
@@ -837,3 +850,17 @@ def alta_persona(request):
     return render(request, 'persona/alta/alta_persona.html', {'form': form})
 
 #------------------------------------------------------------------------------------------------------------------
+#cajero ---------------------------------------------------------------------------------------------------------
+
+def mostrar_cajero(request):
+    contexto = {
+        "ctxpago": registrar_pago_tramite(request)
+    }
+    #print(contexto)
+    return render(request, 'persona/cajero/cajero.html', contexto)
+
+#------------------------------------------------------------------------------------------------------------------
+#movil ---------------------------------------------------------------------------------------------------------
+
+def movil_login(request):        
+    return render(request, 'movil/Templates/login.html', contexto)
