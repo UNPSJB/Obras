@@ -6,9 +6,9 @@
 		<font size="2">
 			<li><a href="#" class="current"><font color="white">Propietario</font></a></li>
 			<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour">Consultar estado de mis tramites</a></li>
-			<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne">Pago de permiso de construccion</a></li>
 			<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne">Modificar mis datos personales</a></li>
-			<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne">Modificar fuentes y colores</a></li>
+			<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne">Seleccionar forma de financiacion</a></li>
+			<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne">Modificar fuentes y color</a></li>
 		</font>
 	</ul>
 {% endblock %}
@@ -38,29 +38,7 @@
 				</div>
 			</div>
 		</div>
-		<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
-		<div class="panel panel-custom">
-			<div class="panel-heading panel-heading-custom box" role="tab" id="headingFour">
-				<h5 class="panel-title">
-					<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
-						<font color="#ffffff" size="2">Pago de permiso de construccion</font>
-					</a>
-				</h5>
-			</div>
-	<div id="collapseFour" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFour">
-				<div class="panel-body">
-					<div class="container-fluid">
-						<div class="row">
-							<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-								{% block contenido_pago_permiso %}
-									{% include "persona/propietario/pago_permiso.html" with pagos_de_propietario=ctxtramitespropietario %}
-								{% endblock %}
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
+
 		<div class="panel panel-custom">
 			<div class="panel-heading panel-heading-custom box" role="tab" id="headingOne">
 			  <h5 class="panel-title">
@@ -118,7 +96,113 @@
 			  </div>
 			</div>
 		</div>
-	</div>
+
+		<div class="panel panel-custom">
+			<div class="panel-heading panel-heading-custom box" role="tab" id="headingTwo">
+				<h5 class="panel-title">
+					<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseFour">
+						<font color="#ffffff" size="2">Seleccionar forma de financiacion</font>
+					</a>
+				</h5>
+			</div>
+			<div id="collapseTwo" class="panel-collapse collapse " role="tabpanel" aria-labelledby="headingTwo">
+			  <div class="panel-body">
+				<div class="container-fluid">
+					<div class="row">
+						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+							<div class="container-fluid">
+							<br>
+								<form action="" class="" >
+									<div class="row">
+										<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+												<div class="form-group">
+													<label> Monto a abonar:</label>
+													<span class="label label-primary"> ------------------------- </span>
+												</div>
+										</div>
+										<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+											<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.5.0/js/bootstra p-datepicker.min.js"></script>
+												<div class="form-group">
+													<!--<label for=""> Fecha de pago:</label>-->
+													<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+														{% block seleccionar_financiacion %}
+															{% include "persona/propietario/seleccionar_financiacion.html" with tramites_de_propietario=ctxtramitespropietario %}
+														{% endblock %}
+													</div>
+												</div>
+										</div>
+										<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+										<div class="col-xs-12 col-sm-12 col-md-3 col-lg-4">
+											<select class="form-control input-sm" id="opcionesPropietario" name="Opciones de Datos del tramite" onChange="opcionesDatosTramite(this.value);">
+												<option selected value="nada"> ¿Como desea abonar el monto? </option>
+												<option value="alta_tipo_documento">En un pago</option>
+												<option value="alta_tipo_de_obra">En cuotas</option>
+											</select>
+										</div>
+
+										</div>
+									</div>
+									<div class="container-fluid">
+										<br>
+										<div class="row">
+											<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="right">
+												<button class="btn btn-primary btn-sm" type="submit" title="Enviar modificación de mis datos">
+													Guardar
+												</button>
+											<button class="btn btn-danger btn-sm" type="reset" title="Borrar datos del formulario">
+												Limpiar
+											</button>
+											</div>
+										</div>
+									</div>
+							</div>
+						</div>
+					</div>
+				</div>
+			  </div>
+			</div>
+		</div>
+
+	  <div class="panel panel-custom">
+		<div class="panel-heading panel-heading-custom box" role="tab" id="headingThree">
+		  <h5 class="panel-title">
+			<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+			  <font color="#ffffff" size="2">Modificar fuentes y colores</font>
+			</a>
+		  </h5>
+		</div>
+		<div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+		  <div class="panel-body">
+			<div class="container-fluid">
+				<div class="row">
+					<!--  completar esto -->
+					<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+			  		<div class="col-xs-12 col-sm-12 col-md-3 col-lg-4">
+				 	 <select class="form-control input-sm" id="opcionesPropietario" name="Opciones de Datos del tramite" onChange="opcionesDatosTramite(this.value);">
+					  <option selected value="nada"> ¿Que desea modificar? </option>
+					  <option value="alta_tipo_documento">Las fuentes</option>
+					  <option value="alta_tipo_de_obra">Los colores</option>
+				  </select>
+			  </div>
+				</div>
+			</div>
+				<div class="container-fluid">
+					<br>
+					<div class="row">
+						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="right">
+							<button class="btn btn-primary btn-sm" type="submit" title="Enviar modificación de mis datos">
+								Guardar
+							</button>
+							<button class="btn btn-danger btn-sm" type="reset" title="Borrar datos del formulario">
+								Limpiar
+							</button>
+						</div>
+					</div>
+				</div>
+		  </div>
+		</div>
+	  </div>
+	  </div>
 {% endblock %}
 
 

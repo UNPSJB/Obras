@@ -3,6 +3,7 @@ from django.contrib.auth.decorators import login_required
 from . import views
 from tramite.models import *
 from persona.views import *
+from pago.views import *
 
 urlpatterns = [
 

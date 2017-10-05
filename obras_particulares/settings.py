@@ -42,6 +42,7 @@ INSTALLED_APPS = [
     'tipos',
     'tramite',
     'documento',
+    'pago',
 ]
 
 MIDDLEWARE = [
