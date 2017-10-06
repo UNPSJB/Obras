@@ -7,8 +7,8 @@
 			<li><a href="#" class="current"><font color="white">Propietario</font></a></li>
 			<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour">Consultar estado de mis tramites</a></li>
 			<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne">Modificar mis datos personales</a></li>
-			<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne">Seleccionar forma de financiacion</a></li>
-			<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne">Modificar fuentes y color</a></li>
+			<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseOne">Seleccionar forma de financiacion</a></li>
+			<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseOne">Modificar fuentes y color</a></li>
 		</font>
 	</ul>
 {% endblock %}
@@ -100,7 +100,7 @@
 		<div class="panel panel-custom">
 			<div class="panel-heading panel-heading-custom box" role="tab" id="headingTwo">
 				<h5 class="panel-title">
-					<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseFour">
+					<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
 						<font color="#ffffff" size="2">Seleccionar forma de financiacion</font>
 					</a>
 				</h5>
@@ -203,6 +203,20 @@
 		</div>
 	  </div>
 	  </div>
+		<div class="container-fluid">
+			<br>
+			<div class="row">
+				<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="right">
+					<button class="btn btn-primary btn-sm" type="submit" title="Enviar modificación de mis datos">
+						Modificar color
+					</button>
+					<button class="btn btn-danger btn-sm" type="reset" title="Borrar datos del formulario">
+						Cambiar tamaño de letra
+					</button>
+				</div>
+			</div>
+		</div>
+	</div>
 {% endblock %}
 
 
@@ -231,5 +245,6 @@
 			showRemove: false
 		});
 	</script>
+
 
 {% endblock %}
