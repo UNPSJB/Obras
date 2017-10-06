@@ -17,9 +17,10 @@ class Tipo_Pago(models.Model):
 
 
 class Cuota(models.Model):
-    fechaVencimiento=models.DateField
-    fechaPago=models.DateField
-    monto=models.IntegerField
+    fechaVencimiento=models.DateField()
+    fechaPago=models.DateField()
+    monto=models.IntegerField()
+    estado=models.CharField(max_length=100)
 
     def calcularValorCuota(self):
         var=Pago()

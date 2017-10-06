@@ -32,7 +32,9 @@ class FormularioPago(forms.ModelForm):
             'tipoPago',
             'cuota',
             'valor',
-            'cantidadCuotas',)#,'fecha']
+            'cantidadCuotas',
+            'fecha',
+        )
 
     def __init__(self, *args, **kwargs):
         super(FormularioPago, self).__init__(*args, **kwargs)
@@ -42,8 +44,8 @@ class FormularioPago(forms.ModelForm):
         self.fields['tipoPago'].widget.attrs['placeholder'] = "Ingresar Tipo de Pago"
         self.fields['cuota'].widget.attrs['placeholder'] = "cuota"
         self.fields['valor'].widget.attrs['placeholder'] = "Importe"
-        self.fields['cantidadCuotas'].widget.attrs['placeholder'] = "Ingresar fecha"
-       # self.fields['fecha'].widget.attrs['placeholder'] = "Ingresar fecha"
+        self.fields['cantidadCuotas'].widget.attrs['placeholder'] = "Ingresar cantidad de cuotas"
+        self.fields['fecha'].widget.attrs['placeholder'] = "Ingresar fecha"
 
         # -------------------------------------------------------------------------------------
 
@@ -51,3 +53,26 @@ class FormularioPago(forms.ModelForm):
     #     FormularioPago, self.save(commit=False)
     #     pago.save()
     #     return pago
+
+
+class FormularioCuota(forms.ModelForm):
+    NAME = 'cuota_form'
+    SUBMIT = 'cuota_submit'
+
+    class Meta:
+        model = Cuota
+        fields = (
+            'fechaVencimiento',
+            'fechaPago',
+            'monto',
+        )
+
+    def __init__(self, *args, **kwargs):
+        super(FormularioCuota, self).__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        # self.helper.add_input(Submit(self.SUBMIT, 'Guardar Tramite'))
+        self.helper.form_tag = False
+        self.fields['fechaVencimiento'].widget.attrs['placeholder'] = "fecha de vencimiento"
+        self.fields['fechaPago'].widget.attrs['placeholder'] = "fecha de pago"
+        self.fields['monto'].widget.attrs['placeholder'] = "monto"
+

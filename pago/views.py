@@ -22,3 +22,14 @@ def alta_tipoPago(request):
         form = FormularioTipoPago()
 
     return render(request, 'tipoPago/alta_tipo_de_pago.html', {'form': form})
+
+def alta_Cuota(request):
+    if request.method == "POST":
+        form = FormularioCuota(request.POST)
+        if form.is_valid():
+            cuota = form.save(commit=False)
+            cuota.save()
+    else:
+        form = FormularioCuota()
+
+    return render(request, 'tipoPago/alta_tipo_de_pago.html', {'form': form})
