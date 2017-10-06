@@ -22,9 +22,31 @@
 
         <tbody>
             <tr>
-                <td class="col-sm-8">
-                    <h6>Marmol o piedra</h6>                    
+                <td class="col-sm-8"><h6>Ladrillo media maquina</h6></td>                
+                <td>
+                    <label class="switch">
+                        <input type="checkbox"><span class="slider round"></span>
+                    </label>
                 </td>                
+            </tr>
+            <tr>
+                <td class="col-sm-8"><h6>Bloques de hormigon</h6></td>                
+                <td>
+                    <label class="switch">
+                        <input type="checkbox"><span class="slider round"></span>
+                    </label>
+                </td>                
+            </tr>
+            <tr>
+                <td class="col-sm-8"><h6>Ladrillo ceramico hueco</h6></td>                
+                <td>
+                    <label class="switch">
+                        <input type="checkbox"><span class="slider round"></span>
+                    </label>
+                </td>                
+            </tr>
+            <tr>
+                <td class="col-sm-8"><h6>Ladrillo ceramico hueco</h6></td>                
                 <td>
                     <label class="switch">
                         <input type="checkbox"><span class="slider round"></span>
@@ -35,6 +57,17 @@
         </tbody>
     </table>
 </div>
+
+<a href="{% url 'movil_inspector' %}">
+    <button type="button" align="rigth" class="btn btn-primary" name="volver">
+        Volver
+    </button>
+</a>
+<a href="{% url 'movil_inspector' %}">
+    <button type="button" align="rigth" class="btn btn-primary" name="volver">
+        Guardar
+    </button>
+</a>
 
 <style>
     .switch {

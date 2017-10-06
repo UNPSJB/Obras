@@ -14,27 +14,51 @@
     <table class="table table-bordered table-striped table-hover table-condensed" style="background: white;">
         <thead>
             <tr>
-                <th>Frente o fachada</th>
+                <th>Techos</th>
                 <th></th>                
                 <th></th>
             </tr>
         </thead>
 
-        <tbody>
+        <tbody>            
             <tr>
-                <td class="col-sm-8">
-                    <h6>Marmol o piedra</h6>                    
-                </td>                
+                <td class="col-sm-8"><h6>Chapa prepintada</h6></td>                
                 <td>
                     <label class="switch">
                         <input type="checkbox"><span class="slider round"></span>
                     </label>
                 </td>                
             </tr>
-            
+            <tr>
+                <td class="col-sm-8"><h6>Teja smaltada</h6></td>                
+                <td>
+                    <label class="switch">
+                        <input type="checkbox"><span class="slider round"></span>
+                    </label>
+                </td>                
+            </tr>
+            <tr>
+                <td class="col-sm-8"><h6>Losa premoldeada</h6></td>                
+                <td>
+                    <label class="switch">
+                        <input type="checkbox"><span class="slider round"></span>
+                    </label>
+                </td>                
+            </tr>            
         </tbody>
     </table>
 </div>
+
+<a href="{% url 'movil_inspector' %}">
+    <button type="button" align="rigth" class="btn btn-primary" name="volver">
+        Volver
+    </button>
+</a>
+<a href="{% url 'movil_inspector' %}">
+    <button type="button" align="rigth" class="btn btn-primary" name="volver">
+        Guardar
+    </button>
+</a>
 
 <style>
     .switch {

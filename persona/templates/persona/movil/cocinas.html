@@ -14,7 +14,7 @@
     <table class="table table-bordered table-striped table-hover table-condensed" style="background: white;">
         <thead>
             <tr>
-                <th>Frente o fachada</th>
+                <th>Cocinas</th>
                 <th></th>                
                 <th></th>
             </tr>
@@ -22,19 +22,59 @@
 
         <tbody>
             <tr>
-                <td class="col-sm-8">
-                    <h6>Marmol o piedra</h6>                    
-                </td>                
+                <td class="col-sm-8"><h6>Alacena y bajo mesada a medida</h6></td>                
                 <td>
                     <label class="switch">
                         <input type="checkbox"><span class="slider round"></span>
                     </label>
                 </td>                
             </tr>
-            
+            <tr>
+                <td class="col-sm-8"><h6>Mesada de marmol/granito</h6></td>                
+                <td>
+                    <label class="switch">
+                        <input type="checkbox"><span class="slider round"></span>
+                    </label>
+                </td>                
+            </tr>
+            <tr>
+                <td class="col-sm-8"><h6>Cocina con horno visor</h6></td>                
+                <td>
+                    <label class="switch">
+                        <input type="checkbox"><span class="slider round"></span>
+                    </label>
+                </td>                
+            </tr>
+            <tr>
+                <td class="col-sm-8"><h6>Mesada de acero inoxidable</h6></td>                
+                <td>
+                    <label class="switch">
+                        <input type="checkbox"><span class="slider round"></span>
+                    </label>
+                </td>                
+            </tr>
+            <tr>
+                <td class="col-sm-8"><h6>Mesada de granito reconstruido</h6></td>                
+                <td>
+                    <label class="switch">
+                        <input type="checkbox"><span class="slider round"></span>
+                    </label>
+                </td>                
+            </tr>            
         </tbody>
     </table>
 </div>
+
+<a href="{% url 'movil_inspector' %}">
+    <button type="button" align="rigth" class="btn btn-primary" name="volver">
+        Volver
+    </button>
+</a>
+<a href="{% url 'movil_inspector' %}">
+    <button type="button" align="rigth" class="btn btn-primary" name="volver">
+        Guardar
+    </button>
+</a>
 
 <style>
     .switch {
