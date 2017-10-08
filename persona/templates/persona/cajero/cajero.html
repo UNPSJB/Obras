@@ -7,7 +7,8 @@
     <font size="2">
 		<li><a class="current"><font color="white">Cajero</font> </a></li>
 		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseSeven" aria-expanded="false"aria-controls="collapseSeven" onclick='mostrarSubmenu("sin_submenu")'>Registrar pago</a></li>
-		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseEight" aria-expanded="false"aria-controls="collapseSeven" onclick='mostrarSubmenu("sin_submenu")'>Registrar plan de pago</a></li>
+		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseEight" aria-expanded="false"aria-controls="collapseEight" onclick='mostrarSubmenu("sin_submenu")'>Registrar plan de pago</a></li>
+		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseNine" aria-expanded="false"aria-controls="collapseNine" onclick='mostrarSubmenu("sin_submenu")'>Registrar Cuota</a></li>
 		<li><a data-toggle="collapse" data-parent="#accordion" href="#" aria-expanded="false" aria-controls="#" onclick='mostrarSubmenu("sin_submenu")'>Listar tramites</a></li>
 	</font>
   </ul>
@@ -73,6 +74,8 @@
 														{% block seleccionar_financiacion %}
 															{% include "persona/propietario/seleccionar_financiacion.html" with tramites_de_propietario=ctxtramitespropietario %}
 														{% endblock %}
+														<!-- <label>Fecha de Financiación: <input id="three" class="datepicker" type="text" readonly="true"></label> para que sea como los otros dos no encontre otra forma de que hayan varios calednarios-->
+
 													</div>
 												</div>
 										</div>
@@ -103,11 +106,106 @@
 											</div>
 										</div>
 									</div>
+								</form>
 						</div>
 					</div>
 				</div>
 			  </div>
 			</div>
 		</div>
+	</div>
+	    <div class="panel panel-custom">
+			<div class="panel-heading panel-heading-custom box" role="tab" id="headingNine">
+				<h5 class="panel-title">
+					<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseNine" aria-expanded="false" aria-controls="collapseNine">
+						<font color="#ffffff" size="2">Registrar Cuota</font>
+					</a>
+				</h5>
+			</div>
+			<div id="collapseNine" class="panel-collapse collapse " role="tabpanel" aria-labelledby="headingNine">
+			  <div class="panel-body">
+				<div class="container-fluid">
+					<div class="row">
+						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+							<div class="container-fluid">
+							<br>
+								<form action="" class="" >
+									<div class="row">
+										<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+												<div class="form-group">
+													<label>Monto:</label>
+													<span class="label label-primary"> ------------------------- </span>
+												</div>
+										</div>
+										<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+													<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+ 														<label>Fecha de Vencimiento: <input id="one" class="datepicker" type="text" readonly="true"></label>
+													</div>
+													<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
+ 														<label>Fecha de Pago: <input id="two" class="datepicker" type="text" readonly="true"></label>
+													</div>
+										</div>
+										<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+										<div class="col-xs-12 col-sm-12 col-md-3 col-lg-4">
+											<select class="form-control input-sm" id="opcionesTipoPago" name="Opciones de Pagos" onChange="opcionesPago(this.value);">
+												<option selected value="nada"> Ingrese el tipo de pago </option>
+												<option value="efectivo">Efectivo</option>
+												<option value="Debito">Debito</option>
+											</select>
+										</div>
+
+										</div>
+									</div>
+									<div class="container-fluid">
+										<br>
+										<div class="row">
+											<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="right">
+												<button class="btn btn-primary btn-sm" type="submit" title="Enviar modificación de mis datos">
+													Guardar
+												</button>
+											<button class="btn btn-danger btn-sm" type="reset" title="Borrar datos del formulario">
+												Limpiar
+											</button>
+											</div>
+										</div>
+									</div>
+								</form>
+						</div>
+					</div>
+				</div>
+			  </div>
+			</div>
 		</div>
+	</div>
+
+</div>
+<script type="text/javascript">
+  $(function() {
+   $('input').filter('.datepicker').datepicker({
+    changeMonth: true,
+    changeYear: true,
+    showOn: 'button',
+    buttonImage:'/media/imagenes/icon-calendar.png',
+    buttonImageOnly: true,
+    minDate:0,
+    maxDate: new Date(2020, 12, 30),
+    // Formato de la fecha
+    dateFormat: "dd/mm/yy",
+    // Primer dia de la semana El lunes
+    firstDay: 1,
+    // Dias Largo en castellano
+    dayNames: [ "Domingo", "Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado" ],
+    // Dias cortos en castellano
+    dayNamesMin: [ "Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sa" ],
+    // Nombres largos de los meses en castellano
+    monthNames: [ "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre" ],
+    // Nombres de los meses en formato corto
+    monthNamesShort: [ "Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dec" ],
+    // Cuando seleccionamos la fecha esta se pone en el campo Input
+    onSelect: function(dateText) {
+          $('#fecha').val(dateText);
+      }
+   });
+  });
+ </script>
 {% endblock %}
