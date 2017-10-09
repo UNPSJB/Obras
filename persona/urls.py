@@ -46,6 +46,7 @@ urlpatterns = [
     url(r'^ver_documentos_visados/(?P<pk_tramite>\d+)/$', views.ver_documentos_visados, name="ver_documentos_visados"),
     url(r'^reporte_tramites_aceptados_excel/', ReporteTramitesAceptadosExcel.as_view(), name="reporte_tramites_aceptados_excel"),
     url(r'^reporte_tramites_aceptados_pdf/$', login_required(ReporteTramitesAceptadosPdf.as_view()), name="reporte_tramites_aceptados_pdf"),
+    url(r'^planilla_visado/$', views.planilla_visado, name="planilla_visado"),
 
     # inspector -----------------------------------------------------------------------------------------------------
     url(r'^inspector$', views.mostrar_inspector, name="inspector"),

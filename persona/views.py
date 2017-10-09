@@ -102,7 +102,7 @@ def documentos_de_estado(request, pk_estado):
 
 @login_required(login_url="login")
 @grupo_requerido('profesional')
-def mostrar_profesional(request):
+def mostrar_profesional(request):    
     usuario = request.user
     #raise Exception(usuario.persona.profesional)
     tipos_de_documentos_requeridos = TipoDocumento.get_tipos_documentos_para_momento(TipoDocumento.INICIAR)
@@ -494,6 +494,10 @@ class ReporteTramitesAceptadosPdf(View):
         Story.append(detalle_orden)
         doc.build(Story)
         return response
+
+
+def planilla_visado(request):        
+    return render(request,'persona/visador/planilla_visado.html') 
 
 #-------------------------------------------------------------------------------------------------------------------
 #inspector ---------------------------------------------------------------------------------------------------------
