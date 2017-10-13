@@ -20,13 +20,10 @@ class AltaProfesional(admin.ModelAdmin):
 
 class AltaPropietario(admin.ModelAdmin):
     pass
-class AltaCajero(admin.ModelAdmin):
-    pass
 
 admin.site.register(Persona,ALtaPersona)
 admin.site.register(Profesional,AltaProfesional)
 admin.site.register(Propietario, AltaPropietario)
-admin.site.register(Cajero, AltaCajero)
 admin.site.register(Usuario)
 
 
