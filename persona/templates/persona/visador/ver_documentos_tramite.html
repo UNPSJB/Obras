@@ -49,9 +49,16 @@
                                 </div>
                             </div>
                         {% endfor %}
-                    </div>       
+                    </div>
 				    <div>
                         <a href="{% url 'planilla_visado' %}">
+                            <button type="button" align="rigth" class="btn btn-primary" name="volver">
+                                Generar Visado
+                            </button>
+                        </a>
+                    </div>
+                    <div>
+                        <a href="{% url 'planilla_de_visado' %}">
                             <button type="button" align="rigth" class="btn btn-primary" name="volver">
                                 Generar Visado
                             </button>

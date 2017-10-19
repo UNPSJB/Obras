@@ -497,7 +497,10 @@ class ReporteTramitesAceptadosPdf(View):
 
 
 def planilla_visado(request):        
-    return render(request,'persona/visador/planilla_visado.html') 
+    return render(request,'persona/visador/planilla_visado.html')
+
+def planilla_de_visado(request):
+    return render(request,'persona/visador/planilla_de_visado.html')
 
 #-------------------------------------------------------------------------------------------------------------------
 #inspector ---------------------------------------------------------------------------------------------------------

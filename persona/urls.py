@@ -47,6 +47,7 @@ urlpatterns = [
     url(r'^reporte_tramites_aceptados_excel/', ReporteTramitesAceptadosExcel.as_view(), name="reporte_tramites_aceptados_excel"),
     url(r'^reporte_tramites_aceptados_pdf/$', login_required(ReporteTramitesAceptadosPdf.as_view()), name="reporte_tramites_aceptados_pdf"),
     url(r'^planilla_visado/$', views.planilla_visado, name="planilla_visado"),
+    url(r'^planilla_de_visado/$', views.planilla_de_visado, name="planilla_de_visado"),
 
     # inspector -----------------------------------------------------------------------------------------------------
     url(r'^inspector$', views.mostrar_inspector, name="inspector"),
