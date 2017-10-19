@@ -20,13 +20,26 @@
 	  <div class="panel">
           <div class="container-fluid">
               <div class="row">
-                  <label><h2>Datos catastrales:</h2></label><br>
-                  <label><h2>Parcela: {{tramite.parcela}}</h2></label><br>
-                  <label><h2>Sector:{{tramite.sector}}</h2></label><br>
-                  <label><h2>Manzana:{{tramite.manzana}}</h2></label><br>
-                  <label><h2>Circunscripcion:{{tramite.circunscripcion}}</h2></label><br>
+                  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                        <form action="" >
+                            <div class="row" style="color:#fff;">
+                                <div class=" col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                                    <ol>
+                                        <label>Datos catastrales:</h2></label><br>
+                                        <label>Parcela:</label>
+                                        <li> {{tramite.parcela}}</li>
+                                        <label>Sector:</label>
+                                        <li> {{tramite.sector}}</li>
+                                        <label>Manzana:</label>
+                                        <li> {{tramite.manzana}}</li>
+                                        <label>Circunscripcion:</label>
+                                        <li> {{tramite.circunscripcion}}</li>
+                                    </ol>
+                                </div>
+                            </div>
+                        </form>
+                  </div>
               </div>
-
           </div>
 		<div class="panel-heading box" role="tab" id="headingFive">
 		  <h5 class="panel-title">

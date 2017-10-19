@@ -52,57 +52,6 @@ class Usuario(Rol, AbstractUser):
     def get_view_groups(self):
         return self.groups.all()
 
-#agrego lo de cajero
-
-class Cajero(models.Model):
-    SEXOS = [{'F', 'Femenino'}, {'M', 'Masculino'}]
-    dni = models.IntegerField(unique = True)
-    apellido = models.CharField(max_length = 50)
-    nombre = models.CharField(max_length = 50)
-    mail = models.EmailField(max_length = 40)
-    cuil = models.CharField(max_length = 14)    #el ultimo numero va a ser 00..09
-    domicilio = models.CharField(max_length = 50)
-    telefono = models.CharField(max_length = 15)
-    profesional = models.OneToOneField(Profesional, blank=True, null=True)
-    propietario = models.OneToOneField(Propietario, blank=True, null=True)
-    usuario = models.OneToOneField(Usuario, blank=True, null=True)
-
-    def __str__(self):
-        return "{}, {}" .format(self.apellido, self.nombre)
-
-    def crear_usuario(self, *extra_grupos):
-        grupos = list(extra_grupos)
-        created = False
-        password = ""
-        aux_usuario = None
-        if self.usuario is None:
-            password = generar_password()
-            aux_usuario = Usuario.objects.create_user(username=self.mail, email=self.mail, password=password)
-            created = True
-        self.usuario = aux_usuario
-        if self.profesional is not None:
-            grupos.append(Usuario.PROFESIONAL)
-        if self.propietario is not None:
-            grupos.append(Usuario.PROPIETARIO)
-        for nombre in grupos:
-            g = Group.objects.get(name=nombre)
-            self.usuario.groups.add(g)
-        self.save()
-        return created, password, self.usuario
-
-    def get_profesional(self):
-        return self.profesional
-
-    def get_propietario(self):
-        return self.propietario
-
-def generar_password():
-    longitud = 6
-    valores = "123456789abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"
-    password = ""
-    password = password.join([choice(valores) for i in range(longitud)])
-    return password
-
 
 class Persona(models.Model):
     SEXOS = [{'F', 'Femenino'}, {'M', 'Masculino'}]
