@@ -1,6 +1,8 @@
 from pago.models import *
 from crispy_forms.helper import FormHelper
 from django import forms
+from django.forms import ValidationError
+from crispy_forms.layout import Submit, Field
 
 from tramite.models import *
 from .models import *
@@ -18,9 +20,15 @@ class FormularioTipoPago(forms.ModelForm):
         super(FormularioTipoPago, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
         # self.helper.form_class = 'form-horizontal'
-        # self.helper.add_input(Submit('tipo_pago_submit', 'Guardar'))
+        self.helper.add_input(Submit(self.SUBMIT, 'Guardar'))
         self.fields['nombre'].widget.attrs['placeholder'] = "Ingresar Nombre"
 
+    def clean_nombre(self):
+        nombre = self.cleaned_data['nombre']
+        cargados = Tipo_Pago.objects.filter(nombre__icontains=nombre)
+        if cargados.exists():
+            raise ValidationError("Ya existe {}".format(cargados.first().nombre))
+        return nombre
 
 class FormularioPago(forms.ModelForm):
     NAME = 'pago_form'

@@ -2,7 +2,6 @@
 from __future__ import unicode_literals
 from django.db import models
 from pago.models import *
-from persona.models import *
 from django import template
 
 

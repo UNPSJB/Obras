@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import  login_required
 
 from .forms import *
 from django.contrib import messages
-from pago.forms import *
+from pago.forms import FormularioTipoPago
 from tipos.forms import *
 from obras_particulares.views import *
 from tramite.forms import FormularioIniciarTramite

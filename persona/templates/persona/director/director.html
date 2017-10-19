@@ -191,26 +191,18 @@
 					<div class="row">
 						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 							<hr>
-							<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4" style="display:none">
+							<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4" style="display:none" >
 								{% block alta_tipo_de_pago %}
 									{% crispy tipo_pago_form %}
 								{% endblock %}
 							</div>
 							<form method="post" enctype="multipart/form-data"> {% csrf_token %}
-								<div id="nombre_tipo_pago" class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+									<div id="nombre_tipo_pago" class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
 								</div>
-								<!--<div id="boton_tipo_pago" class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="right">-->
-									<!--<button class="btn btn-danger btn-sm" type="reset" title="Borrar datos del formulario">-->
-										<!--Limpiar-->
-									<!--</button>-->
-								<!--</div>-->
-								<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="right">
-											<button class="btn btn-primary btn-sm" type="submit" title="Guardar">
-												Guardar
-											</button>
-											<button class="btn btn-danger btn-sm" type="reset" title="Borrar">
-												Limpiar
-											</button>
+								<div id="boton_tipo_pago" class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="right">
+									<button class="btn btn-danger btn-sm" type="reset" title="Borrar datos del formulario">
+										Limpiar
+									</button>
 								</div>
 								<br>
 							</form>
@@ -490,7 +482,7 @@
 		$('#submit-id-tipo_obra_submit').appendTo('#boton_tipo_obra')
 
 		$('#alta_tipo_de_pago #div_id_nombre').appendTo('#nombre_tipo_pago')
-		$('#submit-id-tipo_pago_submit').appendTo('#boton_tipo_pago')
+		$('#submit-id-tipo_de_pago_submit').appendTo('#boton_tipo_pago')
 
 
 	</script>

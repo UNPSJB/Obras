@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 from django.shortcuts import render
 from .models import *
 from .forms import *
+
 # Create your views here.
 def mostrar_Pago(request):
     form= FormularioPago()
@@ -20,7 +21,6 @@ def alta_tipoPago(request):
             tipo_pago.save()
     else:
         form = FormularioTipoPago()
-
     return render(request, 'tipoPago/alta_tipo_de_pago.html', {'form': form})
 
 def alta_Cuota(request):
@@ -31,5 +31,4 @@ def alta_Cuota(request):
             cuota.save()
     else:
         form = FormularioCuota()
-
     return render(request, 'tipoPago/alta_tipo_de_pago.html', {'form': form})
