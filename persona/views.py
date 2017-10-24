@@ -870,6 +870,10 @@ def listado_tramite_para_financiar(request):
     contexto = {'tramites':tramites}
     return contexto
 
+def elegir_financiacion(request):    
+    return render(request, 'persona/cajero/elegir_financiacion.html')
+
+
 #------------------------------------------------------------------------------------------------------------------
 #movil ---------------------------------------------------------------------------------------------------------
 
