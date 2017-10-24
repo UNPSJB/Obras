@@ -43,6 +43,7 @@ INSTALLED_APPS = [
     'tramite',
     'documento',
     'pago',
+    'planilla_visado'
 ]
 
 MIDDLEWARE = [

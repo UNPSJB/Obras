@@ -117,10 +117,16 @@ for Klass in [Cancelacion, Cancelada]:
 
 
 class Pago(models.Model):
+    CUOTAS = [
+        (1, "Una Cuota"),
+        (3, "Tres Cuotas"),
+        (6, "Seis Cuotas"),
+        (12, "Doce Cuotas"),
+    ]
     tipoPago = models.ForeignKey(Tipo_Pago)
     cuota = models.ForeignKey(Cuota)
     valor = models.IntegerField()
-    cantidadCuotas = models.IntegerField(null=False)
+    cantidadCuotas = models.IntegerField(null=False, choices=CUOTAS)
     fecha = models.DateField()
 
     def __str__(self):

@@ -1,10 +1,9 @@
-from pago.models import *
+#from pago.models import *
 from crispy_forms.helper import FormHelper
 from django import forms
 from django.forms import ValidationError
 from crispy_forms.layout import Submit, Field
 
-from tramite.models import *
 from .models import *
 
 
@@ -48,7 +47,8 @@ class FormularioPago(forms.ModelForm):
         super(FormularioPago, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
         # self.helper.add_input(Submit(self.SUBMIT, 'Guardar Tramite'))
-        self.helper.form_tag = False
+       # self.helper.form_tag = False
+        self.helper.add_input(Submit(self.SUBMIT, 'Guardar'))
         self.fields['tipoPago'].widget.attrs['placeholder'] = "Ingresar Tipo de Pago"
         self.fields['cuota'].widget.attrs['placeholder'] = "cuota"
         self.fields['valor'].widget.attrs['placeholder'] = "Importe"
@@ -57,10 +57,10 @@ class FormularioPago(forms.ModelForm):
 
         # -------------------------------------------------------------------------------------
 
-    # def save(self, commit=True, pago=None):
-    #     FormularioPago, self.save(commit=False)
-    #     pago.save()
-    #     return pago
+    def save(self, commit=True, pago=None):
+        FormularioPago, self.save(commit=False)
+        pago.save()
+        return pago
 
 
 class FormularioCuota(forms.ModelForm):
