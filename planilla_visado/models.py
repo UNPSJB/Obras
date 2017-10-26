@@ -19,6 +19,7 @@ class PlanillaVisadoQuerySet(models.QuerySet):
 
 PlanillaManager = PlanillaVisadoBaseManager.from_queryset(PlanillaVisadoQuerySet)
 
+
 class Doc_Balance_Superficie(models.Model):
     nombre = models.CharField(max_length=100)
     descripcion = models.CharField(max_length=150)
@@ -28,17 +29,17 @@ class Doc_Balance_Superficie(models.Model):
 
 
 class Elemento_Balance_Superficie(models.Model):
-    Es = [
-        ('C', 'Correcto'),
-        ('I', 'Incorrecto'),
-    ]
-    elementoBalance = models.CharField(choices=Es, max_length=2)
     nombre = models.CharField(max_length=100)
     descripcion = models.CharField(max_length=150)
 
     def __str__(self):
         return self.elementoBalance
 
+class PlanillaLocales(models.Model):
+    planillaLocales = models.CharField(max_length=2)
+
+    def __str__(self):
+        return self.planillaLocales
 
 class ColumnaDeVisado(models.Model):
     """las columnas de una vista de planilla de visado
@@ -107,6 +108,7 @@ class ItemDeVisado(models.Model):
 class PlanillaDeVisado(models.Model):
     #tramite = models.ForeignKey(Tramite)
     items = models.ManyToManyField(ItemDeVisado, related_name="planillas")
+   # planillaLocales = models.ManyToManyField(PlanillaLocales, related_name="planillas")#esto nose si es asi
 
     def agregar_item(self, item):
         self.items.add(item)
@@ -124,3 +126,18 @@ class PlanillaDeVisado(models.Model):
             else:
                 print("{item}: X".format(item=item))
 
+    def agregar_local(self, local):   #agregue esto para agregar lo de la planilla de locales
+        self.locales.add(local)
+
+    def quita_local(self, local):
+        self.locales.remove(local)
+
+    def local_activo(self, local):
+        return self.locales.filter(pk=local.pk).exists()
+
+        def marcar_locales(self, locales):
+            for local in locales:
+                if self.local_activo(local):
+                    print("{item}: O".format(item=local))
+                else:
+                    print("{item}: X".format(item=local))

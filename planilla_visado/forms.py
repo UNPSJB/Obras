@@ -12,7 +12,7 @@ class FormularioDocBalanceSuperficie(forms.ModelForm):
 
     class Meta:
         model = Doc_Balance_Superficie
-        fields = ('nombre',)
+        fields = ('nombre','descripcion')
 
     def __init__(self, *args, **kwargs):
         super(FormularioDocBalanceSuperficie, self).__init__(*args, **kwargs)
@@ -34,7 +34,7 @@ class FormularioElementoBalanceSuperficie(forms.ModelForm):
 
     class Meta:
         model = Doc_Balance_Superficie
-        fields = ('nombre',)
+        fields = ('nombre','descripcion')
 
     def __init__(self, *args, **kwargs):
         super(FormularioElementoBalanceSuperficie, self).__init__(*args, **kwargs)
@@ -50,62 +50,60 @@ class FormularioElementoBalanceSuperficie(forms.ModelForm):
             raise ValidationError("Ya existe {}".format(cargados.first().nombre))
         return nombre
 
-
-class FormulariotTipoVista(forms.ModelForm):
-    NAME = 'tipo_vista_form'
-    SUBMIT = 'tipo_vista_submit'
+class FormularioColumnaVisado(forms.ModelForm):
+    NAME = 'columna_visado_form'
+    SUBMIT = 'columna_visado_submit'
 
     class Meta:
-        model = Tipo_De_Vista
+        model = ColumnaDeVisado
         fields = ('nombre',)
 
     def __init__(self, *args, **kwargs):
-        super(FormulariotTipoVista, self).__init__(*args, **kwargs)
+        super(FormularioColumnaVisado, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
         # self.helper.form_class = 'form-horizontal'
         self.helper.add_input(Submit(self.SUBMIT, 'Guardar'))
-        self.fields['nombre'].widget.attrs['placeholder'] = "Ingresar Nombre de tipo de vista"
+        self.fields['nombre'].widget.attrs['placeholder'] = "Ingresar Nombre de columna"
 
     def clean_nombre(self):
         nombre = self.cleaned_data['nombre']
-        cargados = Tipo_De_Vista.objects.filter(nombre__icontains=nombre)
+        cargados = ColumnaDeVisado.objects.filter(nombre__icontains=nombre)
         if cargados.exists():
             raise ValidationError("Ya existe {}".format(cargados.first().nombre))
         return nombre
 
-class FormularioElementoDeVista(forms.ModelForm):
-    NAME = 'elemento_vista_form'
-    SUBMIT = 'elemento_vista_submit'
+class FormularioFilaVisado(forms.ModelForm):
+    NAME = 'fila_visado_form'
+    SUBMIT = 'fila_visado_submit'
 
     class Meta:
-        model = Elemento_De_Vista
-        fields = ('nombre',)
+        model = FilaDeVisado
+        fields = ('nombre','items')
 
     def __init__(self, *args, **kwargs):
-        super(FormularioElementoDeVista, self).__init__(*args, **kwargs)
+        super(FormularioFilaVisado, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
         # self.helper.form_class = 'form-horizontal'
         self.helper.add_input(Submit(self.SUBMIT, 'Guardar'))
-        self.fields['nombre'].widget.attrs['placeholder'] = "Ingresar Nombre de elemento de vista"
+        self.fields['nombre'].widget.attrs['placeholder'] = "Ingresar Nombre de fila"
 
     def clean_nombre(self):
         nombre = self.cleaned_data['nombre']
-        cargados = Elemento_De_Vista.objects.filter(nombre__icontains=nombre)
+        cargados = FilaDeVisado.objects.filter(nombre__icontains=nombre)
         if cargados.exists():
             raise ValidationError("Ya existe {}".format(cargados.first().nombre))
         return nombre
 
-
-class FormularioItemDeVistaElemento(forms.ModelForm):
+class FormularioItemDeVisado(forms.ModelForm):
     NAME = 'item_vista_elementoform'
-    SUBMIT = 'item_vista_submit'
+    SUBMIT = 'item_vista_elemento_submit'
 
     class Meta:
-        model = Elemento_De_Vista
-        fields = ('nombre',)
+        model = ItemDeVisado
+        fields = ('columna_de_visado','fila_de_visado','activo')
 
     def __init__(self, *args, **kwargs):
-        super(FormularioItemDeVistaElemento, self).__init__(*args, **kwargs)
+        super(FormularioItemDeVisado, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
         # self.helper.form_class = 'form-horizontal'
         self.helper.add_input(Submit(self.SUBMIT, 'Guardar'))
@@ -113,7 +111,16 @@ class FormularioItemDeVistaElemento(forms.ModelForm):
 
     def clean_nombre(self):
         nombre = self.cleaned_data['nombre']
-        cargados = Elemento_De_Vista.objects.filter(nombre__icontains=nombre)
+        cargados = ItemDeVisado.objects.filter(nombre__icontains=nombre)
         if cargados.exists():
             raise ValidationError("Ya existe {}".format(cargados.first().nombre))
         return nombre
+#
+# class FormularioPlanillaDeLocales(forms.ModelForm):
+#     NAME = 'planilla_de_localesform'
+#     SUBMIT = 'planilla_de_locales_submit'
+#
+#     class Meta:
+#         model = PlanillaLocales
+#         fields = ('planillaLocales')
+

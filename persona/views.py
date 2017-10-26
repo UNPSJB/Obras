@@ -647,6 +647,7 @@ def ver_inspecciones(request, pk_tramite):
 
 #------------------------------------------------------------------------------------------------------------------
 #director ---------------------------------------------------------------------------------------------------------
+from planilla_visado.forms import FormularioColumnaVisado, FormularioFilaVisado, FormularioItemDeVisado
 
 @login_required(login_url="login")
 @grupo_requerido('director')
@@ -676,7 +677,9 @@ FORMS_DIRECTOR = {(k.NAME, k.SUBMIT): k for k in {
     FormularioTipoObra,
     FormularioTipoDocumento,
     FormularioTipoPago,
-
+    FormularioColumnaVisado,
+    FormularioFilaVisado,
+    FormularioItemDeVisado,
 }}
 
 def cambiar_usuario_de_grupo(request):
