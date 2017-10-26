@@ -18,13 +18,12 @@
 					<li><a href="#" onclick='opcionesDatosTramite("alta_tipo_documento")'>Crear tipo de documento</a></li>
 					<li><a href="#" onclick='opcionesDatosTramite("alta_tipo_de_obra")'>Crear tipo de obra</a></li>
 					<li><a href="#" onclick='opcionesDatosTramite("alta_tipo_de_pago")'>Crear tipo de pago</a></li>
-
 				</ul>
-			<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo" onclick='mostrarSubmenu("tareasTramite"),opcionesDatosTramite("nada")'>Generar planilla visado <span class="caret"></span></a></li>
-				<ul class="sidebar sidebar-2" style="display:none;" <!--id="tareasTramite">-->
-					<li><a href="#" onclick='opcionesDatosTramite("alta_tipo_documento")'>Alta documento balance superficie</a></li>
-					<li><a href="#" onclick='opcionesDatosTramite("alta_tipo_de_obra")'>Alta columna visado</a></li>
-					<li><a href="#" onclick='opcionesDatosTramite("alta_tipo_de_pago")'>Alta fila visado</a></li>
+			<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree" onclick='mostrarSubmenu("tareasVisado"),opcionesVisado("nada")'>Generar planilla visado <span class="caret"></span></a></li>
+				<ul class="sidebar sidebar-2" style="display:none;" id="tareasPlanillaVisado">
+					<li><a href="#" onclick='opcionesVisado("alta_fila_visado")'>Alta fila visado</a></li>
+					<li><a href="#" onclick='opcionesVisado("alta_columna_visado")'>Alta columna visado</a></li>
+					<li><a href="#" onclick='opcionesVisado("alta_elemnto_visado")'>Alta elemnto visado</a></li>
 
 				</ul>
 			<!--<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree" onclick='mostrarSubmenu("sin_submenu")'>Otorgar final de obra</a></li>-->
@@ -216,35 +215,41 @@
 						</div>
 					</div>
 				</div>
-
-
 			</div>
 		</div>
 	  </div>
- 	<!--
-	  <div class="panel">
-		<div class="panel-heading box" role="tab" id="headingThree">
-		  <h5 class="panel-title">
-			<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree" onclick='mostrarSubmenu("sin_submenu")'>
-			  <font color="#ffffff" size="2">Otorgar final de obra</font>
-			</a>
-		  </h5>
-		</div>
-		<div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
-		  <div class="panel-body">
-			<div class="container-fluid">
-				<div class="row">
-					<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 
-					</div>
+		<!-- ACA VA LO NUEVO //LO DE PLANILLA VISADO-->
+		<div class="panel">
+			<div class="panel-heading box" role="tab" id="headingThree">
+				<h5 class="panel-title">
+					<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="collapseThree" aria-expanded="false" aria-controls="colapseThree" onclick='mostrarSubmenu("sin_submenu")'>
+						<font color="#fffff" size="2">Planilla de visado</font>
+					</a>			
+				</h5>
+			</div>
+			<div id="collapseThree" class="panel-collapse
+				{% if submit_name != 'columna_visado_submit' %}collapse{% endif %}" role="tabpanel" aria-labelledby="headingThree">
+				<div class="panel-body">
+					<div class="panel-body">
+						<div class="row">
+							<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+								<div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
+									<select class="form-control input-sm" id="opcionVisado" name="Obciones para planilla visado" onchange="opcionesVisado(this.value)">
+									<option selected value="nada">¿Que desea hacer?</option>
+									<option value="alta_fila">Crear fila visado</option>
+									<option value="alta_columna">Crear columna visado</option>
+									<option value="alta_item">Crear item visado</option>
+								</select>
+								</div>
+							</div>
+						</div>
 				</div>
-			</div>
-		  </div>
-		</div>
-	  </div>
-		-->
-	<!-- ACA VA LO NUEVO //LO DE PLANILLA VISADO-->
 
+			</div>
+
+		</div>
+		</div>
 		<!-- FINALIZA LO DE PLANILLA VISADO-->
 	  <div class="panel">
 		<div class="panel-heading box" role="tab" id="headingSix">

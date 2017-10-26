@@ -106,8 +106,7 @@ class FormularioItemDeVisado(forms.ModelForm):
         super(FormularioItemDeVisado, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
         # self.helper.form_class = 'form-horizontal'
-        self.helper.add_input(Submit(self.SUBMIT, 'Guardar'))
-        self.fields['nombre'].widget.attrs['placeholder'] = "Ingresar Nombre de elemento de vista"
+        self.helper.add_input(Submit(self.SUBMIT, 'Guardar'))    
 
     def clean_nombre(self):
         nombre = self.cleaned_data['nombre']

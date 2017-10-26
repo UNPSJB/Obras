@@ -365,9 +365,6 @@ def tramites_visados(request):
 def ver_documentos_para_visado(request, pk_tramite):
 
     tipos_de_documentos_requeridos = TipoDocumento.get_tipos_documentos_para_momento(TipoDocumento.VISAR)
-
-
-
     FormularioDocumentoSet = FormularioDocumentoSetFactory(tipos_de_documentos_requeridos)
     inicial = metodo(tipos_de_documentos_requeridos)
     documento_set = FormularioDocumentoSet(initial=inicial)
@@ -495,12 +492,8 @@ class ReporteTramitesAceptadosPdf(View):
         doc.build(Story)
         return response
 
-
-def planilla_visado(request):        
+def planilla_visado(request):
     return render(request,'persona/visador/planilla_visado.html')
-
-def planilla_de_visado(request):
-    return render(request,'persona/visador/planilla_de_visado.html')
 
 #-------------------------------------------------------------------------------------------------------------------
 #inspector ---------------------------------------------------------------------------------------------------------
