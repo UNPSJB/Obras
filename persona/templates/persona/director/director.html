@@ -220,36 +220,45 @@
 	  </div>
 
 		<!-- ACA VA LO NUEVO //LO DE PLANILLA VISADO-->
-		<div class="panel">
-			<div class="panel-heading box" role="tab" id="headingThree">
-				<h5 class="panel-title">
-					<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="collapseThree" aria-expanded="false" aria-controls="colapseThree" onclick='mostrarSubmenu("sin_submenu")'>
-						<font color="#fffff" size="2">Planilla de visado</font>
-					</a>			
-				</h5>
-			</div>
-			<div id="collapseThree" class="panel-collapse
-				{% if submit_name != 'columna_visado_submit' %}collapse{% endif %}" role="tabpanel" aria-labelledby="headingThree">
-				<div class="panel-body">
+		
+			<div class="panel">
+				<div class="panel-heading box" role="tab" id="headingThree">
+					<h5 class="panel-title">
+						<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="collapseThree" aria-expanded="false" aria-controls="colapseThree" onclick='mostrarSubmenu("sin_submenu")'>
+							<font color="#fffff" size="2">Planilla de visado</font>
+						</a>			
+					</h5>
+				</div>
+				<div id="collapseThree" class="panel-collapse
+					{% if submit_name != 'columna_visado_submit' %}collapse{% endif %}" role="tabpanel" aria-labelledby="headingThree">
 					<div class="panel-body">
-						<div class="row">
-							<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-								<div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
-									<select class="form-control input-sm" id="opcionVisado" name="Obciones para planilla visado" onchange="opcionesVisado(this.value)">
-									<option selected value="nada">¿Que desea hacer?</option>
-									<option value="alta_fila">Crear fila visado</option>
-									<option value="alta_columna">Crear columna visado</option>
-									<option value="alta_item">Crear item visado</option>
-								</select>
+						<div class="panel-body">
+							<div class="row">
+								<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+									<div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
+										<select class="form-control input-sm" id="opcionVisado" name="Obciones para planilla visado" onchange="opcionesVisado(this.value)">
+											<option selected value="nada">¿Que desea hacer?</option>
+											<option value="alta_fila">Crear fila visado</option>
+											<option value="alta_columna">Crear columna visado</option>
+											<option value="alta_item">Crear item visado</option>
+										</select>
+									</div>
 								</div>
 							</div>
-						</div>
+						</div>	
+					</div>
 				</div>
-
+				<div class="container-fluid" id="alta_fila" {% if submit_name != 'fila_visado_submit' %} class="hide"{% endif %} style="display:none;">
+					<div class="row">
+						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+							{% block alta_fila %}
+								{% crispy fila_visado_form %}
+							{% endblock %}
+						</div>
+					</div>
+				</div>
 			</div>
-
-		</div>
-		</div>
+		
 		<!-- FINALIZA LO DE PLANILLA VISADO-->
 	  <div class="panel">
 		<div class="panel-heading box" role="tab" id="headingSix">
@@ -431,6 +440,17 @@
 					//esto es por si dejo los submenu
 					$("#" + "opcionesDelTramite").val('alta_tipo_de_pago');
 				}
+		}
+
+		function opcionesVisado(id){
+			if (id == "nada"){
+				$("#alta_fila").hide();
+				$("#"+"opcionesVisado").val('nada');
+			}			
+			if (id == "alta_fila"){
+				$("#alta_fila").show();
+				$("#"+"opcionesVisado").val('alta_fila');
+			}
 		}
 
 	</script>
