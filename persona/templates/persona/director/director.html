@@ -229,8 +229,7 @@
 						</a>			
 					</h5>
 				</div>
-				<div id="collapseThree" class="panel-collapse
-					{% if submit_name != 'columna_visado_submit' %}collapse{% endif %}" role="tabpanel" aria-labelledby="headingThree">
+				<div id="collapseThree" class="panel-collapse" role="tabpanel" aria-labelledby="headingThree">
 					<div class="panel-body">
 						<div class="panel-body">
 							<div class="row">
@@ -240,7 +239,7 @@
 											<option selected value="nada">¿Que desea hacer?</option>
 											<option value="alta_fila">Crear fila visado</option>
 											<option value="alta_columna">Crear columna visado</option>
-											<option value="alta_item">Crear item visado</option>
+											<option value="alta_item">Generar planilla visado</option>
 										</select>
 									</div>
 								</div>
@@ -253,6 +252,24 @@
 						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 							{% block alta_fila %}
 								{% crispy fila_visado_form %}
+							{% endblock %}
+						</div>
+					</div>
+				</div>
+				<div class="container-fluid" id="alta_columna" {% if submit_name != 'columna_visado_submit' %} class="hide"{% endif %} style="display:none;">
+					<div class="row">
+						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+							{% block alta_columna %}
+								{% crispy columna_visado_form %}
+							{% endblock %}
+						</div>
+					</div>
+				</div>
+				<div class="container-fluid" id="alta_item" {% if submit_name != 'item_visado_submit' %} class="hide"{% endif %} style="display:none;">
+					<div class="row">
+						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+							{% block alta_item %}
+								{% crispy planilla_de_visado_form %}
 							{% endblock %}
 						</div>
 					</div>
@@ -451,6 +468,14 @@
 				$("#alta_fila").show();
 				$("#"+"opcionesVisado").val('alta_fila');
 			}
+			if (id == "alta_columna"){
+				$("#alta_columna").show();
+				$("#"+"opcionesVisado").val('alta_columna');
+			}
+			if (id == "alta_item"){
+				$("#alta_item").show();
+				$("#"+"opcionesVisado").val('alta_item');
+			}
 		}
 
 	</script>
@@ -518,6 +543,8 @@
 
 		$('#alta_tipo_de_pago #div_id_nombre').appendTo('#nombre_tipo_pago')
 		$('#submit-id-tipo_de_pago_submit').appendTo('#boton_tipo_pago')
+
+		
 
 
 	</script>

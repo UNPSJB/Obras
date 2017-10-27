@@ -96,9 +96,52 @@ class FormularioFilaVisado(forms.ModelForm):
             raise ValidationError("Ya existe {}".format(cargados.first().nombre))
         return nombre
 
+from django.utils.safestring import mark_safe
+
+class HorizontalCheckboxRenderer(forms.CheckboxSelectMultiple):
+    def __init__(self, *args, **kwargs):
+        super(HorizontalCheckboxRenderer, self).__init__(*args, **kwargs)
+        print("index")
+        css_style = 'style="display: inline-block; margin-right: 10px;"'
+
+        self.renderer.inner_html = '<li ' + css_style + '>{choice_value}{sub_widgets}</li>'
+
+def PlanillaDeVisadoFormFactory(filas, columnas):
+    COL_CHOICES = []
+    for columna in columnas:
+        COL_CHOICES.append((columna.pk, columna.nombre))
+    fields = {
+        'NAME': 'planilla_de_visado_form',
+        'SUBMIT': 'planilla_de_visado_submit'
+    }
+    for index, fila in enumerate(filas):
+        fields["fila" + str(index)] = forms.MultipleChoiceField(
+            label=fila.nombre,
+            required=False,
+            widget= forms.CheckboxSelectMultiple(attrs={
+                'display': 'inline-block'
+            }),
+            choices=COL_CHOICES,
+        )
+    class PlanillaDeVisadoMixin(forms.Form):
+        NAME = 'planilla_de_visado_form'
+        SUBMIT = 'planilla_de_visado_submit'
+     
+        def save(self, *args, **kwargs):
+            print(self.cleaned_data)
+            return "pepe"
+    
+        def __init__(self, *args, **kwargs):
+            super(PlanillaDeVisadoMixin, self).__init__(*args, **kwargs)
+            self.helper = FormHelper()
+            # self.helper.form_class = 'form-horizontal'
+            self.helper.add_input(Submit(self.SUBMIT, 'Guardar'))
+
+    return type("PlanillaDeVisadoForm", (PlanillaDeVisadoMixin, ), fields)
+
 class FormularioItemDeVisado(forms.ModelForm):
-    NAME = 'item_vista_elementoform'
-    SUBMIT = 'item_vista_elemento_submit'
+    NAME = 'item_visado_form'
+    SUBMIT = 'item_visado_submit'
 
     class Meta:
         model = ItemDeVisado
