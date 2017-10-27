@@ -19,7 +19,8 @@ class FormularioDocBalanceSuperficie(forms.ModelForm):
         self.helper = FormHelper()
         # self.helper.form_class = 'form-horizontal'
         self.helper.add_input(Submit(self.SUBMIT, 'Guardar'))
-        self.fields['nombre'].widget.attrs['placeholder'] = "Ingresar Nombre de documento de balance"
+        self.fields['nombre'].widget.attrs['placeholder'] = "Ingresar Nombre"
+        self.fields['descripcion'].widget.attrs['placeholder'] = "Ingresar Descripcion"
 
     def clean_nombre(self):
         nombre = self.cleaned_data['nombre']
@@ -33,7 +34,7 @@ class FormularioElementoBalanceSuperficie(forms.ModelForm):
     SUBMIT = 'elemento_balance_submit'
 
     class Meta:
-        model = Doc_Balance_Superficie
+        model = Elemento_Balance_Superficie
         fields = ('nombre','descripcion')
 
     def __init__(self, *args, **kwargs):
@@ -41,11 +42,12 @@ class FormularioElementoBalanceSuperficie(forms.ModelForm):
         self.helper = FormHelper()
         # self.helper.form_class = 'form-horizontal'
         self.helper.add_input(Submit(self.SUBMIT, 'Guardar'))
-        self.fields['nombre'].widget.attrs['placeholder'] = "Ingresar Nombre de documento de balance"
+        self.fields['nombre'].widget.attrs['placeholder'] = "Ingresar Nombre"
+        self.fields['descripcion'].widget.attrs['placeholder'] = "Ingresar Descripcion"
 
     def clean_nombre(self):
         nombre = self.cleaned_data['nombre']
-        cargados = Doc_Balance_Superficie.objects.filter(nombre__icontains=nombre)
+        cargados = Elemento_Balance_Superficie.objects.filter(nombre__icontains=nombre)
         if cargados.exists():
             raise ValidationError("Ya existe {}".format(cargados.first().nombre))
         return nombre
@@ -63,7 +65,7 @@ class FormularioColumnaVisado(forms.ModelForm):
         self.helper = FormHelper()
         # self.helper.form_class = 'form-horizontal'
         self.helper.add_input(Submit(self.SUBMIT, 'Guardar'))
-        self.fields['nombre'].widget.attrs['placeholder'] = "Ingresar Nombre de columna"
+        self.fields['nombre'].widget.attrs['placeholder'] = "Ingresar Nombre"
 
     def clean_nombre(self):
         nombre = self.cleaned_data['nombre']
@@ -78,14 +80,14 @@ class FormularioFilaVisado(forms.ModelForm):
 
     class Meta:
         model = FilaDeVisado
-        fields = ('nombre','items')
+        fields = ('nombre',)
 
     def __init__(self, *args, **kwargs):
         super(FormularioFilaVisado, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
         # self.helper.form_class = 'form-horizontal'
         self.helper.add_input(Submit(self.SUBMIT, 'Guardar'))
-        self.fields['nombre'].widget.attrs['placeholder'] = "Ingresar Nombre de fila"
+        self.fields['nombre'].widget.attrs['placeholder'] = "Ingresar Nombre"
 
     def clean_nombre(self):
         nombre = self.cleaned_data['nombre']
@@ -106,14 +108,19 @@ class FormularioItemDeVisado(forms.ModelForm):
         super(FormularioItemDeVisado, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
         # self.helper.form_class = 'form-horizontal'
-        self.helper.add_input(Submit(self.SUBMIT, 'Guardar'))    
+        self.helper.add_input(Submit(self.SUBMIT, 'Guardar'))
+        self.fields['columna_de_visado'].widget.attrs['placeholder'] = "Ingresar columna"
+        self.fields['fila_de_visado'].widget.attrs['placeholder'] = "Ingresar fila"
+        self.fields['activo'].widget.attrs['placeholder'] = "Ingresar si es activo"
 
-    def clean_nombre(self):
+    def clean_nombre(self): #aca iria validacion de columna valida y fila valida
         nombre = self.cleaned_data['nombre']
         cargados = ItemDeVisado.objects.filter(nombre__icontains=nombre)
         if cargados.exists():
             raise ValidationError("Ya existe {}".format(cargados.first().nombre))
         return nombre
+
+
 #
 # class FormularioPlanillaDeLocales(forms.ModelForm):
 #     NAME = 'planilla_de_localesform'

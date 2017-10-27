@@ -72,7 +72,7 @@ class FilaDeVisado(models.Model):
     Indicacion de corte....
     """
     nombre = models.CharField(max_length=200)
-    items = models.ManyToManyField(ColumnaDeVisado, through='ItemDeVisado', related_name='items')
+    #items = models.ManyToManyField(ColumnaDeVisado, through='ItemDeVisado', related_name='items')
 
     def __str__(self):
         return self.nombre
