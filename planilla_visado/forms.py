@@ -65,7 +65,7 @@ class FormularioColumnaVisado(forms.ModelForm):
         self.helper = FormHelper()
         # self.helper.form_class = 'form-horizontal'
         self.helper.add_input(Submit(self.SUBMIT, 'Guardar'))
-        self.fields['nombre'].widget.attrs['placeholder'] = "Ingresar Nombre"
+        self.fields['nombre'].widget.attrs['placeholder'] = "Ingresar Nombre columna"
 
     def clean_nombre(self):
         nombre = self.cleaned_data['nombre']
@@ -87,7 +87,7 @@ class FormularioFilaVisado(forms.ModelForm):
         self.helper = FormHelper()
         # self.helper.form_class = 'form-horizontal'
         self.helper.add_input(Submit(self.SUBMIT, 'Guardar'))
-        self.fields['nombre'].widget.attrs['placeholder'] = "Ingresar Nombre"
+        self.fields['nombre'].widget.attrs['placeholder'] = "Ingresar Nombre fila"
 
     def clean_nombre(self):
         nombre = self.cleaned_data['nombre']
