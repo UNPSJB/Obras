@@ -10,25 +10,30 @@
       </ul>
 {% endblock %}
 
-{% block contenido_elegir_financiacion %}
-    
-        <div class="panel">
-            <div id="collapseSeven" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingSeven">
-                <div class="panel-body">
-                    <div class="container-fluid">
-                        <div class="row">
-                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                                <div class="col-xs-12 col-sm-12 col-md-6 col-lg-12">
-                                    <div class="form-group">
-                                        <label> Monto a abonar:</label>
-                                        <span class="label label-primary"> ------------------------- </span>
-                                    </div>
-                                </div>						    
-                            </div>
-                        </div>
-                    </div>
-                </div>
+{% block contenido %}
+
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <hr>
+            <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4" style="display:none">
+                <h1>Monto: {{tramite.monto_a_pagar}}</h1>
             </div>
+            <form method="post" enctype="multipart/form-data"> {% csrf_token %}
+                <div id="tipo" class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+                        <h1>Monto: {{tramite.monto_a_pagar}}</h1>
+                </div>                
+                <div id="boton_tipo" class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="right">
+                    <button class="btn btn-danger btn-sm" type="reset" title="Borrar datos del formulario">
+                        Limpiar
+                    </button>
+                    <button class="btn btn-primary btn-sm" type="submit" title="Enviar modificación de mis datos">
+                            Guardar
+                    </button>
+                </div>
+                
+                <br>
+            </form>
         </div>
-    
+    </div>
+
 {% endblock %}

@@ -74,11 +74,13 @@ urlpatterns = [
     url(r'^reporte_tramites_director_excel/', ReporteTramitesDirectorExcel.as_view(), name="reporte_tramites_director_excel"),
     url(r'^reporte_tramites_director_pdf/$', login_required(ReporteTramitesDirectorPdf.as_view()), name="reporte_tramites_director_pdf"),
     url(r'^vista_de_usuarios$', views.ver_listado_todos_usuarios, name="vista_de_usuarios"),
+    url(r'^item_de_visado/(?P<pk_tramite>\d+)/$', views.generar_planilla_visado, name="item_visado"),
+    
 
     #cajero -------------------------------------------------------------------------------------------------------
     url(r'^cajero$', views.mostrar_cajero, name="cajero"),
     url(r'^cajero/tramite_para_financiar$', views.listado_tramite_para_financiar, name="tramite_para_financiar"),
-    url(r'^cajero/elegir_financiacion$', views.elegir_financiacion, name="financiar"),
+    url(r'^cajero/elegir_financiacion/(?P<pk_tramite>\d+)/$', views.elegir_financiacion, name="financiar"),
     #movil -------------------------------------------------------------------------------------------------------
     url(r'^movil$', views.movil_inspector, name="movil_inspector"),
     url(r'^frente$', views.frente_o_fachada, name="frente_o_fachada"),

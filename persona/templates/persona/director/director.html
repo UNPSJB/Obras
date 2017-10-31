@@ -294,11 +294,41 @@
 				</div>
 				<div class="container-fluid" id="alta_item" {% if submit_name != 'item_visado_submit' %} class="hide"{% endif %} style="display:none;">
 					<div class="row">
-						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 							{% block alta_item %}
-								{% crispy planilla_de_visado_form %}
+								<table class="table-bordered table-striped table-hover table-condensed" style="background: white;">
+									<thead>
+										<tr>
+											<th>Filas</th>
+											{% for index, name in planilla_de_visado_form.fields.fila0.choices %}					
+											<th>{{name}}</th>
+											{% endfor %}
+										</tr>
+									</thead>								
+								<tbody>									
+									{% for item in planilla_de_visado_form %}
+									<tr>
+										<td class="col-xs-12">{{ item.label }}</td>
+										{% for columna in item %}
+											<td class="col-xs-1">{{ columna }}</td>
+										{% endfor %}
+									</tr>
+									{% endfor %}									
+								</tbody>
+							</table>		
+							<div class="container-fluid">
+									<br>
+									<div class="row">
+										<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="right">											
+											<button class="btn btn-danger btn-sm" type="reset" title="Borrar datos del formulario">
+												Limpiar
+											</button>
+											<button class="btn btn-primary btn-sm" type="submit" title="Enviar modificación de mis datos">
+												Guardar
+											</button>
+										</div>
+									</div>
+								</div>								
 							{% endblock %}
-						</div>
 					</div>
 				</div>
 			<div class="container-fluid" id="alta_elemento_balance" {% if submit_name != 'elemento_balance_submit' %} class="hide"{% endif %} style="display:none;">

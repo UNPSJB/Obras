@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import  login_required
 
 from .forms import *
 from django.contrib import messages
-from pago.forms import FormularioTipoPago
+from pago.forms import FormularioTipoPago, FormularioPago
 from tipos.forms import *
 from obras_particulares.views import *
 from tramite.forms import FormularioIniciarTramite
@@ -730,7 +730,7 @@ def ver_listado_todos_usuarios(request):
             cant_usuarios_grupos.append(gu)
     total_usuarios_grupos = dict(collections.Counter(cant_usuarios_grupos))
     for lg in grupos:
-        if (not total_usuarios_grupos.has_key(lg)):
+        if (not total_usuaxrios_grupos.has_key(lg)):
             total_usuarios_grupos.setdefault(lg, 0)
     datos_grupos = total_usuarios_grupos.values()
     return render(request, 'persona/director/vista_de_usuarios.html', {"label_grupos":label_grupos, "datos_grupos":datos_grupos})
@@ -755,6 +755,16 @@ def documentos_del_estado(request, pk_estado):
     documentos_fecha = filter(lambda e:(datetime.strftime(e.fecha, '%d/%m/%Y %H:%M') == fecha_str), documentos)
     contexto= {'documentos_de_fecha': documentos_fecha}
     return render(request, 'persona/director/documentos_del_estado.html', contexto)
+
+def generar_planilla_visado(request):
+    filas = FilaDeVisado.objects.all()
+    raise Exception(filas)
+    print (filas)
+    columnas = ColumnaDeVisado.objects.all()
+    contexto = {'filas': filas}
+    contexto_columnas = {'columnas': columnas}
+    return render(request, 'persona/director/item_visado.html', contexto)
+
 
 class ReporteTramitesDirectorExcel(TemplateView):
 
@@ -877,9 +887,11 @@ def listado_tramite_para_financiar(request):
     contexto = {'tramites':tramites}
     return contexto
 
-def elegir_financiacion(request):    
-    return render(request, 'persona/cajero/elegir_financiacion.html')
-
+def elegir_financiacion(request,pk_tramite):    
+    tramite = get_object_or_404(Tramite, pk=pk_tramite)
+    contexto = {'tramite': tramite}
+    form = FormularioPago()
+    return render(request, 'persona/cajero/elegir_financiacion.html',contexto)
 
 #------------------------------------------------------------------------------------------------------------------
 #movil ---------------------------------------------------------------------------------------------------------
