@@ -642,6 +642,10 @@ def ver_inspecciones(request, pk_tramite):
 #director ---------------------------------------------------------------------------------------------------------
 from planilla_visado import forms as pforms
 from planilla_visado import models as pmodels
+from planilla_inspeccion.forms import FormularioCategoriaInspeccion
+from planilla_inspeccion.forms import FormularioItemInspeccion
+from planilla_inspeccion.forms import FormularioDetalleItem
+from planilla_inspeccion.forms import FormularioDocumentoTecnicoInspeccion
 
 @login_required(login_url="login")
 @grupo_requerido('director')
@@ -674,7 +678,12 @@ FORMS_DIRECTOR = {(k.NAME, k.SUBMIT): k for k in {
     pforms.FormularioColumnaVisado,
     pforms.FormularioFilaVisado,
     pforms.FormularioItemDeVisado,
-    pforms.PlanillaDeVisadoFormFactory(pmodels.FilaDeVisado.objects.all(), pmodels.ColumnaDeVisado.objects.all())
+    pforms.PlanillaDeVisadoFormFactory(pmodels.FilaDeVisado.objects.all(), pmodels.ColumnaDeVisado.objects.all()),
+    pforms.FormularioElementoBalanceSuperficie,
+    FormularioCategoriaInspeccion,
+    FormularioItemInspeccion,
+    FormularioDetalleItem,
+    FormularioDocumentoTecnicoInspeccion
 }}
 
 def cambiar_usuario_de_grupo(request):

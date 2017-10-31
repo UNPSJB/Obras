@@ -21,9 +21,10 @@
 				</ul>
 			<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree" onclick='mostrarSubmenu("tareasPlanillaVisado"),opcionesVisado("nada")'>Generar planilla visado <span class="caret"></span></a></li>
 				<ul class="sidebar sidebar-2" style="display:none;" id="tareasPlanillaVisado">
-					<li><a href="#" onclick='opcionesVisado("alta_fila_visado")'>Crear fila visado</a></li>
-					<li><a href="#" onclick='opcionesVisado("alta_columna_visado")'>Crear columna visado</a></li>
-					<li><a href="#" onclick='opcionesVisado("alta_elemnto_visado")'>Generar planilla visado</a></li>
+					<li><a href="#" onclick='opcionesVisado("alta_fila")'>Crear fila visado</a></li>
+					<li><a href="#" onclick='opcionesVisado("alta_columna")'>Crear columna visado</a></li>
+					<li><a href="#" onclick='opcionesVisado("alta_item")'>Generar planilla visado</a></li>
+					<li><a href="#" onclick='opcionesVisado("alta_elemento_balance")'>Crear elemento balance superficie</a></li>
 
 				</ul>
 			<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseSeven" aria-expanded="false" aria-controls="collapseSeven" onclick='mostrarSubmenu("tareasPlanillaInspeccion"),opcionesInspeccion("nada")'>Generar planilla inspeccion <span class="caret"></span></a></li>
@@ -227,17 +228,15 @@
 		</div>
 	  </div>
 
-		<!-- ACA VA LO NUEVO //LO DE PLANILLA VISADO-->
-		
 			<div class="panel">
 				<div class="panel-heading box" role="tab" id="headingThree">
 					<h5 class="panel-title">
-						<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="collapseThree" aria-expanded="false" aria-controls="colapseThree" onclick='mostrarSubmenu("tareasPlanillaVisado")'>
+						<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="colapseThree" onclick='mostrarSubmenu("tareasPlanillaVisado")'>
 							<font color="#fffff" size="2">Planilla de visado</font>
 						</a>			
 					</h5>
 				</div>
-				<div id="collapseThree" class="panel-collapse {% if submit_name != 'fila_visado_submit' and submit_name != 'columna_visado_submit and submit_name != item_visado_submit' %}collapse{% endif %}
+				<div id="collapseThree" class="panel-collapse {% if submit_name != 'fila_visado_submit' and submit_name != 'columna_visado_submit and submit_name != item_visado_submit and submit_name != elemento_balance_submit' %}collapse{% endif %}
 				" role="tabpanel" aria-labelledby="headingThree">
 					<div class="panel-body">
 						<div class="panel-body">
@@ -249,6 +248,7 @@
 											<option value="alta_fila">Crear fila visado</option>
 											<option value="alta_columna">Crear columna visado</option>
 											<option value="alta_item">Generar planilla visado</option>
+											<option value="alta_elemento_balance">Crear elemento balance superficie</option>
 										</select>
 									</div>
 								</div>
@@ -301,9 +301,163 @@
 						</div>
 					</div>
 				</div>
+			<div class="container-fluid" id="alta_elemento_balance" {% if submit_name != 'elemento_balance_submit' %} class="hide"{% endif %} style="display:none;">
+				<div class="row">
+					<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+						<hr>
+						<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4" style="display:none">
+							{% block alta_elemento_balance %}
+								{% crispy elemento_balance_form %}
+							{% endblock %}
+						</div>
+						<form method="post" enctype="multipart/form-data"> {% csrf_token %}
+							<div id="nombre_elemento_balance" class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+							</div>
+							<div id="desc_elemento_balance" class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+							</div>
+							<div id="boton_elemento_balance" class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="right">
+								<button class="btn btn-danger btn-sm" type="reset" title="Borrar datos del formulario">
+									Limpiar
+								</button>
+							</div>
+							<br>
+						</form>
+					</div>
+				</div>
 			</div>
+	</div>
+	<div class="panel">
+				<div class="panel-heading box" role="tab" id="headingSeven">
+					<h5 class="panel-title">
+						<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseSeven" aria-expanded="false" aria-controls="colapseSeven" onclick='mostrarSubmenu("tareasPlanillaInspeccion")'>
+							<font color="#fffff" size="2">Planilla de inspeccion</font>
+						</a>
+					</h5>
+				</div>
+				<div id="collapseSeven" class="panel-collapse {% if submit_name != 'cat_inspeccion_submit' and submit_name != 'item_inspeccion_submit' and submit_name != 'detalle_item_inspeccion_submit' and submit_name != 'doc_tecnico_inspeccion_submit' %}collapse{% endif %}
+				" role="tabpanel" aria-labelledby="headingSeven">
+					<div class="panel-body">
+						<div class="panel-body">
+							<div class="row">
+								<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+									<div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
+										<select class="form-control input-sm" id="opcionesInspeccion" name="Opciones para planilla inspeccion" onchange="opcionesInspeccion(this.value)">
+											<option selected value="nada">¿Que desea hacer?</option>
+											<option value="alta_categoria_inspeccion">Crear categoria inspeccion</option>
+											<option value="alta_item_inspeccion">Crear item inspeccion</option>
+											<option value="alta_detalle_item">Crear detalle inspeccion</option>
+											<option value="alta_doc_inspeccion">Crear documento tecnico</option>
+										</select>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div class="container-fluid" id="alta_categoria_inspeccion" {% if submit_name != 'cat_inspeccion_submit' %} class="hide"{% endif %} style="display:none;">
+				<div class="row">
+					<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+						<hr>
+						<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4" style="display:none">
+							{% block alta_categoria_inspeccion %}
+								{% crispy cat_inspeccion_form %}
+							{% endblock %}
+						</div>
+						<form method="post" enctype="multipart/form-data"> {% csrf_token %}
+							<div id="nombre_cat_inspeccion" class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+							</div>
+							<div id="desc_cat_inspeccion" class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+							</div>
+							<div id="tipo_cat_inspeccion" class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+							</div>
+							<div id="boton_cat_inspeccion" class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="right">
+								<button class="btn btn-danger btn-sm" type="reset" title="Borrar datos del formulario">
+									Limpiar
+								</button>
+							</div>
+							<br>
+						</form>
+					</div>
+				</div>
+			</div>
+			<div class="container-fluid" id="alta_item_inspeccion" {% if submit_name != 'item_inspeccion_submit' %} class="hide"{% endif %} style="display:none;">
+				<div class="row">
+					<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+						<hr>
+						<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4" style="display:none">
+							{% block alta_item_inspeccion %}
+								{% crispy item_inspeccion_form %}
+							{% endblock %}
+						</div>
+						<form method="post" enctype="multipart/form-data"> {% csrf_token %}
+							<div id="nombre_item_inspeccion" class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+							</div>
+							<div id="cat_inspeccion" class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+							</div>
+							<div id="boton_item_inspeccion" class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="right">
+								<button class="btn btn-danger btn-sm" type="reset" title="Borrar datos del formulario">
+									Limpiar
+								</button>
+							</div>
+							<br>
+						</form>
+					</div>
+				</div>
+			</div>
+			<div class="container-fluid" id="alta_detalle_item" {% if submit_name != 'detalle_item_inspeccion_submit' %} class="hide"{% endif %} style="display:none;">
+				<div class="row">
+					<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+						<hr>
+						<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4" style="display:none">
+							{% block alta_detalle_item %}
+								{% crispy detalle_item_inspeccion_form %}
+							{% endblock %}
+						</div>
+						<form method="post" enctype="multipart/form-data"> {% csrf_token %}
+							<div id="item_detalle_inspeccion" class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+							</div>
+							<div id="cat_detalle" class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+							</div>
+							<div id="nombre_detalle_item" class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+							</div>
+							<div id="boton_detalle_inspeccion" class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="right">
+								<button class="btn btn-danger btn-sm" type="reset" title="Borrar datos del formulario">
+									Limpiar
+								</button>
+							</div>
+							<br>
+						</form>
+					</div>
+				</div>
+			</div>
+			<div class="container-fluid" id="alta_doc_inspeccion" {% if submit_name != 'doc_tecnico_inspeccion_submit' %} class="hide"{% endif %} style="display:none;">
+				<div class="row">
+					<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+						<hr>
+						<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4" style="display:none">
+							{% block alta_doc_inspeccion %}
+								{% crispy doc_tecnico_inspeccion_form %}
+							{% endblock %}
+						</div>
+						<form method="post" enctype="multipart/form-data"> {% csrf_token %}
+							<div id="nombre_doc_inspeccion" class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+							</div>
+							<div id="descripcion_doc" class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+							</div>
+							<div id="detalle_doc" class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+							</div>
+							<div id="boton_doc_inspeccion" class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="right">
+								<button class="btn btn-danger btn-sm" type="reset" title="Borrar datos del formulario">
+									Limpiar
+								</button>
+							</div>
+							<br>
+						</form>
+					</div>
+				</div>
+			</div>
+	</div>
 
-		<!-- FINALIZA LO DE PLANILLA VISADO-->
 	  <div class="panel">
 		<div class="panel-heading box" role="tab" id="headingSix">
 		  <h5 class="panel-title">
@@ -491,26 +645,76 @@
 				$("#alta_fila").hide();
 				$("#alta_columna").hide();
 				$("#alta_item").hide();
+				$("#alta_elemento_balance").hide();
 				$("#"+"opcionesVisado").val('nada');
 			}
 			if (id == "alta_fila"){
 				$("#alta_fila").show();
 				$("#alta_columna").hide();
 				$("#alta_item").hide();
+				$("#alta_elemento_balance").hide();
 				$("#"+"opcionesVisado").val('alta_fila');
 			}
 			if (id == "alta_columna"){
 				$("#alta_fila").hide();
 				$("#alta_columna").show();
 				$("#alta_item").hide();
+				$("#alta_elemento_balance").hide();
 				$("#"+"opcionesVisado").val('alta_columna');
 			}
 			if (id == "alta_item"){
 				$("#alta_fila").hide();
 				$("#alta_columna").hide();
 				$("#alta_item").show();
+				$("#alta_elemento_balance").hide();
 				$("#"+"opcionesVisado").val('alta_item');
 			}
+			if (id == "alta_elemento_balance"){
+				$("#alta_fila").hide();
+				$("#alta_columna").hide();
+				$("#alta_item").hide();
+				$("#alta_elemento_balance").show();
+				$("#"+"opcionesVisado").val('alta_elemento_balance');
+			}
+		}
+
+		function opcionesInspeccion(id){
+			if (id == "nada"){
+				$("#alta_categoria_inspeccion").hide();
+				$("#alta_item_inspeccion").hide();
+				$("#alta_detalle_item").hide();
+				$("#alta_doc_inspeccion").hide();
+				$("#"+"opcionesInspeccion").val('nada');
+			}
+			if (id == "alta_categoria_inspeccion"){
+				$("#alta_categoria_inspeccion").show();
+				$("#alta_item_inspeccion").hide();
+				$("#alta_detalle_item").hide();
+				$("#alta_doc_inspeccion").hide();
+				$("#"+"opcionesInspeccion").val('alta_categoria_inspeccion');
+			}
+			if (id == "alta_item_inspeccion"){
+				$("#alta_categoria_inspeccion").hide();
+				$("#alta_item_inspeccion").show();
+				$("#alta_detalle_item").hide();
+				$("#alta_doc_inspeccion").hide();
+				$("#"+"opcionesInspeccion").val('alta_item_inspeccion');
+			}
+			if (id == "alta_detalle_item"){
+				$("#alta_categoria_inspeccion").hide();
+				$("#alta_item_inspeccion").hide();
+				$("#alta_detalle_item").show();
+				$("#alta_doc_inspeccion").hide();
+				$("#"+"opcionesInspeccion").val('alta_detalle_item');
+			}
+			if (id == "alta_doc_inspeccion"){
+				$("#alta_categoria_inspeccion").hide();
+				$("#alta_item_inspeccion").hide();
+				$("#alta_detalle_item").hide();
+				$("#alta_doc_inspeccion").show();
+				$("#"+"opcionesInspeccion").val('alta_doc_inspeccion');
+			}
+
 		}
 
 	</script>
@@ -585,6 +789,28 @@
 		$('#alta_columna #div_id_nombre').appendTo('#nombre_columna')
 		$('#submit-id-columna_visado_submit').appendTo('#boton_columna')
 
+		$('#alta_elemento_balance #div_id_nombre').appendTo('#nombre_elemento_balance')
+		$('#alta_elemento_balance #div_id_descripcion').appendTo('#desc_elemento_balance')
+		$('#submit-id-elemento_balance_submit').appendTo('#boton_elemento_balance')
+
+		$('#alta_categoria_inspeccion #div_id_nombre').appendTo('#nombre_cat_inspeccion')
+		$('#alta_categoria_inspeccion #div_id_descripcion').appendTo('#desc_cat_inspeccion')
+		$('#alta_categoria_inspeccion #div_id_tipo').appendTo('#tipo_cat_inspeccion')
+		$('#submit-id-cat_inspeccion_submit').appendTo('#boton_cat_inspeccion')
+
+		$('#alta_item_inspeccion #div_id_nombre').appendTo('#nombre_item_inspeccion')
+		$('#alta_item_inspeccion #div_id_categorias').appendTo('#cat_inspeccion')
+		$('#submit-id-item_inspeccion_submit').appendTo('#boton_item_inspeccion')
+
+		$('#alta_detalle_item #div_id_item_inspeccion').appendTo('#item_detalle_inspeccion')
+		$('#alta_detalle_item #div_id_categoria_inspeccion').appendTo('#cat_detalle')
+		$('#alta_detalle_item #div_id_nombre').appendTo('#nombre_detalle_item')
+		$('#submit-id-detalle_item_inspeccion_submit').appendTo('#boton_detalle_inspeccion')
+
+		$('#alta_doc_inspeccion #div_id_nombre').appendTo('#nombre_doc_inspeccion')
+		$('#alta_doc_inspeccion #div_id_descripcion').appendTo('#descripcion_doc')
+		$('#alta_doc_inspeccion #div_id_detalles').appendTo('#detalle_doc')
+		$('#submit-id-doc_tecnico_inspeccion_submit').appendTo('#boton_doc_inspeccion')
 
 	</script>
 

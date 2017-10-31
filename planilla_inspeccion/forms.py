@@ -28,7 +28,7 @@ from .models import *
 #         return descripcion
 
 class FormularioCategoriaInspeccion(forms.ModelForm):
-    NAME = 'cat_inspeccicon_form'
+    NAME = 'cat_inspeccion_form'
     SUBMIT = 'cat_inspeccion_submit'
 
     class Meta:
@@ -44,7 +44,7 @@ class FormularioCategoriaInspeccion(forms.ModelForm):
         self.fields['descripcion'].widget.attrs['placeholder'] = "Ingresar Descripcion"
         self.fields['tipo'].widget.attrs['placeholder'] = "Ingresar tipo"
 
-    def clean_descripcion(self):
+    def clean_nombre(self):
         nombre = self.cleaned_data['nombre']
         cargados = CategoriaInspeccion.objects.filter(nombre__icontains=nombre)
         if cargados.exists():
@@ -52,7 +52,7 @@ class FormularioCategoriaInspeccion(forms.ModelForm):
         return nombre
 
 class FormularioItemInspeccion(forms.ModelForm):
-    NAME = 'item_inspeccicon_form'
+    NAME = 'item_inspeccion_form'
     SUBMIT = 'item_inspeccion_submit'
 
     class Meta:
@@ -67,7 +67,7 @@ class FormularioItemInspeccion(forms.ModelForm):
         self.fields['nombre'].widget.attrs['placeholder'] = "Ingresar nombre"
         self.fields['categorias'].widget.attrs['placeholder'] = "Ingresar Categoria"
 
-    def clean_descripcion(self):
+    def clean_nombre(self):
         nombre = self.cleaned_data['nombre']
         cargados = ItemInspeccion.objects.filter(nombre__icontains=nombre)
         if cargados.exists():
@@ -75,7 +75,7 @@ class FormularioItemInspeccion(forms.ModelForm):
         return nombre
 
 class FormularioDetalleItem(forms.ModelForm):
-    NAME = 'detalle_item_inspeccicon_form'
+    NAME = 'detalle_item_inspeccion_form'
     SUBMIT = 'detalle_item_inspeccion_submit'
 
     class Meta:
@@ -91,7 +91,7 @@ class FormularioDetalleItem(forms.ModelForm):
         self.fields['categoria_inspeccion'].widget.attrs['placeholder'] = "Ingresar Categoria"
         self.fields['nombre'].widget.attrs['placeholder'] = "Ingresar nombre"
 
-    def clean_descripcion(self):
+    def clean_nombre(self):
         nombre = self.cleaned_data['nombre']
         cargados = ItemInspeccion.objects.filter(nombre__icontains=nombre)
         if cargados.exists():
@@ -99,7 +99,7 @@ class FormularioDetalleItem(forms.ModelForm):
         return nombre
 
 class FormularioDocumentoTecnicoInspeccion(forms.ModelForm):
-    NAME = 'doc_tecnico_inspeccicon_form'
+    NAME = 'doc_tecnico_inspeccion_form'
     SUBMIT = 'doc_tecnico_inspeccion_submit'
 
     class Meta:
@@ -115,8 +115,8 @@ class FormularioDocumentoTecnicoInspeccion(forms.ModelForm):
         self.fields['descripcion'].widget.attrs['placeholder'] = "Ingresar Descripcion"
         self.fields['detalles'].widget.attrs['placeholder'] = "Ingresar Detalles"
 
-    def clean_descripcion(self):
-        nombre = self.cleaned_data['descripcion']
+    def clean_nombre(self):
+        nombre = self.cleaned_data['nombre']
         cargados = DocumentoTecnicoInspeccion.objects.filter(nombre__icontains=nombre)
         if cargados.exists():
             raise ValidationError("Ya existe {}".format(cargados.first().nombre))
