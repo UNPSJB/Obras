@@ -1,41 +1,47 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
+{% load crispy_forms_tags%}
+
+{%block barrapropietario%}
+	<br>
+		<div id="nav">
+			<div class="col-xs-2 col-sm-2 col-md-2 col-lg-2" style="background-color:#336699!important; border-color:#2c3e50!important; color:white!important; border-style:inset; border-width: thick;">
+				<li id="estilom"><a link href="#" rel="/static/css/base2.css"><label  style="color:white!important;" >Estilo Base</label></a></li>
+			</div>
+			<div class="col-xs-2 col-sm-2 col-md-2 col-lg-2"style="background-color:#e4d62f!important; border-color:#333333!important; text-color:#ab1515!important; border-style:inset;    border-width: thick;">
+				<li id="estilol"><a  link href="#" rel="/static/css/estilo1.css"><label style="color:#ab1515!important;">Estilo 1</label></a></li>
+			</div>
+			<div class="col-xs-2 col-sm-2 col-md-2 col-lg-2" style="background-color:mediumspringgreen!important; border-color:#144431!important; text-color:#136948!important!; border-style:inset; border-width: thick;">
+				<li id="estilo"><a  link href="#" rel="/static/css/estilo2.css"><label style="color:#136948!important;">Estilo 2</label></a></li>
+			</div>
+			<div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
+				<span onclick="zoomIn()"><label>Aumentar Fuente</label></span>
+			</div>
+			<div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
+				<span onclick="zoomOut()"><label>Disminuir Fuente</label></span>
+			</div>
+		</div>
+{% endblock %}
 
 {% block barra %}
+<br>
 	<ul class="sidebar sidebar-1">
-		<font size="2">
-			<li><a href="#" class="current"><font color="white">Propietario</font></a></li>
-			<!--<span onclick="zoomIn()">Aumentar<br>Fuente</span> <span onclick="zoomOut()">Disminuir<br>Fuente</span>-->
-			<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour">Consultar estado de mis tramites</a></li>
-			<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne">Modificar mis datos personales</a></li>
-			<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseOne">Seleccionar forma de financiacion</a></li>
-			<!--<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseOne">Modificar fuentes y color</a></li>-->
-			<li><a data-toggle="collapse" data-parent="#accordion">Configuracion de pagina</a></li>
-			<form>
-				<div align="center">
-				  <button class="btn btn-primary btn-sm" type="submit" value="agrandar"span onclick="zoomIn()">Agrandar<br></span>
-                  <button class="btn btn-primary btn-sm" type="submit"input value="achicar"span onclick="zoomOut()">Achicar<br></span>
-				</div>
-			  </form>
-			<form>
-				<div align="center">
-					<a href="#"
-					   <button class="btn btn-primary btn-sm" type="submit" value="cambiar" onclick="javascript:document.body.style.backgroundColor='#C0C0C0'; document.body.style.backgroundImage='none';">Gris</a>
-					<button class="btn btn-primary btn-sm" type="submit" value="cambiar" onclick="changeColor()">Celeste<br></button>
-				</div>
-			  </form>
-		</font>
+		<li><a href="#" class="current"><label>Propietario</label></a></li>
+		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour"><label id="i">Consultar estado de mis tramites</label></a></li>
+		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne"><label id="j">Modificar mis datos personales</label></a></li>
+		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseOne"><label id="k">Seleccionar forma de financiacion</label></a></li>
+
 	</ul>
 {% endblock %}
 
-
 {% block contenido %}
-	<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+<br>
+	<div class="panel-group" id="#accordion" role="tablist" aria-multiselectable="true">
 		<div class="panel panel-custom">
 			<div class="panel-heading panel-heading-custom box" role="tab" id="headingFour">
 				<h5 class="panel-title">
 					<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
-						<font color="#ffffff" size="2">Consultar estado de mis Trámites</font>
+						<label id="a">Consultar estado de mis Tramites</label>
 					</a>
 				</h5>
 			</div>
@@ -43,7 +49,7 @@
 				<div class="panel-body">
 					<div class="container-fluid">
 						<div class="row">
-							<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+							<div id="columna" class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 								{% block contenido_tramite_estado %}
 									{% include "persona/propietario/consultar_estado_tramite_propietario.html" with tramites_de_propietario=ctxtramitespropietario %}
 								{% endblock %}
@@ -58,7 +64,7 @@
 			<div class="panel-heading panel-heading-custom box" role="tab" id="headingOne">
 			  <h5 class="panel-title">
 				<a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-				  <font color="#ffffff" size="2">Modificar mis datos personales</font>
+					<label id="b">Modificar mis datos personales</label>
 				</a>
 			  </h5>
 			</div>
@@ -66,38 +72,38 @@
 			  <div class="panel-body">
 				<div class="container-fluid">
 					<div class="row">
-						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-							<div class="container-fluid">
+						<div id="columna1" class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+							<div class="container-fluid" id="contenedor1">
 							<br>
 								<form action="" class="" >
 									<div class="row">
-										<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+										<div id="columna1a" class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
 												<div class="form-group">
-													<label> Nro. de teléfono:</label>
+													<label id="c"> Nro. de telefono:</label>
 													<input class="form-control input-sm" id="" name="" type="text" placeholder="Ingresar Nro de telefono" title="Ingresar nuevo Nro de telefono" maxlength="13" autofocus />
 												</div>
 										</div>
-										<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+										<div id="columna1b" class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
 												<div class="form-group">
-													<label for=""> E-Mail:</label>
-													<input class="form-control input-sm" id="" name="" type="email" placeholder="Ingresar e-mail" title="Ingresar nuevo e-mail" maxlength="20" />
+													<label id="d"> E-Mail:</label>
+													<input class="form-control input-sm" id="email" name="" type="email" placeholder="Ingresar e-mail" title="Ingresar nuevo e-mail" maxlength="20" />
 												</div>
 										</div>
-										<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
-											<label for="">Cambiar Foto de perfil:</label>
+										<div id="columna1c" class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+											<label id="e">Cambiar Foto de perfil:</label>
 											<br>
 											<input class="file" id="perfil" type="file" data-preview-file-type="any" title="Cargar nueva foto de perfil">
 										</div>
 									</div>
-									<div class="container-fluid">
+									<div id="contenedor1a" class="container-fluid">
 										<br>
 										<div class="row">
-											<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="right">
-												<button class="btn btn-primary btn-sm" type="submit" title="Enviar modificación de mis datos">
-													Modificar mis datos
+											<div id="columna1d" class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="right">
+												<button class="btn btn-primary btn-sm" type="submit" title="Enviar modificaciÃ³n de mis datos">
+													<label id="f">Modificar mis datos</label>
 												</button>
 												<button class="btn btn-danger btn-sm" type="reset" title="Borrar datos del formulario">
-													Limpiar
+													<label>Limpiar</label>
 												</button>
 											</div>
 										</div>
@@ -116,7 +122,7 @@
 			<div class="panel-heading panel-heading-custom box" role="tab" id="headingTwo">
 				<h5 class="panel-title">
 					<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-						<font color="#ffffff" size="2">Seleccionar forma de financiacion</font>
+						<label id="g">Seleccionar forma de financiacion</label>
 					</a>
 				</h5>
 			</div>
@@ -124,45 +130,41 @@
 			  <div class="panel-body">
 				<div class="container-fluid">
 					<div class="row">
-						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-							<div class="container-fluid">
+						<div id="columna2" class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+							<div class="container-fluid" id="contenedor2">
 							<br>
 								<form action="" class="" >
 									<div class="row">
-										<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+										<div id="columna2a" class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
 												<div class="form-group">
-													<label> Monto a abonar:</label>
-													<span class="label label-primary"> ------------------------- </span>
+													<label id="h"> Monto:</label>
+													<span class="label label-primary"> --------------------- </span>
 												</div>
 										</div>
-										<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
-											<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.5.0/js/bootstra p-datepicker.min.js"></script>
-												<div class="form-group">
-													<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-														{% block seleccionar_financiacion %}
-															{% include "persona/propietario/seleccionar_financiacion.html" with tramites_de_propietario=ctxtramitespropietario %}
-														{% endblock %}
-													</div>
-												</div>
+										<div id="columna2b" class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+											<div class="form-group">
+												<label>Fecha Pago:<input id="fecha" name="fecha" class="datepicker" style="color:black" type="text" readonly="true;"></label>
+
+											</div>
 										</div>
-										<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-										<div class="col-xs-12 col-sm-12 col-md-3 col-lg-4">
+										<div id="columna2c" class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+										<div id="columna2d"class="col-xs-12 col-sm-12 col-md-3 col-lg-4">
 											<select class="form-control input-sm" id="opcionesPropietario" name="Opciones de Datos del tramite" onChange="opcionesDatosTramite(this.value);">
-												<option selected value="nada"> ¿Como desea abonar el monto? </option>
-												<option value="alta_tipo_documento">En 1 cuota (un pago)</option>
-												<option value="alta_tipo_de_obra">En 3 cuotas</option>
-												<option value="alta_tipo_de_obra">En 6 cuotas</option>
-												<option value="alta_tipo_de_obra">En 12 cuotas</option>
+												<option selected value="nada"> <label style="font-weight:bold!important;">Â¿Como desea abonar el monto?</label> </option>
+												<option value="alta_tipo_documento"><label style="font-weight:bold;">En 1 cuota (un pago)</label></option>
+												<option value="alta_tipo_de_obra"><label  style="font-weight:bold;">En 3 cuotas</label></option>
+												<option value="alta_tipo_de_obra"><label  style="font-weight:bold;">En 6 cuotas</label></option>
+												<option value="alta_tipo_de_obra"><label  style="font-weight:bold;">En 12 cuotas</label></option>
 											</select>
 										</div>
 
 										</div>
 									</div>
-									<div class="container-fluid">
+									<div id="contenedor2a" class="container-fluid">
 										<br>
 										<div class="row">
-											<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="right">
-												<button class="btn btn-primary btn-sm" type="submit" title="Enviar modificación de mis datos">
+											<div id="columna2e" class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="right">
+												<button class="btn btn-primary btn-sm" type="submit" title="Enviar modificaciÃ³n de mis datos">
 													Guardar
 												</button>
 											<button class="btn btn-danger btn-sm" type="reset" title="Borrar datos del formulario">
@@ -178,83 +180,13 @@
 			  </div>
 			</div>
 		</div>
-
-	  <!--<div class="panel panel-custom">
-		<div class="panel-heading panel-heading-custom box" role="tab" id="headingThree">
-		  <h5 class="panel-title">
-			<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-			  <font color="#ffffff" size="2">Modificar fuentes y colores</font>
-			</a>
-		  </h5>
-		</div>
-		<div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
-		  <div class="panel-body">
-			<div class="container-fluid">
-				<div class="row">
-					<!--  completar esto -->
-				<!--	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-			  		<div class="col-xs-12 col-sm-12 col-md-3 col-lg-4">
-				 	 <select class="form-control input-sm" id="opcionesPropietario" name="Opciones de Datos del tramite" onChange="opcionesDatosTramite(this.value);">
-					  <option selected value="nada"> ¿Que desea modificar? </option>
-					  <option value="alta_tipo_documento">Las fuentes</option>
-					  <option value="alta_tipo_de_obra">Los colores</option>
-				  </select>
-			  </div>
-				</div>
-			</div>
-				<div class="container-fluid">
-					<br>
-					<div class="row">
-						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="right">
-							<button class="btn btn-primary btn-sm" type="submit" title="Enviar modificación de mis datos">
-								Guardar
-							</button>
-							<button class="btn btn-danger btn-sm" type="reset" title="Borrar datos del formulario">
-								Limpiar
-							</button>
-						</div>
-					</div>
-				</div>
-		  </div>
-		</div>
-	  </div>
-	  </div>
-		<div class="container-fluid">
-			<br>
-			<div class="row">
-				<head class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="right">
-				<head>
-					<script>
-						function abrir(){
-							window.open("propietario")
-						}
-					</script>
-						<title></title>
-				</head>
-				<body>
-					<input type="button" value="abrir ventana" onclick = "abrir()">
-				</body>
-
-					<!--<button class="btn btn-primary btn-sm" type="submit" title="Enviar modificación de mis datos">
-						Modificar interfaz
-
-						<a href="javascript:void(document.body.style.fontSize='20px')">Aumenta el tamaño de la fuente de toda la página</a>
-					</button>
-					<!--<button class="btn btn-danger btn-sm" type="reset" title="Borrar datos del formulario">
-						Cambiar tamaño de letra
-					</button>-->
-			<!--	</div>
-			</div>
-			<!--<a href="#"  class="boton" onclick = "changeLetra();">enlace</a>-->
-		<!--	<a href="javascript:void(document.body.style.fontSize='20px')">Aumenta el tamaño de la fuente de toda la página</a>
-		</div>-->
 	</div>
 {% endblock %}
 
 
 {% block scripts %}
 
-	<script>
+<script>
 		$("#perfil").fileinput({
 			showCaption: false,
 			browseClass: "btn btn-primary btn-sm",
@@ -299,59 +231,50 @@
         }
     </script>
 
-    <style>
-        header span {
-            margin:5px;
-            width:150px;
-            text-align:center;
-            border:1px solid;
-            background:blue;
-            padding:10px;
-            display:inline-block;
-            font-size:14px;
-            cursor:pointer;
-        }
-
-        .fuente1 {font-size:14px;}
-        .fuente2 {font-size:1em;}
-    </style>
-</head>
 
 <script type="text/javascript">
-/* Funcion cambiar el color de fondo*/
-function changeColor(){
-    document.body.style.backgroundColor="#66CCFF"
-}
+  $(function() {
+   $('input').filter('.datepicker').datepicker({
+    changeMonth: true,
+    changeYear: true,
+    showOn: 'button',
+    buttonImage:'/media/imagenes/icon-calendar.png',
+    buttonImageOnly: true,
+    minDate:0,
+    maxDate: new Date(2020, 12, 30),
+    // Formato de la fecha
+    dateFormat: "dd/mm/yy",
+    // Primer dia de la semana El lunes
+    firstDay: 1,
+    // Dias Largo en castellano
+    dayNames: [ "Domingo", "Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado" ],
+    // Dias cortos en castellano
+    dayNamesMin: [ "Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sa" ],
+    // Nombres largos de los meses en castellano
+    monthNames: [ "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre" ],
+    // Nombres de los meses en formato corto
+    monthNamesShort: [ "Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dec" ],
+    // Cuando seleccionamos la fecha esta se pone en el campo Input
+    onSelect: function(dateText) {
+          $('#fecha').val(dateText);
+      }
+   });
+  });
+ </script>
+<script>
+	$(document).ready(function() {
+	if(Cookies.get("temporal")) {
+		$("link").attr("href",Cookies.get("temporal"));
+		Cookies.remove("temporal");
+	}
+	$("#nav li a").click(function() {
+		$("link").attr("href",$(this).attr('rel'));
+		Cookies.set("temporal",$(this).attr('rel'), {expires: 365, path: '/'});
+		return false;
+	});
+});
+
 </script>
 
-<!--<body>
-
-    <header>
-
-        <span onclick="zoomIn()">Aumentar<br>Fuente</span> <span onclick="zoomOut()">Disminuir<br>Fuente</span>
-
-    </header>
-
-
-
-    <div class="fuente1">
-
-        <h2>Fuente establecida con <strong>px</strong></h2>
-
-        Esta fuenta esta establecida con pixeles, por lo que no se modificara su tamaño
-
-    </div>
-
-
-
-    <div class="fuente2">
-
-        <h2>Fuente establecida con <strong>em</strong></h2>
-
-        Esta fuente esta establecida con em, por lo que su tamaño sera modificado con javascript
-
-    </div>
-
-</body>-->
 
 {% endblock %}
