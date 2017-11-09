@@ -294,8 +294,10 @@
 				</div>
 				<div class="container-fluid" id="alta_item" {% if submit_name != 'item_visado_submit' %} class="hide"{% endif %} style="display:none;">
 					<div class="row">
+					<!--	<form action="" method="post" enctype="multipart/form-data">{% csrf_token %}-->
 							{% block alta_item %}
-								<table class="table-bordered table-striped table-hover table-condensed" style="background: white;">
+								{% crispy planilla_de_visado_form %}
+								<!--<table class="table-bordered table-striped table-hover table-condensed" style="background: white;">
 									<thead>
 										<tr>
 											<th>Filas</th>
@@ -327,8 +329,12 @@
 											</button>
 										</div>
 									</div>
-								</div>								
+								</div>		-->
+					<!--		<button type="submit" type="reset" title="Borrar datos del formulario">
+												Limpiar
+											</button>-->
 							{% endblock %}
+						</form>
 					</div>
 				</div>
 			<div class="container-fluid" id="alta_elemento_balance" {% if submit_name != 'elemento_balance_submit' %} class="hide"{% endif %} style="display:none;">

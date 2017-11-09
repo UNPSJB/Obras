@@ -49,21 +49,25 @@ class ColumnaDeVisado(models.Model):
     def __str__(self):
         return self.nombre
 
+    def relacionar_con_filas(self, filas):
+        for fila in filas:
+            self.relacionar_con_fila(fila)
+
     def relacionar_con_fila(self, fila):
         try:
-            item = self.items.get(itemdevisado__fila_de_visado=fila)
+            item = self.items.get(fila_de_visado=fila)
             item.activo = True
             item.save()
             return item
-        except Exception as ex:
+        except ItemDeVisado.DoesNotExist as ex:
             return ItemDeVisado.objects.create(columna_de_visado=self, fila_de_visado=fila)
 
     def quitar_fila(self, fila):
         try:
-            item = self.items.get(itemdevisado__fila_de_visado=fila)
+            item = self.items.get(fila_de_visado=fila)
             item.activo = False
             item.save()
-        except Exception as ex:
+        except ItemDeVisado.DoesNotExist as ex:
             pass
 
 class FilaDeVisado(models.Model):
@@ -77,26 +81,30 @@ class FilaDeVisado(models.Model):
     def __str__(self):
         return self.nombre
 
+    def relacionar_con_columnas(self, columnas):
+        for columna in columnas:
+            self.relacionar_con_columna(columna)
+
     def relacionar_con_columna(self, columna):
         try:
-            item = self.items.get(itemdevisado__columna_de_visado=columna)
+            item = self.items.get(columna_de_visado=columna)
             item.activo = True
             item.save()
             return item
-        except Exception as ex:
+        except ItemDeVisado.DoesNotExist as ex:
             return ItemDeVisado.objects.create(columna_de_visado=columna, fila_de_visado=self)
 
     def quitar_columna(self, columna):
         try:
-            item = self.items.get(itemdevisado__columna_de_visado=columna)
+            item = self.items.get(columna_de_visado=columna)
             item.activo = False
             item.save()
-        except Exception as ex:
+        except ItemDeVisado.DoesNotExist as ex:
             pass
 
 class ItemDeVisado(models.Model):
-    columna_de_visado = models.ForeignKey(ColumnaDeVisado)
-    fila_de_visado = models.ForeignKey(FilaDeVisado)
+    columna_de_visado = models.ForeignKey(ColumnaDeVisado, related_name="items")
+    fila_de_visado = models.ForeignKey(FilaDeVisado, related_name="items")
     activo = models.BooleanField(default=True)
 
     class Meta:

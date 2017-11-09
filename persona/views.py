@@ -652,6 +652,9 @@ from planilla_inspeccion.forms import FormularioDocumentoTecnicoInspeccion
 def mostrar_director(request):
     usuario = request.user
     values = {}
+    FORMS_DIRECTOR.update({(k.NAME, k.SUBMIT): k for k in [
+        pforms.PlanillaDeVisadoFormFactory(pmodels.FilaDeVisado.objects.all(), pmodels.ColumnaDeVisado.objects.all())
+    ]})
     for form_name, submit_name in FORMS_DIRECTOR:
         KlassForm = FORMS_DIRECTOR[(form_name, submit_name)]
         if request.method == "POST" and submit_name in request.POST:
@@ -678,7 +681,7 @@ FORMS_DIRECTOR = {(k.NAME, k.SUBMIT): k for k in {
     pforms.FormularioColumnaVisado,
     pforms.FormularioFilaVisado,
     pforms.FormularioItemDeVisado,
-    pforms.PlanillaDeVisadoFormFactory(pmodels.FilaDeVisado.objects.all(), pmodels.ColumnaDeVisado.objects.all()),
+    #pforms.PlanillaDeVisadoFormFactory(pmodels.FilaDeVisado.objects.all(), pmodels.ColumnaDeVisado.objects.all()),
     pforms.FormularioElementoBalanceSuperficie,
     FormularioCategoriaInspeccion,
     FormularioItemInspeccion,

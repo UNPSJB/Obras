@@ -114,28 +114,41 @@ def PlanillaDeVisadoFormFactory(filas, columnas):
         'NAME': 'planilla_de_visado_form',
         'SUBMIT': 'planilla_de_visado_submit'
     }
-    for index, fila in enumerate(filas):
-        fields["fila" + str(index)] = forms.MultipleChoiceField(
+
+    for fila in filas:
+        items = ItemDeVisado.objects.filter(fila_de_visado=fila)
+        initial = [str(i.columna_de_visado.pk) for i in items]
+        fields["fila-" + str(fila.pk)] = forms.MultipleChoiceField(
             label=fila.nombre,
             required=False,
-            widget= forms.CheckboxSelectMultiple(attrs={
-                'display': 'inline-block'
-            }),
+            initial=initial,
+            widget=forms.CheckboxSelectMultiple(),
             choices=COL_CHOICES,
         )
+
     class PlanillaDeVisadoMixin(forms.Form):
         NAME = 'planilla_de_visado_form'
         SUBMIT = 'planilla_de_visado_submit'
-     
+        RESET = 'resetear_reset'
+
         def save(self, *args, **kwargs):
-            print(self.cleaned_data)
-            return "pepe"
-    
+            datos = self.cleaned_data
+            for field, values in datos.items():
+                pk = int(field.split("-")[1])
+                fila = filter(lambda f: f.pk == pk, filas).pop()
+                cols = filter(lambda c: str(c.pk) in values, columnas)
+                ItemDeVisado.objects.filter(fila_de_visado=fila).delete()
+                fila.relacionar_con_columnas(cols)
+                # ItemDeVisado.objects.create(coumna_de_visado=columna, fila_de_visado=fila)
+            print datos
+            return
+
         def __init__(self, *args, **kwargs):
             super(PlanillaDeVisadoMixin, self).__init__(*args, **kwargs)
             self.helper = FormHelper()
             # self.helper.form_class = 'form-horizontal'
             self.helper.add_input(Submit(self.SUBMIT, 'Guardar'))
+            self.helper.add_input(Submit(self.RESET, 'Limpiar'))
 
     return type("PlanillaDeVisadoForm", (PlanillaDeVisadoMixin, ), fields)
 
