@@ -363,13 +363,13 @@ def tramites_visados(request):
     return contexto
 
 def ver_documentos_para_visado(request, pk_tramite):
-
     tipos_de_documentos_requeridos = TipoDocumento.get_tipos_documentos_para_momento(TipoDocumento.VISAR)
     FormularioDocumentoSet = FormularioDocumentoSetFactory(tipos_de_documentos_requeridos)
     inicial = metodo(tipos_de_documentos_requeridos)
     documento_set = FormularioDocumentoSet(initial=inicial)
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
-    if request.method == "POST":
+    return render(request, 'persona/visador/ver_documentos_tramite.html', {'tramite': tramite, 'documentos_requeridos': tipos_de_documentos_requeridos})
+'''    if request.method == "POST":
 
         observacion = request.POST["observaciones"]
         tram = request.POST['tram']
@@ -384,18 +384,34 @@ def ver_documentos_para_visado(request, pk_tramite):
         else:
             aprobar_visado(request, tram, monto_permiso)
     else:
-        return render(request, 'persona/visador/ver_documentos_tramite.html', {'tramite': tramite, 'ctxdoc': documento_set, 'documentos_requeridos': tipos_de_documentos_requeridos})
-    return redirect('visador')
-
+        #return render(request, 'persona/visador/ver_documentos_tramite.html', {'tramite': tramite, 'ctxdoc': documento_set, 'documentos_requeridos': tipos_de_documentos_requeridos})
+        return render(request, 'persona/visador/ver_documentos_tramite.html', {'tramite': tramite, 'documentos_requeridos': tipos_de_documentos_requeridos})
+'''        
+    #return redirect('visador')
 
 def ver_documentos_visados(request, pk_tramite):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
     return render(request, 'persona/visador/ver_documentos_visados.html', {'tramite': tramite})
 
+def planilla_visado(request, pk_tramite):
+    tramite = get_object_or_404(Tramite, pk=pk_tramite)    
+    if request.method == "POST":
+        observacion = request.POST["observaciones"]
+        tram = request.POST['tram']
+        monto_permiso = request.POST['monto']
+        if "Envia Planilla de visado" in request.POST:            
+            no_aprobar_visado(request, tram, observacion)
+        else:
+            aprobar_visado(request, tram, monto_permiso)
+    else:
+        return render(request, 'persona/visador/planilla_visado.html', {'tramite': tramite})
+    #return render(request, 'persona/visador/planilla_visado.html', {'tramite': tramite})
+    return redirect('visador')
+
 def aprobar_visado(request, pk_tramite, monto):
     usuario = request.user
-    tramite = get_object_or_404(Tramite, pk=pk_tramite)
-    tramite.hacer(tramite.VISAR, usuario)
+    tramite = get_object_or_404(Tramite, pk=pk_tramite)        
+    tramite.hacer(tramite.VISAR, usuario)    
     tramite.monto_a_pagar= monto
     tramite.save()
     messages.add_message(request, messages.SUCCESS, 'Tramite visado aprobado')
@@ -491,9 +507,6 @@ class ReporteTramitesAceptadosPdf(View):
         Story.append(detalle_orden)
         doc.build(Story)
         return response
-
-def planilla_visado(request):
-    return render(request,'persona/visador/planilla_visado.html')
 
 #-------------------------------------------------------------------------------------------------------------------
 #inspector ---------------------------------------------------------------------------------------------------------
