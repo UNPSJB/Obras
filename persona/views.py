@@ -34,7 +34,7 @@ from reportlab.lib.enums import TA_CENTER, TA_JUSTIFY, TA_LEFT, TA_RIGHT
 import time
 from datetime import datetime
 import collections
-
+from planilla_visado.models import ItemDeVisado
 #-------------------------------------------------------------------------------------------------------------------
 #generales ---------------------------------------------------------------------------------------------------------
 
@@ -262,9 +262,8 @@ def listado_de_tramites_iniciados(request):
     contexto = {'tramites': tramites}
     return contexto
 
-def tramite_corregidos_list(request):
-    tramites = Tramite.objects.all()
-    #tramites = filter(lambda tramite: (tramite.estado_actual is  is not None), personas)
+def tramite_corregidos_list(request):    
+    tramites = Tramite.objects.en_estado(Corregido)
     contexto = {'tramites': tramites}
     return contexto
 
@@ -393,8 +392,11 @@ def ver_documentos_visados(request, pk_tramite):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
     return render(request, 'persona/visador/ver_documentos_visados.html', {'tramite': tramite})
 
+from planilla_visado.models import FilaDeVisado, ColumnaDeVisado
+
 def planilla_visado(request, pk_tramite):
-    tramite = get_object_or_404(Tramite, pk=pk_tramite)    
+    tramite = get_object_or_404(Tramite, pk=pk_tramite)  
+    items = ItemDeVisado.objects.all()  
     if request.method == "POST":
         observacion = request.POST["observaciones"]
         tram = request.POST['tram']
@@ -404,7 +406,9 @@ def planilla_visado(request, pk_tramite):
         else:
             aprobar_visado(request, tram, monto_permiso)
     else:
-        return render(request, 'persona/visador/planilla_visado.html', {'tramite': tramite})
+        filas = FilaDeVisado.objects.all()
+        columnas = ColumnaDeVisado.objects.all()
+        return render(request, 'persona/visador/planilla_visado.html', {'tramite': tramite, 'items':items, 'filas':filas, 'columnas':columnas})
     #return render(request, 'persona/visador/planilla_visado.html', {'tramite': tramite})
     return redirect('visador')
 
