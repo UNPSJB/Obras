@@ -79,11 +79,11 @@ urlpatterns = [
     url(r'^cajero$', views.mostrar_cajero, name="cajero"),
     url(r'^cajero/tramite_para_financiar$', views.listado_tramite_para_financiar, name="tramite_para_financiar"),
     url(r'^cajero/elegir_financiacion/(?P<pk_tramite>\d+)/$', views.elegir_financiacion, name="financiar"),
+
     #movil -------------------------------------------------------------------------------------------------------
-    url(r'^movil$', views.movil_inspector, name="movil_inspector"),
-    url(r'^frente$', views.frente_o_fachada, name="frente_o_fachada"),
-    url(r'^paredes$', views.paredes, name="paredes"),
-    url(r'^techos$', views.techos, name="techos"),
-    url(r'^cocinas$', views.cocinas, name="cocinas"),
+    url(r'^movil$', views.movil_inspector, name="movil_inspector"),    
+    url(r'^inspector_movil$', views.mostrar_inspector_movil, name="inspector_movil"),
+    url(r'^inspector_movil/(?P<pk_tramite>\d+)/$', views.planilla_inspeccion_movil, name="planilla_inspeccion_movil"),
+    #url(r'^vista_de_inspecciones/(?P<pk_tramite>\d+)/$', views.ver_inspecciones_movil, name="ver_inspecciones_movil"),
 
 ]

@@ -412,12 +412,16 @@ def planilla_visado(request, pk_tramite):
     #return render(request, 'persona/visador/planilla_visado.html', {'tramite': tramite})
     return redirect('visador')
 
-def aprobar_visado(request, pk_tramite, monto):
+from planilla_visado.models import PlanillaDeVisado
+
+#def aprobar_visado(request, pk_tramite, monto,planilla_visado):
+def aprobar_visado(request, pk_tramite, monto):    
     usuario = request.user
     tramite = get_object_or_404(Tramite, pk=pk_tramite)        
     tramite.hacer(tramite.VISAR, usuario)    
     tramite.monto_a_pagar= monto
     tramite.save()
+#    planilla_visado.save()
     messages.add_message(request, messages.SUCCESS, 'Tramite visado aprobado')
     return redirect('visador')
 
@@ -936,3 +940,14 @@ def cocinas(request):
 
 def techos(request):    
     return render(request,'persona/movil/techos.html')                
+
+def mostrar_inspector_movil(request):
+    argumentos = [Visado, ConInspeccion]
+    tramites = Tramite.objects.en_estado(argumentos)    
+    return render(request, 'persona/movil/inspector_movil.html', {'tramites':tramites})
+
+def planilla_inspeccion_movil(request,pk_tramite):
+    tramite = get_object_or_404(Tramite, pk=pk_tramite)
+    contexto = {'tramite': tramite}    
+    return render(request, 'persona/movil/planilla_inspeccion.html',contexto)
+
