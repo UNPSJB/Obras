@@ -23,7 +23,7 @@ class CategoriaInspeccion(models.Model):
 
     def __str__(self):
         return self.nombre
-    
+
     def relacionar_con_items(self, items):
         for item in items:
             self.relacionar_con_item(item)
@@ -48,7 +48,7 @@ class CategoriaInspeccion(models.Model):
 class ItemInspeccion(models.Model): #Frente o fachada, paredes, techos, cielorraso,
     # revoques, puertas, ventanas, baños, cocinas, revestimientos, instalaciones complementarias, pisos
     nombre = models.CharField(max_length=100)
-    categorias = models.ManyToManyField(CategoriaInspeccion, through='DetalleDeItemInspeccion')
+    #categorias = models.ManyToManyField(CategoriaInspeccion, through='DetalleDeItemInspeccion')
 
     def __str__(self):
         return self.nombre

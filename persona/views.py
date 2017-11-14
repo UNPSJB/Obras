@@ -663,12 +663,9 @@ def ver_inspecciones(request, pk_tramite):
 #director ---------------------------------------------------------------------------------------------------------
 from planilla_visado import forms as pforms
 from planilla_visado import models as pmodels
-from planilla_inspeccion import forms as iforms
-from planilla_inspeccion import models as imodels
 from planilla_inspeccion.forms import FormularioCategoriaInspeccion
 from planilla_inspeccion.forms import FormularioItemInspeccion
 from planilla_inspeccion.forms import FormularioDetalleItem
-#from planilla_inspeccion.forms import FormularioDocumentoTecnicoInspeccion
 
 @login_required(login_url="login")
 @grupo_requerido('director')
@@ -677,8 +674,7 @@ def mostrar_director(request):
     values = {}
     FORMS_DIRECTOR.update({(k.NAME, k.SUBMIT): k for k in [
         pforms.PlanillaDeVisadoFormFactory(pmodels.FilaDeVisado.objects.all(), pmodels.ColumnaDeVisado.objects.all()),
-        iforms.PlanillaDeInspeccionFormFactory(imodels.CategoriaInspeccion.objects.all(),imodels.ItemInspeccion.objects.all())
-    ]})
+          ]})
     for form_name, submit_name in FORMS_DIRECTOR:
         KlassForm = FORMS_DIRECTOR[(form_name, submit_name)]
         if request.method == "POST" and submit_name in request.POST:
