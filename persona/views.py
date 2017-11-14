@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login
-from django.contrib.auth.decorators import  login_required
+from django.contrib.auth.decorators import  login_required, user_passes_test
 
 from .forms import *
 from django.contrib import messages
@@ -769,6 +769,18 @@ def detalle_de_tramite(request, pk_tramite):
         fechas_del_estado.append(est.timestamp.strftime("%d/%m/%Y"));
     return render(request, 'persona/director/detalle_de_tramite.html', {"tramite": contexto0, "estados": contexto1, "fecha": fechas_del_estado})
 
+#-------------------------------------------------------------------------------
+
+from planilla_inspeccion.models import *
+def generar_planilla_inspeccion(request):
+    filas = FilaDeVisado.objects.all()        
+    columnas = ColumnaDeVisado.objects.all()
+    contexto = {'filas': filas}
+    contexto_columnas = {'columnas': columnas}
+    return render(request, 'persona/director/planilla_inspeccion.html', contexto)
+
+#-------------------------------------------------------------------------------
+
 def documentos_del_estado(request, pk_estado):
     estado = get_object_or_404(Estado, pk=pk_estado)
     fecha = estado.timestamp
@@ -779,13 +791,9 @@ def documentos_del_estado(request, pk_estado):
     return render(request, 'persona/director/documentos_del_estado.html', contexto)
 
 def generar_planilla_visado(request):
-    filas = FilaDeVisado.objects.all()
-    raise Exception(filas)
-    print (filas)
-    columnas = ColumnaDeVisado.objects.all()
-    contexto = {'filas': filas}
-    contexto_columnas = {'columnas': columnas}
-    return render(request, 'persona/director/item_visado.html', contexto)
+    items = ItemInspeccion.objects.all()    
+    detalles = DetallesDeItemInspeccion.objects.all()    
+    return render(request, 'persona/director/planilla_inspeccion.html', {"items":items, "detalles":detalles})
 
 
 class ReporteTramitesDirectorExcel(TemplateView):
@@ -937,6 +945,10 @@ def cocinas(request):
 def techos(request):    
     return render(request,'persona/movil/techos.html')                
 
+def es_inspector(usuario):
+    return usuario.groups.filter(name='inspector').exists()
+
+@user_passes_test(es_inspector)
 def mostrar_inspector_movil(request):
     argumentos = [Visado, ConInspeccion]
     tramites = Tramite.objects.en_estado(argumentos)    
@@ -946,4 +958,3 @@ def planilla_inspeccion_movil(request,pk_tramite):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
     contexto = {'tramite': tramite}    
     return render(request, 'persona/movil/planilla_inspeccion.html',contexto)
-
