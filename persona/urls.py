@@ -81,6 +81,8 @@ urlpatterns = [
     url(r'^cajero$', views.mostrar_cajero, name="cajero"),
     url(r'^cajero/tramite_para_financiar$', views.listado_tramite_para_financiar, name="tramite_para_financiar"),
     url(r'^cajero/elegir_financiacion/(?P<pk_tramite>\d+)/$', views.elegir_financiacion, name="financiar"),
+    url(r'^cajero/registrar_cuota.html', views.registrar_cuota, name="registrar_cuota"),
+
     #movil -------------------------------------------------------------------------------------------------------
     url(r'^movil$', views.movil_inspector, name="movil_inspector"),
     url(r'^frente$', views.frente_o_fachada, name="frente_o_fachada"),

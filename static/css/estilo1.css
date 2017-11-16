@@ -65,6 +65,7 @@ label {
     display: inline-block;
     max-width: 100%;
     margin-bottom: 5px;
+    -webkit-font-size-delta:large!Important;
 }
 
 .btn-sm, .btn-group-sm > .btn {
@@ -460,6 +461,7 @@ label {
 label#a,label#b,label#g,label#i,label#j,label#k{
    color: #ab1515!important;
    font-weight:bolder!important;
+
 }
 /*.box:hover {
     color: #336699!important;
@@ -925,7 +927,7 @@ input {
 }
 
 
-.label {
+/*.label {
     display: inline;
     padding: .2em .6em .3em;
     font-size: 75%;
@@ -937,7 +939,7 @@ input {
     vertical-align: baseline;
     border-radius: .25em;
     color-text:white;
-}
+}*/
 
 select.input-sm {
     height: 30px;
