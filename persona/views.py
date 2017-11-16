@@ -1,12 +1,10 @@
-from django.shortcuts import render, redirect, get_object_or_404, render_to_response
+from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login
-from pago.models import Cuota, Cancelacion,Cancelada
-from datetime import date, timedelta
-from django.contrib.auth.decorators import  login_required, user_passes_test
+from django.contrib.auth.decorators import  login_required
 
 from .forms import *
 from django.contrib import messages
-from pago.forms import FormularioTipoPago, FormularioPago, FormularioCuota
+from pago.forms import FormularioTipoPago, FormularioPago
 from tipos.forms import *
 from obras_particulares.views import *
 from tramite.forms import FormularioIniciarTramite
@@ -104,7 +102,7 @@ def documentos_de_estado(request, pk_estado):
 
 @login_required(login_url="login")
 @grupo_requerido('profesional')
-def mostrar_profesional(request):    
+def mostrar_profesional(request):
     usuario = request.user
     #raise Exception(usuario.persona.profesional)
     tipos_de_documentos_requeridos = TipoDocumento.get_tipos_documentos_para_momento(TipoDocumento.INICIAR)
@@ -129,12 +127,12 @@ def mostrar_profesional(request):
             for docForm in documento_set:
                lista.append(docForm.save(commit=False))
             Tramite.new(
-                usuario, 
-                propietario, 
+                usuario,
+                propietario,
                 usuario.persona.profesional,
                 request.POST['tipo_obra'],
                 request.POST['medidas'],
-                request.POST['domicilio'],                
+                request.POST['domicilio'],
                 request.POST['parcela'],
                 request.POST['circunscripcion'],
                 request.POST['manzana'],
@@ -264,7 +262,7 @@ def listado_de_tramites_iniciados(request):
     contexto = {'tramites': tramites}
     return contexto
 
-def tramite_corregidos_list(request):    
+def tramite_corregidos_list(request):
     tramites = Tramite.objects.en_estado(Corregido)
     contexto = {'tramites': tramites}
     return contexto
@@ -387,7 +385,7 @@ def ver_documentos_para_visado(request, pk_tramite):
     else:
         #return render(request, 'persona/visador/ver_documentos_tramite.html', {'tramite': tramite, 'ctxdoc': documento_set, 'documentos_requeridos': tipos_de_documentos_requeridos})
         return render(request, 'persona/visador/ver_documentos_tramite.html', {'tramite': tramite, 'documentos_requeridos': tipos_de_documentos_requeridos})
-'''        
+'''
     #return redirect('visador')
 
 def ver_documentos_visados(request, pk_tramite):
@@ -397,13 +395,13 @@ def ver_documentos_visados(request, pk_tramite):
 from planilla_visado.models import FilaDeVisado, ColumnaDeVisado
 
 def planilla_visado(request, pk_tramite):
-    tramite = get_object_or_404(Tramite, pk=pk_tramite)  
-    items = ItemDeVisado.objects.all()  
+    tramite = get_object_or_404(Tramite, pk=pk_tramite)
+    items = ItemDeVisado.objects.all()
     if request.method == "POST":
         observacion = request.POST["observaciones"]
         tram = request.POST['tram']
         monto_permiso = request.POST['monto']
-        if "Envia Planilla de visado" in request.POST:            
+        if "Envia Planilla de visado" in request.POST:
             no_aprobar_visado(request, tram, observacion)
         else:
             aprobar_visado(request, tram, monto_permiso)
@@ -417,10 +415,10 @@ def planilla_visado(request, pk_tramite):
 from planilla_visado.models import PlanillaDeVisado
 
 #def aprobar_visado(request, pk_tramite, monto,planilla_visado):
-def aprobar_visado(request, pk_tramite, monto):    
+def aprobar_visado(request, pk_tramite, monto):
     usuario = request.user
-    tramite = get_object_or_404(Tramite, pk=pk_tramite)        
-    tramite.hacer(tramite.VISAR, usuario)    
+    tramite = get_object_or_404(Tramite, pk=pk_tramite)
+    tramite.hacer(tramite.VISAR, usuario)
     tramite.monto_a_pagar= monto
     tramite.save()
 #    planilla_visado.save()
@@ -668,6 +666,8 @@ from planilla_visado import models as pmodels
 from planilla_inspeccion.forms import FormularioCategoriaInspeccion
 from planilla_inspeccion.forms import FormularioItemInspeccion
 from planilla_inspeccion.forms import FormularioDetalleItem
+from planilla_inspeccion.models import *
+from planilla_inspeccion.models import CategoriaInspeccion, ItemInspeccion, DetalleDeItemInspeccion
 
 @login_required(login_url="login")
 @grupo_requerido('director')
@@ -781,14 +781,19 @@ def documentos_del_estado(request, pk_estado):
     return render(request, 'persona/director/documentos_del_estado.html', contexto)
 
 def generar_planilla_visado(request):
-    filas = FilaDeVisado.objects.all()
-    raise Exception(filas)
-    print (filas)
-    columnas = ColumnaDeVisado.objects.all()
-    contexto = {'filas': filas}
-    contexto_columnas = {'columnas': columnas}
-    return render(request, 'persona/director/item_visado.html', contexto)
+     filas = FilaDeVisado.objects.all()
+     raise Exception(filas)
+     print (filas)
+     columnas = ColumnaDeVisado.objects.all()
+     contexto = {'filas': filas}
+     contexto_columnas = {'columnas': columnas}
+     return render(request, 'persona/director/item_visado.html', contexto)
 
+def listado_planilla_inspeccion(request):
+     items = ItemInspeccion.objects.all()
+     detalles = DetalleDeItemInspeccion.objects.all()
+     categorias = CategoriaInspeccion.objects.all()
+     return render(request, 'persona/director/ver_planilla_inspeccion.html', {"items":items, "detalles": detalles, "categorias":categorias})
 
 class ReporteTramitesDirectorExcel(TemplateView):
 
@@ -875,6 +880,7 @@ class ReporteTramitesDirectorPdf(View):
         Story.append(detalle_orden)
         doc.build(Story)
         return response
+
 
 #-------------------------------------------------------------------------------------------------------------------
 #No se de donde son estos------------------------------------------------------------------
