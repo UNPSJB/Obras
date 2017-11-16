@@ -666,6 +666,8 @@ from planilla_visado import models as pmodels
 from planilla_inspeccion.forms import FormularioCategoriaInspeccion
 from planilla_inspeccion.forms import FormularioItemInspeccion
 from planilla_inspeccion.forms import FormularioDetalleItem
+from planilla_inspeccion.models import *
+from planilla_inspeccion.models import CategoriaInspeccion, ItemInspeccion, DetalleDeItemInspeccion
 
 @login_required(login_url="login")
 @grupo_requerido('director')
@@ -779,14 +781,20 @@ def documentos_del_estado(request, pk_estado):
     return render(request, 'persona/director/documentos_del_estado.html', contexto)
 
 def generar_planilla_visado(request):
-    filas = FilaDeVisado.objects.all()
-    raise Exception(filas)
-    print (filas)
-    columnas = ColumnaDeVisado.objects.all()
-    contexto = {'filas': filas}
-    contexto_columnas = {'columnas': columnas}
-    return render(request, 'persona/director/item_visado.html', contexto)
+     filas = FilaDeVisado.objects.all()
+     raise Exception(filas)
+     print (filas)
+     columnas = ColumnaDeVisado.objects.all()
+     contexto = {'filas': filas}
+     contexto_columnas = {'columnas': columnas}
+     return render(request, 'persona/director/item_visado.html', contexto)
 
+def listado_planilla_inspeccion(request):
+     items = ItemInspeccion.objects.all()
+     detalles = DetalleDeItemInspeccion.objects.all()
+     categorias = CategoriaInspeccion.objects.all()
+     print(categorias)
+     return render(request, 'persona/director/ver_planilla_inspeccion.html', {"items":items, "detalles": detalles, "categorias":categorias})
 
 class ReporteTramitesDirectorExcel(TemplateView):
 
@@ -873,6 +881,7 @@ class ReporteTramitesDirectorPdf(View):
         Story.append(detalle_orden)
         doc.build(Story)
         return response
+
 
 #-------------------------------------------------------------------------------------------------------------------
 #No se de donde son estos------------------------------------------------------------------

@@ -74,6 +74,7 @@ urlpatterns = [
     url(r'^reporte_tramites_director_pdf/$', login_required(ReporteTramitesDirectorPdf.as_view()), name="reporte_tramites_director_pdf"),
     url(r'^vista_de_usuarios$', views.ver_listado_todos_usuarios, name="vista_de_usuarios"),
     url(r'^item_de_visado$', views.generar_planilla_visado, name="item_visado"),
+    url(r'^ver_planilla_inspeccion$', views.listado_planilla_inspeccion, name="ver_planilla_inspeccion"),
     
     #cajero -------------------------------------------------------------------------------------------------------
     url(r'^cajero$', views.mostrar_cajero, name="cajero"),
