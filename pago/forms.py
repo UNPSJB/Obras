@@ -6,6 +6,39 @@ from crispy_forms.layout import Submit, Field
 
 from .models import *
 
+class FormularioCuota(forms.ModelForm):
+    NAME = 'cuota_form'
+    SUBMIT = 'cuota_submit'
+
+    class Meta:
+        model = Cuota
+        fields = (
+            'fechaVencimiento',
+            # 'fechaPago',
+            'monto',
+            'numeroCuota'
+        )
+        labels={
+            'fechaVencimiento': "Fecha Vencimiento",
+            'monto': "Monto",
+            'numeroCuota':"Numero de Cuota",
+        }
+        widgets = {
+            'fechaVencimiento': forms.DateInput(attrs={'class': 'datepicker'}),
+            # 'fechaPago': forms.DateInput(attrs={'class': 'datepicker'}),
+            'monto': forms.TextInput(attrs={'class':'form-control'}),
+        }
+
+    def __init__(self, *args, **kwargs):
+        super(FormularioCuota, self).__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.add_input(Submit(self.SUBMIT, 'Guardar'))
+        self.fields['fechaVencimiento'].widget.attrs['placeholder'] = "fecha de vencimiento"
+        # self.fields['fechaPago'].widget.attrs['placeholder'] = "fecha de pago"
+        # self.fields['fechaPago'].required = False
+        self.fields['monto'].widget.attrs['placeholder'] = "monto"
+        self.fields['numeroCuota'].widget.attrs['placeholder'] = "cuota"
+        # self.fields['pago'].widget.attrs['placeholder'] = "ingresar pago"
 
 class FormularioTipoPago(forms.ModelForm):
     NAME = 'tipo_pago_form'
@@ -14,6 +47,7 @@ class FormularioTipoPago(forms.ModelForm):
     class Meta:
         model = Tipo_Pago
         fields = ('nombre',)
+        cuota = forms.ChoiceField(choices=Pago.CUOTAS)
 
     def __init__(self, *args, **kwargs):
         super(FormularioTipoPago, self).__init__(*args, **kwargs)
@@ -35,52 +69,47 @@ class FormularioPago(forms.ModelForm):
 
     class Meta:
         model = Pago
-        fields = (
-            'tipoPago',
-            'cuota',
-            'valor',
-            'cantidadCuotas',
-            'fecha',
-        )
-
+        fields = ('tipoPago','valor','cantidadCuotas','tramite', 'cuota',)
+        exclude=('cuota',)
     def __init__(self, *args, **kwargs):
         super(FormularioPago, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
-        # self.helper.add_input(Submit(self.SUBMIT, 'Guardar Tramite'))
-       # self.helper.form_tag = False
-        self.helper.add_input(Submit(self.SUBMIT, 'Guardar'))
+        self.helper.add_input(Submit('pago_submit', 'Guardar'))
         self.fields['tipoPago'].widget.attrs['placeholder'] = "Ingresar Tipo de Pago"
-        self.fields['cuota'].widget.attrs['placeholder'] = "cuota"
         self.fields['valor'].widget.attrs['placeholder'] = "Importe"
         self.fields['cantidadCuotas'].widget.attrs['placeholder'] = "Ingresar cantidad de cuotas"
-        self.fields['fecha'].widget.attrs['placeholder'] = "Ingresar fecha"
+        self.fields['tramite'].widget.attrs['placeholder'] = "Ingresar nro tramite"
 
-        # -------------------------------------------------------------------------------------
+    def clean_valor(self):
+        valor = self.cleaned_data['valor']
+        if valor<1:
+            raise ValidationError("Valor invalido ")
+        return valor
 
-    def save(self, commit=True, pago=None):
-        FormularioPago, self.save(commit=False)
-        pago.save()
-        return pago
+    def clean_cantidadCuotas(self):
+        cantidadCuotas = self.cleaned_data['cantidadCuotas']
+        if cantidadCuotas is None:
+            raise ValidationError("Seleccione el numero de cuotas ")
+        return cantidadCuotas
+
+    def clean_tramite(self):
+        tramite = self.cleaned_data['tramite']
+        if tramite is None:
+            raise ValidationError("Seleccione un tramite")
+        return tramite
+
+    def clean_tipoPago(self):
+        tipoPago = self.cleaned_data['tipoPago']
+        if tipoPago is None:
+            raise ValidationError("Seleccione un tipo de Pago")
+        return tipoPago
+
+    '''def clean_nombre(self):
+        nombre = self.cleaned_data['nombre']
+        cargados = CategoriaInspeccion.objects.filter(nombre__icontains=nombre)
+        if cargados.exists():
+            raise ValidationError("Ya existe {}".format(cargados.first().nombre))
+        return nombre'''
 
 
-class FormularioCuota(forms.ModelForm):
-    NAME = 'cuota_form'
-    SUBMIT = 'cuota_submit'
-
-    class Meta:
-        model = Cuota
-        fields = (
-            'fechaVencimiento',
-            'fechaPago',
-            'monto',
-        )
-
-    def __init__(self, *args, **kwargs):
-        super(FormularioCuota, self).__init__(*args, **kwargs)
-        self.helper = FormHelper()
-        # self.helper.add_input(Submit(self.SUBMIT, 'Guardar Tramite'))
-        self.helper.form_tag = False
-        self.fields['fechaVencimiento'].widget.attrs['placeholder'] = "fecha de vencimiento"
-        self.fields['fechaPago'].widget.attrs['placeholder'] = "fecha de pago"
-        self.fields['monto'].widget.attrs['placeholder'] = "monto"
 

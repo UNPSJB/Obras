@@ -11,29 +11,23 @@
 {% endblock %}
 
 {% block contenido %}
-
-    <div class="row">
-        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-            <hr>
-            <div class="col-xs-12 col-sm-12 col-md-4 col-lg-4" style="display:none">
-                <h1>Monto: {{tramite.monto_a_pagar}}</h1>
-            </div>
-            <form method="post" enctype="multipart/form-data"> {% csrf_token %}
-                <div id="tipo" class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
-                        <h1>Monto: {{tramite.monto_a_pagar}}</h1>
-                </div>                
-                <div id="boton_tipo" class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="right">
-                    <button class="btn btn-danger btn-sm" type="reset" title="Borrar datos del formulario">
-                        Limpiar
-                    </button>
-                    <button class="btn btn-primary btn-sm" type="submit" title="Enviar modificación de mis datos">
-                            Guardar
-                    </button>
-                </div>
-                
-                <br>
-            </form>
-        </div>
+{%crispy ctxpago %}
+<form method="post" enctype="multipart/form-data"> {% csrf_token %}
+    <div id="tipoPago" class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
     </div>
-
+    <div id="valor" class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+    </div>
+    <div id="cant_cuotas" class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+    </div>
+    <div id="tramite" class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+    </div>
+    <div id="cuota" class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+    </div>
+    <div id="boton_de_pago" class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="right">
+        <button class="btn btn-danger btn-sm" type="reset" title="Borrar datos del formulario">
+            Limpiar
+        </button>
+    </div>
+    <br>
+</form>
 {% endblock %}

@@ -6,11 +6,9 @@
   <ul class="sidebar sidebar-1">
     <font size="2">
 		<li><a class="current"><font color="white">Cajero</font> </a></li>
-		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseSeven" aria-expanded="false"aria-controls="collapseSeven" onclick='mostrarSubmenu("sin_submenu")'>Registrar pago</a></li>
-		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseEight" aria-expanded="false"aria-controls="collapseEight" onclick='mostrarSubmenu("sin_submenu")'>Registrar plan de pago</a></li>
+		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseSeven" aria-expanded="false"aria-controls="collapseSeven" onclick='mostrarSubmenu("sin_submenu")'>Elegir financiacion</a></li>
 		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseNine" aria-expanded="false"aria-controls="collapseNine" onclick='mostrarSubmenu("sin_submenu")'>Registrar Cuota</a></li>
 		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseTen" aria-expanded="false"aria-controls="collapseNine" onclick='mostrarSubmenu("sin_submenu")'>Generar comprobante de pago</a></li>
-		<li><a data-toggle="collapse" data-parent="#accordion" href="#" aria-expanded="false" aria-controls="#" onclick='mostrarSubmenu("sin_submenu")'>Listar tramites</a></li>
 	</font>
   </ul>
 {% endblock %}
@@ -21,7 +19,7 @@
         <div class="panel-heading box" role="tab" id="headingSeven">
 	        <h5 class="panel-title">
 			    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseSeven" aria-expanded="false" aria-controls="collapseSeven">
-				    <font color="#ffffff" size="2">Registrar pago</font>
+				    <font color="#ffffff" size="2">Elegir financiacion</font>
 			    </a>
 		    </h5>
         </div>
@@ -30,57 +28,18 @@
 			    <div class="container-fluid">
 				    <div class="row">
 					    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-						    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-12">
-								{% block contenido_tramite_para_financiar %}
-									{% include "persona/cajero/tramites_para_financiar.html" with tramites=ctxtramite_para_fianciar.tramites %}
+						    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-12" id="pagos">
+								{% block tramites_para_financiar %}
+									{% include "persona/cajero/tramites_para_financiar.html" with tramites=ctxtramite_para_financiar.tramites %}
 								{% endblock %}
-						    </div>						    
+						    </div>
 					    </div>
 				    </div>
 			    </div>
 		    </div>
 	    </div>
     </div>
-		<div class="panel panel-custom">
-			<div class="panel-heading panel-heading-custom box" role="tab" id="headingEight">
-				<h5 class="panel-title">
-					<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseEight" aria-expanded="false" aria-controls="collapseEight">
-						<font color="#ffffff" size="2">Registrar plan de pago</font>
-					</a>
-				</h5>
-			</div>
-			<div id="collapseEight" class="panel-collapse collapse " role="tabpanel" aria-labelledby="headingEight">
-			  <div class="panel-body">
-				<div class="container-fluid">
-					<div class="row">
-						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-							<div class="container-fluid">
-							<br>
-								<form action="" class="" >
-									<div class="row">
-										
-									</div>
-									<div class="container-fluid">
-										<br>
-										<div class="row">
-											<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="right">
-												<button class="btn btn-primary btn-sm" type="submit" title="Enviar modificación de mis datos">
-													Guardar
-												</button>
-											<button class="btn btn-danger btn-sm" type="reset" title="Borrar datos del formulario">
-												Limpiar
-											</button>
-											</div>
-										</div>
-									</div>
-								</form>
-						</div>
-					</div>
-				</div>
-			  </div>
-			</div>
-		</div>
-	</div>
+
 	    <div class="panel panel-custom">
 			<div class="panel-heading panel-heading-custom box" role="tab" id="headingNine">
 				<h5 class="panel-title">
@@ -96,46 +55,49 @@
 						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 							<div class="container-fluid">
 							<br>
-								<form action="" class="" >
-									<div class="row">
-										<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-											<div class="form-group">
-												<label>Monto:</label>
-												<span class="label label-primary"> -------- </span>
-											</div>
-										</div>
-										<div>
-											<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-												<label>Vencimiento:<input id="one" class="datepicker" style="color:black" type="text" readonly="true"></label>
-											</div>
-												<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-													<label>Fecha de Pago:<input id="two" class="datepicker" style="color:black" type="text" readonly="true;"></label>
-												</div>
-										</div>
-										<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-											<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-												<select class="form-control input-sm" id="opcionesTipoPago" name="Opciones de Pagos" onChange="opcionesPago(this.value);">
-													<option selected value="nada"> Ingrese el tipo de pago </option>
-													<option value="efectivo">Efectivo</option>
-													<option value="Debito">Debito</option>
-												</select>
-											</div>
-										</div>
-									</div>
-									<div class="container-fluid">
-										<br>
-										<div class="row">
-											<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="right">
-												<button class="btn btn-primary btn-sm" type="submit" title="Enviar modificación de mis datos">
-													Guardar
-												</button>
-											<button class="btn btn-danger btn-sm" type="reset" title="Borrar datos del formulario">
-												Limpiar
-											</button>
-											</div>
-										</div>
-									</div>
-								</form>
+								{% block registrar_cuota %}
+								     {% include 'persona/cajero/registrar_cuota.html' %}
+								{% endblock %}
+								<!--<form action="" class="" >-->
+									<!--<div class="row">-->
+										<!--<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">-->
+											<!--<div class="form-group">-->
+												<!--<label>Monto:</label>-->
+												<!--<span class="label label-primary"> &#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45; </span>-->
+											<!--</div>-->
+										<!--</div>-->
+										<!--<div>-->
+											<!--<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">-->
+												<!--<label>Vencimiento:<input id="one" class="datepicker" style="color:black" type="text" readonly="true"></label>-->
+											<!--</div>-->
+												<!--<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">-->
+													<!--<label>Fecha de Pago:<input id="two" class="datepicker" style="color:black" type="text" readonly="true;"></label>-->
+												<!--</div>-->
+										<!--</div>-->
+										<!--<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">-->
+											<!--<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">-->
+												<!--<select class="form-control input-sm" id="opcionesTipoPago" name="Opciones de Pagos" onChange="opcionesPago(this.value);">-->
+													<!--<option selected value="nada"> Ingrese el tipo de pago </option>-->
+													<!--<option value="efectivo">Efectivo</option>-->
+													<!--<option value="Debito">Debito</option>-->
+												<!--</select>-->
+											<!--</div>-->
+										<!--</div>-->
+									<!--</div>-->
+									<!--<div class="container-fluid">-->
+										<!--<br>-->
+										<!--<div class="row">-->
+											<!--<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="right">-->
+												<!--<button class="btn btn-primary btn-sm" type="submit" title="Enviar modificación de mis datos">-->
+													<!--Guardar-->
+												<!--</button>-->
+											<!--<button class="btn btn-danger btn-sm" type="reset" title="Borrar datos del formulario">-->
+												<!--Limpiar-->
+											<!--</button>-->
+											<!--</div>-->
+										<!--</div>-->
+									<!--</div>-->
+								<!--</form>-->
 						</div>
 					</div>
 				</div>
@@ -143,6 +105,7 @@
 			</div>
 		</div>
 	</div>
+
 	<div class="panel">
         <div class="panel-heading box" role="tab" id="headingTen">
 	        <h5 class="panel-title">
@@ -183,8 +146,21 @@
 		    </div>
 	    </div>
     </div>
-
 </div>
+
+<script>
+	$('#pagos #div_id_tipoPago').appendTo('#tipoPago')
+	$('#pagos #div_id_valor').appendTo('#valor')
+	$('#pagos #div_id_cantidadCuotas').appendTo('#cant_cuotas')
+	$('#pagos #div_id_tramite').appendTo('#tramite')
+	$('#pagos #div_id_cuota').appendTo('#cuota')
+	$('#submit-id-pago_submit').appendTo('#boton_de_pago')
+
+	$('#cuotas #div_id_fechaVencimiento').appendTo('#fechaVencimiento')
+	$('#cuotas #div_id_fechaPago').appendTo('#fechaPago')
+	$('#cuotas #div_id_monto').appendTo('#monto')
+	$('#submit-id-cuota_submit').appendTo('#boton_de_cuota')
+</script>
 <script type="text/javascript">
   $(function() {
    $('input').filter('.datepicker').datepicker({

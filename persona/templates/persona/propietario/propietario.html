@@ -15,10 +15,10 @@
 				<li id="estilo"><a  link href="#" rel="/static/css/estilo2.css"><label style="color:#136948!important;">Estilo 2</label></a></li>
 			</div>
 			<div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
-				<span onclick="zoomIn()"><label>Aumentar Fuente</label></span>
+				<input type=image src="/media/imagenes/zoom in.ico" onclick="zoomIn()" style="width:35px; height:35px;"></input>
 			</div>
 			<div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
-				<span onclick="zoomOut()"><label>Disminuir Fuente</label></span>
+				<input type=image src="/media/imagenes/zoom out.ico" style="width:35px; height:35px;" onclick="zoomOut()"></input>
 			</div>
 		</div>
 {% endblock %}
@@ -39,11 +39,11 @@
 	<div class="panel-group" id="#accordion" role="tablist" aria-multiselectable="true">
 		<div class="panel panel-custom">
 			<div class="panel-heading panel-heading-custom box" role="tab" id="headingFour">
-				<h5 class="panel-title">
+				<a class="panel-title">
 					<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
 						<label id="a">Consultar estado de mis Tramites</label>
 					</a>
-				</h5>
+				</a>
 			</div>
 			<div id="collapseFour" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFour">
 				<div class="panel-body">
@@ -62,11 +62,11 @@
 
 		<div class="panel panel-custom">
 			<div class="panel-heading panel-heading-custom box" role="tab" id="headingOne">
-			  <h5 class="panel-title">
+			  <a class="panel-title">
 				<a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
 					<label id="b">Modificar mis datos personales</label>
 				</a>
-			  </h5>
+			  </a>
 			</div>
 			 <div id="collapseOne" class="panel-collapse collapse " role="tabpanel" aria-labelledby="headingOne">
 			  <div class="panel-body">
@@ -120,11 +120,11 @@
 
 		<div class="panel panel-custom">
 			<div class="panel-heading panel-heading-custom box" role="tab" id="headingTwo">
-				<h5 class="panel-title">
+				<a class="panel-title">
 					<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
 						<label id="g">Seleccionar forma de financiacion</label>
 					</a>
-				</h5>
+				</a>
 			</div>
 			<div id="collapseTwo" class="panel-collapse collapse " role="tabpanel" aria-labelledby="headingTwo">
 			  <div class="panel-body">
@@ -150,11 +150,12 @@
 										<div id="columna2c" class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 										<div id="columna2d"class="col-xs-12 col-sm-12 col-md-3 col-lg-4">
 											<select class="form-control input-sm" id="opcionesPropietario" name="Opciones de Datos del tramite" onChange="opcionesDatosTramite(this.value);">
-												<option selected value="nada"> <label style="font-weight:bold!important;">Â¿Como desea abonar el monto?</label> </option>
+												<option selected value="nada"> <label style="font-weight:bold!important;">¿Como desea abonar el monto?</label> </option>
 												<option value="alta_tipo_documento"><label style="font-weight:bold;">En 1 cuota (un pago)</label></option>
 												<option value="alta_tipo_de_obra"><label  style="font-weight:bold;">En 3 cuotas</label></option>
 												<option value="alta_tipo_de_obra"><label  style="font-weight:bold;">En 6 cuotas</label></option>
 												<option value="alta_tipo_de_obra"><label  style="font-weight:bold;">En 12 cuotas</label></option>
+											<!--TODO VEER!!!!!!!-->
 											</select>
 										</div>
 
@@ -221,13 +222,16 @@
         var fontSize = 1;
         // funcion para aumentar la fuente
         function zoomIn() {
-            fontSize += 0.1;
+        	fontSize += 0.1;
             document.body.style.fontSize = fontSize + "em";
-        }
+           	Cookies.set("fs",fontSize, {expires: 365, path: '/'});
+	    }
         // funcion para disminuir la fuente
         function zoomOut() {
             fontSize -= 0.1;
             document.body.style.fontSize = fontSize + "em";
+           	Cookies.set("fs",fontSize, {expires: 365, path: '/'});
+
         }
     </script>
 
@@ -263,9 +267,13 @@
  </script>
 <script>
 	$(document).ready(function() {
+	var font=0;
 	if(Cookies.get("temporal")) {
 		$("link").attr("href",Cookies.get("temporal"));
-		Cookies.remove("temporal");
+		if (Cookies.get("fs")){
+			font=Cookies.get("fs");
+		    document.body.style.fontSize = font + "em";
+		}
 	}
 	$("#nav li a").click(function() {
 		$("link").attr("href",$(this).attr('rel'));
@@ -275,6 +283,7 @@
 });
 
 </script>
+
 
 
 {% endblock %}
