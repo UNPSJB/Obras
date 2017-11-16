@@ -4,8 +4,6 @@ from django.db import models
 from pago.models import *
 from tramite.models import *
 from django import template
-from tramite.models import Tramite
-
 
 # Create your models here.
 class PagoBaseManager(models.Manager):
@@ -130,8 +128,6 @@ class Pago(models.Model):
     tipoPago = models.ForeignKey(Tipo_Pago, blank=True, null=True)
     valor = models.IntegerField()
     cantidadCuotas = models.IntegerField(null=True, choices=CUOTAS, blank=True)
-    #tramite = models.ForeignKey('tramite.Tramite', related_name='tramite', blank=True, null=False)
-    # unique=True)#el tramite deberia ser unico OneToOneField
     cuota=models.ForeignKey(Cuota, blank=True, null=True) #foreign key o relacion uno a muchos
     fecha = models.DateTimeField(auto_now_add=True)  # para que sea la del momento que se da el alta
 
