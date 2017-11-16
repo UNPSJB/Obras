@@ -1,0 +1,61 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load crispy_forms_tags%}
+
+{% block estilos %}
+
+{% endblock %}
+
+{% block contenido %}
+
+<ul class="sidebar sidebar-1">
+
+    <li><a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne"><label id="j">Mis inspecciones agendadas</label></a></li>    
+</ul>
+
+<div class="panel panel-custom">
+    <div class="panel-heading panel-heading-custom box" role="tab" id="headingOne">
+      <h5 class="panel-title">
+        <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+            <label id="b">Mis inspecciones agendadas</label>
+        </a>
+      </h5>
+    </div>
+     <div id="collapseOne" class="panel-collapse collapse " role="tabpanel" aria-labelledby="headingOne">      
+        <div class="table-responsive">
+            <table class="table table-bordered table-striped table-hover table-condensed" style="background: white;">
+                <thead>
+                    <tr>      
+                        <th>Tramite </th>          
+                        <th>Domicilio</th>
+                        <th>Inspeccionar</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% if tramites %}
+                        {% for tramite in tramites %}
+                            <tr>
+                                <td>{{ tramite.id }}</td>
+                                <td>{{ tramite.domicilio }}</td>
+                                <td>
+                                    <a href="{% url 'planilla_inspeccion_movil' tramite.id%}">
+                                        <button type="button" class="btn btn-primary brn-xs" name="realiazar-inspeccion">
+                                            <span class="glyphicon glyphicon-home" aria-hidden="true"> Inspeccionar </span>                                
+                                        </button>
+                                    </a>
+                                </td>                       
+                            </tr>
+                        {% endfor %}
+                    {% endif%}
+                </tbody>
+            </table>
+        </div>
+    </div>  
+</div>
+    
+{% endblock %}
+    
+    
+{% block scripts %}
+{% endblock %}
+    

@@ -33,6 +33,7 @@
 					<li><a href="#" onclick='opcionesInspeccion("alta_item_inspeccion")'>Crear item inspeccion</a></li>
 					<li><a href="#" onclick='opcionesInspeccion("alta_detalle_item")'>Crear detalle inspeccion</a></li>
 					<li><a href="#" onclick='opcionesInspeccion("alta_doc_inspeccion")'>Crear documento tecnico</a></li>
+					<li><a href="#" onclick='opcionesInspeccion("alta_planilla_inspeccion")'>Generar planilla inspeccion</a></li>
 
 				</ul>
 			<!--<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree" onclick='mostrarSubmenu("sin_submenu")'>Otorgar final de obra</a></li>-->
@@ -383,6 +384,7 @@
 											<option value="alta_item_inspeccion">Crear item inspeccion</option>
 											<option value="alta_detalle_item">Crear detalle inspeccion</option>
 											<option value="alta_doc_inspeccion">Crear documento tecnico</option>
+											<option value="alta_planilla_inspeccion">Generar planilla inspeccion</option>
 										</select>
 									</div>
 								</div>
@@ -472,7 +474,7 @@
 						<hr>
 						<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4" style="display:none">
 							{% block alta_doc_inspeccion %}
-								{% crispy doc_tecnico_inspeccion_form %}
+
 							{% endblock %}
 						</div>
 						<form method="post" enctype="multipart/form-data"> {% csrf_token %}
@@ -487,6 +489,32 @@
 									Limpiar
 								</button>
 							</div>
+							<br>
+						</form>
+					</div>
+				</div>
+			</div>
+			<div class="container-fluid" id="alta_planilla_inspeccion" {% if submit_name != 'doc_tecnico_inspeccion_submit' %} class="hide"{% endif %} style="display:none;">
+				<div class="row">
+					<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+						<hr>
+						<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4" style="display:none">
+							{% block alta_planilla_inspeccion %}
+
+							{% endblock %}
+						</div>
+						<form method="post" enctype="multipart/form-data"> {% csrf_token %}
+							<!--<div id="nombre_doc_inspeccion" class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+							</div>
+							<div id="descripcion_doc" class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+							</div>
+							<div id="detalle_doc" class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+							</div>
+							<div id="boton_doc_inspeccion" class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="right">
+								<button class="btn btn-danger btn-sm" type="reset" title="Borrar datos del formulario">
+									Limpiar
+								</button>
+							</div>-->
 							<br>
 						</form>
 					</div>
@@ -720,6 +748,7 @@
 				$("#alta_item_inspeccion").hide();
 				$("#alta_detalle_item").hide();
 				$("#alta_doc_inspeccion").hide();
+				$("#alta_planilla_inspeccion").hide();
 				$("#"+"opcionesInspeccion").val('nada');
 			}
 			if (id == "alta_categoria_inspeccion"){
@@ -727,6 +756,7 @@
 				$("#alta_item_inspeccion").hide();
 				$("#alta_detalle_item").hide();
 				$("#alta_doc_inspeccion").hide();
+				$("#alta_planilla_inspeccion").hide();
 				$("#"+"opcionesInspeccion").val('alta_categoria_inspeccion');
 			}
 			if (id == "alta_item_inspeccion"){
@@ -734,6 +764,7 @@
 				$("#alta_item_inspeccion").show();
 				$("#alta_detalle_item").hide();
 				$("#alta_doc_inspeccion").hide();
+				$("#alta_planilla_inspeccion").hide();
 				$("#"+"opcionesInspeccion").val('alta_item_inspeccion');
 			}
 			if (id == "alta_detalle_item"){
@@ -741,6 +772,7 @@
 				$("#alta_item_inspeccion").hide();
 				$("#alta_detalle_item").show();
 				$("#alta_doc_inspeccion").hide();
+				$("#alta_planilla_inspeccion").hide();
 				$("#"+"opcionesInspeccion").val('alta_detalle_item');
 			}
 			if (id == "alta_doc_inspeccion"){
@@ -748,7 +780,16 @@
 				$("#alta_item_inspeccion").hide();
 				$("#alta_detalle_item").hide();
 				$("#alta_doc_inspeccion").show();
+				$("#alta_planilla_inspeccion").hide();
 				$("#"+"opcionesInspeccion").val('alta_doc_inspeccion');
+			}
+			if (id == "alta_planilla_inspeccion"){
+				$("#alta_categoria_inspeccion").hide();
+				$("#alta_item_inspeccion").hide();
+				$("#alta_detalle_item").hide();
+				$("#alta_doc_inspeccion").hide();
+				$("#alta_planilla_inspeccion").show();
+				$("#"+"opcionesInspeccion").val('alta_planilla_inspeccion');
 			}
 
 		}
