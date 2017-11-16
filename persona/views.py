@@ -910,8 +910,7 @@ def alta_persona(request):
 
 def mostrar_cajero(request):
     contexto = {
-        "ctxtramite_para_financiar": listado_tramite_para_financiar(request),
-        "ctxpago": registrar_pago(request),
+        "ctxtramite_para_financiar": listado_tramite_para_financiar(request),        
         # "ctxcuota": registrar_cuota(request),
     }
     return render(request, 'persona/cajero/cajero.html', contexto)
@@ -984,9 +983,10 @@ def listado_tramite_para_financiar(request):
     return contexto
 
 def elegir_financiacion(request,pk_tramite):    
-    tramite = get_object_or_404(Tramite, pk=pk_tramite)
-    contexto = {'tramite': tramite}
-    form = FormularioPago(request)
+    tramite = get_object_or_404(Tramite, pk=pk_tramite)    
+    contexto = {
+        "ctxpago": registrar_pago(request),        
+    }
     return render(request, 'persona/cajero/elegir_financiacion.html',contexto)
 
 #------------------------------------------------------------------------------------------------------------------

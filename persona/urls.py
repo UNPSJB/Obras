@@ -80,6 +80,7 @@ urlpatterns = [
     url(r'^cajero/tramite_para_financiar$', views.listado_tramite_para_financiar, name="tramite_para_financiar"),
     url(r'^cajero/elegir_financiacion/(?P<pk_tramite>\d+)/$', views.elegir_financiacion, name="financiar"),
     url(r'^cajero/registrar_cuota.html', views.registrar_cuota, name="registrar_cuota"),
+    #url(r'^cajero/registrar_pago.html', views.registrar_pago, name="registrar_pago"),
 
     #movil -------------------------------------------------------------------------------------------------------
     url(r'^movil$', views.movil_inspector, name="movil_inspector"),    
