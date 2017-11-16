@@ -69,7 +69,7 @@ class FormularioPago(forms.ModelForm):
 
     class Meta:
         model = Pago
-        fields = ('tipoPago','valor','cantidadCuotas','tramite', 'cuota',)
+        fields = ('tipoPago','valor','cantidadCuotas', 'cuota',)
         exclude=('cuota',)
     def __init__(self, *args, **kwargs):
         super(FormularioPago, self).__init__(*args, **kwargs)
@@ -78,7 +78,6 @@ class FormularioPago(forms.ModelForm):
         self.fields['tipoPago'].widget.attrs['placeholder'] = "Ingresar Tipo de Pago"
         self.fields['valor'].widget.attrs['placeholder'] = "Importe"
         self.fields['cantidadCuotas'].widget.attrs['placeholder'] = "Ingresar cantidad de cuotas"
-        self.fields['tramite'].widget.attrs['placeholder'] = "Ingresar nro tramite"
 
     def clean_valor(self):
         valor = self.cleaned_data['valor']

@@ -4,7 +4,7 @@ from django.contrib.auth.decorators import  login_required
 
 from .forms import *
 from django.contrib import messages
-from pago.forms import FormularioTipoPago, FormularioPago
+from pago.forms import *
 from tipos.forms import *
 from obras_particulares.views import *
 from tramite.forms import FormularioIniciarTramite
@@ -35,6 +35,9 @@ import time
 from datetime import datetime
 import collections
 from planilla_visado.models import ItemDeVisado
+from pago.models import Cuota, Cancelacion,Cancelada
+from datetime import date, timedelta
+
 #-------------------------------------------------------------------------------------------------------------------
 #generales ---------------------------------------------------------------------------------------------------------
 
@@ -793,6 +796,13 @@ def listado_planilla_inspeccion(request):
      items = ItemInspeccion.objects.all()
      detalles = DetalleDeItemInspeccion.objects.all()
      categorias = CategoriaInspeccion.objects.all()
+     print(categorias)
+     return render(request, 'persona/director/ver_planilla_inspeccion.html', {"items":items, "detalles": detalles, "categorias":categorias})
+
+def listado_planilla_inspeccion(request):
+     items = ItemInspeccion.objects.all()
+     detalles = DetalleDeItemInspeccion.objects.all()
+     categorias = CategoriaInspeccion.objects.all()
      return render(request, 'persona/director/ver_planilla_inspeccion.html', {"items":items, "detalles": detalles, "categorias":categorias})
 
 class ReporteTramitesDirectorExcel(TemplateView):
@@ -922,6 +932,62 @@ def elegir_financiacion(request,pk_tramite):
     contexto = {'tramite': tramite}
     form = FormularioPago()
     return render(request, 'persona/cajero/elegir_financiacion.html',contexto)
+
+def registrar_pago(request):
+    if request.method == "POST":
+        form = FormularioPago(request.POST)
+        if form.is_valid():
+            pago = form.save(commit=False)
+            pago.valor=pago.guardar_valor()
+            print(pago.valor)
+            print(pago.cantidadCuotas)
+            contador=31
+            fms = "%A"
+            for i in range(1, pago.cantidadCuotas+1):
+                total = pago.importe()
+                cuota = Cuota(monto=total,numeroCuota=i)
+                cuota.fechaVencimiento=date.today() + timedelta(days=contador)
+                dia=cuota.fechaVencimiento.strftime(fms)
+                if (dia=="Sunday"):
+                    cuota.fechaVencimiento=date.today() + timedelta(days=contador+1)
+                else:
+                    if (dia=="Saturday"):
+                        cuota.fechaVencimiento = date.today() + timedelta(days=contador + 2)
+                contador=contador+31
+                cuota.save()
+            pago.save()
+    else:
+        # initial = {'valor':}
+        form = FormularioPago()
+    return form
+
+def registrar_cuota(request):
+    form = FormularioCuota(request.POST)
+    if form.is_valid():
+        form= form.save(commit=False)
+        form.save()
+    else:
+        print (form.errors)
+        messages.error(request,"error")
+        #return form
+    return render (request,'persona/cajero/registrar_cuota.html', {'form':form})
+
+def actualizar_cuota(request, pk_cuota):
+    cuota=Cuota.objects.get(pk=pk_cuota)
+    if request.method=="GET":
+        form=FormularioCuota(instance=cuota)
+        cuota.fechaVencimiento=request.POST['fechaVencimiento']
+    else:
+        form=FormularioCuota(request.POST,instance=cuota)
+        if form.is_valid():
+            form.save()
+
+def listado_pagos(request,pk_tramite):
+    pago=Pago.objects.filter(pk=pk_tramite)
+    cuotas=Cuota.objects.filter (pk=pago)
+    cuotas=cuotas.filter.en_estado(Cancelada)
+    return {'cuotas':cuotas}
+
 
 #------------------------------------------------------------------------------------------------------------------
 #movil ---------------------------------------------------------------------------------------------------------
