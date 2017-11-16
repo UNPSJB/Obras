@@ -4,6 +4,9 @@ from django.utils import timezone
 import datetime
 from persona.models import *
 from tipos.models import *
+from planilla_visado.models import *
+from planilla_inspeccion.models import *
+from pago.models import *
 from django import template
 
 register = template.Library()
@@ -49,6 +52,9 @@ class Tramite(models.Model):
     medidas = models.IntegerField()
     tipo_obra = models.ForeignKey(TipoObra)
     domicilio = models.CharField(max_length=50,blank=True)
+    planillaVisado = models.ForeignKey(PlanillaDeVisado, default=True, null=True, unique=False)
+    planillaInspeccion = models.ForeignKey(PlanillaDeInspeccion, default=True, null=True, unique=False)
+    pago = models.ForeignKey(Pago, default=True, blank=True, null=True)
     #-------------------------------------------------------------------------------------
     # DATOS CATASTRALES
     parcela = models.CharField(max_length = 20)
@@ -269,43 +275,43 @@ class Finalizado(Estado):
 for klass in [Iniciado, Aceptado, Visado, Corregido, Agendado, Inspeccionado, Finalizado, ConInspeccion, FinalObraSolicitado]:
     Estado.register(klass)
 
-class Pago(models.Model):
-    tramite = models.ForeignKey(Tramite)
-    fecha = models.DateField(auto_now=True)
-    monto = models.DecimalField(max_digits=10, decimal_places=2)
-
-    def __str__(self):
-        cabecera = '{0} - {1}'.format(self.tramite.pk, self.fecha)
-        return cabecera
-
-    @classmethod
-    def procesar_pagos(cls, archivo):
-
-        datos = archivo.read()
-
-        #La siguientes linea arma un diccionario para poder recorrer el archivo mejor
-        spliter = lambda datos: [ l.split('"')[:2] for l in datos.splitlines()[1:]]
-
-        datos_diccionario = []
-
-        #Esta linea arma una lista de cadenas de la siguiente forma: {'monto': xxxxxx, 'id': xx}
-        try:
-            for idt, monto in spliter(datos):
-                datos_diccionario.append({"id": int(idt[:-1]), "monto": Decimal(monto[1:].replace(".","").replace(",", "."))})
-
-            for linea in datos_diccionario:
-                try:
-                    monto_pagado = linea['monto']
-                    id_tramite = int(linea['id'])
-                    tramite = Tramite.objects.get(pk=id_tramite)
-                    tramite.calcular_monto_pagado(monto_pagado)
-                    p = cls(tramite=tramite, monto=monto_pagado)
-                    p.save()
-                except Tramite.DoesNotExist:
-                    print 'El tramite con numero: {0}, no existe en el sistema. Se ignora su pago.'.format(id_tramite)
-
-        except ValueError:
-            print('El archivo cargado no tiene el formato correcto.')
+# class Pago(models.Model):
+#     tramite = models.ForeignKey(Tramite)
+#     fecha = models.DateField(auto_now=True)
+#     monto = models.DecimalField(max_digits=10, decimal_places=2)
+#
+#     def __str__(self):
+#         cabecera = '{0} - {1}'.format(self.tramite.pk, self.fecha)
+#         return cabecera
+#
+#     @classmethod
+#     def procesar_pagos(cls, archivo):
+#
+#         datos = archivo.read()
+#
+#         #La siguientes linea arma un diccionario para poder recorrer el archivo mejor
+#         spliter = lambda datos: [ l.split('"')[:2] for l in datos.splitlines()[1:]]
+#
+#         datos_diccionario = []
+#
+#         #Esta linea arma una lista de cadenas de la siguiente forma: {'monto': xxxxxx, 'id': xx}
+#         try:
+#             for idt, monto in spliter(datos):
+#                 datos_diccionario.append({"id": int(idt[:-1]), "monto": Decimal(monto[1:].replace(".","").replace(",", "."))})
+#
+#             for linea in datos_diccionario:
+#                 try:
+#                     monto_pagado = linea['monto']
+#                     id_tramite = int(linea['id'])
+#                     tramite = Tramite.objects.get(pk=id_tramite)
+#                     tramite.calcular_monto_pagado(monto_pagado)
+#                     p = cls(tramite=tramite, monto=monto_pagado)
+#                     p.save()
+#                 except Tramite.DoesNotExist:
+#                     print 'El tramite con numero: {0}, no existe en el sistema. Se ignora su pago.'.format(id_tramite)
+#
+#         except ValueError:
+#             print('El archivo cargado no tiene el formato correcto.')
 
 
 @register.filter(is_safe=True)
