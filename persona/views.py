@@ -912,20 +912,18 @@ def alta_persona(request):
 
 def mostrar_cajero(request):
     contexto = {
-        "ctxtramite_para_fianciar": listado_tramite_para_financiar(request),
+        "ctxtramites_para_financiar": listado_tramites_para_financiar(request),
     }    
     return render(request, 'persona/cajero/cajero.html', contexto)
 
-def listado_tramite_para_financiar(request):
+def listado_tramites_para_financiar(request):
     tramites = Tramite.objects.en_estado(Visado)
-    contexto = {'tramites':tramites}
+    contexto = {'tramites':tramites}    
     return contexto
 
 def elegir_financiacion(request,pk_tramite):    
-    tramite = get_object_or_404(Tramite, pk=pk_tramite)
-    contexto = {'tramite': tramite}
-    form = FormularioPago()
-    return render(request, 'persona/cajero/elegir_financiacion.html',contexto)
+    tramite = get_object_or_404(Tramite, pk=pk_tramite)    
+    return render(request, 'persona/cajero/elegir_financiacion.html',{'tramite': tramite, 'ctxpago':registrar_pago(request)}    )
 
 def registrar_pago(request):
     if request.method == "POST":
