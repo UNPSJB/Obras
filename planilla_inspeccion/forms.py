@@ -70,7 +70,7 @@ class FormularioDetalleItem(forms.ModelForm):
 
     def clean_nombre(self):
         nombre = self.cleaned_data['nombre']
-        cargados = ItemInspeccion.objects.filter(nombre__icontains=nombre)
+        cargados = DetalleDeItemInspeccion.objects.filter(nombre__icontains=nombre)
         if cargados.exists():
             raise ValidationError("Ya existe {}".format(cargados.first().nombre))
         return nombre

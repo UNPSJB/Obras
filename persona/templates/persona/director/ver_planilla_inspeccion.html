@@ -1,0 +1,81 @@
+{% load staticfiles %}
+{% load crispy_forms_tags%}
+
+{% block estilos %}
+
+{% endblock %}
+
+{% block planilla_de_inspeccion %}
+        <h5 class="panel-title">
+			<font color="#ffffff" size="2">Planilla de inspeccion</font>
+        </h5>
+        <!--<body>-->
+            <!--<table border="1">-->
+                    <!--<th>Item</th>-->
+                    <!--{% for item in items %}-->
+                    <!--<td>{{item.nombre}}</td>-->
+                    <!--</th>-->
+                    <!--{% endfor %}-->
+                <!--<tr>-->
+                    <!--{% for categoria in categorias %}-->
+                    <!--<td>{{categoria.nombre}}</td>-->
+                    <!--<td>-->
+                        <!--{% for detalle in detalles %}-->
+                        <!--<td>{{detalle.nombre}}</td>-->
+                    <!--</td>-->
+                    <!--{% endfor %}-->
+                <!--</tr>-->
+
+                <!--{% endfor %}-->
+            <!--</table>-->
+        <!--</body>-->
+    <body>
+    <table border="1">
+    <tr>
+        <th>Categoria/Item</th>
+        {% for item in items %}
+        <td>{{item.nombre}}</td>
+        {% endfor %}
+    </tr>
+
+    {% for categoria in categorias %}
+    <tr>
+        <td class="col-xs-12">{{ categoria.nombre }}</td>
+        {% for detalle in detalles %}
+        <td class="col-xs-1">{{ detalle.nombre }}</td>
+        {% endfor %}
+    </tr>
+{% endfor %}
+</tbody>
+</table>
+    <!--<table class="table-bordered table-striped table-hover table-condensed" style="background: white;">-->
+        <!--<thead>-->
+        <!--<tr>-->
+            <!--{% for categoria in categorias %}-->
+            <!--<th>{{categoria.nombre}}</th>-->
+            <!--{% endfor %}-->
+        <!--</tr>-->
+        <!--</thead>-->
+        <!--<tbody>-->
+        <!--<th>Items</th>-->
+        <!--{% for item in items %}-->
+        <!--<tr>-->
+            <!--<th>{{ item.nombre }}</th>-->
+            <!--{% for detalle in detalles %}-->
+            <!--<tr>-->
+                <!--<th>{{detalle.nombre}}</th>-->
+            <!--{% endfor %}-->
+        <!--</tr>-->
+        <!--{% endfor %}-->
+        <!--</tr>-->
+        <!--</tbody>-->
+    <!--</table>-->
+    <!--{% for item in items %}-->
+        <!--<h1>-->
+            <!--planilla de inspeccion-->
+        <!--</h1>-->
+
+   <!-- {% endfor %}-->
+
+
+{% endblock %}

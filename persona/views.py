@@ -792,17 +792,11 @@ def generar_planilla_visado(request):
      contexto_columnas = {'columnas': columnas}
      return render(request, 'persona/director/item_visado.html', contexto)
 
-def listado_planilla_inspeccion(request):
+def ver_planilla_inspeccion(request):
      items = ItemInspeccion.objects.all()
      detalles = DetalleDeItemInspeccion.objects.all()
      categorias = CategoriaInspeccion.objects.all()
      print(categorias)
-     return render(request, 'persona/director/ver_planilla_inspeccion.html', {"items":items, "detalles": detalles, "categorias":categorias})
-
-def listado_planilla_inspeccion(request):
-     items = ItemInspeccion.objects.all()
-     detalles = DetalleDeItemInspeccion.objects.all()
-     categorias = CategoriaInspeccion.objects.all()
      return render(request, 'persona/director/ver_planilla_inspeccion.html', {"items":items, "detalles": detalles, "categorias":categorias})
 
 class ReporteTramitesDirectorExcel(TemplateView):
