@@ -35,7 +35,7 @@ import time
 from datetime import datetime
 import collections
 from planilla_visado.models import ItemDeVisado
-from pago.models import Cuota, Cancelacion,Cancelada
+from pago.models import Cuota, Cancelacion,Cancelada,Estado
 from datetime import date, timedelta
 
 #-------------------------------------------------------------------------------------------------------------------
@@ -207,7 +207,7 @@ def profesional_solicita_final_obra(request, pk_tramite):
 def ver_documentos_corregidos(request, pk_tramite):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
     if request.method == "POST":
-        print ("falta guardar documentos")
+        print ("faltan guardar documentos")
         enviar_correcciones(request, pk_tramite)
     else:
         return render(request, 'persona/profesional/ver_documentos_corregidos.html', {'tramite': tramite})
@@ -913,24 +913,30 @@ def alta_persona(request):
 def mostrar_cajero(request):
     contexto = {
         "ctxtramites_para_financiar": listado_tramites_para_financiar(request),
+        "ctxcuotas":listado_cuotas(request)
     }    
     return render(request, 'persona/cajero/cajero.html', contexto)
 
 def listado_tramites_para_financiar(request):
     tramites = Tramite.objects.en_estado(Visado)
-    contexto = {'tramites':tramites}    
+    contexto = {'tramites':tramites}
+    print ("contexto")
+    print(contexto)
     return contexto
 
 def elegir_financiacion(request,pk_tramite):    
-    tramite = get_object_or_404(Tramite, pk=pk_tramite)    
-    return render(request, 'persona/cajero/elegir_financiacion.html',{'tramite': tramite, 'ctxpago':registrar_pago(request)}    )
+    tramite = get_object_or_404(Tramite, pk=pk_tramite)
+    print("tramite")
+    print(tramite)
+    return render(request, 'persona/cajero/elegir_financiacion.html',{'tramite': tramite, 'ctxpago':registrar_pago(request,tramite.id)})
 
-def registrar_pago(request):
+def registrar_pago(request,pk_tramite):
+    tramite = get_object_or_404(Tramite, pk=pk_tramite)
     if request.method == "POST":
         form = FormularioPago(request.POST)
         if form.is_valid():
             pago = form.save(commit=False)
-            pago.valor=pago.guardar_valor()
+            # pago.valor=pago.guardar_valor()
             print(pago.valor)
             print(pago.cantidadCuotas)
             contador=31
@@ -938,6 +944,8 @@ def registrar_pago(request):
             for i in range(1, pago.cantidadCuotas+1):
                 total = pago.importe()
                 cuota = Cuota(monto=total,numeroCuota=i)
+                print("valor")
+                print(i)
                 cuota.fechaVencimiento=date.today() + timedelta(days=contador)
                 dia=cuota.fechaVencimiento.strftime(fms)
                 if (dia=="Sunday"):
@@ -947,39 +955,46 @@ def registrar_pago(request):
                         cuota.fechaVencimiento = date.today() + timedelta(days=contador + 2)
                 contador=contador+31
                 cuota.save()
+                cuota.hacer("Cancelacion")
             pago.save()
+            tramite.pago=pago
+            tramite.save()
     else:
         # initial = {'valor':}
-        form = FormularioPago()
+        form = FormularioPago(initial = {'valor':tramite.monto_a_pagar})
     return form
 
-def registrar_cuota(request):
-    form = FormularioCuota(request.POST)
-    if form.is_valid():
-        form= form.save(commit=False)
-        form.save()
-    else:
-        print (form.errors)
-        messages.error(request,"error")
-        #return form
-    return render (request,'persona/cajero/registrar_cuota.html', {'form':form})
+def listado_cuotas(request):
+    cuotas=Cuota.objects.en_estado(Cancelacion)
+    contexto= {'cuotas':cuotas}
+    return contexto
 
-def actualizar_cuota(request, pk_cuota):
-    cuota=Cuota.objects.get(pk=pk_cuota)
-    if request.method=="GET":
-        form=FormularioCuota(instance=cuota)
-        cuota.fechaVencimiento=request.POST['fechaVencimiento']
-    else:
-        form=FormularioCuota(request.POST,instance=cuota)
-        if form.is_valid():
-            form.save()
+def elegir_cuota(request,pk_cuota):
+    cuota=get_object_or_404(Cuota,pk=pk_cuota)
+    cuota.guardar_fecha()
+    cuota.save()
+    cuota.hacer("cancelacion")
+    messages.add_message(request, messages.SUCCESS, 'Pago Registrado.')
+    return redirect('cajero')
 
-def listado_pagos(request,pk_tramite):
-    pago=Pago.objects.filter(pk=pk_tramite)
-    cuotas=Cuota.objects.filter (pk=pago)
-    cuotas=cuotas.filter.en_estado(Cancelada)
-    return {'cuotas':cuotas}
-
+#
+# def actualizar_cuota(request, pk_cuota):
+#     cuota=get_object_or_404(Cuota,pk=pk_cuota)
+#     if request.method=="GET":
+#         form=FormularioCuota(instance=cuota)
+#         try:
+#             print (form.errors)
+#             fecha = datetime.datetime.now()
+#             print(fecha)
+#             print(form.errors)
+#         except:
+#         if form.is_valid():
+#             form.save()
+#     else:
+#         form=FormularioCuota(request.POST,instance=cuota)
+#         if form.is_valid():
+#             form.save()
+#     return redirect('persona/cajero/cajero.html')
 
 #------------------------------------------------------------------------------------------------------------------
 #movil ---------------------------------------------------------------------------------------------------------
@@ -991,7 +1006,7 @@ def movil_inspector(request):
     #return render(request, 'persona/movil/inspector.html')
     return render(request, 'persona/movil/planilla_inspeccion.html')
 
-def frente_o_fachada(request):    
+def frente_o_fachada(request):
     return render(request,'persona/movil/frente_o_fachada.html')    
 
 def paredes(request):    

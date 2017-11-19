@@ -56,8 +56,9 @@
 							<div class="container-fluid">
 							<br>
 								{% block registrar_cuota %}
-								     {% include 'persona/cajero/registrar_cuota.html' %}
+									{% include "persona/cajero/registrar_cuota.html" with cuota=ctxcuotas.cuotas %}
 								{% endblock %}
+
 								<!--<form action="" class="" >-->
 									<!--<div class="row">-->
 										<!--<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">-->
@@ -149,12 +150,7 @@
 </div>
 
 <script>
-	$('#pagos #div_id_tipoPago').appendTo('#tipoPago')
-	$('#pagos #div_id_valor').appendTo('#valor')
-	$('#pagos #div_id_cantidadCuotas').appendTo('#cant_cuotas')
-	$('#pagos #div_id_tramite').appendTo('#tramite')
-	$('#pagos #div_id_cuota').appendTo('#cuota')
-	$('#submit-id-pago_submit').appendTo('#boton_de_pago')
+
 
 	$('#cuotas #div_id_fechaVencimiento').appendTo('#fechaVencimiento')
 	$('#cuotas #div_id_fechaPago').appendTo('#fechaPago')

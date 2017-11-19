@@ -14,7 +14,7 @@ class FormularioCuota(forms.ModelForm):
         model = Cuota
         fields = (
             'fechaVencimiento',
-            # 'fechaPago',
+            'fechaPago',
             'monto',
             'numeroCuota'
         )
@@ -25,7 +25,6 @@ class FormularioCuota(forms.ModelForm):
         }
         widgets = {
             'fechaVencimiento': forms.DateInput(attrs={'class': 'datepicker'}),
-            # 'fechaPago': forms.DateInput(attrs={'class': 'datepicker'}),
             'monto': forms.TextInput(attrs={'class':'form-control'}),
         }
 
@@ -34,8 +33,8 @@ class FormularioCuota(forms.ModelForm):
         self.helper = FormHelper()
         self.helper.add_input(Submit(self.SUBMIT, 'Guardar'))
         self.fields['fechaVencimiento'].widget.attrs['placeholder'] = "fecha de vencimiento"
-        # self.fields['fechaPago'].widget.attrs['placeholder'] = "fecha de pago"
-        # self.fields['fechaPago'].required = False
+        self.fields['fechaPago'].widget.attrs['placeholder'] = "fecha de pago"
+        self.fields['fechaPago'].required = False
         self.fields['monto'].widget.attrs['placeholder'] = "monto"
         self.fields['numeroCuota'].widget.attrs['placeholder'] = "cuota"
         # self.fields['pago'].widget.attrs['placeholder'] = "ingresar pago"
@@ -76,14 +75,14 @@ class FormularioPago(forms.ModelForm):
         self.helper = FormHelper()
         self.helper.add_input(Submit('pago_submit', 'Guardar'))
         self.fields['tipoPago'].widget.attrs['placeholder'] = "Ingresar Tipo de Pago"
-        self.fields['valor'].widget.attrs['placeholder'] = "Importe"
+        self.fields['valor'].widget.attrs['placeholder'] = "Importe"#sacar
         self.fields['cantidadCuotas'].widget.attrs['placeholder'] = "Ingresar cantidad de cuotas"
 
-    def clean_valor(self):
-        valor = self.cleaned_data['valor']
-        if valor<1:
-            raise ValidationError("Valor invalido ")
-        return valor
+    # def clean_valor(self):
+    #     valor = self.cleaned_data['valor']
+    #     if valor<1:
+    #         raise ValidationError("Valor invalido ")
+    #     return valor
 
     def clean_cantidadCuotas(self):
         cantidadCuotas = self.cleaned_data['cantidadCuotas']

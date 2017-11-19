@@ -4,6 +4,7 @@ from django.db import models
 from pago.models import *
 from tramite.models import *
 from django import template
+from django.shortcuts import get_object_or_404
 
 # Create your models here.
 class PagoBaseManager(models.Manager):
@@ -11,12 +12,12 @@ class PagoBaseManager(models.Manager):
 
 
 class PagoQuerySet(models.QuerySet):
-    def en_estado(self, estados_cuota):
-        if type(estados_cuota) != list:
-            estados_cuota = [estados_cuota]
-        return self.annotate(max_id=models.Max('estados__id')).filter(
-            estados__id=models.F('max_id'),
-            estados__tipo__in=[e.TIPO for e in estados_cuota])
+    def en_estado(self, estado_cuota):
+        if type(estado_cuota) != list:
+            estado_cuota = [estado_cuota]
+        return self.annotate(max_id=models.Max('estado_cuota__id')).filter(
+            estado_cuota__id=models.F('max_id'),
+            estado_cuota__tipo__in=[e.TIPO for e in estado_cuota])
 
 PagoManager = PagoBaseManager.from_queryset(PagoQuerySet)
 
@@ -36,20 +37,18 @@ class Cuota(models.Model):
     fechaPago = models.DateField(auto_now_add=False) #false sino se llena cuando se crea el pago
     monto = models.IntegerField(null=True, blank=True)
     numeroCuota=models.IntegerField(null=True, blank=True)
+
     # pago=models.ForeignKey(Pago, related_name='pago', blank=True, null=True)
-    #    objects = PagoManager()
+    objects = PagoManager()
     def __str__(self):
         return "Numero de Cuota: {} - monto: {}" .format(self.numeroCuota, self.monto)
 
-    # def calcular_valor_cuota(self):
-    #     if self.pago is not None:
-    #         self.monto = self.pago.importe()
-    #         return self.monto
-    #   return -1
+    def guardar_fecha(self):
+        self.fechaPago = datetime.datetime.now()
 
-    def estado_cuota(self):
-        if self.estados_cuota.exists():
-            return self.estados_cuota.latest().related()
+    def estados(self):
+        if self.estado_cuota.exists():
+            return self.estado_cuota.latest().related()
 
     @classmethod
     def new(cls, tipo):
@@ -58,11 +57,8 @@ class Cuota(models.Model):
         t.hacer(None, observacion="")
         return t
 
-    def estados_related(self):
-        return [self.estado_cuota.related() for estado in self.estados_cuota.all()]
-
     def hacer(self, accion, *args, **kwargs):
-        estado_actual = self.estado()
+        estado_actual = self.estados()
         if estado_actual is not None and hasattr(estado_actual, accion):
             metodo = getattr(estado_actual, accion)
             estado_nuevo = metodo(self, *args, **kwargs)
@@ -73,18 +69,17 @@ class Cuota(models.Model):
         else:
             raise Exception("Cuota: La accion solicitada no se pudo realizar")
 
-
 class Estado(models.Model):
     TIPO = 0
     TIPOS = [
         (0, "Estado")
     ]
-    cuota = models.ForeignKey(Cuota, related_name='estados_cuota')  # FK related_name=estados
+    cuota = models.ForeignKey(Cuota, related_name='estado_cuota')  # FK related_name=estados
     tipo = models.PositiveSmallIntegerField(choices=TIPOS)
     marca = models.DateTimeField(auto_now=True)
 
     class Meta:
-        get_latest_by = 'timestamp'
+        get_latest_by = 'marca'
 
     def save(self, *args, **kwargs):
         if self.pk is None:
@@ -126,7 +121,7 @@ class Pago(models.Model):
         (12, "Doce Cuotas"),
     ]
     tipoPago = models.ForeignKey(Tipo_Pago, blank=True, null=True)
-    valor = models.IntegerField()
+    valor = models.IntegerField()#sacar
     cantidadCuotas = models.IntegerField(null=True, choices=CUOTAS, blank=True)
     cuota=models.ForeignKey(Cuota, blank=True, null=True) #foreign key o relacion uno a muchos
     fecha = models.DateTimeField(auto_now_add=True)  # para que sea la del momento que se da el alta
@@ -134,7 +129,7 @@ class Pago(models.Model):
     def __str__(self):
         return "Numero de Pago: {} - cantidad de cuotas: {} - valor: {}" .format(self.pk, self.cantidadCuotas, self.valor)
 
-    def guardar_valor(self):
+    def guardar_valor(self): #sacar
         if self.tramite is not None:
             self.valor=self.tramite.monto_a_pagar
         return self.valor
@@ -142,4 +137,3 @@ class Pago(models.Model):
     def importe(self):
         resultado=self.valor/self.cantidadCuotas
         return resultado
-
