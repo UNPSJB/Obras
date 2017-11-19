@@ -471,7 +471,7 @@
 			<div class="container-fluid" id="generar_planilla_inspeccion" style="display:none;">
 					<div class="row">
 							{% block generar_planilla_inspeccion %}
-								{% include 'persona/director/ver_planilla_inspeccion.html' %}
+								{% include "persona/director/ver_planilla_inspeccion.html" with items=items filas=filas detalles=detalles%}
 							{% endblock %}
 						</form>
 					</div>

@@ -676,7 +676,10 @@ from planilla_inspeccion.models import CategoriaInspeccion, ItemInspeccion, Deta
 @grupo_requerido('director')
 def mostrar_director(request):
     usuario = request.user
-    values = {}
+    items = ItemInspeccion.objects.all()
+    detalles = DetalleDeItemInspeccion.objects.all()
+    categorias = CategoriaInspeccion.objects.all()     
+    values = {"items":items, "categorias":categorias, "detalles":detalles}
     FORMS_DIRECTOR.update({(k.NAME, k.SUBMIT): k for k in [
         pforms.PlanillaDeVisadoFormFactory(pmodels.FilaDeVisado.objects.all(), pmodels.ColumnaDeVisado.objects.all()),
           ]})
@@ -795,9 +798,10 @@ def generar_planilla_visado(request):
 def ver_planilla_inspeccion(request):
      items = ItemInspeccion.objects.all()
      detalles = DetalleDeItemInspeccion.objects.all()
-     categorias = CategoriaInspeccion.objects.all()
-     print(categorias)
-     return render(request, 'persona/director/ver_planilla_inspeccion.html', {"items":items, "detalles": detalles, "categorias":categorias})
+     categorias = CategoriaInspeccion.objects.all()     
+     contexto = {'items': items}
+     #return render(request, 'persona/director/ver_planilla_inspeccion.html', {"items":items, "detalles": detalles, "categorias":categorias})
+     return render(request, 'persona/director/ver_planilla_inspeccion.html', contexto)
 
 class ReporteTramitesDirectorExcel(TemplateView):
 
