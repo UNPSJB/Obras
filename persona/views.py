@@ -54,7 +54,8 @@ def convertidor_de_fechas(fecha):
 @grupo_requerido('propietario')
 def mostrar_propietario(request):
     contexto = {
-        "ctxtramitespropietario": listado_tramites_propietario(request)
+        "ctxtramitespropietario": listado_tramites_propietario(request),
+        "ctxmis_tramites_para_financiar": tramites_para_financiar(request),
     }
     #print(contexto)
     return render(request, 'persona/propietario/propietario.html', contexto)
@@ -99,6 +100,26 @@ def documentos_de_estado(request, pk_estado):
     documentos_fecha = filter(lambda e:(datetime.strftime(e.fecha, '%d/%m/%Y %H:%M') == fecha_str), documentos)
     contexto= {'documentos_de_fecha': documentos_fecha}
     return render(request, 'persona/propietario/documentos_de_estado.html', contexto)
+
+def tramites_para_financiar(request):
+    tramites = Tramite.objects.all()
+    personas = Persona.objects.all()
+    usuario = request.user
+    lista_de_persona_que_esta_logueada = filter(
+        lambda persona: (persona.usuario is not None and persona.usuario == usuario), personas
+    )
+    persona = lista_de_persona_que_esta_logueada.pop()  # Saco de la lista la persona porque no puedo seguir trabajando con una lista
+    propietario = persona.get_propietario()  # Me quedo con el atributo propietario de la persona
+    tramites_propietario = Tramite.objects.en_estado(Visado)
+    tramites_propietario = filter(lambda tramite: (tramite.propietario == propietario), tramites)
+    contexto = {'tramites':tramites_propietario}
+    return contexto
+
+def elegir_financiacion(request,pk_tramite):
+    tramite = get_object_or_404(Tramite, pk=pk_tramite)
+    print("tramite")
+    print(tramite)
+    return render(request, 'persona/cajero/elegir_financiacion.html',{'tramite': tramite, 'ctxpago':registrar_pago(request,tramite.id)})
 
 #-------------------------------------------------------------------------------------------------------------------
 #profesional -------------------------------------------------------------------------------------------------------

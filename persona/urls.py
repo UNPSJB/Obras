@@ -19,6 +19,8 @@ urlpatterns = [
     url(r'^ver_historial_tramite/(?P<pk_tramite>\d+)/$', views.ver_historial_tramite, name="ver_historial_tramite"),
     url(r'^solicitud_final_obra_propietario/(?P<pk_tramite>\d+)/$', views.propietario_solicita_final_obra, name="propietario_solicita_final_obra"),
     url(r'^documentos_de_estado/(?P<pk_estado>\d+)/$', views.documentos_de_estado, name="documentos_de_estado"),
+    url(r'^cajero/tramites_para_financiar$', views.tramites_para_financiar, name="tramites_para_financiar"),
+    url(r'^cajero/elegir_financiacion/(?P<pk_tramite>\d+)/$', views.elegir_financiacion, name="financiar"),
 
     # profesional ---------------------------------------------------------------------------------------------------
     url(r'^profesional$', views.mostrar_profesional, name="profesional"),
@@ -79,7 +81,7 @@ urlpatterns = [
     #cajero -------------------------------------------------------------------------------------------------------
     url(r'^cajero$', views.mostrar_cajero, name="cajero"),
     url(r'^cajero/tramites_para_financiar$', views.listado_tramites_para_financiar, name="tramites_para_financiar"),
-    url(r'^cajero/elegir_financiacion/(?P<pk_tramite>\d+)/$', views.elegir_financiacion, name="financiar"),
+    url(r'^elegir_financiacion/(?P<pk_tramite>\d+)/$', views.elegir_financiacion, name="financiar"),
 
     url(r'^cajero/registrar_cuota$', views.listado_cuotas, name="registrar_cuota"),
     url(r'^cajero/actualizar_cuota/(?P<pk_cuota>\d+)$', views.elegir_cuota, name="actualizar_cuota"),
