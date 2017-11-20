@@ -416,7 +416,7 @@ def ver_documentos_visados(request, pk_tramite):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
     return render(request, 'persona/visador/ver_documentos_visados.html', {'tramite': tramite})
 
-from planilla_visado.models import FilaDeVisado, ColumnaDeVisado
+from planilla_visado.models import FilaDeVisado, ColumnaDeVisado, Elemento_Balance_Superficie
 
 def planilla_visado(request, pk_tramite):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
@@ -432,7 +432,8 @@ def planilla_visado(request, pk_tramite):
     else:
         filas = FilaDeVisado.objects.all()
         columnas = ColumnaDeVisado.objects.all()
-        return render(request, 'persona/visador/planilla_visado.html', {'tramite': tramite, 'items':items, 'filas':filas, 'columnas':columnas})
+        elementosBalance = Elemento_Balance_Superficie.objects.all()
+        return render(request, 'persona/visador/planilla_visado.html', {'tramite': tramite, 'items':items, 'filas':filas, 'columnas':columnas, 'elementosBalance':elementosBalance})
     #return render(request, 'persona/visador/planilla_visado.html', {'tramite': tramite})
     return redirect('visador')
 

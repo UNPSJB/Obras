@@ -129,7 +129,6 @@ def PlanillaDeVisadoFormFactory(filas, columnas):
     class PlanillaDeVisadoMixin(forms.Form):
         NAME = 'planilla_de_visado_form'
         SUBMIT = 'planilla_de_visado_submit'
-        RESET = 'resetear_reset'
 
         def save(self, *args, **kwargs):
             datos = self.cleaned_data
@@ -148,7 +147,6 @@ def PlanillaDeVisadoFormFactory(filas, columnas):
             self.helper = FormHelper()
             # self.helper.form_class = 'form-horizontal'
             self.helper.add_input(Submit(self.SUBMIT, 'Guardar'))
-            self.helper.add_input(Submit(self.RESET, 'Limpiar'))
 
     return type("PlanillaDeVisadoForm", (PlanillaDeVisadoMixin, ), fields)
 

@@ -17,14 +17,50 @@
       <div class="panel-heading box" role="tab" id="headingOne">
         <h5 class="panel-title">
           <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
-            <font color="#ffffff" size="4">PLANILLA DE VISADO TECNICO      PADRON: {{tramite.parcela}} </font>
+            <div id="boton_tipo_pago" class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="center">
+              <font color="#ffffff" size="4">PLANILLA DE VISADO TECNICO</font><br>
+            </div>
           </a>
-      </h5>
-      <div>
-        <h3>DATOS PROPIETARIO {{tramite.propietario.persona}} {{tramite.propietario.persona.dni}}</h3>
-        <h3>DATOS PROFESIONAL {{tramite.profesional}} {{tramite.profesional.persona.dni}}</h3>
+        </h5>
       </div>
-    </div>  
+      <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <form action="" >
+            <div class="row" style="color:#fff;">
+              <div class=" col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <ol>
+                  <label>PADRON:</h2></label>
+                  <li> {{tramite.parcela}}</li>
+                  <label>DATOS PROPIETARIO:</label>
+                  <li> {{tramite.propietario.persona}}</li>
+                  <label>DATOS PROFESIONAL:</label>
+                  <li> {{tramite.profesional}}</li>
+                </ol>
+              </div>
+            </div>
+          </form>
+        </div>
+      </div>
+            <!--<div class="panel-heading box" role="tab" id="headingOne">-->
+        <!--<h5 class="panel-title">-->
+          <!--<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne">-->
+            <!--<div id="boton_tipo_pago" class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="center">-->
+            <!--<font color="#ffffff" size="5">PLANILLA DE VISADO TECNICO</font><br>-->
+            <!--</div>-->
+            <!--<font color="#ffffff" size="3">PADRON: {{tramite.parcela}} </font>-->
+          <!--</a>-->
+      <!--</h5>-->
+      <!--<div>-->
+        <!--<td>-->
+          <!--<h3><font color="#ffffff" size="3">DATOS PROPIETARIO {{tramite.propietario.persona}} {{tramite.propietario.persona.dni}}</font></h3>-->
+        <!--</td>-->
+        <!--<td>-->
+          <!--<h3><font color="#ffffff" size="3">DATOS PROFESIONAL {{tramite.profesional}} {{tramite.profesional.persona.dni}}</font></h3>-->
+        <!--</td>-->
+        <!--&lt;!&ndash;<h3>DATOS PROPIETARIO {{tramite.propietario.persona}} {{tramite.propietario.persona.dni}}</h3>&ndash;&gt;-->
+        <!--&lt;!&ndash;<h3>DATOS PROFESIONAL {{tramite.profesional}} {{tramite.profesional.persona.dni}}</h3>&ndash;&gt;-->
+      <!--</div>-->
+    <!--</div>  -->
 
   <div class="table-responsive">
     <table class="table table-bordered table-striped table-hover table-condensed" style="text-align:center;">
@@ -32,7 +68,7 @@
         <tr>              
           <th></th> 
           {% for columna in columnas %}
-            <th>{{columna}}</th>                            
+            <th>{{columna}}</th>
           {% endfor %}              
         </tr>
       </thead>        
@@ -53,11 +89,30 @@
             {% endfor %}
           </tr>
         {% endfor %}
-      </tbody>
+        </tbody>
     </table>
   </div>
+  <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <form action="" >
+            <div class="row" style="color:#fff;">
+              <div class=" col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <ol>
+                  <label>Balances de superficie:</h2></label>
+                {% for elementoBalance in elementosBalance %}
+                  <li> {{elementoBalance.nombre}}
+                    <label class="switch">
+                      <input type="checkbox"><span class="slider round"></span>
+                    </label>
+                  </li>
+                {% endfor %}
+                </ol>
+              </div>
+            </div>
+          </form>
+        </div>
+  </div>
 
-  
   <div class="panel-body">
     <div class="container-fluid">
       <div class="row">          
@@ -69,8 +124,9 @@
           </div>
           <button class="btn btn-primary btn-sm" type="submit" title="Aprobar el visado" name="Aprobar el visado">
             Aprobar visado
-          </button>            
+          </button>
           <div class="form-group">
+          <br>
             <label>Observaciones:</label>
             <input type="hidden" id="id_tramite" value="{{tramite.id}}" name="tram">
             <input class="form-control input-sm" id="id_observaciones" name="observaciones" type="text" placeholder="Ingresar observaciones" title="Observaciones" maxlength="100" />
@@ -83,7 +139,7 @@
       </div>
     </div>        
   </div>
-
+</div>
   
 </div>
 
