@@ -1006,17 +1006,11 @@ def elegir_cuota(request,pk_cuota):
     cuota.save()
     cuota.hacer("cancelacion")
     messages.add_message(request, messages.SUCCESS, 'Pago Registrado.')
-    return render(request, 'persona/cajero/comprobante.html',{'cuota': cuota, 'comprobante':comprobante(request,pk_cuota)})
-
-def comprobante(request,pk_cuota):
-    cuota=get_object_or_404(Cuota,pk=pk_cuota)
     pago = cuota.pago
     tramite = get_object_or_404(Tramite, pago=pago)
     tramite.calcular_monto_pagado(cuota.monto)
     tramite.save()
-    return render(request,'persona/cajero/comprobante.html',{'cuota': cuota,'pago':pago,'tramite':tramite})
-
-
+    return render(request, 'persona/cajero/comprobante.html',{'cuota': cuota, 'pago':pago,'tramite':tramite})
 
 #------------------------------------------------------------------------------------------------------------------
 #movil ---------------------------------------------------------------------------------------------------------

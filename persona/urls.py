@@ -86,7 +86,7 @@ urlpatterns = [
 
     url(r'^cajero/registrar_cuota$', views.listado_cuotas, name="registrar_cuota"),
     url(r'^cajero/actualizar_cuota/(?P<pk_cuota>\d+)$', views.elegir_cuota, name="actualizar_cuota"),
-    url(r'^cajero/comprobante.html/(?P<pk_cuota>\d+)$', views.comprobante, name="comprobante"),#-TODO como hacer para no acceder a las otras cuotas?
+    #TODO como hacer para no acceder a las otras cuotas?
     url(r'^cajero/registrar_pago.html/(?P<pk_tramite>\d+)/$', views.registrar_pago, name="registrar_pago"),
 
     #movil -------------------------------------------------------------------------------------------------------
