@@ -1,0 +1,48 @@
+{% load staticfiles %}
+{% load crispy_forms_tags%}
+
+{% block estilos %}
+{% endblock %}
+
+{% block planilla_visado %}
+
+<div class="table-responsive">
+<table class="table table-bordered table-striped table-hover table-condensed" style="text-align:center;">
+      <thead>
+        <tr>
+          <th>Filas/Columnas</th>
+          {% for columna in columnas %}
+            <th>{{columna.nombre}}</th>
+          {% endfor %}
+        </tr>
+      </thead>
+    <tbody>
+        {% for item in planilla_de_visado_form %}
+        <tr>
+            <td class="col-xs-4">{{ item.label }}</td>
+            {% for columna in item %}
+            <td class="col-sm-4">{{ columna }}</td>
+            {% endfor %}
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+</div>
+<div class="row">
+  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+    <form action="" >
+      <div class="row" style="color:#fff;">
+        <div class=" col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <ol>
+            <label>Balance de superficie:</h2></label>
+            {% for balanceSuperficie in balancesSuperficies %}
+            <li> {{balanceSuperficie.nombre}}</li>
+            {% endfor %}
+          </ol>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
+
+{% endblock %}
