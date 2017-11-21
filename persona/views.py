@@ -37,6 +37,9 @@ import collections
 from planilla_visado.models import ItemDeVisado
 from pago.models import Cuota, Cancelacion,Cancelada,Estado
 from datetime import date, timedelta
+import pdfkit
+from django.template.loader import get_template
+from django.template import Context
 
 #-------------------------------------------------------------------------------------------------------------------
 #generales ---------------------------------------------------------------------------------------------------------
@@ -918,20 +921,16 @@ def mostrar_cajero(request):
     contexto = {
         "ctxtramites_para_financiar": listado_tramites_para_financiar(request),
         "ctxcuotas":listado_cuotas(request)
-    }    
+    }
     return render(request, 'persona/cajero/cajero.html', contexto)
 
 def listado_tramites_para_financiar(request):
     tramites = Tramite.objects.en_estado(Visado)
     contexto = {'tramites':tramites}
-    print ("contexto")
-    print(contexto)
     return contexto
 
 def elegir_financiacion(request,pk_tramite):    
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
-    print("tramite")
-    print(tramite)
     return render(request, 'persona/cajero/elegir_financiacion.html',{'tramite': tramite, 'ctxpago':registrar_pago(request,tramite.id)})
 
 def registrar_pago(request,pk_tramite):
@@ -940,16 +939,14 @@ def registrar_pago(request,pk_tramite):
         form = FormularioPago(request.POST)
         if form.is_valid():
             pago = form.save(commit=False)
-            # pago.valor=pago.guardar_valor()
-            print(pago.valor)
-            print(pago.cantidadCuotas)
             contador=31
             fms = "%A"
+            pago.save()
+            tramite.pago = pago
+            tramite.save()
+            total=tramite.monto_a_pagar/pago.cantidadCuotas
             for i in range(1, pago.cantidadCuotas+1):
-                total = pago.importe()
-                cuota = Cuota(monto=total,numeroCuota=i)
-                print("valor")
-                print(i)
+                cuota = Cuota(monto=total,numeroCuota=i,pago=pago)
                 cuota.fechaVencimiento=date.today() + timedelta(days=contador)
                 dia=cuota.fechaVencimiento.strftime(fms)
                 if (dia=="Sunday"):
@@ -960,12 +957,8 @@ def registrar_pago(request,pk_tramite):
                 contador=contador+31
                 cuota.save()
                 cuota.hacer("Cancelacion")
-            pago.save()
-            tramite.pago=pago
-            tramite.save()
     else:
-        # initial = {'valor':}
-        form = FormularioPago(initial = {'valor':tramite.monto_a_pagar})
+        form = FormularioPago()
     return form
 
 def listado_cuotas(request):
@@ -979,26 +972,17 @@ def elegir_cuota(request,pk_cuota):
     cuota.save()
     cuota.hacer("cancelacion")
     messages.add_message(request, messages.SUCCESS, 'Pago Registrado.')
-    return redirect('cajero')
+    return render(request, 'persona/cajero/comprobante.html',{'cuota': cuota, 'comprobante':comprobante(request,pk_cuota)})
 
-#
-# def actualizar_cuota(request, pk_cuota):
-#     cuota=get_object_or_404(Cuota,pk=pk_cuota)
-#     if request.method=="GET":
-#         form=FormularioCuota(instance=cuota)
-#         try:
-#             print (form.errors)
-#             fecha = datetime.datetime.now()
-#             print(fecha)
-#             print(form.errors)
-#         except:
-#         if form.is_valid():
-#             form.save()
-#     else:
-#         form=FormularioCuota(request.POST,instance=cuota)
-#         if form.is_valid():
-#             form.save()
-#     return redirect('persona/cajero/cajero.html')
+def comprobante(request,pk_cuota):
+    cuota=get_object_or_404(Cuota,pk=pk_cuota)
+    pago = cuota.pago
+    tramite = get_object_or_404(Tramite, pago=pago)
+    tramite.calcular_monto_pagado(cuota.monto)
+    tramite.save()
+    return render(request,'persona/cajero/comprobante.html',{'cuota': cuota,'pago':pago,'tramite':tramite})
+
+
 
 #------------------------------------------------------------------------------------------------------------------
 #movil ---------------------------------------------------------------------------------------------------------

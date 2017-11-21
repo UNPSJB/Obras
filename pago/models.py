@@ -32,14 +32,37 @@ class Tipo_Pago(models.Model):
     def __str__(self):
         return self.nombre
 
+class Pago(models.Model):
+    CUOTAS = [
+        (1, "Una Cuota"),
+        (3, "Tres Cuotas"),
+        (6, "Seis Cuotas"),
+        (12, "Doce Cuotas"),
+    ]
+    tipoPago = models.ForeignKey(Tipo_Pago, blank=True, null=True)
+    cantidadCuotas = models.IntegerField(null=True, choices=CUOTAS, blank=True)
+    # cuota=models.ForeignKey(Cuota, blank=True, null=True) #foreign key o relacion uno a muchos
+    fecha = models.DateTimeField(auto_now_add=True)  # para que sea la del momento que se da el alta
+    def __str__(self):
+        return "Numero de Pago: {} - cantidad de cuotas: {} - valor: {}" .format(self.pk, self.cantidadCuotas, self.valor)
+
+    # def guardar_valor(self): #sacar
+    #     if self.tramite is not None:
+    #         self.valor=self.tramite.monto_a_pagar
+    #     return self.valor
+
+    # def importe(self):
+    #     resultado=self.valor/self.cantidadCuotas
+    #     return resultado
+
 class Cuota(models.Model):
     fechaVencimiento = models.DateField(null=True, blank=True)
-    fechaPago = models.DateField(auto_now_add=False) #false sino se llena cuando se crea el pago
+    fechaPago = models.DateField(blank=True, null=True) #false sino se llena cuando se crea el pago
     monto = models.IntegerField(null=True, blank=True)
     numeroCuota=models.IntegerField(null=True, blank=True)
-
-    # pago=models.ForeignKey(Pago, related_name='pago', blank=True, null=True)
+    pago=models.ForeignKey(Pago, related_name='pago', blank=True, null=True)
     objects = PagoManager()
+
     def __str__(self):
         return "Numero de Cuota: {} - monto: {}" .format(self.numeroCuota, self.monto)
 
@@ -112,28 +135,3 @@ class Cancelada(Estado):
 
 for Klass in [Cancelacion, Cancelada]:
     Estado.register(Klass)
-
-class Pago(models.Model):
-    CUOTAS = [
-        (1, "Una Cuota"),
-        (3, "Tres Cuotas"),
-        (6, "Seis Cuotas"),
-        (12, "Doce Cuotas"),
-    ]
-    tipoPago = models.ForeignKey(Tipo_Pago, blank=True, null=True)
-    valor = models.IntegerField()#sacar
-    cantidadCuotas = models.IntegerField(null=True, choices=CUOTAS, blank=True)
-    cuota=models.ForeignKey(Cuota, blank=True, null=True) #foreign key o relacion uno a muchos
-    fecha = models.DateTimeField(auto_now_add=True)  # para que sea la del momento que se da el alta
-
-    def __str__(self):
-        return "Numero de Pago: {} - cantidad de cuotas: {} - valor: {}" .format(self.pk, self.cantidadCuotas, self.valor)
-
-    def guardar_valor(self): #sacar
-        if self.tramite is not None:
-            self.valor=self.tramite.monto_a_pagar
-        return self.valor
-
-    def importe(self):
-        resultado=self.valor/self.cantidadCuotas
-        return resultado

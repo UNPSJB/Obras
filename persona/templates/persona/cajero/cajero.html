@@ -59,99 +59,16 @@
 									{% include "persona/cajero/registrar_cuota.html" with cuota=ctxcuotas.cuotas %}
 								{% endblock %}
 
-								<!--<form action="" class="" >-->
-									<!--<div class="row">-->
-										<!--<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">-->
-											<!--<div class="form-group">-->
-												<!--<label>Monto:</label>-->
-												<!--<span class="label label-primary"> &#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45; </span>-->
-											<!--</div>-->
-										<!--</div>-->
-										<!--<div>-->
-											<!--<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">-->
-												<!--<label>Vencimiento:<input id="one" class="datepicker" style="color:black" type="text" readonly="true"></label>-->
-											<!--</div>-->
-												<!--<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">-->
-													<!--<label>Fecha de Pago:<input id="two" class="datepicker" style="color:black" type="text" readonly="true;"></label>-->
-												<!--</div>-->
-										<!--</div>-->
-										<!--<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">-->
-											<!--<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">-->
-												<!--<select class="form-control input-sm" id="opcionesTipoPago" name="Opciones de Pagos" onChange="opcionesPago(this.value);">-->
-													<!--<option selected value="nada"> Ingrese el tipo de pago </option>-->
-													<!--<option value="efectivo">Efectivo</option>-->
-													<!--<option value="Debito">Debito</option>-->
-												<!--</select>-->
-											<!--</div>-->
-										<!--</div>-->
-									<!--</div>-->
-									<!--<div class="container-fluid">-->
-										<!--<br>-->
-										<!--<div class="row">-->
-											<!--<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="right">-->
-												<!--<button class="btn btn-primary btn-sm" type="submit" title="Enviar modificación de mis datos">-->
-													<!--Guardar-->
-												<!--</button>-->
-											<!--<button class="btn btn-danger btn-sm" type="reset" title="Borrar datos del formulario">-->
-												<!--Limpiar-->
-											<!--</button>-->
-											<!--</div>-->
-										<!--</div>-->
-									<!--</div>-->
-								<!--</form>-->
+						</div>
 						</div>
 					</div>
-				</div>
+			  	</div>
 			  </div>
 			</div>
 		</div>
-	</div>
-
-	<div class="panel">
-        <div class="panel-heading box" role="tab" id="headingTen">
-	        <h5 class="panel-title">
-			    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTen" aria-expanded="false" aria-controls="collapseTen">
-				    <font color="#ffffff" size="2">Generar comprobante de pago</font>
-			    </a>
-		    </h5>
-        </div>
-	    <div id="collapseTen" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTen">
-		    <div class="panel-body">
-			    <div class="container-fluid">
-				    <div class="row">
-					    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-						    <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-								<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
-									<div class="form-group">
-												<label>Monto a abonar:</label>
-												<span class="label label-primary"> -----</span>
-											</div>
-											</div>
-										</div>
-									<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-										<label>Fecha: <input id="one" class="datepicker" type="text" readonly="true"></label>
-									</div>
-						    </div>
-						    <div id="boton_pago" class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="right">
-							    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="right">
-									<button class="btn btn-primary btn-sm" type="submit" title="Enviar modificación de mis datos">
-										Guardar
-									</button>
-									<button class="btn btn-danger btn-sm" type="reset" title="Borrar datos del formulario">
-										Limpiar
-									</button>
-						    </div>
-					    </div>
-				    </div>
-			    </div>
-		    </div>
-	    </div>
-    </div>
 </div>
 
 <script>
-
-
 	$('#cuotas #div_id_fechaVencimiento').appendTo('#fechaVencimiento')
 	$('#cuotas #div_id_fechaPago').appendTo('#fechaPago')
 	$('#cuotas #div_id_monto').appendTo('#monto')

@@ -54,7 +54,7 @@ class Tramite(models.Model):
     domicilio = models.CharField(max_length=50,blank=True)
     planillaVisado = models.ForeignKey(PlanillaDeVisado, default=True, null=True, unique=False)
     planillaInspeccion = models.ForeignKey(PlanillaDeInspeccion, default=True, null=True, unique=False)
-    pago = models.ForeignKey(Pago, default=True, blank=True, null=True)
+    pago = models.ForeignKey(Pago, default=True, blank=True, null=True)#TODO ONETOONE CAMBIAR
     #-------------------------------------------------------------------------------------
     # DATOS CATASTRALES
     parcela = models.CharField(max_length = 20)
