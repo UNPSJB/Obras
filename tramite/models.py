@@ -4,8 +4,6 @@ from django.utils import timezone
 import datetime
 from persona.models import *
 from tipos.models import *
-from planilla_visado.models import *
-from planilla_inspeccion.models import *
 from pago.models import *
 from django import template
 
