@@ -25,14 +25,14 @@
 					<li><a href="#" onclick='opcionesVisado("alta_columna")'>Crear columna visado</a></li>
 					<li><a href="#" onclick='opcionesVisado("alta_item")'>Generar planilla visado</a></li>
 					<li><a href="#" onclick='opcionesVisado("alta_elemento_balance")'>Crear elemento balance superficie</a></li>
-
+					<li><a href="#" onclick='opcionesVisado("ver_planilla_visado")'>Ver planilla visado</a></li>
 				</ul>
 			<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseSeven" aria-expanded="false" aria-controls="collapseSeven" onclick='mostrarSubmenu("tareasPlanillaInspeccion"),opcionesInspeccion("nada")'>Generar planilla inspeccion <span class="caret"></span></a></li>
 			<ul class="sidebar sidebar-2" style="display:none;" id="tareasPlanillaInspeccion">
 					<li><a href="#" onclick='opcionesInspeccion("alta_categoria_inspeccion")'>Crear categoria inspeccion</a></li>
 					<li><a href="#" onclick='opcionesInspeccion("alta_item_inspeccion")'>Crear item inspeccion</a></li>
 					<li><a href="#" onclick='opcionesInspeccion("alta_detalle_item")'>Crear detalle inspeccion</a></li>
-					<li><a href="#" onclick='opcionesInspeccion("generar_planilla_inspeccion")'>Generar planilla de inspeccion</a></li>
+					<li><a href="#" onclick='opcionesInspeccion("generar_planilla_inspeccion")'>Ver planilla de inspeccion</a></li>
 				</ul>
 			<!--<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree" onclick='mostrarSubmenu("sin_submenu")'>Otorgar final de obra</a></li>-->
 			<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseSix" aria-expanded="false" aria-controls="collapseSix" onclick='mostrarSubmenu("sin_submenu")'>Modificar mis datos personales</a></li>
@@ -248,6 +248,7 @@
 											<option value="alta_columna">Crear columna visado</option>
 											<option value="alta_item">Generar planilla visado</option>
 											<option value="alta_elemento_balance">Crear elemento balance superficie</option>
+											<option value="ver_planilla_visado">Ver planilla visado</option>
 										</select>
 									</div>
 								</div>
@@ -360,6 +361,14 @@
 					</div>
 				</div>
 			</div>
+			<div class="container-fluid" id="ver_planilla_visado" style="display:none;">
+				<div class="row">
+							{% block ver_planilla_visado %}
+								{% include "persona/director/listado_planilla_visado.html" with filas=filas columnas=columnas itemsVisados=itemsVisados balancesSuperficies=balancesSuperficies %}
+							{% endblock %}
+						</form>
+					</div>
+			</div>
 	</div>
 	<div class="panel">
 				<div class="panel-heading box" role="tab" id="headingSeven">
@@ -381,9 +390,7 @@
 											<option value="alta_categoria_inspeccion">Crear categoria inspeccion</option>
 											<option value="alta_item_inspeccion">Crear item inspeccion</option>
 											<option value="alta_detalle_item">Crear detalle inspeccion</option>
-											<option value="generar_planilla_inspeccion">Generar planilla de inspeccion</option>
-											<!--<option value="alta_doc_inspeccion">Crear documento tecnico</option>-->
-											<!--<option value="alta_planilla_inspeccion">Generar planilla inspeccion</option>-->
+											<option value="generar_planilla_inspeccion">Ver planilla de inspeccion</option>
 										</select>
 									</div>
 								</div>
@@ -666,6 +673,7 @@
 				$("#alta_columna").hide();
 				$("#alta_item").hide();
 				$("#alta_elemento_balance").hide();
+				$("#ver_planilla_visado").hide();
 				$("#"+"opcionesVisado").val('nada');
 			}
 			if (id == "alta_fila"){
@@ -673,6 +681,7 @@
 				$("#alta_columna").hide();
 				$("#alta_item").hide();
 				$("#alta_elemento_balance").hide();
+				$("#ver_planilla_visado").hide();
 				$("#"+"opcionesVisado").val('alta_fila');
 			}
 			if (id == "alta_columna"){
@@ -680,6 +689,7 @@
 				$("#alta_columna").show();
 				$("#alta_item").hide();
 				$("#alta_elemento_balance").hide();
+				$("#ver_planilla_visado").hide();
 				$("#"+"opcionesVisado").val('alta_columna');
 			}
 			if (id == "alta_item"){
@@ -687,6 +697,7 @@
 				$("#alta_columna").hide();
 				$("#alta_item").show();
 				$("#alta_elemento_balance").hide();
+				$("#ver_planilla_visado").hide();
 				$("#"+"opcionesVisado").val('alta_item');
 			}
 			if (id == "alta_elemento_balance"){
@@ -694,7 +705,16 @@
 				$("#alta_columna").hide();
 				$("#alta_item").hide();
 				$("#alta_elemento_balance").show();
+				$("#ver_planilla_visado").hide();
 				$("#"+"opcionesVisado").val('alta_elemento_balance');
+			}
+			if (id == "ver_planilla_visado"){
+				$("#alta_fila").hide();
+				$("#alta_columna").hide();
+				$("#alta_item").hide();
+				$("#alta_elemento_balance").hide();
+				$("#ver_planilla_visado").show();
+				$("#"+"opcionesVisado").val('ver_planilla_visado');
 			}
 		}
 

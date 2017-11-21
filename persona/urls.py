@@ -19,6 +19,8 @@ urlpatterns = [
     url(r'^ver_historial_tramite/(?P<pk_tramite>\d+)/$', views.ver_historial_tramite, name="ver_historial_tramite"),
     url(r'^solicitud_final_obra_propietario/(?P<pk_tramite>\d+)/$', views.propietario_solicita_final_obra, name="propietario_solicita_final_obra"),
     url(r'^documentos_de_estado/(?P<pk_estado>\d+)/$', views.documentos_de_estado, name="documentos_de_estado"),
+    url(r'^cajero/tramites_para_financiar$', views.tramites_para_financiar, name="tramites_para_financiar"),
+    url(r'^cajero/elegir_financiacion/(?P<pk_tramite>\d+)/$', views.elegir_financiacion, name="financiar"),
 
     # profesional ---------------------------------------------------------------------------------------------------
     url(r'^profesional$', views.mostrar_profesional, name="profesional"),
@@ -47,6 +49,7 @@ urlpatterns = [
     url(r'^reporte_tramites_aceptados_excel/', ReporteTramitesAceptadosExcel.as_view(), name="reporte_tramites_aceptados_excel"),
     url(r'^reporte_tramites_aceptados_pdf/$', login_required(ReporteTramitesAceptadosPdf.as_view()), name="reporte_tramites_aceptados_pdf"),
     url(r'^visador/planilla_visado/(?P<pk_tramite>\d+)/$', views.planilla_visado, name="planilla_visado"),    
+    #url(r'^visador/ver_planilla_visado/', views.ver_planilla_visado, name="ver_planilla_visado"),    
 
     # inspector -----------------------------------------------------------------------------------------------------
     url(r'^inspector$', views.mostrar_inspector, name="inspector"),
@@ -73,13 +76,13 @@ urlpatterns = [
     url(r'^reporte_tramites_director_excel/', ReporteTramitesDirectorExcel.as_view(), name="reporte_tramites_director_excel"),
     url(r'^reporte_tramites_director_pdf/$', login_required(ReporteTramitesDirectorPdf.as_view()), name="reporte_tramites_director_pdf"),
     url(r'^vista_de_usuarios$', views.ver_listado_todos_usuarios, name="vista_de_usuarios"),
-    url(r'^item_de_visado$', views.generar_planilla_visado, name="item_visado"),
+    url(r'^listado_planilla_visado', views.generar_planilla_visado, name="listado_planilla_visado"),
     url(r'^ver_planilla_inspeccion$', views.ver_planilla_inspeccion, name="ver_planilla_inspeccion"),
     
     #cajero -------------------------------------------------------------------------------------------------------
     url(r'^cajero$', views.mostrar_cajero, name="cajero"),
     url(r'^cajero/tramites_para_financiar$', views.listado_tramites_para_financiar, name="tramites_para_financiar"),
-    url(r'^cajero/elegir_financiacion/(?P<pk_tramite>\d+)/$', views.elegir_financiacion, name="financiar"),
+    url(r'^elegir_financiacion/(?P<pk_tramite>\d+)/$', views.elegir_financiacion, name="financiar"),
 
     url(r'^cajero/registrar_cuota$', views.listado_cuotas, name="registrar_cuota"),
     url(r'^cajero/actualizar_cuota/(?P<pk_cuota>\d+)$', views.elegir_cuota, name="actualizar_cuota"),

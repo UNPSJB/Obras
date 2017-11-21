@@ -1,6 +1,6 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login
-from django.contrib.auth.decorators import  login_required
+from django.contrib.auth.decorators import  login_required,user_passes_test
 
 from .forms import *
 from django.contrib import messages
@@ -57,10 +57,25 @@ def convertidor_de_fechas(fecha):
 @grupo_requerido('propietario')
 def mostrar_propietario(request):
     contexto = {
-        "ctxtramitespropietario": listado_tramites_propietario(request)
+        "ctxtramitespropietario": listado_tramites_propietario(request),
+        "ctxmis_tramites_para_financiar": tramites_para_financiar(request),
     }
     #print(contexto)
     return render(request, 'persona/propietario/propietario.html', contexto)
+
+def tramites_para_financiar(request):
+    tramites = Tramite.objects.all()
+    personas = Persona.objects.all()
+    usuario = request.user
+    lista_de_persona_que_esta_logueada = filter(
+        lambda persona: (persona.usuario is not None and persona.usuario == usuario), personas
+    )
+    persona = lista_de_persona_que_esta_logueada.pop()  # Saco de la lista la persona porque no puedo seguir trabajando con una lista
+    propietario = persona.get_propietario()  # Me quedo con el atributo propietario de la persona
+    tramites_propietario = Tramite.objects.en_estado(Visado)
+    tramites_propietario = filter(lambda tramite: (tramite.propietario == propietario), tramites)
+    contexto = {'tramites':tramites_propietario}
+    return contexto
 
 def listado_tramites_propietario(request):
     tramites = Tramite.objects.all()
@@ -102,6 +117,7 @@ def documentos_de_estado(request, pk_estado):
     documentos_fecha = filter(lambda e:(datetime.strftime(e.fecha, '%d/%m/%Y %H:%M') == fecha_str), documentos)
     contexto= {'documentos_de_fecha': documentos_fecha}
     return render(request, 'persona/propietario/documentos_de_estado.html', contexto)
+
 
 #-------------------------------------------------------------------------------------------------------------------
 #profesional -------------------------------------------------------------------------------------------------------
@@ -351,8 +367,19 @@ def mostrar_visador(request):
     contexto = {
         "ctxtramaceptado": tramites_aceptados(request),
         "ctxtramvisados": tramites_visados(request),
+        "ctxmis_visados": mis_visados(request),
     }
     return render(request, 'persona/visador/visador.html', contexto)
+
+def mis_visados(request):
+    usuario = request.user
+    estados = Estado.objects.all()
+    tipo = 3 #visado    
+    argumentos = [Visado]
+    tramites = Tramite.objects.en_estado(Visado)
+    tramites_del_visador = filter(lambda t: t.estado().usuario == usuario, tramites)
+    contexto = {"tramites_del_visador": tramites_del_visador}    
+    return tramites_del_visador
 
 def tramites_aceptados(request):
     aceptados = Tramite.objects.en_estado(Aceptado)
@@ -362,10 +389,12 @@ def tramites_aceptados(request):
 def tramites_visados(request):
     usuario = request.user
     estados = Estado.objects.all()
-    tipo = 3 #es el tipo de visado
-    estados_visado = filter(lambda estado: (estado.usuario is not None and estado.usuario == usuario and estado.tipo == tipo), estados)
-    contexto = {'estados': estados_visado}
-    return contexto
+    tipo = 3 #visado    
+    argumentos = [Visado]
+    tramites = Tramite.objects.en_estado(Visado)
+    tramites_del_visador = filter(lambda t: t.estado().usuario == usuario, tramites)
+    contexto = {"tramites_del_visador": tramites_del_visador}  
+    return contexto    
 
 def ver_documentos_para_visado(request, pk_tramite):
     tipos_de_documentos_requeridos = TipoDocumento.get_tipos_documentos_para_momento(TipoDocumento.VISAR)
@@ -374,31 +403,19 @@ def ver_documentos_para_visado(request, pk_tramite):
     documento_set = FormularioDocumentoSet(initial=inicial)
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
     return render(request, 'persona/visador/ver_documentos_tramite.html', {'tramite': tramite, 'documentos_requeridos': tipos_de_documentos_requeridos})
-'''    if request.method == "POST":
-
-        observacion = request.POST["observaciones"]
-        tram = request.POST['tram']
-        monto_permiso = request.POST['monto']
-
-        if "Envia Planilla de visado" in request.POST:
-            documento_set = FormularioDocumentoSet(request.POST, request.FILES)
-            if documento_set.is_valid():
-                for docForm in documento_set:
-                    docForm.save(tramite=tramite)
-            no_aprobar_visado(request, tram, observacion)
-        else:
-            aprobar_visado(request, tram, monto_permiso)
-    else:
-        #return render(request, 'persona/visador/ver_documentos_tramite.html', {'tramite': tramite, 'ctxdoc': documento_set, 'documentos_requeridos': tipos_de_documentos_requeridos})
-        return render(request, 'persona/visador/ver_documentos_tramite.html', {'tramite': tramite, 'documentos_requeridos': tipos_de_documentos_requeridos})
-'''
-    #return redirect('visador')
 
 def ver_documentos_visados(request, pk_tramite):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
     return render(request, 'persona/visador/ver_documentos_visados.html', {'tramite': tramite})
 
 from planilla_visado.models import FilaDeVisado, ColumnaDeVisado
+
+def ver_planilla_visado(request):    
+    items = ItemDeVisado.objects.all()    
+    filas = FilaDeVisado.objects.all()
+    columnas = ColumnaDeVisado.objects.all()
+    elementos = Elemento_Balance_Superficie.objects.all()        
+    return render(request, 'persona/visador/ver_planilla_visado.html', {'tramite': tramite, 'items':items, 'filas':filas, 'columnas':columnas, 'elementos':elementos})    
 
 def planilla_visado(request, pk_tramite):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
@@ -414,8 +431,9 @@ def planilla_visado(request, pk_tramite):
     else:
         filas = FilaDeVisado.objects.all()
         columnas = ColumnaDeVisado.objects.all()
-        return render(request, 'persona/visador/planilla_visado.html', {'tramite': tramite, 'items':items, 'filas':filas, 'columnas':columnas})
-    #return render(request, 'persona/visador/planilla_visado.html', {'tramite': tramite})
+        elementos = Elemento_Balance_Superficie.objects.all()        
+        #raise Exception(elementos)
+        return render(request, 'persona/visador/planilla_visado.html', {'tramite': tramite, 'items':items, 'filas':filas, 'columnas':columnas, 'elementos':elementos})
     return redirect('visador')
 
 from planilla_visado.models import PlanillaDeVisado
@@ -426,8 +444,8 @@ def aprobar_visado(request, pk_tramite, monto):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
     tramite.hacer(tramite.VISAR, usuario)
     tramite.monto_a_pagar= monto
-    tramite.save()
-#    planilla_visado.save()
+    #tramite.planilla_visado = planilla_visado          
+    tramite.save()    
     messages.add_message(request, messages.SUCCESS, 'Tramite visado aprobado')
     return redirect('visador')
 
@@ -791,8 +809,6 @@ def documentos_del_estado(request, pk_estado):
 
 def generar_planilla_visado(request):
      filas = FilaDeVisado.objects.all()
-     raise Exception(filas)
-     print (filas)
      columnas = ColumnaDeVisado.objects.all()
      contexto = {'filas': filas}
      contexto_columnas = {'columnas': columnas}
@@ -1006,7 +1022,21 @@ def cocinas(request):
 def techos(request):    
     return render(request,'persona/movil/techos.html')                
 
+def es_inspector(usuario):
+    return usuario.groups.filter(name='inspector').exists()
+
+@user_passes_test(es_inspector)
 def mostrar_inspector_movil(request):
+    usuario = request.user
+    estados = Estado.objects.all()
+    tipo = 5 #Agendados
+    argumentos = [Visado, ConInspeccion]
+    tramites = Tramite.objects.en_estado(Agendado)
+    tramites_del_inspector = filter(lambda t: t.estado().usuario == usuario, tramites)
+    contexto = {"tramites_del_inspector": tramites_del_inspector}
+    return render(request, 'persona/movil/inspector_movil.html', {'tramites':tramites_del_inspector})
+
+
     argumentos = [Visado, ConInspeccion]
     tramites = Tramite.objects.en_estado(argumentos)    
     return render(request, 'persona/movil/inspector_movil.html', {'tramites':tramites})

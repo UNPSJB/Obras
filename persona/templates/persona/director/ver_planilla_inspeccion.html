@@ -9,31 +9,48 @@
 <div class="table-responsive">
     <table class="table table-bordered table-striped table-hover table-condensed" style="text-align:center;">
       <thead>
-        <tr>              
-          <th></th> 
+        <tr>
+          <th></th>
           {% for item in items %}
-            <th>{{item.nombre}}</th>                            
-          {% endfor %}              
+            <th>{{item.nombre}}</th>
+          {% endfor %}
         </tr>
-      </thead>        
-      <tbody>          
+      </thead>
+      <tbody>
         {% for categoria in categorias %}
           <tr>
             <td class="col-xs-1">{{ categoria.nombre }}</td>
-            {% for item in items %} 
-            <td class="col-sm-4">&nbsp;             
-              {% for detalle in detalles %}                              
-                {% if categoria.nombre == detalle.categoria_inspeccion.nombre and item.nombre == detalle.item_inspeccion.nombre %}                                                 
-                    {{ detalle.nombre }}<hr>                    
-                {% endif %}                
+            {% for item in items %}
+            <td class="col-sm-4">&nbsp;
+              {% for detalle in detalles %}
+                {% if categoria.nombre == detalle.categoria_inspeccion.nombre and item.nombre == detalle.item_inspeccion.nombre %}
+                    {{ detalle.nombre }}<hr>
+                {% endif %}
               {% endfor %}
-            </td>            
+            </td>
             {% endfor %}
           </tr>
         {% endfor %}
       </tbody>
     </table>
   </div>
+<div class="row">
+  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+    <form action="" >
+      <div class="row" style="color:#fff;">
+        <div class=" col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <ol>
+            <label>Descripcion de categorias:</h2></label>
+            {% for categoria in categorias %}
+            <li> {{categoria.tipo}}</li>
+            <li> {{categoria.descripcion}}</li>
+            {% endfor %}
+          </ol>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
 
 
 {% endblock %}

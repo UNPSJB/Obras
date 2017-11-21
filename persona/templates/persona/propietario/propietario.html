@@ -126,59 +126,18 @@
 					</a>
 				</a>
 			</div>
-			<div id="collapseTwo" class="panel-collapse collapse " role="tabpanel" aria-labelledby="headingTwo">
-			  <div class="panel-body">
-				<div class="container-fluid">
-					<div class="row">
-						<div id="columna2" class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-							<div class="container-fluid" id="contenedor2">
-							<br>
-								<form action="" class="" >
-									<div class="row">
-										<div id="columna2a" class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
-												<div class="form-group">
-													<label id="h"> Monto:</label>
-													<span class="label label-primary"> --------------------- </span>
-												</div>
-										</div>
-										<div id="columna2b" class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
-											<div class="form-group">
-												<label>Fecha Pago:<input id="fecha" name="fecha" class="datepicker" style="color:black" type="text" readonly="true;"></label>
-
-											</div>
-										</div>
-										<div id="columna2c" class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-										<div id="columna2d"class="col-xs-12 col-sm-12 col-md-3 col-lg-4">
-											<select class="form-control input-sm" id="opcionesPropietario" name="Opciones de Datos del tramite" onChange="opcionesDatosTramite(this.value);">
-												<option selected value="nada"> <label style="font-weight:bold!important;">¿Como desea abonar el monto?</label> </option>
-												<option value="alta_tipo_documento"><label style="font-weight:bold;">En 1 cuota (un pago)</label></option>
-												<option value="alta_tipo_de_obra"><label  style="font-weight:bold;">En 3 cuotas</label></option>
-												<option value="alta_tipo_de_obra"><label  style="font-weight:bold;">En 6 cuotas</label></option>
-												<option value="alta_tipo_de_obra"><label  style="font-weight:bold;">En 12 cuotas</label></option>
-											<!--TODO VEER!!!!!!!-->
-											</select>
-										</div>
-
-										</div>
-									</div>
-									<div id="contenedor2a" class="container-fluid">
-										<br>
-										<div class="row">
-											<div id="columna2e" class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="right">
-												<button class="btn btn-primary btn-sm" type="submit" title="Enviar modificaciÃ³n de mis datos">
-													Guardar
-												</button>
-											<button class="btn btn-danger btn-sm" type="reset" title="Borrar datos del formulario">
-												Limpiar
-											</button>
-											</div>
-										</div>
-									</div>
+			<div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+				<div class="panel-body">
+					<div class="container-fluid">
+						<div class="row">
+							<div id="columna2" class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+								{% block contenido_mis_tramites_para_financiar %}									
+									{% include "persona/cajero/tramites_para_financiar.html" with tramites=ctxmis_tramites_para_financiar.tramites_propietario %}
+								{% endblock %}
 							</div>
 						</div>
 					</div>
 				</div>
-			  </div>
 			</div>
 		</div>
 	</div>

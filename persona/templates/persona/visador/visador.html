@@ -77,7 +77,7 @@
 				<div class="container-fluid">
 					<div class="row">
 						{% block contenido_tramites_visados%}
-							{% include "persona/visador/tramites_visados.html" with estados=ctxtramvisados.estados%}
+							{% include "persona/visador/tramites_visados.html" with tramites=ctxtramvisados.tramites_del_visador %}
 						{% endblock %}
 					</div>
 				</div>
