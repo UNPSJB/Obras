@@ -37,9 +37,7 @@ import collections
 from planilla_visado.models import ItemDeVisado
 from pago.models import Cuota, Cancelacion,Cancelada,Estado
 from datetime import date, timedelta
-import pdfkit
-from django.template.loader import get_template
-from django.template import Context
+
 
 #-------------------------------------------------------------------------------------------------------------------
 #generales ---------------------------------------------------------------------------------------------------------
