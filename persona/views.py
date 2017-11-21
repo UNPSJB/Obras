@@ -38,6 +38,7 @@ from planilla_visado.models import ItemDeVisado
 from pago.models import Cuota, Cancelacion,Cancelada,Estado
 from datetime import date, timedelta
 
+
 #-------------------------------------------------------------------------------------------------------------------
 #generales ---------------------------------------------------------------------------------------------------------
 
@@ -712,8 +713,12 @@ def mostrar_director(request):
     usuario = request.user
     items = ItemInspeccion.objects.all()
     detalles = DetalleDeItemInspeccion.objects.all()
-    categorias = CategoriaInspeccion.objects.all()     
-    values = {"items":items, "categorias":categorias, "detalles":detalles}
+    categorias = CategoriaInspeccion.objects.all()
+    filas = FilaDeVisado.objects.all()
+    columnas = ColumnaDeVisado.objects.all()
+    itemsVisados = ItemDeVisado.objects.all()
+    balancesSuperficies = Elemento_Balance_Superficie.objects.all()
+    values = {"items":items, "categorias":categorias, "detalles":detalles, "filas": filas, "columnas":columnas, "itemsVisados":itemsVisados, "balancesSuperficies":balancesSuperficies}
     FORMS_DIRECTOR.update({(k.NAME, k.SUBMIT): k for k in [
         pforms.PlanillaDeVisadoFormFactory(pmodels.FilaDeVisado.objects.all(), pmodels.ColumnaDeVisado.objects.all()),
           ]})
@@ -820,11 +825,28 @@ def documentos_del_estado(request, pk_estado):
     contexto= {'documentos_de_fecha': documentos_fecha}
     return render(request, 'persona/director/documentos_del_estado.html', contexto)
 
+# def generar_planilla_visado(request):
+#      filas = FilaDeVisado.objects.all()
+#      columnas = ColumnaDeVisado.objects.all()
+#      itemsVisados = ItemDeVisado.objects.all()
+#      balancesSuperficies = Elemento_Balance_Superficie.objects.all()
+#      contexto = {'filas': filas, 'columnas':columnas, 'itemsVisados': itemsVisados, 'balancesSuperficies':balancesSuperficies}
+#     # contexto_columnas = {'columnas': columnas}
+#      return render(request, 'persona/director/item_visado.html', contexto)
 def generar_planilla_visado(request):
-     filas = FilaDeVisado.objects.all()
-     columnas = ColumnaDeVisado.objects.all()
-     items = ItemDeVisado.objects.all()
-     return render(request, 'persona/director/item_visado.html', {"items":items, "filas":filas, "columnas":columnas })
+    filas = FilaDeVisado.objects.all()
+    raise Exception(filas)
+    print (filas)
+    #raise Exception(filas)
+    #print (filas)
+    columnas = ColumnaDeVisado.objects.all()
+    contexto = {'filas': filas}
+    contexto_columnas = {'columnas': columnas}
+    balancesSuperficies = Elemento_Balance_Superficie.objects.all()
+    itemsVisados = ItemDeVisado.objects.all()
+    contexto = {'filas': filas, 'columnas':columnas, 'itemsVisados':itemsVisados,'balancesSuperficies':balancesSuperficies}
+    #contexto_columnas = {'columnas': columnas}
+    return render(request, 'persona/director/item_visado.html', contexto)
 
 def ver_planilla_inspeccion(request):
      items = ItemInspeccion.objects.all()
@@ -949,7 +971,7 @@ def mostrar_cajero(request):
     contexto = {
         "ctxtramites_para_financiar": listado_tramites_para_financiar(request),
         "ctxcuotas":listado_cuotas(request)
-    }    
+    }
     return render(request, 'persona/cajero/cajero.html', contexto)
 
 def listado_tramites_para_financiar(request):
@@ -972,11 +994,12 @@ def registrar_pago(request,pk_tramite):
             print(pago.cantidadCuotas)
             contador=31
             fms = "%A"
+            pago.save()
+            tramite.pago = pago
+            tramite.save()
+            total=tramite.monto_a_pagar/pago.cantidadCuotas
             for i in range(1, pago.cantidadCuotas+1):
-                total = pago.importe()
-                cuota = Cuota(monto=total,numeroCuota=i)
-                print("valor")
-                print(i)
+                cuota = Cuota(monto=total,numeroCuota=i,pago=pago)
                 cuota.fechaVencimiento=date.today() + timedelta(days=contador)
                 dia=cuota.fechaVencimiento.strftime(fms)
                 if (dia=="Sunday"):
@@ -986,13 +1009,9 @@ def registrar_pago(request,pk_tramite):
                         cuota.fechaVencimiento = date.today() + timedelta(days=contador + 2)
                 contador=contador+31
                 cuota.save()
-                cuota.hacer("Cancelacion")
-            pago.save()
-            tramite.pago=pago
-            tramite.save()
+                cuota.hacer("Cancelacion")            
     else:
-        # initial = {'valor':}
-        form = FormularioPago(initial = {'valor':tramite.monto_a_pagar})
+        form = FormularioPago()
     return form
 
 def listado_cuotas(request):
@@ -1006,26 +1025,11 @@ def elegir_cuota(request,pk_cuota):
     cuota.save()
     cuota.hacer("cancelacion")
     messages.add_message(request, messages.SUCCESS, 'Pago Registrado.')
-    return redirect('cajero')
-
-#
-# def actualizar_cuota(request, pk_cuota):
-#     cuota=get_object_or_404(Cuota,pk=pk_cuota)
-#     if request.method=="GET":
-#         form=FormularioCuota(instance=cuota)
-#         try:
-#             print (form.errors)
-#             fecha = datetime.datetime.now()
-#             print(fecha)
-#             print(form.errors)
-#         except:
-#         if form.is_valid():
-#             form.save()
-#     else:
-#         form=FormularioCuota(request.POST,instance=cuota)
-#         if form.is_valid():
-#             form.save()
-#     return redirect('persona/cajero/cajero.html')
+    pago = cuota.pago
+    tramite = get_object_or_404(Tramite, pago=pago)
+    tramite.calcular_monto_pagado(cuota.monto)
+    tramite.save()
+    return render(request, 'persona/cajero/comprobante.html',{'cuota': cuota, 'pago':pago,'tramite':tramite})
 
 #------------------------------------------------------------------------------------------------------------------
 #movil ---------------------------------------------------------------------------------------------------------
