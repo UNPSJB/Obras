@@ -41,26 +41,6 @@
           </form>
         </div>
       </div>
-            <!--<div class="panel-heading box" role="tab" id="headingOne">-->
-        <!--<h5 class="panel-title">-->
-          <!--<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne">-->
-            <!--<div id="boton_tipo_pago" class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="center">-->
-            <!--<font color="#ffffff" size="5">PLANILLA DE VISADO TECNICO</font><br>-->
-            <!--</div>-->
-            <!--<font color="#ffffff" size="3">PADRON: {{tramite.parcela}} </font>-->
-          <!--</a>-->
-      <!--</h5>-->
-      <!--<div>-->
-        <!--<td>-->
-          <!--<h3><font color="#ffffff" size="3">DATOS PROPIETARIO {{tramite.propietario.persona}} {{tramite.propietario.persona.dni}}</font></h3>-->
-        <!--</td>-->
-        <!--<td>-->
-          <!--<h3><font color="#ffffff" size="3">DATOS PROFESIONAL {{tramite.profesional}} {{tramite.profesional.persona.dni}}</font></h3>-->
-        <!--</td>-->
-        <!--&lt;!&ndash;<h3>DATOS PROPIETARIO {{tramite.propietario.persona}} {{tramite.propietario.persona.dni}}</h3>&ndash;&gt;-->
-        <!--&lt;!&ndash;<h3>DATOS PROFESIONAL {{tramite.profesional}} {{tramite.profesional.persona.dni}}</h3>&ndash;&gt;-->
-      <!--</div>-->
-    <!--</div>  -->
 
   <div class="table-responsive">
     <table class="table table-bordered table-striped table-hover table-condensed" style="text-align:center;">
@@ -77,7 +57,7 @@
           <tr>
             <td class="col-xs-1">{{ fila }}</td>
             {% for columna in columnas %} 
-            <td class="col-sm-4">&nbsp;             
+            <td class="col-sm-1">&nbsp;             
               {% for item in items %}                              
                 {% if fila == item.fila_de_visado and columna == item.columna_de_visado %}                       
                     <label class="switch">
@@ -92,26 +72,33 @@
         </tbody>
     </table>
   </div>
-  <div class="row">
+<br>
+    <div class="row">
         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-          <form action="" >
-            <div class="row" style="color:#fff;">
-              <div class=" col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                <ol>
-                  <label>Balances de superficie:</h2></label>
-                {% for elementoBalance in elementosBalance %}
-                  <li> {{elementoBalance.nombre}}
-                    <label class="switch">
-                      <input type="checkbox"><span class="slider round"></span>
-                    </label>
-                  </li>
-                {% endfor %}
-                </ol>
-              </div>
+            <div class="table-responsive">
+                <table class="table table-bordered table-striped table-hover table-condensed" style="text-align:center;">
+                    <thead>
+                        <tr>                                            
+                            <th></th>                      
+                            <th>BALANCE DE SUPERFICIE</th> 
+                        </tr>
+                    </thead>        
+                    <tbody> 
+                        {% for elemtento in elementos %}                             
+                            <tr>                            
+                                <td class="col-xs-1">{{ elemento }}</td> 
+                                <td class="col-sm-4">                                                
+                                    <label class="switch">
+                                        <input type="checkbox"><span class="slider round"></span>
+                                    </label>                                                                                       
+                                </td>                                                                                                  
+                            </tr>        
+                        {% endfor %}                    
+                    </tbody>
+                </table>
             </div>
-          </form>
         </div>
-  </div>
+    </div>
 
   <div class="panel-body">
     <div class="container-fluid">
@@ -119,8 +106,9 @@
         <form action="" method="post" enctype="multipart/form-data">
           <div class="form-group">
             <label for="id_monto_a_pagar">Monto:</label>
-            <input type="hidden" id="id_tram" value="{{tramite.id}}">
+            <input type="hidden" id="id_tram" value="{{tramite.id}}">            
             <input class="form-control input-sm" id="id_monto_a_pagar" name="monto" type="number" step="any" placeholder="Ingresar monto" title="Monto" maxlength="10" value="ingresar monto"/>
+            <!--<input type="hidden" id="planilla_visado" value="{{items}}"/>-->
           </div>
           <button class="btn btn-primary btn-sm" type="submit" title="Aprobar el visado" name="Aprobar el visado">
             Aprobar visado

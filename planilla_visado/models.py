@@ -33,7 +33,7 @@ class Elemento_Balance_Superficie(models.Model):
     descripcion = models.CharField(max_length=150)
 
     def __str__(self):
-        return self.elementoBalance
+        return self.nombre
 
 class PlanillaLocales(models.Model):
     planillaLocales = models.CharField(max_length=2)

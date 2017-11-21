@@ -131,8 +131,8 @@
 					<div class="container-fluid">
 						<div class="row">
 							<div id="columna2" class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-								{% block contenido_mis_tramites_para_financiar %}
-									{% include "persona/cajero/tramites_para_financiar.html" with tramites=ctxmis_tramites_para_financiar.tramites %}
+								{% block contenido_mis_tramites_para_financiar %}									
+									{% include "persona/cajero/tramites_para_financiar.html" with tramites=ctxmis_tramites_para_financiar.tramites_propietario %}
 								{% endblock %}
 							</div>
 						</div>
