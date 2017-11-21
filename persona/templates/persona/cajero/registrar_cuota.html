@@ -4,7 +4,6 @@
 <div class="table-responsive">
 
         <table class="table table-bordered table-striped table-hover table-condensed" style="background: white;">
-            <!-- Cabecera -->
             <thead>
                 <tr>
                     <th>Id</th>
@@ -14,7 +13,6 @@
                     <th>Registrar Pago</th>
                 </tr>
             </thead>
-            <!-- Mostramos los datos de las tablas -->
             <tbody>
                 {% for cuotas in cuota %}
                     <tr>
@@ -26,7 +24,7 @@
                         <td>
                             <a href="{% url 'actualizar_cuota' cuotas.id %}">
                                 <button type="button" class="btn btn-primary brn-xs" name="RegistrarPago">
-                                    <span class="glyphicon glyphicon-home" aria-hidden="true"> Registrar Pago </span>
+                                    <span class="glyphicon glyphicon-home" aria-hidden="true"> Generar Comprobante </span>
                                 </button>
                             </a>
                         </td>

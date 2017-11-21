@@ -1,0 +1,94 @@
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+    <link rel="stylesheet" href="bootstrap-3.3.7-dist/css/bootstrap.min.css">
+    <!-- Theme opcional -->
+    <link rel="stylesheet" href="bootstrap-3.3.7-dist/css/bootstrap-theme.min.css">
+</head>
+
+<body>
+<div class="container-fluid">
+
+<div class="table">
+<div class="row" style="background:white;">
+        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+            <div style="background-color:#2c3e50;">
+            <p>
+                <img src="/media/imagenes/Escudobanner.png" class="img-responsive" alt="Imagen responsive" style="position:absolute; top: 40; left: 40; max-width: None!important; width: 180;">
+            </p> <br><br>
+            <br><br>
+            <p>
+                 </div>
+                <div align="justify" style="font-size:9px; text-align:left;">
+                    <br>  &nbsp; MUNICIPALIDAD DE TRELEW
+                    <br>
+                     &nbsp; Rivadavia 390 <br>
+                     &nbsp; 9100 TRELEW- Provincia del Chubut
+                </div>
+                <h3 align="right">
+                Comprobante de Pago &nbsp;  &nbsp;
+                </h3>
+                <hr style="border-width: thick;">
+
+        <br>
+            </p>
+
+            &nbsp;<label> PAGO EFECTUADO </label>
+            <h5 align="right"> Fecha de Vencimiento {{ cuota.fechaVencimiento }} &nbsp; &nbsp;</h5>
+            <h5 align="right"> Fecha de Pago {{ cuota.fechaPago }} &nbsp; &nbsp; </h5>
+            <br>  <label> &nbsp; Apellido - Nombre : {{ tramite.propietario.persona.apellido}}  -  {{ tramite.propietario.persona.nombre }}</label>
+            <label>  &nbsp;  &nbsp;DNI : {{tramite.propietario.persona.dni}}</label><br>
+
+        </div>
+    <div>
+<br> <div class="table-responsive">
+    <table align="center" class="table table-bordered table-striped table-hover" style="width:1200px;">
+        <thead>
+            <tr>
+                <th class="col-lg-4 col-md-4 col-sm-6 col-xs-12">Numero de tramite</th>
+                <th class="col-lg-4 col-md-4 col-sm-6 col-xs-12">Tipo de Obra  </th>
+                <th class="col-lg-4 col-md-4 col-sm-6 col-xs-12">Numero de Cuota</th>
+                <th class="col-lg-4 col-md-4 col-sm-6 col-xs-12">Importe</th>
+                <th class="col-lg-4 col-md-4 col-sm-6 col-xs-12">Tipo de Pago</th>
+
+            </tr>
+        </thead>
+        <tbody style="text-align:center">
+            <tr>
+                <td>{{ tramite.id }}</td>
+                <td>{{ tramite.tipo_obra.nombre }}</td>
+                <td>{{ cuota.numeroCuota }}</td>
+                <td>{{ cuota.monto }} </td>
+                <td>{{ pago.tipoPago.nombre }} </td>
+            </tr>
+        </tbody>
+    </table>
+<br>
+        <label align="center">&nbsp; ESTE RECIBO ES CONSTANCIA DE PAGO </label>
+    </div>
+        <form action='/persona/cajero'>
+
+             <Button class="btn btn-primary btn-sm" type="submit" value="Atras">Atras</Button>
+
+        </form>
+</div>
+</div>
+   </div>
+</div>
+
+
+<style>
+    body{
+        background:radial-gradient(circle at 1.98% 14.97%,#6699CC, transparent 100%),
+        radial-gradient(circle at 98.02% 52.96%, #66CCFF, transparent 100%),
+        radial-gradient(circle at 50% 50%, #66CCFF,#66CCFF 100%);
+    }
+    th{
+        background-color:#2c3e50;
+        color:white;
+    }
+</style>
+
+</body>
+</html>

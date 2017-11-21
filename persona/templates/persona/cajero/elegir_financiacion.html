@@ -17,8 +17,17 @@
     <div class="row">
      <label> Elegir Financiacion</label>
     </div>
+    <div class="form-group">
     <br>
-                {%crispy ctxpago %}
+                 <label style="font-size:15px;">Total a Abonar:&nbsp;{{tramite.monto_a_pagar}}</label>
+                 <br>
+                 {%crispy ctxpago %}
+         <form action='/persona/cajero' style="">
+
+             <Button class="btn btn-primary btn-sm" type="submit" value="Atras">Atras</Button>
+
+</form>
+    </div>
     <br>
 </div>
 <br>
@@ -55,6 +64,10 @@ label{
 }
 .content-fluid{
     background-color:#2c3e50!important;
+}
+input#submit-id-pago_submmit.btn.btn-primary.btn-sm{
+background-color:red!important;
+
 }
 </style>
 
