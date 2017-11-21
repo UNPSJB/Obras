@@ -429,6 +429,7 @@ def planilla_visado(request, pk_tramite):
         filas = FilaDeVisado.objects.all()
         columnas = ColumnaDeVisado.objects.all()
         elementos = Elemento_Balance_Superficie.objects.all()        
+        #raise Exception(elementos)
         return render(request, 'persona/visador/planilla_visado.html', {'tramite': tramite, 'items':items, 'filas':filas, 'columnas':columnas, 'elementos':elementos})
     return redirect('visador')
 
