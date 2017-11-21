@@ -696,8 +696,12 @@ def mostrar_director(request):
     usuario = request.user
     items = ItemInspeccion.objects.all()
     detalles = DetalleDeItemInspeccion.objects.all()
-    categorias = CategoriaInspeccion.objects.all()     
-    values = {"items":items, "categorias":categorias, "detalles":detalles}
+    categorias = CategoriaInspeccion.objects.all()
+    filas = FilaDeVisado.objects.all()
+    columnas = ColumnaDeVisado.objects.all()
+    itemsVisados = ItemDeVisado.objects.all()
+    balancesSuperficies = Elemento_Balance_Superficie.objects.all()
+    values = {"items":items, "categorias":categorias, "detalles":detalles, "filas": filas, "columnas":columnas, "itemsVisados":itemsVisados, "balancesSuperficies":balancesSuperficies}
     FORMS_DIRECTOR.update({(k.NAME, k.SUBMIT): k for k in [
         pforms.PlanillaDeVisadoFormFactory(pmodels.FilaDeVisado.objects.all(), pmodels.ColumnaDeVisado.objects.all()),
           ]})
@@ -804,12 +808,28 @@ def documentos_del_estado(request, pk_estado):
     contexto= {'documentos_de_fecha': documentos_fecha}
     return render(request, 'persona/director/documentos_del_estado.html', contexto)
 
+# def generar_planilla_visado(request):
+#      filas = FilaDeVisado.objects.all()
+#      columnas = ColumnaDeVisado.objects.all()
+#      itemsVisados = ItemDeVisado.objects.all()
+#      balancesSuperficies = Elemento_Balance_Superficie.objects.all()
+#      contexto = {'filas': filas, 'columnas':columnas, 'itemsVisados': itemsVisados, 'balancesSuperficies':balancesSuperficies}
+#     # contexto_columnas = {'columnas': columnas}
+#      return render(request, 'persona/director/item_visado.html', contexto)
 def generar_planilla_visado(request):
-     filas = FilaDeVisado.objects.all()
-     columnas = ColumnaDeVisado.objects.all()
-     contexto = {'filas': filas}
-     contexto_columnas = {'columnas': columnas}
-     return render(request, 'persona/director/item_visado.html', contexto)
+    filas = FilaDeVisado.objects.all()
+    raise Exception(filas)
+    print (filas)
+    #raise Exception(filas)
+    #print (filas)
+    columnas = ColumnaDeVisado.objects.all()
+    contexto = {'filas': filas}
+    contexto_columnas = {'columnas': columnas}
+    balancesSuperficies = Elemento_Balance_Superficie.objects.all()
+    itemsVisados = ItemDeVisado.objects.all()
+    contexto = {'filas': filas, 'columnas':columnas, 'itemsVisados':itemsVisados,'balancesSuperficies':balancesSuperficies}
+    #contexto_columnas = {'columnas': columnas}
+    return render(request, 'persona/director/item_visado.html', contexto)
 
 def ver_planilla_inspeccion(request):
      items = ItemInspeccion.objects.all()
