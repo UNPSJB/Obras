@@ -435,15 +435,31 @@ def planilla_visado(request, pk_tramite):
 
 from planilla_visado.models import PlanillaDeVisado
 
-#def aprobar_visado(request, pk_tramite, monto,planilla_visado):
+
 def aprobar_visado(request, pk_tramite, monto):
-    usuario = request.user
+    list_items = []
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
+    planilla = PlanillaDeVisado(tramite)
+    planilla.save()
+    for name, value in request.POST.items():
+        if name.startswith('item'):
+            ipk= name.split('-')[1]
+            list_items.append(ipk)            
+    items = ItemDeVisado.objects.all()        
+    for item in items:        
+        for i in list_items:            
+            if (item.id == int(i)):                                
+                planilla.agregar_item(item)                                                            
+                
+    #raise Exception(planilla)
+    planilla.save()
+    usuario = request.user    
     tramite.hacer(tramite.VISAR, usuario)
-    tramite.monto_a_pagar= monto
-    #tramite.planilla_visado = planilla_visado          
+    tramite.monto_a_pagar= monto    
+    tramite.planillaVisado = planilla
+    raise (tramite.planillaVisado)
     tramite.save()    
-    messages.add_message(request, messages.SUCCESS, 'Tramite visado aprobado')
+    messages.add_message(request, messages.SUCCESS, 'Tramite visado aprobado')        
     return redirect('visador')
 
 def no_aprobar_visado(request, pk_tramite, observacion):
@@ -807,9 +823,8 @@ def documentos_del_estado(request, pk_estado):
 def generar_planilla_visado(request):
      filas = FilaDeVisado.objects.all()
      columnas = ColumnaDeVisado.objects.all()
-     contexto = {'filas': filas}
-     contexto_columnas = {'columnas': columnas}
-     return render(request, 'persona/director/item_visado.html', contexto)
+     items = ItemDeVisado.objects.all()
+     return render(request, 'persona/director/item_visado.html', {"items":items, "filas":filas, "columnas":columnas })
 
 def ver_planilla_inspeccion(request):
      items = ItemInspeccion.objects.all()

@@ -174,13 +174,3 @@ class FormularioItemDeVisado(forms.ModelForm):
             raise ValidationError("Ya existe {}".format(cargados.first().nombre))
         return nombre
 
-
-#
-# class FormularioPlanillaDeLocales(forms.ModelForm):
-#     NAME = 'planilla_de_localesform'
-#     SUBMIT = 'planilla_de_locales_submit'
-#
-#     class Meta:
-#         model = PlanillaLocales
-#         fields = ('planillaLocales')
-

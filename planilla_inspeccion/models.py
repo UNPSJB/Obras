@@ -2,6 +2,7 @@
 from __future__ import unicode_literals
 
 from django.db import models
+from tramite.models import *
 
 # Create your models here.
 class PlanillaInspeccionBaseManager(models.Manager):
@@ -94,9 +95,8 @@ class DetalleDeItemInspeccion(models.Model):
  #        return self.nombre
 
 class PlanillaDeInspeccion(models.Model):
-    #tramite = models.ForeignKey(Tramite)
-    detalles = models.ManyToManyField(DetalleDeItemInspeccion, related_name="planillasInspeccion")
-   # planillaLocales = models.ManyToManyField(PlanillaLocales, related_name="planillas")#esto nose si es asi
+    tramite = models.ForeignKey(Tramite, related_name="inspecciones")
+    detalles = models.ManyToManyField(DetalleDeItemInspeccion, related_name="planillasInspeccion")   
 
     def agregar_detalle(self, detalle):
         self.detalles.add(detalle)

@@ -4,8 +4,6 @@ from django.utils import timezone
 import datetime
 from persona.models import *
 from tipos.models import *
-from planilla_visado.models import *
-from planilla_inspeccion.models import *
 from pago.models import *
 from django import template
 
@@ -51,9 +49,7 @@ class Tramite(models.Model):
     profesional= models.ForeignKey(Profesional,unique=False)
     medidas = models.IntegerField()
     tipo_obra = models.ForeignKey(TipoObra)
-    domicilio = models.CharField(max_length=50,blank=True)
-    planillaVisado = models.ForeignKey(PlanillaDeVisado, default=True, null=True, unique=False)
-    planillaInspeccion = models.ForeignKey(PlanillaDeInspeccion, default=True, null=True, unique=False)
+    domicilio = models.CharField(max_length=50,blank=True)    
     pago = models.ForeignKey(Pago, default=True, blank=True, null=True)
     #-------------------------------------------------------------------------------------
     # DATOS CATASTRALES

@@ -2,11 +2,11 @@
 from __future__ import unicode_literals
 
 from django.db import models
+from tramite.models import *
 
-# Create your models here.
+
 class PlanillaVisadoBaseManager(models.Manager):
     pass
-
 
 class PlanillaVisadoQuerySet(models.QuerySet):
     def en_estado(self, estados):
@@ -114,9 +114,8 @@ class ItemDeVisado(models.Model):
         return "{fila}, {columna}".format(fila=self.fila_de_visado.nombre, columna=self.columna_de_visado.nombre)
 
 class PlanillaDeVisado(models.Model):
-    #tramite = models.ForeignKey(Tramite)
-    items = models.ManyToManyField(ItemDeVisado, related_name="planillas")
-   # planillaLocales = models.ManyToManyField(PlanillaLocales, related_name="planillas")#esto nose si es asi
+    tramite = models.ForeignKey(Tramite, related_name="visados")
+    items = models.ManyToManyField(ItemDeVisado, related_name="planillas")   
 
     def agregar_item(self, item):
         self.items.add(item)
@@ -149,3 +148,9 @@ class PlanillaDeVisado(models.Model):
                     print("{item}: O".format(item=local))
                 else:
                     print("{item}: X".format(item=local))
+
+    def __str__(self):
+        cadena = " "
+        for item in self.items.all():
+            cadena += "{fila}, {columna}".format(fila=item.fila_de_visado.nombre, columna=item.columna_de_visado.nombre)                    
+        return cadena                        
