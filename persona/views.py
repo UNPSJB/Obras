@@ -440,7 +440,8 @@ from planilla_visado.models import PlanillaDeVisado
 def aprobar_visado(request, pk_tramite, monto):
     list_items = []
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
-    planilla = PlanillaDeVisado(tramite)
+    planilla = PlanillaDeVisado()
+    planilla.tramite = tramite
     planilla.save()
     for name, value in request.POST.items():
         if name.startswith('item'):
@@ -450,15 +451,11 @@ def aprobar_visado(request, pk_tramite, monto):
     for item in items:        
         for i in list_items:            
             if (item.id == int(i)):                                
-                planilla.agregar_item(item)                                                            
-                
-    #raise Exception(planilla)
+                planilla.agregar_item(item)                                                                                
     planilla.save()
     usuario = request.user    
     tramite.hacer(tramite.VISAR, usuario)
-    tramite.monto_a_pagar= monto    
-    tramite.planillaVisado = planilla
-    raise (tramite.planillaVisado)
+    tramite.monto_a_pagar= monto        
     tramite.save()    
     messages.add_message(request, messages.SUCCESS, 'Tramite visado aprobado')        
     return redirect('visador')
