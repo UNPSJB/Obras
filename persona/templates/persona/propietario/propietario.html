@@ -27,9 +27,9 @@
 <br>
 	<ul class="sidebar sidebar-1">
 		<li><a href="#" class="current"><label>Propietario</label></a></li>
-		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour"><label id="i">Consultar estado de mis tramites</label></a></li>
-		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne"><label id="j">Modificar mis datos personales</label></a></li>
+		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour"><label id="i">Consultar estado de mis tramites</label></a></li>		
 		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseOne"><label id="k">Seleccionar forma de financiacion</label></a></li>
+		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne"><label id="j">Modificar mis datos personales</label></a></li>
 
 	</ul>
 {% endblock %}
@@ -52,6 +52,29 @@
 							<div id="columna" class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 								{% block contenido_tramite_estado %}
 									{% include "persona/propietario/consultar_estado_tramite_propietario.html" with tramites_de_propietario=ctxtramitespropietario %}
+								{% endblock %}
+							</div>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div class="panel panel-custom">
+			<div class="panel-heading panel-heading-custom box" role="tab" id="headingTwo">
+				<a class="panel-title">
+					<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+						<label id="g">Seleccionar forma de financiacion</label>
+					</a>
+				</a>
+			</div>
+			<div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+				<div class="panel-body">
+					<div class="container-fluid">
+						<div class="row">
+							<div id="columna2" class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+								{% block contenido_mis_tramites_para_financiar %}									
+									{% include "persona/cajero/tramites_para_financiar.html" with tramites=ctxmis_tramites_para_financiar %}
 								{% endblock %}
 							</div>
 						</div>
@@ -117,29 +140,7 @@
 			  </div>
 			</div>
 		</div>
-
-		<div class="panel panel-custom">
-			<div class="panel-heading panel-heading-custom box" role="tab" id="headingTwo">
-				<a class="panel-title">
-					<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-						<label id="g">Seleccionar forma de financiacion</label>
-					</a>
-				</a>
-			</div>
-			<div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
-				<div class="panel-body">
-					<div class="container-fluid">
-						<div class="row">
-							<div id="columna2" class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-								{% block contenido_mis_tramites_para_financiar %}									
-									{% include "persona/cajero/tramites_para_financiar.html" with tramites=ctxmis_tramites_para_financiar.tramites_propietario %}
-								{% endblock %}
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
+		
 	</div>
 {% endblock %}
 
