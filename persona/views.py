@@ -973,10 +973,7 @@ def registrar_pago(request,pk_tramite):
     if request.method == "POST":
         form = FormularioPago(request.POST)
         if form.is_valid():
-            pago = form.save(commit=False)
-            # pago.valor=pago.guardar_valor()
-            print(pago.valor)
-            print(pago.cantidadCuotas)
+            pago = form.save(commit=False)            
             contador=31
             fms = "%A"
             pago.save()
