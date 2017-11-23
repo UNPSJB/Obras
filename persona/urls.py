@@ -96,5 +96,6 @@ urlpatterns = [
     url(r'^inspector_movil$', views.mostrar_inspector_movil, name="inspector_movil"),
     url(r'^inspector_movil/(?P<pk_tramite>\d+)/$', views.planilla_inspeccion_movil, name="planilla_inspeccion_movil"),
     #url(r'^vista_de_inspecciones/(?P<pk_tramite>\d+)/$', views.ver_inspecciones_movil, name="ver_inspecciones_movil"),
+    url(r'^cargar_inspeccion/(?P<pk_tramite>\d+)/$', views.cargar_inspeccion_movil, name="cargar_inspeccion_movil"),
 
 ]

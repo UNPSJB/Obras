@@ -45,8 +45,8 @@ from datetime import date, timedelta
 DATETIME = re.compile("^(\d{4})\-(\d{2})\-(\d{2})\s(\d{2}):(\d{2})$")
 
 def convertidor_de_fechas(fecha):
-
     return datetime(*[int(n) for n in DATETIME.match(fecha).groups()])
+    #return datetime(*[int(n) for n in DATETIME.match(fecha)])
 
 #-------------------------------------------------------------------------------------------------------------------
 #propietario -------------------------------------------------------------------------------------------------------
@@ -109,9 +109,9 @@ def ver_historial_tramite(request, pk_tramite):
 def documentos_de_estado(request, pk_estado):
     estado = get_object_or_404(Estado, pk=pk_estado)
     fecha = estado.timestamp
-    fecha_str = datetime.strftime(fecha, '%d/%m/%Y %H:%M')
+    fecha_str = date.strftime(fecha, '%d/%m/%Y %H:%M')
     documentos = estado.tramite.documentos.all()
-    documentos_fecha = filter(lambda e:(datetime.strftime(e.fecha, '%d/%m/%Y %H:%M') == fecha_str), documentos)
+    documentos_fecha = filter(lambda e:(date.strftime(e.fecha, '%d/%m/%Y %H:%M') == fecha_str), documentos)
     contexto= {'documentos_de_fecha': documentos_fecha}
     return render(request, 'persona/propietario/documentos_de_estado.html', contexto)
 
@@ -241,9 +241,9 @@ def enviar_correcciones(request, pk_tramite):
 def documento_de_estado(request, pk_estado):
     estado = get_object_or_404(Estado, pk=pk_estado)
     fecha = estado.timestamp
-    fecha_str = datetime.strftime(fecha, '%d/%m/%Y %H:%M')
+    fecha_str = date.strftime(fecha, '%d/%m/%Y %H:%M')
     documentos = estado.tramite.documentos.all()
-    documentos_fecha = filter(lambda e:(datetime.strftime(e.fecha, '%d/%m/%Y %H:%M') == fecha_str), documentos)
+    documentos_fecha = filter(lambda e:(date.strftime(e.fecha, '%d/%m/%Y %H:%M') == fecha_str), documentos)
     contexto= {'documentos_de_fecha': documentos_fecha}
     return render(request, 'persona/profesional/documento_de_estado.html', contexto)
 
@@ -553,6 +553,8 @@ class ReporteTramitesAceptadosPdf(View):
 #-------------------------------------------------------------------------------------------------------------------
 #inspector ---------------------------------------------------------------------------------------------------------
 
+from planilla_inspeccion.models import *
+
 @login_required(login_url="login")
 @grupo_requerido('inspector')
 def mostrar_inspector(request):
@@ -583,37 +585,51 @@ def tramites_agendados_por_inspector(request):
     argumentos = [Visado, ConInspeccion]
     tramites = Tramite.objects.en_estado(Agendado)
     tramites_del_inspector = filter(lambda t: t.estado().usuario == usuario, tramites)
-    #print (tramites_del_inspector)
     contexto = {"tramites_del_inspector": tramites_del_inspector}
     return tramites_del_inspector
 
 def agendar_tramite(request, pk_tramite):
-    tramite = get_object_or_404(Tramite, pk=pk_tramite)
-    fecha = convertidor_de_fechas(request.GET["msg"])
+    tramite = get_object_or_404(Tramite, pk=pk_tramite)    
+    fecha = convertidor_de_fechas(request.GET["msg"])    
+    usuario = request.user
     tramite.hacer(Tramite.AGENDAR, request.user, fecha) #tramite, fecha_inspeccion, inspector=None
     return redirect('inspector')
 
 def cargar_inspeccion(request, pk_tramite):
+    raise Exception("HOLAAA")            
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
-    tipos_de_documentos_requeridos = TipoDocumento.get_tipos_documentos_para_momento(TipoDocumento.INSPECCIONAR)
-    FormularioDocumentoSet = FormularioDocumentoSetFactory(tipos_de_documentos_requeridos)
-    inicial = metodo(tipos_de_documentos_requeridos)
-    documento_set = FormularioDocumentoSet(initial=inicial)
     id_tramite = int(pk_tramite)
-    if request.method == "POST":
-        documento_set = FormularioDocumentoSet(request.POST, request.FILES)
-        if documento_set.is_valid():
-            for docForm in documento_set:
-                docForm.save(tramite=tramite)
-                if "aceptar_tramite" in request.POST:
-                    print ("acepte el tramite")
-                    aceptar_inspeccion(request, pk_tramite)
-                elif "rechazar_tramite" in request.POST:
-                    print ("rechace el tramite")
-                    rechazar_inspeccion(request, pk_tramite)
-        else:
-            print("no entre al if")
-    return render(request, 'persona/inspector/cargar_inspeccion.html', {'tramite': tramite, 'ctxdocumentoset': documento_set})
+    planilla = PlanillaDeInspeccion()
+    planilla.tramite = tramite
+    planilla.save()
+    list_detalles=[]
+    for name,value in request.POST.detalles():
+        if name.startswith('detalle'):
+            ipk=name.split('-')[1]
+            list_detalles.append(ipk)
+    raise Exception(list_detalles)            
+    return redirect('inspector_movil')
+    
+    
+    #tipos_de_documentos_requeridos = TipoDocumento.get_tipos_documentos_para_momento(TipoDocumento.INSPECCIONAR)
+    #FormularioDocumentoSet = FormularioDocumentoSetFactory(tipos_de_documentos_requeridos)
+    #inicial = metodo(tipos_de_documentos_requeridos)
+    #documento_set = FormularioDocumentoSet(initial=inicial)
+    #id_tramite = int(pk_tramite)    
+    #if request.method == "POST":
+    #    documento_set = FormularioDocumentoSet(request.POST, request.FILES)
+    #    if documento_set.is_valid():
+    #        for docForm in documento_set:
+    #            docForm.save(tramite=tramite)
+    #            if "aceptar_tramite" in request.POST:
+    #                print ("acepte el tramite")
+    #                aceptar_inspeccion(request, pk_tramite)
+    #            elif "rechazar_tramite" in request.POST:
+    #                print ("rechace el tramite")
+    #                rechazar_inspeccion(request, pk_tramite)
+    #    else:
+    #        print("no entre al if")
+    #return render(request, 'persona/inspector/cargar_inspeccion.html', {'tramite': tramite, 'ctxdocumentoset': documento_set})
 
 def rechazar_inspeccion(request, pk_tramite):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
@@ -643,9 +659,9 @@ def ver_documentos_tramite_inspector(request, pk_tramite):
 def documentos_inspector_estado(request, pk_estado):
     estado = get_object_or_404(Estado, pk=pk_estado)
     fecha = estado.timestamp
-    fecha_str = datetime.strftime(fecha, '%d/%m/%Y %H:%M')
+    fecha_str = date.strftime(fecha, '%d/%m/%Y %H:%M')
     documentos = estado.tramite.documentos.all()
-    documentos_fecha = filter(lambda e:(datetime.strftime(e.fecha, '%d/%m/%Y %H:%M') == fecha_str), documentos)
+    documentos_fecha = filter(lambda e:(date.strftime(e.fecha, '%d/%m/%Y %H:%M') == fecha_str), documentos)
     contexto= {'documentos_de_fecha': documentos_fecha}
     return render(request, 'persona/inspector/documentos_del_estado.html', contexto)
 
@@ -816,9 +832,9 @@ def detalle_de_tramite(request, pk_tramite):
 def documentos_del_estado(request, pk_estado):
     estado = get_object_or_404(Estado, pk=pk_estado)
     fecha = estado.timestamp
-    fecha_str = datetime.strftime(fecha, '%d/%m/%Y %H:%M')
+    fecha_str = date.strftime(fecha, '%d/%m/%Y %H:%M')
     documentos = estado.tramite.documentos.all()
-    documentos_fecha = filter(lambda e:(datetime.strftime(e.fecha, '%d/%m/%Y %H:%M') == fecha_str), documentos)
+    documentos_fecha = filter(lambda e:(date.strftime(e.fecha, '%d/%m/%Y %H:%M') == fecha_str), documentos)
     contexto= {'documentos_de_fecha': documentos_fecha}
     return render(request, 'persona/director/documentos_del_estado.html', contexto)
 
@@ -1076,13 +1092,25 @@ def mostrar_inspector_movil(request):
     contexto = {"tramites_del_inspector": tramites_del_inspector}
     return render(request, 'persona/movil/inspector_movil.html', {'tramites':tramites_del_inspector})
 
-
-    argumentos = [Visado, ConInspeccion]
-    tramites = Tramite.objects.en_estado(argumentos)    
-    return render(request, 'persona/movil/inspector_movil.html', {'tramites':tramites})
-
 def planilla_inspeccion_movil(request,pk_tramite):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
     contexto = {'tramite': tramite}    
-    return render(request, 'persona/movil/planilla_inspeccion.html',contexto)
+    detalles = DetalleDeItemInspeccion.objects.all()        
+    items = ItemInspeccion.objects.all()
+    categorias = CategoriaInspeccion.objects.all()
+    return render(request, 'persona/movil/planilla_inspeccion.html', {'tramite':tramite, 'items':items, 'detalles':detalles, 'categorias':categorias})
 
+def cargar_inspeccion_movil(request, pk_tramite):
+    raise Exception("HOLAAA")            
+    tramite = get_object_or_404(Tramite, pk=pk_tramite)
+    id_tramite = int(pk_tramite)
+    planilla = PlanillaDeInspeccion()
+    planilla.tramite = tramite
+    planilla.save()
+    list_detalles=[]
+    for name,value in request.POST.detalles():
+        if name.startswith('detalle'):
+            ipk=name.split('-')[1]
+            list_detalles.append(ipk)
+    raise Exception(list_detalles)            
+    return redirect('inspector_movil')
