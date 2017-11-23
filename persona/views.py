@@ -452,6 +452,17 @@ def aprobar_visado(request, pk_tramite, monto):
             if (item.id == int(i)):                                
                 planilla.agregar_item(item)                                                                                
     planilla.save()
+    for name, value in request.POST.items():
+        if name.startswith('elemento'):
+            ipk= name.split('-')[1]
+            list_items.append(ipk)            
+    elementos = Elemento_Balance_Superficie.objects.all()        
+    for elemento in elementos:        
+        for i in list_items:            
+            if (elemento.id == int(i)):                                                
+                planilla.agregar_elemento(elemento)
+                planilla.save()
+    planilla.save()                
     usuario = request.user    
     tramite.hacer(tramite.VISAR, usuario)
     tramite.monto_a_pagar= monto        
@@ -730,8 +741,8 @@ def mostrar_director(request):
     filas = FilaDeVisado.objects.all()
     columnas = ColumnaDeVisado.objects.all()
     itemsVisados = ItemDeVisado.objects.all()
-    balancesSuperficies = Elemento_Balance_Superficie.objects.all()
-    values = {"items":items, "categorias":categorias, "detalles":detalles, "filas": filas, "columnas":columnas, "itemsVisados":itemsVisados}
+    elementos = Elemento_Balance_Superficie.objects.all()
+    values = {"items":items, "categorias":categorias, "detalles":detalles, "filas": filas, "columnas":columnas, "itemsVisados":itemsVisados, "elementos":elementos}
     FORMS_DIRECTOR.update({(k.NAME, k.SUBMIT): k for k in [
         pforms.PlanillaDeVisadoFormFactory(pmodels.FilaDeVisado.objects.all(), pmodels.ColumnaDeVisado.objects.all()),
           ]})

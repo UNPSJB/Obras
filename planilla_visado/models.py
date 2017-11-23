@@ -116,6 +116,10 @@ class ItemDeVisado(models.Model):
 class PlanillaDeVisado(models.Model):
     tramite = models.ForeignKey(Tramite, related_name="visados")
     items = models.ManyToManyField(ItemDeVisado, related_name="planillas")   
+    elementos = models.ManyToManyField(Elemento_Balance_Superficie, related_name="elementos_balance")   
+
+    def agregar_elemento(self, elemento):
+        self.elementos.add(elemento)
 
     def agregar_item(self, item):
         self.items.add(item)
@@ -150,7 +154,10 @@ class PlanillaDeVisado(models.Model):
                     print("{item}: X".format(item=local))
 
     def __str__(self):
-        cadena = " "
+        cadena = "Elementos: "
+        for e in self.elementos.all():
+            cadena += e.nombre+" "
+        cadena += "  Items: "
         for item in self.items.all():
             cadena += "{fila}, {columna}".format(fila=item.fila_de_visado.nombre, columna=item.columna_de_visado.nombre)                    
         return cadena                        
