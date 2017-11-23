@@ -107,6 +107,12 @@ class PlanillaDeInspeccion(models.Model):
     def detalle_activo(self, detalle):
         return self.detalles.filter(pk=detalle.pk).exists()
 
+    def __str__(self):
+        cadena = "Detalles "
+        for detalle in self.detalles.all():
+            cadena += detalle.nombre
+            #cadena += return "{categoria}, {item}".format(categoria=self.categoria_inspeccion.nombre, item=self.item_inspeccion.nombre)
+        return cadena                        
 
 
 
