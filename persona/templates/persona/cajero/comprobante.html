@@ -2,9 +2,9 @@
 <head>
     <meta charset="UTF-8">
     <title>Title</title>
-    <link rel="stylesheet" href="bootstrap-3.3.7-dist/css/bootstrap.min.css">
+    <link rel="stylesheet" href='/static/css/bootstrap.min.cs'>
     <!-- Theme opcional -->
-    <link rel="stylesheet" href="bootstrap-3.3.7-dist/css/bootstrap-theme.min.css">
+    <link rel="stylesheet" href="static/css/bootstrap-theme.min.css">
 </head>
 
 <body>
@@ -67,11 +67,17 @@
 <br>
         <label align="center">&nbsp; ESTE RECIBO ES CONSTANCIA DE PAGO </label>
     </div>
-        <form action='/persona/cajero'>
+        <br><form action='/persona/cajero'>
 
-             <Button class="btn btn-primary btn-sm" type="submit" value="Atras">Atras</Button>
+             &nbsp;<Button class="btn btn-primary btn-sm" type="submit" value="Atras">Atras</Button>
 
         </form>
+        <div>
+    <form action="" method="get">
+        <input type="submit" class="btn" value="Generate PDF" name="mybtn" />
+    </form>
+</div>
+        <br>
 </div>
 </div>
    </div>
@@ -88,6 +94,7 @@
         background-color:#2c3e50;
         color:white;
     }
+
 </style>
 
 </body>
