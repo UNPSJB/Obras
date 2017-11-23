@@ -1,0 +1,39 @@
+{% load staticfiles %}
+
+{% block listado_tramites_a_pagar %}
+<div class="table-responsive">
+
+        <table class="table table-bordered table-striped table-hover table-condensed" style="background: white;">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>domicilio</th>
+                    <th>Monto a pagar</th>
+                    <th>Monto pagado</th>
+                    <th>Seleccionar Tramite</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for tramite in tramites %}
+                    <tr>
+                        <td class="col-xs-1">{{ tramite.id }}</td>
+                        <td class="col-xs-3">{{ tramite.domicilio }}</td>
+                        <td class="col-xs-3">{{ tramite.monto_a_pagar }}</td>
+                        <td class="col-xs-3">{{ tramite.monto_pagado }}</td>
+
+                        <td>
+                            <a href="{% url 'elegir_tramite' tramite.id %}">
+                                <button type="button" class="btn btn-primary brn-xs" name="RegistrarPago">
+                                    <span class="glyphicon glyphicon-home" aria-hidden="true"> Realizar Pago </span>
+                                </button>
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+
+            </tbody>
+        </table>
+    </div>
+
+{% endblock %}
+

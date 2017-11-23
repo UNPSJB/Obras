@@ -50,7 +50,7 @@ class Tramite(models.Model):
     medidas = models.IntegerField()
     tipo_obra = models.ForeignKey(TipoObra)
     domicilio = models.CharField(max_length=50,blank=True)    
-    pago = models.ForeignKey(Pago, default=True, blank=True, null=True)
+    pago = models.OneToOneField(Pago, default=True, blank=True, null=True)
     #-------------------------------------------------------------------------------------
     # DATOS CATASTRALES
     parcela = models.CharField(max_length = 20)
@@ -64,19 +64,7 @@ class Tramite(models.Model):
     
 
     def __str__(self):
-        return "Numero de tramite: {} - Profesional: {} - Propietario: {}" .format(self.pk, self.profesional, self.propietario)
-
-    def saldo_restante_a_pagar(self):
-        if self.monto_a_pagar == None or self.monto_pagado == None:
-            return 0
-        else:
-            return self.monto_a_pagar - self.monto_pagado
-
-    def esta_pagado(self):
-        if ((self.monto_a_pagar - self.monto_pagado) <= 0):
-            return True
-        else:
-            return False
+        return "Numero de tramite: {} - Profesional: {} - Propietario: {} - Pago {} " .format(self.pk, self.profesional, self.propietario, self.pago)
 
     @classmethod
     def new(cls, usuario, propietario, profesional, tipo_obra, medidas, domicilio, parcela, circunscripcion, sector, manzana, documentos):        
@@ -92,7 +80,9 @@ class Tramite(models.Model):
             circunscripcion=circunscripcion, 
             sector=sector, 
             manzana=manzana, 
-            tipo_obra=TipoObra.objects.get(pk=tipo_obra)
+            tipo_obra=TipoObra.objects.get(pk=tipo_obra),
+            pago=None,
+            monto_pagado=0
         )
         t.save()
         for doc in documentos:
@@ -100,6 +90,20 @@ class Tramite(models.Model):
             doc.save()
         t.hacer(Tramite.INICIAR, usuario, observacion="Arranca el tramite")
         return t
+
+    def saldo_restante_a_pagar(self):
+        if self.monto_a_pagar == None or self.monto_pagado == None:
+            return 0
+        else:
+            return self.monto_a_pagar - self.monto_pagado
+
+    def esta_pagado(self):
+        if (self.monto_pagado is None):
+            self.monto_pagado=0
+        if ((self.monto_pagado+1) >= self.monto_a_pagar):
+            return True
+        else:
+            return False
 
     def estado(self):
         if self.estados.exists():

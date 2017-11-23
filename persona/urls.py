@@ -84,8 +84,10 @@ urlpatterns = [
     url(r'^cajero/tramites_para_financiar$', views.listado_tramites_para_financiar, name="tramites_para_financiar"),
     url(r'^elegir_financiacion/(?P<pk_tramite>\d+)/$', views.elegir_financiacion, name="financiar"),
 
-    url(r'^cajero/registrar_cuota$', views.listado_cuotas, name="registrar_cuota"),
+    url(r'^cajero/registrar_cuota/$', views.elegir_tramite, name="registrar_cuota"),
+    url(r'^cajero/listado_tramites_a_pagar', views.listado_tramites_a_pagar, name="listado_tramites_a_pagar"),
     url(r'^cajero/actualizar_cuota/(?P<pk_cuota>\d+)$', views.elegir_cuota, name="actualizar_cuota"),
+    url(r'^cajero/elegir_tramite/(?P<pk_tramite>\d+)$', views.elegir_tramite, name="elegir_tramite"),
     #TODO como hacer para no acceder a las otras cuotas?
     url(r'^cajero/registrar_pago.html/(?P<pk_tramite>\d+)/$', views.registrar_pago, name="registrar_pago"),
 

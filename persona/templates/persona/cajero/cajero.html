@@ -7,8 +7,7 @@
     <font size="2">
 		<li><a class="current"><font color="white">Cajero</font> </a></li>
 		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseSeven" aria-expanded="false"aria-controls="collapseSeven" onclick='mostrarSubmenu("sin_submenu")'>Elegir financiacion</a></li>
-		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseNine" aria-expanded="false"aria-controls="collapseNine" onclick='mostrarSubmenu("sin_submenu")'>Registrar Cuota</a></li>
-		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseTen" aria-expanded="false"aria-controls="collapseNine" onclick='mostrarSubmenu("sin_submenu")'>Generar comprobante de pago</a></li>
+		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseNine" aria-expanded="false"aria-controls="collapseNine" onclick='mostrarSubmenu("sin_submenu")'>Seleccionar tramite</a></li>
 	</font>
   </ul>
 {% endblock %}
@@ -44,7 +43,7 @@
 			<div class="panel-heading panel-heading-custom box" role="tab" id="headingNine">
 				<h5 class="panel-title">
 					<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseNine" aria-expanded="false" aria-controls="collapseNine">
-						<font color="#ffffff" size="2">Registrar Cuota</font>
+						<font color="#ffffff" size="2">Seleccionar Tramite</font>
 					</a>
 				</h5>
 			</div>
@@ -55,8 +54,8 @@
 						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 							<div class="container-fluid">
 							<br>
-								{% block registrar_cuota %}
-									{% include "persona/cajero/registrar_cuota.html" with cuota=ctxcuotas.cuotas %}
+								{% block listado_tramites_a_pagar %}
+									{% include "persona/cajero/listado_tramites_a_pagar.html" with tramites=ctxcuotas.tramites %}
 								{% endblock %}
 
 						</div>

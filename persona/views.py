@@ -955,13 +955,17 @@ def alta_persona(request):
 def mostrar_cajero(request):
     contexto = {
         "ctxtramites_para_financiar": listado_tramites_para_financiar(request),
-        "ctxcuotas":listado_cuotas(request)
+        "ctxcuotas":listado_tramites_a_pagar(request)
     }
     return render(request, 'persona/cajero/cajero.html', contexto)
 
 def listado_tramites_para_financiar(request):
-    tramites = Tramite.objects.en_estado(Visado)
-    contexto = {'tramites':tramites}
+    tramite = Tramite.objects.en_estado(Visado)
+    listado=[]
+    for tramites in tramite:
+        if tramites.pago is None:
+           listado.append(tramites)
+    contexto = {'tramites':listado}
     return contexto
 
 def elegir_financiacion(request,pk_tramite):    
@@ -973,33 +977,56 @@ def registrar_pago(request,pk_tramite):
     if request.method == "POST":
         form = FormularioPago(request.POST)
         if form.is_valid():
-            pago = form.save(commit=False)            
+            pago = form.save(commit=False)
             contador=31
             fms = "%A"
             pago.save()
-            tramite.pago = pago
-            tramite.save()
-            total=tramite.monto_a_pagar/pago.cantidadCuotas
-            for i in range(1, pago.cantidadCuotas+1):
-                cuota = Cuota(monto=total,numeroCuota=i,pago=pago)
-                cuota.fechaVencimiento=date.today() + timedelta(days=contador)
-                dia=cuota.fechaVencimiento.strftime(fms)
-                if (dia=="Sunday"):
-                    cuota.fechaVencimiento=date.today() + timedelta(days=contador+1)
-                else:
-                    if (dia=="Saturday"):
-                        cuota.fechaVencimiento = date.today() + timedelta(days=contador + 2)
-                contador=contador+31
-                cuota.save()
-                cuota.hacer("Cancelacion")            
+            if tramite.pago is None:
+                tramite.pago = pago
+                tramite.save()
+                total=tramite.monto_a_pagar/pago.cantidadCuotas
+                for i in range(1, pago.cantidadCuotas+1):
+                    cuota = Cuota(monto=total,numeroCuota=i,pago=pago)
+                    cuota.fechaVencimiento=date.today() + timedelta(days=contador)
+                    dia=cuota.fechaVencimiento.strftime(fms)
+                    if (dia=="Sunday"):
+                        cuota.fechaVencimiento=date.today() + timedelta(days=contador+1)
+                    else:
+                        if (dia=="Saturday"):
+                            cuota.fechaVencimiento = date.today() + timedelta(days=contador + 2)
+                    contador=contador+31
+                    cuota.save()
+                    cuota.hacer("Cancelacion")
+            else:
+                messages.add_message(request, messages.ERROR, 'El tramite ya tiene un pago registrado.')
+
     else:
         form = FormularioPago()
     return form
+
+def listado_tramites_a_pagar(request):
+    objetos=Tramite.objects.all()
+    tramites=[]
+    for tramite in objetos:
+        if ((tramite.pago is not None) and (tramite.esta_pagado()==False)):
+            tramites.append(tramite)
+    contexto={'tramites':tramites}
+    return contexto
 
 def listado_cuotas(request):
     cuotas=Cuota.objects.en_estado(Cancelacion)
     contexto= {'cuotas':cuotas}
     return contexto
+
+def elegir_tramite(request, pk_tramite):
+    tramite=get_object_or_404(Tramite,pk=pk_tramite)
+    pago=tramite.pago
+    cuotas=[]
+    objetos=Cuota.objects.en_estado(Cancelacion)
+    for cuota in objetos:
+        if cuota.fechaPago is None and cuota.pago==pago:
+            cuotas.append(cuota)
+    return render(request, 'persona/cajero/registrar_cuota.html', {'cuotas':cuotas})
 
 def elegir_cuota(request,pk_cuota):
     cuota=get_object_or_404(Cuota,pk=pk_cuota)
