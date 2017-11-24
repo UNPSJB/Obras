@@ -8,6 +8,7 @@
 
 
 {% block contenido %}
+<div class="container-fluid">
 <form action="" method="post" enctype="multipart/form-data">
 <table class="table table-bordered table-striped table-hover table-condensed" style="text-align:center;">
     <thead>
@@ -41,19 +42,28 @@
 </table>
     <br>
     <a href="{% url 'cargar_inspeccion_movil' tramite.pk %}">
-    <button class="btn btn-primary btn-sm" name="Cargar Inspeccion">
+    <button class="btn btn-info btn-sm" name="Cargar Inspeccion">
         Cargar Inspeccion
     </button>    
 </a>
 </form>
         <a href="{% url 'inspector_movil' %}">
-        <button class="btn btn-primary btn-sm" name="Volver">
+        <button class="btn btn-info btn-sm" name="Volver">
             Volver
-        </button>    
-
-
+        </button><br>
+<br><br><div class="row">
+</div>
+        </a>
+</div>
 <style>
+.btn-info {
+    color: #fff;
+    background-color: #337ab7;
+    border-color: #2e6da4;
+    float:left;
+    margin-right:10px;
 
+}
 ul#menu-horizontal li {
     float: left;
     display: inline;
