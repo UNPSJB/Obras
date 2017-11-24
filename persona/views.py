@@ -969,7 +969,8 @@ def alta_persona(request):
 
 #------------------------------------------------------------------------------------------------------------------
 #cajero ---------------------------------------------------------------------------------------------------------
-
+@login_required(login_url="login")
+@grupo_requerido('cajero')
 def mostrar_cajero(request):
     contexto = {
         "ctxtramites_para_financiar": listado_tramites_para_financiar(request),

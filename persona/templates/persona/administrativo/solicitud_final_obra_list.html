@@ -22,18 +22,16 @@
           {% if tramites %}
               {% for tramite in tramites %}
                 <tr>
-                  <td class="col-xs-1">{{ tramite.numero }}</td>
+                  <td class="col-xs-1">{{ tramite.id }}</td>
                   <td class="col-xs-1">{{ tramite.medidas }} </td>
                   <td class="col-xs-1">{{ tramite.tipoObra }}</td>
                   <td class="col-xs-1">{{ tramite.estado }}</td>
-                  <td class="col-xs-2">{{ tramite.profesional.persona.nombre }}
+                  <td class="col-xs-2">{{ tramite.profesional.persona }}
                       {{ tramite.profesional.persona.apellido }}
-                      {{ tramite.profesional.persona.profesion }}
-                      {{ tramite.profesional.persona.matricula }}
+                      {{ tramite.profesional.profesion }}
+                      {{ tramite.profesional.matricula }}
                   </td>
-                  <td class="col-xs-2">{{ persona.propietario.nombre }}
-                      {{ persona.propietario.apellido }}
-                  </td>
+                  <td class="col-xs-2">{{ tramite.propietario.persona}}</td>
                   <td class="col-xs-1">
                     <a href="">
                       <button type="button" class="btn btn-primary btn-xs" name="ver-certificado">
