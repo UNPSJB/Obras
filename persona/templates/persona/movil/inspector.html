@@ -32,7 +32,7 @@
                           <div class="row">
                             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 															{% include "persona/movil/planilla_inspeccion.html" with items=items%}
-                              
+
                             </div>
                           </div>
 					    </div>
@@ -59,7 +59,9 @@
                         <div class="container-fluid">
                           <div class="row">
                             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                             
+								{% block listado_inspector_movil  %}
+                                {% include "persona/inspector_movil/listado_inspector_movil.html" with tramites_del_inspector=ctxlistado_inspector.tramites %}
+                              {% endblock %}
                             </div>
                             </div>
                         </div>

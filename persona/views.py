@@ -611,14 +611,13 @@ def agendar_tramite(request, pk_tramite):
     return redirect('inspector')
 
 def cargar_inspeccion(request, pk_tramite):
-    raise Exception("HOLAAA")            
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
     id_tramite = int(pk_tramite)
     planilla = PlanillaDeInspeccion()
     planilla.tramite = tramite
     planilla.save()
     list_detalles=[]
-    for name,value in request.POST.detalles():
+    for name,value in request.POST.items():
         if name.startswith('detalle'):
             ipk=name.split('-')[1]
             list_detalles.append(ipk)
@@ -1011,8 +1010,8 @@ def registrar_pago(request,pk_tramite):
             pago = form.save(commit=False)
             contador=31
             fms = "%A"
-            pago.save()
             if tramite.pago is None:
+                pago.save()
                 tramite.pago = pago
                 tramite.save()
                 total=tramite.monto_a_pagar/pago.cantidadCuotas
@@ -1029,6 +1028,7 @@ def registrar_pago(request,pk_tramite):
                     cuota.save()
                     cuota.hacer("Cancelacion")
             else:
+
                 messages.add_message(request, messages.ERROR, 'El tramite ya tiene un pago registrado.')
 
     else:
@@ -1099,7 +1099,7 @@ def es_inspector(usuario):
 @user_passes_test(es_inspector)
 def mostrar_inspector_movil(request):
     contexto = {
-        "ctxplanilla_inspeccion":listado_inspector_movil(request)
+        "ctxlistado_inspector":listado_inspector_movil(request)
     }
     return render(request, 'persona/movil/inspector_movil.html',contexto)
 
@@ -1108,13 +1108,14 @@ def listado_inspector_movil(request):
     estados = Estado.objects.all()
     tipo = 5 #Agendados
     argumentos = [Visado, ConInspeccion]
-    tramites = Tramite.objects.en_estado(Agendado)
-    tramites_del_inspector = filter(lambda t: t.estado().usuario == usuario, tramites)    
-    return tramites_del_inspector
+    tramites_del_inspector = Tramite.objects.en_estado(Agendado)
+    tramites = filter(lambda t: t.estado().usuario == usuario, tramites_del_inspector)
+    contexto={'tramites':tramites}
+    return contexto
 
 def planilla_inspeccion_movil(request,pk_tramite):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
-    contexto = {'tramite': tramite}    
+    contexto = {'tramite': tramite}
     detalles = DetalleDeItemInspeccion.objects.all()        
     items = ItemInspeccion.objects.all()
     categorias = CategoriaInspeccion.objects.all()
@@ -1131,6 +1132,7 @@ def cargar_inspeccion_movil(request, pk_tramite):
         if name.startswith('detalle'):
             ipk=name.split('-')[1]
             list_detalles.append(ipk)
+            print("detalles", list_detalles)
     detalles = DetalleDeItemInspeccion.objects.all()
     for detalle in detalles:
         for i in list_detalles:
@@ -1138,7 +1140,11 @@ def cargar_inspeccion_movil(request, pk_tramite):
                 planilla.agregar_detalle(detalle)
     planilla.save()
     usuario = request.user    
-    tramite.hacer(tramite.INSPECCIONAR, usuario)
-    tramite.save()
-    messages.add_message(request,messages.SUCCESS,"Inspeccion cargada")
+    try:
+        tramite.hacer(tramite.INSPECCIONAR, usuario)
+        tramite.save()
+        messages.add_message(request,messages.SUCCESS,"Inspeccion cargada")
+    except:
+        messages.add_message(request, messages.WARNING, "La inspeccion ya fue cargada")
+
     return redirect('inspector_movil')
