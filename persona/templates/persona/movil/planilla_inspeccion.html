@@ -8,19 +8,6 @@
 
 
 {% block contenido %}
-<!--<div class="dropdown">
-    <button class="dropbtn">Items</button>
-    <div class="dropdown-content">
-        <a href="">Frente o Fachada</a>                        
-    </div>
-</div>
--->
-
-<ul id="menu-horizontal">
-        {% for item in items %}
-            <li><a href="id-{{item.nombre}}" title="Texto">{{item.nombre}}</a></li>            
-        {% endfor %}
-</ul>
 <form action="" method="post" enctype="multipart/form-data">
 <table class="table table-bordered table-striped table-hover table-condensed" style="text-align:center;">
     <thead>
@@ -59,6 +46,10 @@
     </button>    
 </a>
 </form>
+        <a href="{% url 'inspector_movil' %}">
+        <button class="btn btn-primary btn-sm" name="Volver">
+            Volver
+        </button>    
 
 
 <style>
