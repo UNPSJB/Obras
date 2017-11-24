@@ -16,7 +16,6 @@ from persona.models import *
 from tramite.models import Tramite, Estado
 from django.views.generic.detail import DetailView
 import re
-from datetime import datetime, date, time, timedelta
 from django.views.generic.base import TemplateView
 from openpyxl import Workbook
 from django.http.response import HttpResponse
@@ -41,17 +40,11 @@ from datetime import datetime, date, time, timedelta
 #generales ---------------------------------------------------------------------------------------------------------
 
 
-# #DATETIME = re.compile("^(\d{4})\-(\d{2})\-(\d{2})\s(\d{2}):(\d{2})$")
-# DATE = re.compile("^(\d{4})\-(\d{2})\-(\d{2})\s(\d{2}):(\d{2})$")
-# def convertidor_de_fechas(fecha):
-#     #return datetime(*[int(n) for n in DATETIME.match(fecha).groups()])
-#     return date(*[int(n) for n in DATE.match(fecha)])
-
-DATETIME = re.compile("^(\d{4})\-(\d{2})\-(\d{2})$")
+DATETIME = re.compile("^(\d{4})\-(\d{2})\-(\d{2})\s(\d{2}):(\d{2})$")
 
 def convertidor_de_fechas(fecha):
-    return date(*[int(n) for n in DATETIME.match(fecha).groups()])
- 
+    return datetime.datetime(*[int(n) for n in DATETIME.match(fecha).groups()])    
+
 #-------------------------------------------------------------------------------------------------------------------
 #propietario -------------------------------------------------------------------------------------------------------
 
@@ -606,7 +599,6 @@ def agendar_tramite(request, pk_tramite):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)    
     usuario = request.user    
     fecha = convertidor_de_fechas(request.GET["msg"])    
-    raise Exception(fecha)
     tramite.hacer(Tramite.AGENDAR, request.user, fecha) #tramite, fecha_inspeccion, inspector=None
     return redirect('inspector')
 
@@ -621,29 +613,17 @@ def cargar_inspeccion(request, pk_tramite):
         if name.startswith('detalle'):
             ipk=name.split('-')[1]
             list_detalles.append(ipk)
-    raise Exception(list_detalles)            
-    return redirect('inspector_movil')
-    
-    
-    #tipos_de_documentos_requeridos = TipoDocumento.get_tipos_documentos_para_momento(TipoDocumento.INSPECCIONAR)
-    #FormularioDocumentoSet = FormularioDocumentoSetFactory(tipos_de_documentos_requeridos)
-    #inicial = metodo(tipos_de_documentos_requeridos)
-    #documento_set = FormularioDocumentoSet(initial=inicial)
-    #id_tramite = int(pk_tramite)    
-    #if request.method == "POST":
-    #    documento_set = FormularioDocumentoSet(request.POST, request.FILES)
-    #    if documento_set.is_valid():
-    #        for docForm in documento_set:
-    #            docForm.save(tramite=tramite)
-    #            if "aceptar_tramite" in request.POST:
-    #                print ("acepte el tramite")
-    #                aceptar_inspeccion(request, pk_tramite)
-    #            elif "rechazar_tramite" in request.POST:
-    #                print ("rechace el tramite")
-    #                rechazar_inspeccion(request, pk_tramite)
-    #    else:
-    #        print("no entre al if")
-    #return render(request, 'persona/inspector/cargar_inspeccion.html', {'tramite': tramite, 'ctxdocumentoset': documento_set})
+    detalles = DetalleDeItemInspeccion.objects.all()
+    for detalle in detalles:
+        for i in list_detalles:
+            if (detalle.id == int(i)):
+                planilla.agregar_detalle(detalle)
+    planilla.save()
+    usuario = request.user    
+    tramite.hacer(tramite.INSPECCIONAR, usuario)
+    tramite.save()
+    messages.add_message(request,messages.SUCCESS,"Inspeccion cargada")
+    return redirect('inspector')
 
 def rechazar_inspeccion(request, pk_tramite):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
@@ -1119,7 +1099,8 @@ def planilla_inspeccion_movil(request,pk_tramite):
     detalles = DetalleDeItemInspeccion.objects.all()        
     items = ItemInspeccion.objects.all()
     categorias = CategoriaInspeccion.objects.all()
-    return render(request, 'persona/movil/planilla_inspeccion.html', {'tramite':tramite, 'items':items, 'detalles':detalles, 'categorias':categorias, "ctxinspeccion":cargar_inspeccion_movil(request,pk_tramite)})
+    contexto = {"tramite":tramite, "items":items,"detalles":detalles,"categorias":categorias}
+    return render(request, 'persona/movil/planilla_inspeccion.html', contexto)
 
 def cargar_inspeccion_movil(request, pk_tramite):    
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
