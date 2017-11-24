@@ -607,14 +607,14 @@ def agendar_tramite(request, pk_tramite):
     tramite.hacer(Tramite.AGENDAR, request.user, fecha) #tramite, fecha_inspeccion, inspector=None
     return redirect('inspector')
 
-def cargar_inspeccion(request, pk_tramite):
+def cargar_inspeccion(request, pk_tramite):    
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
     id_tramite = int(pk_tramite)
     planilla = PlanillaDeInspeccion()
     planilla.tramite = tramite
     planilla.save()
-    list_detalles=[]
-    for name,value in request.POST.items():
+    list_detalles=[]                    
+    for name,value in request.POST.items():        
         if name.startswith('detalle'):
             ipk=name.split('-')[1]
             list_detalles.append(ipk)
@@ -625,10 +625,13 @@ def cargar_inspeccion(request, pk_tramite):
                 planilla.agregar_detalle(detalle)
     planilla.save()
     usuario = request.user    
-    tramite.hacer(tramite.INSPECCIONAR, usuario)
-    tramite.save()
-    messages.add_message(request,messages.SUCCESS,"Inspeccion cargada")
-    return redirect('inspector')
+    try:
+        tramite.hacer(tramite.INSPECCIONAR, usuario)
+        tramite.save()
+        messages.add_message(request,messages.SUCCESS,"Inspeccion cargada")
+    except:
+        messages.add_message(request, messages.WARNING, "La inspeccion ya fue cargada")
+    return redirect('inspector_movil')
 
 def rechazar_inspeccion(request, pk_tramite):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
@@ -1134,5 +1137,4 @@ def cargar_inspeccion_movil(request, pk_tramite):
         messages.add_message(request,messages.SUCCESS,"Inspeccion cargada")
     except:
         messages.add_message(request, messages.WARNING, "La inspeccion ya fue cargada")
-
     return redirect('inspector_movil')
