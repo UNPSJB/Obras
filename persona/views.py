@@ -1099,15 +1099,17 @@ def planilla_inspeccion_movil(request,pk_tramite):
     detalles = DetalleDeItemInspeccion.objects.all()        
     items = ItemInspeccion.objects.all()
     categorias = CategoriaInspeccion.objects.all()
-    contexto = {"tramite":tramite, "items":items,"detalles":detalles,"categorias":categorias}
+    contexto = {"tramite":tramite, "items":items,"detalles":detalles,"categorias":categorias, "ctxcargarinspeccion":cargar_inspeccion_movil(request,pk_tramite)}
     return render(request, 'persona/movil/planilla_inspeccion.html', contexto)
 
-def cargar_inspeccion_movil(request, pk_tramite):    
+def cargar_inspeccion_movil(request, pk_tramite):
+    print ("tramiteeeees")
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
     id_tramite = int(pk_tramite)
     planilla = PlanillaDeInspeccion()
     planilla.tramite = tramite
     planilla.save()
+    print ("planilla", planilla)
     list_detalles=[]                    
     for name,value in request.POST.items():        
         if name.startswith('detalle'):
