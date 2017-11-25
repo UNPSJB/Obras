@@ -26,7 +26,7 @@
                             <td class="col-xs-4">{{ tramite.propietario}}</td>
                             <td class="col-xs-1">{{ tramite.medidas }} </td>
                             <td align="center" class="col-xs-2">
-                                <a href="{% url 'cargar_inspeccion' pk_tramite=tramite.id %}">
+                                <a href="{% url 'documentos_tramite_inspector' pk_tramite=tramite.id %}">
                                   <button type="button" class="btn btn-primary btn-xs" name="Agendar">
                                     <span class="glyphicon glyphicon-search" aria-hidden="true"> Documentos</span>
                                   </button>
