@@ -1,0 +1,41 @@
+{% load staticfiles %}
+
+{% block contenido_mis_tramites_para_financiar %}
+
+    <div class="table-responsive">
+
+        <table class="table table-bordered table-striped table-hover table-condensed" style="background: white;">
+            <!-- Cabecera -->
+            <thead>
+                <tr>
+                    <th>Nro</th>
+                    <th>Propietario</th>
+                    <th>Profesional</th>
+                    <th>Medidas</th>
+                    <th>Tipo obra</th>
+                    <th>Elegir financiacion</th>
+                </tr>
+            </thead>
+            <!-- Mostramos los datos de las tablas -->
+            <tbody>
+                {% for tramite in tramites %}
+                    <tr>
+                        <td class="col-xs-1">{{ tramite.id }}</td>
+                        <td class="col-xs-3">{{ tramite.propietario }},  DNI: {{ tramite.propietario.persona.dni}}</td>
+                        <td class="col-xs-4">{{ tramite.profesional }} </td>
+                        <td class="col-xs-1">{{ tramite.medidas }}</td>
+                        <td class="col-xs-1">{{ tramite.tipo_obra }}</td>
+                        <td>
+                                <a href="{% url 'financiar_propietario' tramite.id%}">
+                                <button type="button" class="btn btn-primary brn-xs" name="ver-financiacion">
+                                    <span class="glyphicon glyphicon-home" aria-hidden="true"> Financiar </span>                                
+                                </button>
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}            
+
+            </tbody>
+        </table>
+    </div>
+{% endblock %}

@@ -57,6 +57,10 @@ def mostrar_propietario(request):
     }    
     return render(request, 'persona/propietario/propietario.html', contexto)
 
+def elegir_financiacion_propietario(request,pk_tramite):
+    tramite = get_object_or_404(Tramite, pk=pk_tramite)
+    return render(request, 'persona/propietario/elegir_financiacion_propietario.html',{'tramite': tramite, 'ctxpago':registrar_pago(request,tramite.id)})
+
 def tramites_para_financiar(request):
     tramites = Tramite.objects.all()
     personas = Persona.objects.all()

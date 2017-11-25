@@ -25,7 +25,7 @@
 		<div class="panel-heading box" role="tab" id="headingFive">
 		  <h5 class="panel-title">
 			<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
-			  <font color="#ffffff" size="2">Documentos del estado del tramite</font>
+			  <label id="documentos">Documentos del estado del tramite</label>
 			</a>
 		  </h5>
 		</div>
@@ -71,7 +71,18 @@
 {% endblock %}
 
 {% block scripts %}
-
+<script>
+	$(document).ready(function() {
+	var font=0;
+	if(Cookies.get("temporal")) {
+		$("link").attr("href",Cookies.get("temporal"));
+		if (Cookies.get("fs")){
+			font=Cookies.get("fs");
+		    document.body.style.fontSize = font + "em";
+		}
+	}
+});
+</script>
 {% endblock %}
 
 

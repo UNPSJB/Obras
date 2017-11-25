@@ -18,6 +18,7 @@ header {
     /* background: #04142b; */
     transition: 0.5s;
 }
+
 header.sticky {
     position: fixed;
     left: 0;
@@ -220,8 +221,7 @@ article, aside, details, figcaption, figure, footer, header, hgroup, main, menu,
     display: block;
 }
 .container-fluid {
-    background-color:#333!important;
-
+    background-color:#333;
     padding-right: 15px;
     padding-left: 15px;
     margin-right: auto;
@@ -231,7 +231,12 @@ article, aside, details, figcaption, figure, footer, header, hgroup, main, menu,
     display: table;
     content: " ";
 }
-
+#fila1.row{
+background-color:#ab1515!important;
+}
+#headingFive.panel-heading.box{
+background-color:#e4d62f!important;
+}
 *:before, *:after {
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
@@ -459,7 +464,7 @@ label {
     cursor: default;
     color:#212b52;
 }
-label#a,label#b,label#g,label#i,label#j,label#k{
+label#a,label#b,label#g,label#i,label#j,label#k,label#s,label#financiacion,label#documentos{
    color: #ab1515!important;
    font-weight:bolder!important;
 

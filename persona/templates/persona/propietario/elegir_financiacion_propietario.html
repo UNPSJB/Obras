@@ -21,23 +21,22 @@
 			</a>
 		  </h5>
 		</div>
-
-<div id="collapseFive" class="panel-collapse" role="tabpanel" aria-labelledby="headingFive">
+    <div id="collapseFive" class="panel-collapse" role="tabpanel" aria-labelledby="headingFive">
 		  <div class="panel-body">
 			<div class="container-fluid">
 				<div class="row" id="fila1">
                     <div class="form-group">
                         <br>
-                        <label>Total a Abonar:&nbsp;{{tramite.monto_a_pagar}}</label>
+                        <label style="font-size:15px;">Total a Abonar:&nbsp;{{tramite.monto_a_pagar}}</label>
                             <br>
                         {%crispy ctxpago %}
 
-         <form action='/persona/cajero' style="">
+                        <form action='/persona/propietario' style="">
 
-             <Button class="btn btn-info btn-sm" type="submit" value="Atras">Atras</Button>
+                            <Button class="btn btn-info btn-sm" type="submit" value="Atras">Atras</Button>
 
-</form>
-    </div>
+                        </form>
+                    </div>
 
                 </div>
             </div>
@@ -89,6 +88,18 @@ label{
 </style>
 
 {% endblock %}
+{% block scripts %}
+<script>
+	$(document).ready(function() {
+	var font=0;
+	if(Cookies.get("temporal")) {
+		$("link").attr("href",Cookies.get("temporal"));
+		if (Cookies.get("fs")){
+			font=Cookies.get("fs");
+		    document.body.style.fontSize = font + "em";
+		}
+	}
+});
+</script>
 {% endblock %}
-
-
+{% endblock %}

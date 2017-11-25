@@ -345,11 +345,16 @@ label {
     cursor: default;
     color:#212b52;
 }
-label#a,label#b,label#g,label#i,label#j,label#k{
+label#a,label#b,label#g,label#i,label#j,label#k,label#s,label#financiacion,label#documentos{
    color: #136948!important;
    font-weight:bolder!important;
 }
-
+#fila1.row{
+background-color:#136948!important;
+}
+#headingFive.panel-heading.box{
+background-color:mediumspringgreen!important;
+}
 b, strong {
     font-weight: bold;
 font-size: 13px;
