@@ -5,14 +5,14 @@
 {% block barra %}
     <ul class="sidebar sidebar-1">
         <font size="2">
-            <li><a class="current"><font color="white">Cajero</font> </a></li>
+            <li><a class="current"><font color="white">Financiacion</font> </a></li>
         </font>
       </ul>
 {% endblock %}
 
 {% block contenido %}
-{% block registrar_cuota %}
-<div class="container-fluid">
+{% block listado_comprobantes %}
+
 <div class="table-responsive">
 
         <table class="table table-bordered table-striped table-hover table-condensed" style="background: white;">
@@ -22,7 +22,8 @@
                     <th>FechaVencimiento</th>
                     <th>Monto</th>
                     <th>Numero de Cuota</th>
-                    <th>Registrar Pago</th>
+                    <th>Fecha de Pago</th>
+                    <th>Mostrar Comprobante</th>
                 </tr>
             </thead>
             <tbody>
@@ -32,21 +33,25 @@
                         <td class="col-xs-3">{{ cuota.fechaVencimiento }}</td>
                         <td class="col-xs-3">{{ cuota.monto }}</td>
                         <td class="col-xs-3">{{ cuota.numeroCuota }}</td>
+                        <td class="col-xs-3">{{ cuota.fechaPago }}</td>
 
                         <td>
-                            <a href="{% url 'elegir_cuota' cuota.id %}">
-                                <button type="button" onclick="return confirm('Desea registrar el pago de la cuota?')" class="btn btn-primary brn-xs" name="RegistrarPago">
-                                    <span class="glyphicon glyphicon-home" aria-hidden="true"> Registrar Pago </span>
+                            <a  href="{% url 'comprobante_pago_cuota' cuota.id %}">
+                                <button type="button"  class="btn btn-primary brn-xs" name="MostrarComprobante">
+                                    <span class="glyphicon glyphicon-home" aria-hidden="true"> Generar Comprobante </span>
                                 </button>
-
                             </a>
                         </td>
                     </tr>
-                {% endfor %}
-
+            {% endfor %}
             </tbody>
         </table>
+        <div class="col-xs-4 col-sm-4 col-md-12 col-lg-12">
+            <br><form action='/persona/cajero'>
+                &nbsp;<Button class="btn btn-primary btn-sm" type="submit" value="Atras">Atras</Button>
+            </form><br>
+        </div>
     </div>
-</div>
 {% endblock %}
 {% endblock %}
+

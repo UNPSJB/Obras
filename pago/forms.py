@@ -75,14 +75,7 @@ class FormularioPago(forms.ModelForm):
         self.helper = FormHelper()
         self.helper.add_input(Submit('pago_submit', 'Guardar'))
         self.fields['tipoPago'].widget.attrs['placeholder'] = "Ingresar Tipo de Pago"
-        # self.fields['valor'].widget.attrs['placeholder'] = "Importe"#sacar
         self.fields['cantidadCuotas'].widget.attrs['placeholder'] = "Ingresar cantidad de cuotas"
-
-    # def clean_valor(self):
-    #     valor = self.cleaned_data['valor']
-    #     if valor<1:
-    #         raise ValidationError("Valor invalido ")
-    #     return valor
 
     def clean_cantidadCuotas(self):
         cantidadCuotas = self.cleaned_data['cantidadCuotas']
@@ -90,24 +83,12 @@ class FormularioPago(forms.ModelForm):
             raise ValidationError("Seleccione el numero de cuotas ")
         return cantidadCuotas
 
-    # def clean_tramite(self):
-    #     tramite = self.cleaned_data['tramite']
-    #     if tramite is None:
-    #         raise ValidationError("Seleccione un tramite")
-    #     return tramite
-
     def clean_tipoPago(self):
         tipoPago = self.cleaned_data['tipoPago']
         if tipoPago is None:
             raise ValidationError("Seleccione un tipo de Pago")
         return tipoPago
 
-    '''def clean_nombre(self):
-        nombre = self.cleaned_data['nombre']
-        cargados = CategoriaInspeccion.objects.filter(nombre__icontains=nombre)
-        if cargados.exists():
-            raise ValidationError("Ya existe {}".format(cargados.first().nombre))
-        return nombre'''
 
 
 

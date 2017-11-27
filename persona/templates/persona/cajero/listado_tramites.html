@@ -1,6 +1,6 @@
 {% load staticfiles %}
 
-{% block listado_tramites_a_pagar %}
+{% block listado_tramites %}
 <div class="table-responsive">
 
         <table class="table table-bordered table-striped table-hover table-condensed" style="background: white;">
@@ -22,7 +22,7 @@
                         <td class="col-xs-3">{{ tramite.monto_pagado }}</td>
 
                         <td>
-                            <a href="{% url 'elegir_tramite' tramite.id %}">
+                            <a href="{% url 'listado_comprobantes' tramite.id %}">
                                 <button type="button" class="btn btn-primary brn-xs" name="RegistrarPago">
                                     <span class="glyphicon glyphicon-home" aria-hidden="true"> Seleccionar tramite </span>
                                 </button>
@@ -36,4 +36,3 @@
     </div>
 
 {% endblock %}
-

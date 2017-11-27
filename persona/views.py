@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import  login_required,user_passes_test
-
+import easygui as eg
 from .forms import *
 from django.contrib import messages
 from pago.forms import *
@@ -978,7 +978,8 @@ def alta_persona(request):
 def mostrar_cajero(request):
     contexto = {
         "ctxtramites_para_financiar": listado_tramites_para_financiar(request),
-        "ctxcuotas":listado_tramites_a_pagar(request)
+        "ctxcuotas":listado_tramites_a_pagar(request),
+        "ctxlistado":listado_tramites(request),
     }
     return render(request, 'persona/cajero/cajero.html', contexto)
 
@@ -1023,7 +1024,6 @@ def registrar_pago(request,pk_tramite):
             else:
 
                 messages.add_message(request, messages.ERROR, 'El tramite ya tiene un pago registrado.')
-
     else:
         form = FormularioPago()
     return form
@@ -1057,12 +1057,40 @@ def elegir_cuota(request,pk_cuota):
     cuota.guardar_fecha()
     cuota.save()
     cuota.hacer("cancelacion")
-    messages.add_message(request, messages.SUCCESS, 'Pago Registrado.')
     pago = cuota.pago
     tramite = get_object_or_404(Tramite, pago=pago)
     tramite.calcular_monto_pagado(cuota.monto)
     tramite.save()
+    messages.add_message(request, messages.SUCCESS, 'Pago Registrado.')
+    return render(request, 'persona/cajero/actualizar_cuota.html',{'cuota':cuota})
+
+def comprobante_pago_cuota(request,pk_cuota):
+    cuota=get_object_or_404(Cuota,pk=pk_cuota)
+    pago = cuota.pago
+    tramite = get_object_or_404(Tramite, pago=pago)
     return render(request, 'persona/cajero/comprobante.html',{'cuota': cuota, 'pago':pago,'tramite':tramite})
+
+def listado_tramites(request):
+    objetos=Tramite.objects.all()
+    tramites=[]
+    for tramite in objetos:
+        if (tramite.pago is not None):
+            tramites.append(tramite)
+    contexto={'tramites':tramites}
+    return contexto
+
+def listado_comprobantes(request,pk_tramite):
+    tramite=get_object_or_404(Tramite,pk=pk_tramite)
+    pago=tramite.pago
+    canceladas=[]
+    cuotas=Cuota.objects.en_estado(Cancelada)
+    for cuota in cuotas:
+        if cuota.pago==pago:
+                canceladas.append(cuota)
+    if canceladas is None:
+        messages.add_message(request, messages.WARNING, 'No hay pagos registrados para el tramite seleccionado.')
+    print ("canceladas", canceladas)
+    return render (request, 'persona/cajero/listado_comprobantes.html', {'cuotas':canceladas})
 
 #------------------------------------------------------------------------------------------------------------------
 #movil ---------------------------------------------------------------------------------------------------------
