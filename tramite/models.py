@@ -185,6 +185,8 @@ class Iniciado(Estado):
         print (observacion)
         return Corregido(tramite=tramite, observacion=observacion)
 
+    def __str__(self):
+        return "Iniciado"
 
 class Aceptado(Estado):
     TIPO = 2
@@ -195,8 +197,8 @@ class Aceptado(Estado):
     def corregir(self, tramite, observacion):
         return Corregido(tramite=tramite, observacion=observacion)
 
-    def __str__(self):
-        return self.__class__.__name__
+    def __str__(self):        
+        return "Aceptado"
 
 class Visado(Estado):
     TIPO = 3
