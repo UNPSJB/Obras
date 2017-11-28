@@ -31,7 +31,6 @@ from reportlab.lib.pagesizes import letter, A4, landscape
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib.enums import TA_CENTER, TA_JUSTIFY, TA_LEFT, TA_RIGHT
 import time
-from datetime import datetime
 import collections
 from planilla_visado.models import ItemDeVisado
 from pago.models import Cuota, Cancelacion,Cancelada,Estado
@@ -268,7 +267,7 @@ def documento_de_estado(request, pk_estado):
         contexto = {'documentos_de_fecha': documentos_fecha, 'planilla':planilla, 'filas':filas, 'columnas':columnas, 'items':items, 'elementos':elementos}
     else:
         contexto= {'documentos_de_fecha': documentos_fecha}
-    return render(request, 'persona/propietario/documentos_de_estado.html', contexto)
+    return render(request, 'persona/profesional/documento_de_estado.html', contexto)
 
 #-------------------------------------------------------------------------------------------------------------------
 #administrativo ----------------------------------------------------------------------------------------------------
@@ -590,12 +589,14 @@ class ReporteTramitesAceptadosPdf(View):
 
 #-------------------------------------------------------------------------------------------------------------------
 #inspector ---------------------------------------------------------------------------------------------------------
-
+from django_user_agents.utils import get_user_agent
 from planilla_inspeccion.models import *
 
 @login_required(login_url="login")
 @grupo_requerido('inspector')
-def mostrar_inspector(request):
+def mostrar_inspector(request):    
+    if (request.user_agent.is_mobile): # returns True
+        return redirect('inspector_movil')
     contexto = {
         "ctxtramitesvisadosyconinspeccion": tramites_visados_y_con_inspeccion(request),
         "ctxtramitesinspeccionados": tramites_inspeccionados_por_inspector(request),
@@ -612,6 +613,7 @@ def tramites_inspeccionados_por_inspector(request):
     usuario = request.user
     estados = Estado.objects.all()
     tipo = 9
+    print (9)
     estados_inspeccionados = filter(lambda estado: (estado.usuario is not None and estado.usuario == usuario and estado.tipo == tipo), estados)
     return estados_inspeccionados
 
@@ -691,7 +693,19 @@ def documentos_inspector_estado(request, pk_estado):
     fecha_str = date.strftime(fecha, '%d/%m/%Y %H:%M')
     documentos = estado.tramite.documentos.all()
     documentos_fecha = filter(lambda e:(date.strftime(e.fecha, '%d/%m/%Y %H:%M') == fecha_str), documentos)
-    contexto= {'documentos_de_fecha': documentos_fecha}
+    if (estado.tipo >5):
+        planilla = None
+        for p in PlanillaDeInspeccion.objects.all():
+            if (p.tramite.pk == estado.tramite.pk):
+                planilla = p
+        #raise Exception(planilla)
+        items = ItemInspeccion.objects.all()
+        categorias = CategoriaInspeccion.objects.all()
+        detalles = DetalleDeItemInspeccion.objects.all()
+        contexto = {'documentos_de_fecha': documentos_fecha, 'items': items, 'categorias': categorias, 'detalles': detalles}
+        #raise Exception(contexto)
+    else:
+        contexto = {'documentos_de_fecha': documentos_fecha}
     return render(request, 'persona/inspector/documentos_del_estado.html', contexto)
 
 #------------------------------------------------------------------------------------------------------------------
@@ -700,6 +714,8 @@ def documentos_inspector_estado(request, pk_estado):
 @login_required(login_url="login")
 @grupo_requerido('jefeinspector')
 def mostrar_jefe_inspector(request):
+    if (request.user_agent.is_mobile): # returns True
+        return redirect('inspector_movil')
     contexto = {
         "ctxtramitesconinspeccion": tramite_con_inspecciones_list(request),
         "ctxtramitesagendados": tramites_agendados_por_inspector(request),
@@ -1142,10 +1158,13 @@ def es_inspector(usuario):
 
 @user_passes_test(es_inspector)
 def mostrar_inspector_movil(request):
-    contexto = {
-        "ctxlistado_inspector":listado_inspector_movil(request)
-    }
-    return render(request, 'persona/movil/inspector_movil.html',contexto)
+    if (request.user_agent.is_mobile):
+        contexto = {
+            "ctxlistado_inspector":listado_inspector_movil(request)
+        }
+    else:
+        return redirect('inspector')
+    return render(request, 'persona/movil/inspector_movil.html',contexto)        
 
 def listado_inspector_movil(request):
     usuario = request.user
@@ -1165,31 +1184,3 @@ def planilla_inspeccion_movil(request,pk_tramite):
     categorias = CategoriaInspeccion.objects.all()
     contexto = {"tramite":tramite, "items":items,"detalles":detalles,"categorias":categorias}
     return render(request, 'persona/movil/planilla_inspeccion.html', contexto)
-
-'''def cargar_inspeccion_movil(request, pk_tramite):
-    raise Exception("hola")
-    tramite = get_object_or_404(Tramite, pk=pk_tramite)
-    id_tramite = int(pk_tramite)
-    planilla = PlanillaDeInspeccion()
-    planilla.tramite = tramite
-    planilla.save()
-    list_detalles=[]
-    for name,value in request.POST.items():        
-        if name.startswith('detalle'):
-            ipk=name.split('-')[1]
-            list_detalles.append(ipk)
-    detalles = DetalleDeItemInspeccion.objects.all()
-    for detalle in detalles:
-        for i in list_detalles:
-            if (detalle.id == int(i)):
-                planilla.agregar_detalle(detalle)
-    planilla.save()
-    usuario = request.user    
-    try:
-        tramite.hacer(tramite.INSPECCIONAR, usuario)
-        tramite.save()
-        messages.add_message(request,messages.SUCCESS,"Inspeccion cargada")
-    except:
-        messages.add_message(request, messages.WARNING, "La inspeccion ya fue cargada")
-    return redirect('inspector_movil')
-'''
