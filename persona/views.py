@@ -134,7 +134,6 @@ def documentos_de_estado(request, pk_estado):
 @grupo_requerido('profesional')
 def mostrar_profesional(request):
     usuario = request.user
-    #raise Exception(usuario.persona.profesional)
     tipos_de_documentos_requeridos = TipoDocumento.get_tipos_documentos_para_momento(TipoDocumento.INICIAR)
     FormularioDocumentoSet = FormularioDocumentoSetFactory(tipos_de_documentos_requeridos)
     inicial = metodo(tipos_de_documentos_requeridos)
@@ -260,10 +259,10 @@ def documento_de_estado(request, pk_estado):
         for p in PlanillaDeVisado.objects.all():
             if (p.tramite.pk == estado.tramite.pk):
                 planilla = p                                
-        items = ItemDeVisado.objects.all()
+        items = p.items.all()
         filas = FilaDeVisado.objects.all()
         columnas = ColumnaDeVisado.objects.all()
-        elementos = Elemento_Balance_Superficie.objects.all()  
+        elementos = planilla.elementos.all()        
         contexto = {'documentos_de_fecha': documentos_fecha, 'planilla':planilla, 'filas':filas, 'columnas':columnas, 'items':items, 'elementos':elementos}
     else:
         contexto= {'documentos_de_fecha': documentos_fecha}
@@ -631,7 +630,7 @@ def tramites_agendados_por_inspector(request):
 def agendar_tramite(request, pk_tramite):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)    
     usuario = request.user    
-    fecha = convertidor_de_fechas(request.GET["msg"])    
+    fecha = convertidor_de_fechas(request.GET["msg"])        
     tramite.hacer(Tramite.AGENDAR, request.user, fecha) #tramite, fecha_inspeccion, inspector=None
     messages.add_message(request, messages.SUCCESS, "Inspeccion agendada")
     return redirect('inspector')
