@@ -16,6 +16,7 @@
         </thead>
         <tbody>
             {% if tramites %}
+            var count=1;
                 {% for tramite in tramites %}
                     <tr>
                         <td>{{ tramite.id }}</td>
@@ -25,20 +26,24 @@
                         <td>{{ tramite.tipo_obra }}</td>
                         <td>{{ tramite.estado }}</td>
                         <td>
-                            <input type="hidden" id="id_tramite" value="{{tramite.id}}">
+                            <input type="hidden" id="id{{tramite.id}}" value="{{tramite.id}}">
 
-                            <input id="datetime" type="date" value="">
-                            <input id="time" type="time" value="">
-
+                            <input id="datetime{{tramite.id}}" type="date" value="">
+                            <input id="time{{tramite.id}}" type="time" value="">
                             <!--<input id="datepicker" name="datepicker" type="text" readonly="true"></input>-->
                         </td>
                         <td>
+
                             <script>
                         function agregarHora(){
-                            var date = $('#datetime').val()
-                            var hora= $('#time').val()
-                            fecha = date+' '+hora
-                            id_tramite = $("#id_tramite").val();
+                            var id_tramite = $("#id{{tramite.id}}").val();
+                            alert(id_tramite);
+                            var date = $("#datetime{{tramite.id}}").val();
+                            alert (date)
+                            var hora= $("#time{{tramite.id}}").val();
+                            alert(hora)
+                            fecha = date+' '+hora;
+                            console.log(fecha);
                             url = '/persona/agendar_tramite/'+id_tramite+'/?msg='+fecha;
                             location.href = url;
                         }
@@ -84,18 +89,20 @@
                             <td>{{ tramite.tipo_obra }}</td>
                             <td>{{ tramite.estado }}</td>
                             <td>
-                                <input type="hidden" id="id_tramite1" value="{{tramite.id}}" >
+                                <input type="hidden" id="id_tramite1{{tramite.id}}" value="{{tramite.id}}" >
 
-                                <input id="datetime1" type="date" value="">
-                                <input id="time1" type="time" value="">
+                                <input id="datetime1{{tramite.id}}" type="date" value=""  required>
+
+                                <input id="time1{{tramite.id}}" type="time" value=""  required/>
+
                             </td>
                             <td class="col-xs-1">
                                 <script>
                                     function agregarHora1(){
-                                        var date1 = $('#datetime1').val()
-                                        var hora1= $('#time1').val()
+                                        var date1 = $('#datetime1{{tramite.id}}').val()
+                                        var hora1= $('#time1{{tramite.id}}').val()
                                         fecha1 = date1+' '+hora1
-                                        id_tramite1 = $("#id_tramite1").val();
+                                        id_tramite1 = $("#id_tramite1{{tramite.id}}").val();
                                         url = '/persona/agendar_tramite/'+id_tramite1+'/?msg='+fecha1;
                                         location.href = url;
                                     }
