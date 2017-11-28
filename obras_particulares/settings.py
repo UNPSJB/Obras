@@ -44,7 +44,8 @@ INSTALLED_APPS = [
     'documento',
     'pago',
     'planilla_visado',
-    'planilla_inspeccion'
+    'planilla_inspeccion',
+    'django_user_agents',
 ]
 
 MIDDLEWARE = [
@@ -55,6 +56,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django_user_agents.middleware.UserAgentMiddleware',
 ]
 
 ROOT_URLCONF = 'obras_particulares.urls'

@@ -589,12 +589,14 @@ class ReporteTramitesAceptadosPdf(View):
 
 #-------------------------------------------------------------------------------------------------------------------
 #inspector ---------------------------------------------------------------------------------------------------------
-
+from django_user_agents.utils import get_user_agent
 from planilla_inspeccion.models import *
 
 @login_required(login_url="login")
 @grupo_requerido('inspector')
-def mostrar_inspector(request):
+def mostrar_inspector(request):    
+    if (request.user_agent.is_mobile): # returns True
+        return redirect('inspector_movil')
     contexto = {
         "ctxtramitesvisadosyconinspeccion": tramites_visados_y_con_inspeccion(request),
         "ctxtramitesinspeccionados": tramites_inspeccionados_por_inspector(request),
@@ -712,6 +714,8 @@ def documentos_inspector_estado(request, pk_estado):
 @login_required(login_url="login")
 @grupo_requerido('jefeinspector')
 def mostrar_jefe_inspector(request):
+    if (request.user_agent.is_mobile): # returns True
+        return redirect('inspector_movil')
     contexto = {
         "ctxtramitesconinspeccion": tramite_con_inspecciones_list(request),
         "ctxtramitesagendados": tramites_agendados_por_inspector(request),
@@ -1177,31 +1181,3 @@ def planilla_inspeccion_movil(request,pk_tramite):
     categorias = CategoriaInspeccion.objects.all()
     contexto = {"tramite":tramite, "items":items,"detalles":detalles,"categorias":categorias}
     return render(request, 'persona/movil/planilla_inspeccion.html', contexto)
-
-'''def cargar_inspeccion_movil(request, pk_tramite):
-    raise Exception("hola")
-    tramite = get_object_or_404(Tramite, pk=pk_tramite)
-    id_tramite = int(pk_tramite)
-    planilla = PlanillaDeInspeccion()
-    planilla.tramite = tramite
-    planilla.save()
-    list_detalles=[]
-    for name,value in request.POST.items():        
-        if name.startswith('detalle'):
-            ipk=name.split('-')[1]
-            list_detalles.append(ipk)
-    detalles = DetalleDeItemInspeccion.objects.all()
-    for detalle in detalles:
-        for i in list_detalles:
-            if (detalle.id == int(i)):
-                planilla.agregar_detalle(detalle)
-    planilla.save()
-    usuario = request.user    
-    try:
-        tramite.hacer(tramite.INSPECCIONAR, usuario)
-        tramite.save()
-        messages.add_message(request,messages.SUCCESS,"Inspeccion cargada")
-    except:
-        messages.add_message(request, messages.WARNING, "La inspeccion ya fue cargada")
-    return redirect('inspector_movil')
-'''
