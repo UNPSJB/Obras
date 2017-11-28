@@ -30,18 +30,14 @@
 
                             <input id="datetime{{tramite.id}}" type="date" value="">
                             <input id="time{{tramite.id}}" type="time" value="">
-                            <!--<input id="datepicker" name="datepicker" type="text" readonly="true"></input>-->
                         </td>
                         <td>
 
                             <script>
                         function agregarHora(){
                             var id_tramite = $("#id{{tramite.id}}").val();
-                            alert(id_tramite);
                             var date = $("#datetime{{tramite.id}}").val();
-                            alert (date)
                             var hora= $("#time{{tramite.id}}").val();
-                            alert(hora)
                             fecha = date+' '+hora;
                             console.log(fecha);
                             url = '/persona/agendar_tramite/'+id_tramite+'/?msg='+fecha;
