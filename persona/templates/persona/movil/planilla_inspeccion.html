@@ -40,17 +40,19 @@
         {% endfor %}
     </tbody>
 </table>
-    <br>
-    <a href="{% url 'cargar_inspeccion_movil' tramite.pk %}">
-    <button class="btn btn-info btn-sm" name="Cargar Inspeccion">
-        Cargar Inspeccion
-    </button>    
-</a>
 </form>
-        <a href="{% url 'inspector_movil' %}">
+<br>
+    <a href="{% url 'cargar_inspeccion' tramite.pk %}">
+        <button class="btn btn-info btn-sm" name="Cargar Inspeccion">
+            Cargar Inspeccion
+        </button>    
+    </a>
+    <a href="{% url 'inspector_movil' %}">
         <button class="btn btn-info btn-sm" name="Volver">
             Volver
-        </button><br>
+        </button><br>        
+    </a>
+    
 <br><br><div class="row">
 </div>
         </a>

@@ -1163,10 +1163,11 @@ def planilla_inspeccion_movil(request,pk_tramite):
     detalles = DetalleDeItemInspeccion.objects.all()        
     items = ItemInspeccion.objects.all()
     categorias = CategoriaInspeccion.objects.all()
-    contexto = {"tramite":tramite, "items":items,"detalles":detalles,"categorias":categorias, "ctxcargarinspeccion":cargar_inspeccion_movil(request,pk_tramite)}
+    contexto = {"tramite":tramite, "items":items,"detalles":detalles,"categorias":categorias}
     return render(request, 'persona/movil/planilla_inspeccion.html', contexto)
 
-def cargar_inspeccion_movil(request, pk_tramite):
+'''def cargar_inspeccion_movil(request, pk_tramite):
+    raise Exception("hola")
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
     id_tramite = int(pk_tramite)
     planilla = PlanillaDeInspeccion()
@@ -1191,3 +1192,4 @@ def cargar_inspeccion_movil(request, pk_tramite):
     except:
         messages.add_message(request, messages.WARNING, "La inspeccion ya fue cargada")
     return redirect('inspector_movil')
+'''
