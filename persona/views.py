@@ -117,10 +117,10 @@ def documentos_de_estado(request, pk_estado):
         for p in PlanillaDeVisado.objects.all():
             if (p.tramite.pk == estado.tramite.pk):
                 planilla = p                                
-        items = ItemDeVisado.objects.all()
+        items = planilla.items.all()
         filas = FilaDeVisado.objects.all()
         columnas = ColumnaDeVisado.objects.all()
-        elementos = Elemento_Balance_Superficie.objects.all()  
+        elementos = planilla.elementos.all()
         contexto = {'documentos_de_fecha': documentos_fecha, 'planilla':planilla, 'filas':filas, 'columnas':columnas, 'items':items, 'elementos':elementos}
     else:
         contexto= {'documentos_de_fecha': documentos_fecha}
