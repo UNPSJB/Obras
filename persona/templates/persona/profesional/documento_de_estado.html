@@ -126,7 +126,7 @@
 								<td class="col-sm-1">&nbsp;
 								  {% for detalle in detalles %}
 									{% if categoria == detalle.categoria_inspeccion and item == detalle.item_inspeccion %}
-                                  <td>{{ detalle.nombre }}</td>
+                                        <td>{{ detalle.nombre }}</td>
 									{% endif %}
 								  {% endfor %}
 								</td>
@@ -152,7 +152,8 @@
 						  </div>
 						</form>
 					  </div>
-					</div>
+                    </div>
+                                        
 					{% endif %}
                     
                      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="right">
@@ -160,7 +161,14 @@
                             <button type="button" class="btn btn-primary" name="Volver">
                                 Volver
                             </button>
+                        </a>                        
+                        {% if planilla or inspeccion %}
+                        <a href="javascript:history.back(-1);">
+                            <button type="button" class="btn btn-primary" name="Imprimir">
+                                Imprimir
+                            </button>
                         </a>
+                        {% endif %}    
                      </div>
 			    </div>
 			</div>
