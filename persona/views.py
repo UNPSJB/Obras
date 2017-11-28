@@ -631,6 +631,7 @@ def agendar_tramite(request, pk_tramite):
     usuario = request.user    
     fecha = convertidor_de_fechas(request.GET["msg"])    
     tramite.hacer(Tramite.AGENDAR, request.user, fecha) #tramite, fecha_inspeccion, inspector=None
+    messages.add_message(request, messages.SUCCESS, "Inspeccion agendada")
     return redirect('inspector')
 
 def cargar_inspeccion(request, pk_tramite):    

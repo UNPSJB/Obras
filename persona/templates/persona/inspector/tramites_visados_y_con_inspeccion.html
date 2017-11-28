@@ -26,27 +26,23 @@
                         <td>{{ tramite.estado }}</td>
                         <td>
                             <input type="hidden" id="id_tramite" value="{{tramite.id}}">
-                            
-                            <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
-                            <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-                            <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
-                           
-                           <script>
-                              $(document).ready(function() {
-                                $('#datepicker').datepicker({
-                                    changeMonth: true,
-                                    changeYear: true,
-                                    dateFormat: 'yy-mm-dd',
-                                    showOn: "button",
-                                    minDate: 0,
-                                    minMonth: 0,
-                                    inline: true
-                                });
-                            });
-                            </script>
-                            <input id="datepicker" readonly="true"></input>
+
+                            <input id="datetime" type="date" value="">
+                            <input id="time" type="time" value="">
+
+                            <!--<input id="datepicker" name="datepicker" type="text" readonly="true"></input>-->
                         </td>
                         <td>
+                            <script>
+                        function agregarHora(){
+                            var date = $('#datetime').val()
+                            var hora= $('#time').val()
+                            fecha = date+' '+hora
+                            id_tramite = $("#id_tramite").val();
+                            url = '/persona/agendar_tramite/'+id_tramite+'/?msg='+fecha;
+                            location.href = url;
+                        }
+                    </script>
                             <a href="javascript:agregarHora();">
                               <button type="button" class="btn btn-primary btn-sm" name="Agendar">Agendar
                               </button>
@@ -54,20 +50,7 @@
                         </td>
                     </tr>
 
-                    <script>A
-                        function agregarHora(){
-                            var today = new Date();
-                            var Hora = today.getHours();
-                            var Minutos = today.getMinutes();
-                            obs = $("#datepicker").val();
-                            fecha = obs+' '+Hora+':'+Minutos
-                            alert(fecha);
-                            id_tramite = $("#id_tramite").val();
-                            url = '/persona/agendar_tramite/'+id_tramite+'/?msg='+fecha;
-                            alert(url);
-                            location.href = url;
-                        }
-                    </script>
+
                 {% endfor %}
             {% endif%}
         </tbody>
@@ -94,34 +77,30 @@
                 {% if tramites %}
                     {% for tramite in tramites %}
                         <tr>
-                            <td class="col-xs-1">{{ tramite.id }}</td>
-                            <td class="col-xs-2">{{ tramite.propietario }}</td>
-                            <td class="col-xs-2">{{ tramite.profesional }} </td>
-                            <td class="col-xs-1">{{ tramite.medidas }}</td>
-                            <td class="col-xs-2">{{ tramite.tipo_obra }}</td>
-                            <td class="col-xs-1">{{ tramite.estado }}</td>
-                            <td class="col-xs-2" >
-                                <input type="hidden" id="id_tramite" value="{{tramite.id}}" >
-                                <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
-                                <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-                                <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
-                                <script>
-                                  $(document).ready(function() {
-                                    $('#datepicker').datepicker({
-                                        changeMonth: true,
-                                        changeYear: true,
-                                        dateFormat: 'yy-mm-dd',
-                                        showOn: "button",
-                                        minDate: 0,
-                                        minMonth: 0,
-                                        inline: true
-                                    });
-                                });
-                                </script>
-                                <input id="datepicker" readonly>
+                            <td>{{ tramite.id }}</td>
+                            <td>{{ tramite.propietario }}</td>
+                            <td>{{ tramite.profesional }} </td>
+                            <td>{{ tramite.medidas }}</td>
+                            <td>{{ tramite.tipo_obra }}</td>
+                            <td>{{ tramite.estado }}</td>
+                            <td>
+                                <input type="hidden" id="id_tramite1" value="{{tramite.id}}" >
+
+                                <input id="datetime1" type="date" value="">
+                                <input id="time1" type="time" value="">
                             </td>
                             <td class="col-xs-1">
-                                <a href="javascript:agregarHora();">
+                                <script>
+                                    function agregarHora1(){
+                                        var date1 = $('#datetime1').val()
+                                        var hora1= $('#time1').val()
+                                        fecha1 = date1+' '+hora1
+                                        id_tramite1 = $("#id_tramite1").val();
+                                        url = '/persona/agendar_tramite/'+id_tramite1+'/?msg='+fecha1;
+                                        location.href = url;
+                                    }
+                                </script>
+                                <a href="javascript:agregarHora1();">
                                     <button type="button" class="btn btn-primary btn-sm" name="Agendar">
                                         <span class="glyphicon glyphicon-list-alt" aria-hidden="true"> Agendar</span>
                                     </button>
@@ -132,20 +111,6 @@
                 {% endif%}
             </tbody>
         </table>
-         <script>
-            function agregarHora(){
-                var today = new Date();
-                var Hora = today.getHours();
-                var Minutos = today.getMinutes();
-                obs = $("#datepicker").val();
-                fecha = obs+' '+Hora+':'+Minutos
-                alert(fecha);
-                id_tramite = $("#id_tramite").val();
-                url = '/persona/agendar_tramite/'+id_tramite+'/?msg='+fecha;
-                alert(url);
-                location.href = url;
-            }
-        </script>
-    </div>
+     </div>
 
 {% endblock %}
