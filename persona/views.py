@@ -117,10 +117,10 @@ def documentos_de_estado(request, pk_estado):
         for p in PlanillaDeVisado.objects.all():
             if (p.tramite.pk == estado.tramite.pk):
                 planilla = p                                
-        items = ItemDeVisado.objects.all()
+        items = planilla.items.all()
         filas = FilaDeVisado.objects.all()
         columnas = ColumnaDeVisado.objects.all()
-        elementos = Elemento_Balance_Superficie.objects.all()
+        elementos = planilla.elementos.all()
     if (estado.tipo > 5):
         #planilla = None
         for p in PlanillaDeInspeccion.objects.all():
@@ -279,23 +279,8 @@ def documento_de_estado(request, pk_estado):
         items = p.items.all()
         filas = FilaDeVisado.objects.all()
         columnas = ColumnaDeVisado.objects.all()
-        elementos = p.objects.all()
-    if (estado.tipo > 5):
-        planilla = None
-        for p in PlanillaDeInspeccion.objects.all():
-            if (p.tramite.pk == estado.tramite.pk):
-                planilla = p
-                # raise Exception(planilla)
-        ites = ItemInspeccion.objects.all()
-        categorias = CategoriaInspeccion.objects.all()
-        detalles = DetalleDeItemInspeccion.objects.all()
-        contexto = {'documentos_de_fecha': documentos_fecha, 'planilla': planilla, 'filas': filas,
-                        'columnas': columnas, 'items': items, 'elementos': elementos,
-                        'ites': ites, 'categorias': categorias, 'detalles': detalles}
-
         elementos = planilla.elementos.all()        
         contexto = {'documentos_de_fecha': documentos_fecha, 'planilla':planilla, 'filas':filas, 'columnas':columnas, 'items':items, 'elementos':elementos}
-
     else:
         contexto= {'documentos_de_fecha': documentos_fecha}
     return render(request, 'persona/profesional/documento_de_estado.html', contexto)
@@ -724,7 +709,7 @@ def documentos_inspector_estado(request, pk_estado):
     fecha_str = date.strftime(fecha, '%d/%m/%Y %H:%M')
     documentos = estado.tramite.documentos.all()
     documentos_fecha = filter(lambda e:(date.strftime(e.fecha, '%d/%m/%Y %H:%M') == fecha_str), documentos)
-    if (estado.tipo == 6):
+    if (estado.tipo >5):
         planilla = None
         for p in PlanillaDeInspeccion.objects.all():
             if (p.tramite.pk == estado.tramite.pk):
