@@ -612,6 +612,7 @@ def tramites_inspeccionados_por_inspector(request):
     usuario = request.user
     estados = Estado.objects.all()
     tipo = 9
+    print (9)
     estados_inspeccionados = filter(lambda estado: (estado.usuario is not None and estado.usuario == usuario and estado.tipo == tipo), estados)
     return estados_inspeccionados
 
@@ -691,7 +692,19 @@ def documentos_inspector_estado(request, pk_estado):
     fecha_str = date.strftime(fecha, '%d/%m/%Y %H:%M')
     documentos = estado.tramite.documentos.all()
     documentos_fecha = filter(lambda e:(date.strftime(e.fecha, '%d/%m/%Y %H:%M') == fecha_str), documentos)
-    contexto= {'documentos_de_fecha': documentos_fecha}
+    if (estado.tipo >5):
+        planilla = None
+        for p in PlanillaDeInspeccion.objects.all():
+            if (p.tramite.pk == estado.tramite.pk):
+                planilla = p
+        #raise Exception(planilla)
+        items = ItemInspeccion.objects.all()
+        categorias = CategoriaInspeccion.objects.all()
+        detalles = DetalleDeItemInspeccion.objects.all()
+        contexto = {'documentos_de_fecha': documentos_fecha, 'items': items, 'categorias': categorias, 'detalles': detalles}
+        #raise Exception(contexto)
+    else:
+        contexto = {'documentos_de_fecha': documentos_fecha}
     return render(request, 'persona/inspector/documentos_del_estado.html', contexto)
 
 #------------------------------------------------------------------------------------------------------------------
