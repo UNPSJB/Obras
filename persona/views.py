@@ -111,36 +111,40 @@ def documentos_de_estado(request, pk_estado):
     fecha = estado.timestamp
     fecha_str = date.strftime(fecha, '%d/%m/%Y %H:%M')
     documentos = estado.tramite.documentos.all()
-    documentos_fecha = filter(lambda e:(date.strftime(e.fecha, '%d/%m/%Y %H:%M') == fecha_str), documentos)
-    if (estado.tipo >2):        
-        planilla = None
+    documentos_fecha = filter(lambda e:(date.strftime(e.fecha, '%d/%m/%Y %H:%M') == fecha_str), documentos)    
+    contexto = {'documentos_de_fecha': documentos_fecha}
+    planilla = None
+    inspeccion = None    
+    if (estado.tipo >2 and estado.tipo <5):                        
         for p in PlanillaDeVisado.objects.all():
             if (p.tramite.pk == estado.tramite.pk):
                 planilla = p                                
         items = planilla.items.all()
         filas = FilaDeVisado.objects.all()
         columnas = ColumnaDeVisado.objects.all()
-        elementos = planilla.elementos.all()
-    if (estado.tipo > 5):
-        #planilla = None
+        elementos = planilla.elementos.all()                
+        contexto = {
+            'documentos_de_fecha': documentos_fecha,
+            'planilla':planilla,
+            'filas': filas,
+            'columnas': columnas,
+            'items': items,
+            'elementos': elementos,
+        }    
+    if (estado.tipo >5 and estado.tipo <8):                        
         for p in PlanillaDeInspeccion.objects.all():
-            print (p)
             if (p.tramite.pk == estado.tramite.pk):
-                planilla = p
-                # raise Exception(planilla)
-                print ("------------------------")
-                #print (planilla)
-        ites = ItemInspeccion.objects.all()
+                inspeccion = p                                
+        items = ItemInspeccion.objects.all()
         categorias = CategoriaInspeccion.objects.all()
-        detalles = DetalleDeItemInspeccion.objects.all()
-        contexto = {'documentos_de_fecha': documentos_fecha, 'planilla': planilla, 'filas': filas,
-                        'columnas': columnas, 'items': items, 'elementos': elementos,
-                        'ites': ites, 'categorias': categorias, 'detalles': detalles}
-       #print (contexto)
-    else:
-        contexto= {'documentos_de_fecha': documentos_fecha}
+        detalles = inspeccion.detalles.all()
+        contexto = {            
+            'inspeccion': inspeccion,
+            'items': items,
+            'categorias': categorias,
+            'detalles': detalles,                        
+        }    
     return render(request, 'persona/propietario/documentos_de_estado.html', contexto)
-
 
 #-------------------------------------------------------------------------------------------------------------------
 #profesional -------------------------------------------------------------------------------------------------------
@@ -270,19 +274,39 @@ def documento_de_estado(request, pk_estado):
     fecha = estado.timestamp
     fecha_str = date.strftime(fecha, '%d/%m/%Y %H:%M')
     documentos = estado.tramite.documentos.all()
-    documentos_fecha = filter(lambda e:(date.strftime(e.fecha, '%d/%m/%Y %H:%M') == fecha_str), documentos)
-    if (estado.tipo >2):        
-        planilla = None
+    documentos_fecha = filter(lambda e:(date.strftime(e.fecha, '%d/%m/%Y %H:%M') == fecha_str), documentos)    
+    contexto = {'documentos_de_fecha': documentos_fecha}
+    planilla = None
+    inspeccion = None    
+    if (estado.tipo >2 and estado.tipo <5):                        
         for p in PlanillaDeVisado.objects.all():
             if (p.tramite.pk == estado.tramite.pk):
                 planilla = p                                
-        items = p.items.all()
+        items = planilla.items.all()
         filas = FilaDeVisado.objects.all()
         columnas = ColumnaDeVisado.objects.all()
-        elementos = planilla.elementos.all()        
-        contexto = {'documentos_de_fecha': documentos_fecha, 'planilla':planilla, 'filas':filas, 'columnas':columnas, 'items':items, 'elementos':elementos}
-    else:
-        contexto= {'documentos_de_fecha': documentos_fecha}
+        elementos = planilla.elementos.all()                
+        contexto = {
+            'documentos_de_fecha': documentos_fecha,
+            'planilla':planilla,
+            'filas': filas,
+            'columnas': columnas,
+            'items': items,
+            'elementos': elementos,
+        }    
+    if (estado.tipo >5 and estado.tipo <8):                        
+        for p in PlanillaDeInspeccion.objects.all():
+            if (p.tramite.pk == estado.tramite.pk):
+                inspeccion = p                                
+        items = ItemInspeccion.objects.all()
+        categorias = CategoriaInspeccion.objects.all()
+        detalles = inspeccion.detalles.all()
+        contexto = {            
+            'inspeccion': inspeccion,
+            'items': items,
+            'categorias': categorias,
+            'detalles': detalles,                        
+        }    
     return render(request, 'persona/profesional/documento_de_estado.html', contexto)
 
 #-------------------------------------------------------------------------------------------------------------------
