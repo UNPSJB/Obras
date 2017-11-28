@@ -1186,10 +1186,13 @@ def es_inspector(usuario):
 
 @user_passes_test(es_inspector)
 def mostrar_inspector_movil(request):
-    contexto = {
-        "ctxlistado_inspector":listado_inspector_movil(request)
-    }
-    return render(request, 'persona/movil/inspector_movil.html',contexto)
+    if (request.user_agent.is_mobile):
+        contexto = {
+            "ctxlistado_inspector":listado_inspector_movil(request)
+        }
+    else:
+        return redirect('inspector')
+    return render(request, 'persona/movil/inspector_movil.html',contexto)        
 
 def listado_inspector_movil(request):
     usuario = request.user
