@@ -267,7 +267,7 @@ def documento_de_estado(request, pk_estado):
         contexto = {'documentos_de_fecha': documentos_fecha, 'planilla':planilla, 'filas':filas, 'columnas':columnas, 'items':items, 'elementos':elementos}
     else:
         contexto= {'documentos_de_fecha': documentos_fecha}
-    return render(request, 'persona/propietario/documentos_de_estado.html', contexto)
+    return render(request, 'persona/profesional/documento_de_estado.html', contexto)
 
 #-------------------------------------------------------------------------------------------------------------------
 #administrativo ----------------------------------------------------------------------------------------------------
