@@ -31,7 +31,6 @@ from reportlab.lib.pagesizes import letter, A4, landscape
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib.enums import TA_CENTER, TA_JUSTIFY, TA_LEFT, TA_RIGHT
 import time
-from datetime import datetime
 import collections
 from planilla_visado.models import ItemDeVisado
 from pago.models import Cuota, Cancelacion,Cancelada,Estado
@@ -498,6 +497,32 @@ def aprobar_visado(request, pk_tramite, monto):
     return redirect('visador')
 
 def no_aprobar_visado(request, pk_tramite, observacion):
+    list_items = []
+    tramite = get_object_or_404(Tramite, pk=pk_tramite)
+    planilla = PlanillaDeVisado()
+    planilla.tramite = tramite
+    planilla.save()
+    for name, value in request.POST.items():
+        if name.startswith('item'):
+            ipk= name.split('-')[1]
+            list_items.append(ipk)            
+    items = ItemDeVisado.objects.all()        
+    for item in items:        
+        for i in list_items:            
+            if (item.id == int(i)):                                
+                planilla.agregar_item(item)                                                                                
+    planilla.save()
+    for name, value in request.POST.items():
+        if name.startswith('elemento'):
+            ipk= name.split('-')[1]
+            list_items.append(ipk)            
+    elementos = Elemento_Balance_Superficie.objects.all()        
+    for elemento in elementos:        
+        for i in list_items:            
+            if (elemento.id == int(i)):                                                
+                planilla.agregar_elemento(elemento)
+                planilla.save()
+    planilla.save()                
     usuario = request.user
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
     obs = observacion
@@ -630,7 +655,9 @@ def agendar_tramite(request, pk_tramite):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)    
     usuario = request.user    
     fecha = convertidor_de_fechas(request.GET["msg"])    
+    #fecha = request.GET["msg"]    
     tramite.hacer(Tramite.AGENDAR, request.user, fecha) #tramite, fecha_inspeccion, inspector=None
+    messages.add_message(request,messages.SUCCESS,"Tramite agendado")
     return redirect('inspector')
 
 def cargar_inspeccion(request, pk_tramite):    
@@ -1164,31 +1191,3 @@ def planilla_inspeccion_movil(request,pk_tramite):
     categorias = CategoriaInspeccion.objects.all()
     contexto = {"tramite":tramite, "items":items,"detalles":detalles,"categorias":categorias}
     return render(request, 'persona/movil/planilla_inspeccion.html', contexto)
-
-'''def cargar_inspeccion_movil(request, pk_tramite):
-    raise Exception("hola")
-    tramite = get_object_or_404(Tramite, pk=pk_tramite)
-    id_tramite = int(pk_tramite)
-    planilla = PlanillaDeInspeccion()
-    planilla.tramite = tramite
-    planilla.save()
-    list_detalles=[]
-    for name,value in request.POST.items():        
-        if name.startswith('detalle'):
-            ipk=name.split('-')[1]
-            list_detalles.append(ipk)
-    detalles = DetalleDeItemInspeccion.objects.all()
-    for detalle in detalles:
-        for i in list_detalles:
-            if (detalle.id == int(i)):
-                planilla.agregar_detalle(detalle)
-    planilla.save()
-    usuario = request.user    
-    try:
-        tramite.hacer(tramite.INSPECCIONAR, usuario)
-        tramite.save()
-        messages.add_message(request,messages.SUCCESS,"Inspeccion cargada")
-    except:
-        messages.add_message(request, messages.WARNING, "La inspeccion ya fue cargada")
-    return redirect('inspector_movil')
-'''
