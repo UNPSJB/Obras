@@ -120,8 +120,23 @@ def documentos_de_estado(request, pk_estado):
         items = ItemDeVisado.objects.all()
         filas = FilaDeVisado.objects.all()
         columnas = ColumnaDeVisado.objects.all()
-        elementos = Elemento_Balance_Superficie.objects.all()  
-        contexto = {'documentos_de_fecha': documentos_fecha, 'planilla':planilla, 'filas':filas, 'columnas':columnas, 'items':items, 'elementos':elementos}
+        elementos = Elemento_Balance_Superficie.objects.all()
+    if (estado.tipo > 5):
+        #planilla = None
+        for p in PlanillaDeInspeccion.objects.all():
+            print (p)
+            if (p.tramite.pk == estado.tramite.pk):
+                planilla = p
+                # raise Exception(planilla)
+                print ("------------------------")
+                #print (planilla)
+        ites = ItemInspeccion.objects.all()
+        categorias = CategoriaInspeccion.objects.all()
+        detalles = DetalleDeItemInspeccion.objects.all()
+        contexto = {'documentos_de_fecha': documentos_fecha, 'planilla': planilla, 'filas': filas,
+                        'columnas': columnas, 'items': items, 'elementos': elementos,
+                        'ites': ites, 'categorias': categorias, 'detalles': detalles}
+       #print (contexto)
     else:
         contexto= {'documentos_de_fecha': documentos_fecha}
     return render(request, 'persona/propietario/documentos_de_estado.html', contexto)
@@ -129,6 +144,8 @@ def documentos_de_estado(request, pk_estado):
 
 #-------------------------------------------------------------------------------------------------------------------
 #profesional -------------------------------------------------------------------------------------------------------
+
+from planilla_inspeccion.models import PlanillaDeInspeccion
 
 @login_required(login_url="login")
 @grupo_requerido('profesional')
@@ -263,8 +280,19 @@ def documento_de_estado(request, pk_estado):
         items = ItemDeVisado.objects.all()
         filas = FilaDeVisado.objects.all()
         columnas = ColumnaDeVisado.objects.all()
-        elementos = Elemento_Balance_Superficie.objects.all()  
-        contexto = {'documentos_de_fecha': documentos_fecha, 'planilla':planilla, 'filas':filas, 'columnas':columnas, 'items':items, 'elementos':elementos}
+        elementos = Elemento_Balance_Superficie.objects.all()
+    if (estado.tipo > 5):
+        planilla = None
+        for p in PlanillaDeInspeccion.objects.all():
+            if (p.tramite.pk == estado.tramite.pk):
+                planilla = p
+                # raise Exception(planilla)
+        ites = ItemInspeccion.objects.all()
+        categorias = CategoriaInspeccion.objects.all()
+        detalles = DetalleDeItemInspeccion.objects.all()
+        contexto = {'documentos_de_fecha': documentos_fecha, 'planilla': planilla, 'filas': filas,
+                        'columnas': columnas, 'items': items, 'elementos': elementos,
+                        'ites': ites, 'categorias': categorias, 'detalles': detalles}
     else:
         contexto= {'documentos_de_fecha': documentos_fecha}
     return render(request, 'persona/profesional/documento_de_estado.html', contexto)
@@ -693,7 +721,7 @@ def documentos_inspector_estado(request, pk_estado):
     fecha_str = date.strftime(fecha, '%d/%m/%Y %H:%M')
     documentos = estado.tramite.documentos.all()
     documentos_fecha = filter(lambda e:(date.strftime(e.fecha, '%d/%m/%Y %H:%M') == fecha_str), documentos)
-    if (estado.tipo >5):
+    if (estado.tipo == 6):
         planilla = None
         for p in PlanillaDeInspeccion.objects.all():
             if (p.tramite.pk == estado.tramite.pk):

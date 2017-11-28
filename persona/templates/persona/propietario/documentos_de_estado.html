@@ -51,6 +51,13 @@
                                 </div>
                         {% endfor %}
                      </div>
+                    <div class="panel-heading box" role="tab" id="headingSix">
+                      <h5 class="panel-title">
+                        <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseSix" aria-expanded="false" aria-controls="collapseSix">
+                          <label id="documentos1">Planilla de Visado </label>
+                        </a>
+                      </h5>
+                    </div>
                     {% if planilla %}
                         <table class="table table-bordered table-striped table-hover table-condensed" style="text-align:center;">
                             <thead>
@@ -102,9 +109,81 @@
                                     {% endfor %}
                                 </tbody>
                             </table>
-                        </div>                            
-                        {% endif %}
-                    </div>                    
+                        </div>
+                    {% else %}
+						<div class=" col-xs-12 col-sm-12 col-md-12 col-lg-12">
+						  <ol>
+							<li> No se cargo ninguna planilla </li>
+						  </ol>
+						</div>
+					{% endif %}
+
+                    <!--<div class=" col-xs-12 col-sm-12 col-md-12 col-lg-12">-->
+						  <!--<ol>-->
+							<!--<li> Planilla de Inspeccion </li>-->
+						  <!--</ol>-->
+						<!--</div>-->
+                    <div class="panel-heading box" role="tab" id="headingSeven">
+                      <h5 class="panel-title">
+                        <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseSeven" aria-expanded="false" aria-controls="collapseSeven">
+                          <label id="documentos2">Planilla de Inspeccion </label>
+                        </a>
+                      </h5>
+
+                    {% if planilla %}
+
+						<table class="table table-bordered table-striped table-hover table-condensed" style="text-align:center;">
+						  <thead>
+							<tr>
+							  <th></th>
+							  {% for item in items %}
+								<th>{{item.nombre}}</th>
+							  {% endfor %}
+							</tr>
+						  </thead>
+						  <tbody>
+							{% for categoria in categorias %}
+							  <tr>
+								<td class="col-xs-1">{{ categoria.nombre }}</td>
+								{% for item in items %}
+								<td class="col-sm-1">&nbsp;
+								  {% for detalle in detalles %}
+									{% if categoria == detalle.categoria_inspeccion and item == detalle.item_inspeccion %}
+                                  <td>{{ detalle.nombre }}</td>
+									{% endif %}
+								  {% endfor %}
+								</td>
+								{% endfor %}
+							  </tr>
+							{% endfor %}
+							</tbody>
+						</table>
+                    </div>
+					<div class="row">
+					  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+						<form action="" >
+						  <div class="row" style="color:#fff;">
+							<div class=" col-xs-12 col-sm-12 col-md-12 col-lg-12">
+							  <ol>
+								<label>Descripcion de categorias:</h2></label>
+								{% for categoria in categorias %}
+								<li> {{categoria.tipo}}</li>
+								<li> {{categoria.descripcion}}</li>
+								{% endfor %}
+							  </ol>
+							</div>
+						  </div>
+						</form>
+					  </div>
+					</div>
+					{% else %}
+						<div class=" col-xs-12 col-sm-12 col-md-12 col-lg-12">
+						  <ol>
+							<li> No se cargo ninguna planilla </li>
+						  </ol>
+						</div>
+					{% endif %}
+
                      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="right">
                         <a href="javascript:history.back(-1);">
                             <button type="button" class="btn btn-primary" name="Volver">
