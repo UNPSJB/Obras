@@ -25,7 +25,7 @@ class FormularioCuota(forms.ModelForm):
             'numeroCuota':"Numero de Cuota",
         }
         widgets = {
-            'fechaVencimiento': forms.DateInput(attrs={'class': 'datepicker'}),
+            'fechaVencimiento': forms.DateInput(attrs={'class': 'date'}),
             'monto': forms.TextInput(attrs={'class':'form-control'}),
         }
 

@@ -1,22 +1,21 @@
 {% load staticfiles %}
-
+{% block contenido %}
 <div class="table-responsive">
     <table class="table table-bordered table-striped table-hover table-condensed" style="background: white;">
         <thead>
             <tr>
-                <th>Nro de tramite</th>
+                <th class="col-sm-1">Nro de tramite</th>
                 <th>Propietario</th>
                 <th>Profesional</th>
                 <th>Medidas</th>
                 <th>Tipo de Obra</th>
                 <th>Estado</th>
-                <th>Fecha de inspeccion</th>
+                <th> Fecha de inspeccion</th>
                 <th>Agendar</th>
             </tr>
         </thead>
         <tbody>
             {% if tramites %}
-            var count=1;
                 {% for tramite in tramites %}
                     <tr>
                         <td>{{ tramite.id }}</td>
@@ -27,24 +26,35 @@
                         <td>{{ tramite.estado }}</td>
                         <td>
                             <input type="hidden" id="id{{tramite.id}}" value="{{tramite.id}}">
-
-                            <input id="datetime{{tramite.id}}" type="date" value="">
+                            <input id="datetime{{tramite.id}}" type="date" value="" >
                             <input id="time{{tramite.id}}" type="time" value="">
                         </td>
                         <td>
 
-                            <script>
-                        function agregarHora(){
+                        <script type="text/javascript">
+                        function agregarHoraInspeccion{{tramite.id}}(){
                             var id_tramite = $("#id{{tramite.id}}").val();
                             var date = $("#datetime{{tramite.id}}").val();
                             var hora= $("#time{{tramite.id}}").val();
-                            fecha = date+' '+hora;
-                            console.log(fecha);
-                            url = '/persona/agendar_tramite/'+id_tramite+'/?msg='+fecha;
-                            location.href = url;
+                            if (date  && hora) {
+                                var fecha = date+' '+hora;
+                                url = '/persona/agendar_tramite/'+id_tramite+'/?msg='+fecha;
+                                location.href = url;
+                            }
+                            else if (hora ==''){
+                                alert ("El campo hora es obligatorio");
+                            }else{
+                                if(date===''){
+                                    alert("El campo fecha es obligatorio");
+                                }
+                                else{
+                                    alert("Los campos fecha y hora son obligatorios");
+                                }
+                             }
+                            return false;
                         }
-                    </script>
-                            <a href="javascript:agregarHora();">
+                        </script>
+                            <a onclick="javascript:agregarHoraInspeccion{{tramite.id}}();">
                               <button type="button" class="btn btn-primary btn-sm" name="Agendar">Agendar
                               </button>
                             </a>
@@ -57,63 +67,4 @@
         </tbody>
     </table>
 </div>
-
-{% block contenido_tramites_visados_y_con_inspeccion %}
-
-     <div class="table-responsive">
-          <table  class="table table-bordered table-striped table-hover table-condensed" style="background: white;">
-              <thead>
-                  <tr>
-                    <th>Nro</th>
-                    <th>Propietario</th>
-                    <th>Profesional</th>
-                    <th>Medidas</th>
-                    <th>Tipo de Obra</th>
-                    <th>Estado</th>
-                    <th>Fecha de inspeccion</th>
-                    <th>Agendar</th>
-                  </tr>
-            </thead>
-            <tbody>
-                {% if tramites %}
-                    {% for tramite in tramites %}
-                        <tr>
-                            <td>{{ tramite.id }}</td>
-                            <td>{{ tramite.propietario }}</td>
-                            <td>{{ tramite.profesional }} </td>
-                            <td>{{ tramite.medidas }}</td>
-                            <td>{{ tramite.tipo_obra }}</td>
-                            <td>{{ tramite.estado }}</td>
-                            <td>
-                                <input type="hidden" id="id_tramite1{{tramite.id}}" value="{{tramite.id}}" >
-
-                                <input id="datetime1{{tramite.id}}" type="date" value=""  required>
-
-                                <input id="time1{{tramite.id}}" type="time" value=""  required/>
-
-                            </td>
-                            <td class="col-xs-1">
-                                <script>
-                                    function agregarHora1(){
-                                        var date1 = $('#datetime1{{tramite.id}}').val()
-                                        var hora1= $('#time1{{tramite.id}}').val()
-                                        fecha1 = date1+' '+hora1
-                                        id_tramite1 = $("#id_tramite1{{tramite.id}}").val();
-                                        url = '/persona/agendar_tramite/'+id_tramite1+'/?msg='+fecha1;
-                                        location.href = url;
-                                    }
-                                </script>
-                                <a href="javascript:agregarHora1();">
-                                    <button type="button" class="btn btn-primary btn-sm" name="Agendar">
-                                        <span class="glyphicon glyphicon-list-alt" aria-hidden="true"> Agendar</span>
-                                    </button>
-                                </a>
-                            </td>
-                        </tr>
-                    {% endfor %}
-                {% endif%}
-            </tbody>
-        </table>
-     </div>
-
 {% endblock %}
