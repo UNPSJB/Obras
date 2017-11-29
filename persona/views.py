@@ -111,30 +111,50 @@ def documentos_de_estado(request, pk_estado):
     fecha = estado.timestamp
     fecha_str = date.strftime(fecha, '%d/%m/%Y %H:%M')
     documentos = estado.tramite.documentos.all()
-    documentos_fecha = filter(lambda e:(date.strftime(e.fecha, '%d/%m/%Y %H:%M') == fecha_str), documentos)
-    if (estado.tipo >2):        
-        planilla = None
+    documentos_fecha = filter(lambda e:(date.strftime(e.fecha, '%d/%m/%Y %H:%M') == fecha_str), documentos)    
+    contexto = {'documentos_de_fecha': documentos_fecha}
+    planilla = None
+    inspeccion = None    
+    if (estado.tipo >2 and estado.tipo <5):                        
         for p in PlanillaDeVisado.objects.all():
             if (p.tramite.pk == estado.tramite.pk):
                 planilla = p                                
-        items = ItemDeVisado.objects.all()
+        items = planilla.items.all()
         filas = FilaDeVisado.objects.all()
         columnas = ColumnaDeVisado.objects.all()
-        elementos = Elemento_Balance_Superficie.objects.all()  
-        contexto = {'documentos_de_fecha': documentos_fecha, 'planilla':planilla, 'filas':filas, 'columnas':columnas, 'items':items, 'elementos':elementos}
-    else:
-        contexto= {'documentos_de_fecha': documentos_fecha}
+        elementos = planilla.elementos.all()                
+        contexto = {
+            'documentos_de_fecha': documentos_fecha,
+            'planilla':planilla,
+            'filas': filas,
+            'columnas': columnas,
+            'items': items,
+            'elementos': elementos,
+        }    
+    if (estado.tipo >5 and estado.tipo <8):                        
+        for p in PlanillaDeInspeccion.objects.all():
+            if (p.tramite.pk == estado.tramite.pk):
+                inspeccion = p                                
+        items = ItemInspeccion.objects.all()
+        categorias = CategoriaInspeccion.objects.all()
+        detalles = inspeccion.detalles.all()
+        contexto = {            
+            'inspeccion': inspeccion,
+            'items': items,
+            'categorias': categorias,
+            'detalles': detalles,                        
+        }    
     return render(request, 'persona/propietario/documentos_de_estado.html', contexto)
-
 
 #-------------------------------------------------------------------------------------------------------------------
 #profesional -------------------------------------------------------------------------------------------------------
+
+from planilla_inspeccion.models import PlanillaDeInspeccion
 
 @login_required(login_url="login")
 @grupo_requerido('profesional')
 def mostrar_profesional(request):
     usuario = request.user
-    #raise Exception(usuario.persona.profesional)
     tipos_de_documentos_requeridos = TipoDocumento.get_tipos_documentos_para_momento(TipoDocumento.INICIAR)
     FormularioDocumentoSet = FormularioDocumentoSetFactory(tipos_de_documentos_requeridos)
     inicial = metodo(tipos_de_documentos_requeridos)
@@ -254,19 +274,39 @@ def documento_de_estado(request, pk_estado):
     fecha = estado.timestamp
     fecha_str = date.strftime(fecha, '%d/%m/%Y %H:%M')
     documentos = estado.tramite.documentos.all()
-    documentos_fecha = filter(lambda e:(date.strftime(e.fecha, '%d/%m/%Y %H:%M') == fecha_str), documentos)
-    if (estado.tipo >2):        
-        planilla = None
+    documentos_fecha = filter(lambda e:(date.strftime(e.fecha, '%d/%m/%Y %H:%M') == fecha_str), documentos)    
+    contexto = {'documentos_de_fecha': documentos_fecha}
+    planilla = None
+    inspeccion = None    
+    if (estado.tipo >2 and estado.tipo <5):                        
         for p in PlanillaDeVisado.objects.all():
             if (p.tramite.pk == estado.tramite.pk):
                 planilla = p                                
-        items = ItemDeVisado.objects.all()
+        items = planilla.items.all()
         filas = FilaDeVisado.objects.all()
         columnas = ColumnaDeVisado.objects.all()
-        elementos = Elemento_Balance_Superficie.objects.all()  
-        contexto = {'documentos_de_fecha': documentos_fecha, 'planilla':planilla, 'filas':filas, 'columnas':columnas, 'items':items, 'elementos':elementos}
-    else:
-        contexto= {'documentos_de_fecha': documentos_fecha}
+        elementos = planilla.elementos.all()                
+        contexto = {
+            'documentos_de_fecha': documentos_fecha,
+            'planilla':planilla,
+            'filas': filas,
+            'columnas': columnas,
+            'items': items,
+            'elementos': elementos,
+        }    
+    if (estado.tipo >5 and estado.tipo <8):                        
+        for p in PlanillaDeInspeccion.objects.all():
+            if (p.tramite.pk == estado.tramite.pk):
+                inspeccion = p                                
+        items = ItemInspeccion.objects.all()
+        categorias = CategoriaInspeccion.objects.all()
+        detalles = inspeccion.detalles.all()
+        contexto = {            
+            'inspeccion': inspeccion,
+            'items': items,
+            'categorias': categorias,
+            'detalles': detalles,                        
+        }    
     return render(request, 'persona/profesional/documento_de_estado.html', contexto)
 
 #-------------------------------------------------------------------------------------------------------------------
@@ -631,7 +671,7 @@ def tramites_agendados_por_inspector(request):
 def agendar_tramite(request, pk_tramite):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)    
     usuario = request.user    
-    fecha = convertidor_de_fechas(request.GET["msg"])    
+    fecha = convertidor_de_fechas(request.GET["msg"])        
     tramite.hacer(Tramite.AGENDAR, request.user, fecha) #tramite, fecha_inspeccion, inspector=None
     messages.add_message(request, messages.SUCCESS, "Inspeccion agendada")
     return redirect('inspector')
