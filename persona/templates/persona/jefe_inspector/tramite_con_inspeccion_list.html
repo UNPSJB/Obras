@@ -17,7 +17,7 @@
             {% if tramites %}
                 {% for tramite in tramites %}
                     <tr>
-                        <td class="col-xs-1">{{ tramite.id }}</td>
+                        <td class="col-sm-1">{{ tramite.id }}</td>
                         <td class="col-xs-2">{{ tramite.propietario }}</td>
                         <td class="col-xs-3">
                             {{ tramite.profesional.persona.nombre }}
@@ -25,32 +25,58 @@
                             {{ tramite.profesional.profesion }}
                             {{ tramite.profesional.matricula }}
                         </td>
-                        <td class="col-xs-1">{{ tramite.medidas }}</td>
+                        <td class="col-sm-1">{{ tramite.medidas }}</td>
                         <td class="col-xs-1">{{ tramite.tipo_obra }}</td>
                         <td class="col-xs-1">{{ tramite.domicilio }}</td>
-                        <td class="col-xs-1" align="center">
-                            <input type="hidden" id="id_tramite" value="{{tramite.id}}">
-                            <input class="form-control input-xs" id="id_fechadeinspeccion_{{tramite.pk}}" name="" type="text" placeholder="Fecha de inspeccion" title="Fecha de inspeccion" maxlength="100" />
+                        <td class="col-sm-3" align="center">
+                            <input type="hidden" id="idjefe{{tramite.id}}" value="{{tramite.id}}">
+                            <input id="datetimejefe{{tramite.id}}" type="date" value="" >
+                            <input id="timejefe{{tramite.id}}" type="time" value="">
+                            <script type="text/javascript">
+                                function agendarInspeccion{{tramite.id}}(){
+                                    var id_tramite = $("#idjefe{{tramite.id}}").val();
+                                    var date = $("#datetimejefe{{tramite.id}}").val();
+                                    var hora= $("#timejefe{{tramite.id}}").val();
+                                    if (date  && hora) {
+                                        var fecha = date+' '+hora;
+                                        url = '/persona/agendar_tramite/'+id_tramite+'/?msg='+fecha;
+                                        location.href = url;
+                                    }
+                                    else if (hora ==''){
+                                        alert ("El campo hora es obligatorio");
+                                    }else{
+                                        if(date===''){
+                                            alert("El campo fecha es obligatorio");
+                                        }
+                                        else{
+                                            alert("Los campos fecha y hora son obligatorios");
+                                        }
+                                     }
+                                    return false;
+                                }
+                            </script>
                         </td>
                         <td class="col-xs-1" align="center">
-                            <a href="javascript:prueba();">
-                              <button type="button" class="btn btn-primary btn-xs" name="Agendar">
-                                <span class="glyphicon glyphicon-list-alt" aria-hidden="true"> Agendar</span>
+                            <a onclick="javascript:agendarInspeccion{{tramite.id}}();">
+                              <button type="button" class="btn btn-primary btn-sm" name="Agendar">Agendar
                               </button>
                             </a>
+                            <!--<a href="javascript:prueba();">-->
+                              <!--<button type="button" class="btn btn-primary btn-xs" name="Agendar">-->
+                                <!--<span class="glyphicon glyphicon-list-alt" aria-hidden="true"> Agendar</span>-->
+                              <!--</button>-->
+                            <!--</a>-->
                         </td>
-
-                        <script>
-                            function prueba(){
-                                obs = $("#id_fechadeinspeccion_{{tramite.pk}}").val();
-                                alert(obs);
-                                id_tramite = $("#id_tramite").val();
-                                url = '/persona/agendar_inspeccion_final/'+id_tramite+'/?msg='+obs;
-                                alert(url);
-                                location.href = url;
-                            }
-                        </script>
-
+                        <!--<script>-->
+                            <!--function prueba(){-->
+                                <!--obs = $("#id_fechadeinspeccion_{{tramite.pk}}").val();-->
+                                <!--alert(obs);-->
+                                <!--id_tramite = $("#id_tramite").val();-->
+                                <!--url = '/persona/agendar_inspeccion_final/'+id_tramite+'/?msg='+obs;-->
+                                <!--alert(url);-->
+                                <!--location.href = url;-->
+                            <!--}-->
+                        <!--</script>-->
                     </tr>
                 {% endfor %}
             {% endif%}

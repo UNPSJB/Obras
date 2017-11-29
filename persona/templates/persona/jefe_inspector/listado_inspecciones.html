@@ -1,0 +1,36 @@
+{% block listados_inspecciones %}
+
+<div class="table-responsive">
+    <table id="tabla" class="table table-bordered table-striped table-hover table-condensed" style="background: white;">
+        <thead>
+            <tr>
+                <th>Nro de tramite</th>
+                <th>Fecha Inicio</th>
+                <th>Tipo de obra</th>
+                <th>Profesional</th>
+                <th>Propietario</th>
+                <th>Medidas en m2</th>
+                <th>Estado</th>
+                <th>...</th>
+            </tr>
+        </thead>
+
+        <tbody>
+        {% if tramites %}
+            {% for tramite in tramites %}
+              <tr>
+                  <td class="col-xs-1">{{ tramite.id}}</td>
+                  <td class="col-xs-1">{{ tramite.medidas}}</td>
+                  <td class="col-xs-1">{{ tramite.tipo_obra }} </td>
+                  <td class="col-xs-3">{{ tramite.profesional}}</td>
+                  <td class="col-xs-2">{{ tramite.propietario}}</td>
+                  <td class="col-xs-1">{{ tramite.medidas }} </td>
+                  <td class="col-xs-1">{{tramite.estado}}</td>
+
+              </tr>
+            {% endfor %}
+        </tbody>
+        {% endif %}
+    </table>
+</div>
+{% endblock %}

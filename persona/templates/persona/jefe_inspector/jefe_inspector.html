@@ -16,6 +16,7 @@
 {% endblock %}
 
 {% block contenido %}
+<div class="container-fluid">
   <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
     <div class="panel">
       <div class="panel-heading box" role="tab" id="headingTwo">
@@ -53,7 +54,10 @@
                   <div class="container-fluid">
                       <div class="row">
                           <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                              consultar otra inspecciones
+
+                            {% block listados_inspecciones %}
+                               {% include "persona/jefe_inspector/listado_inspecciones.html" with tramites=ctxlistadosinspecciones.tramites %}
+                            {% endblock %}
                           </div>
                       </div>
                   </div>
@@ -163,6 +167,7 @@
       </div>
     </div>
   </div>
+</div>
 {% endblock %}
 
 

@@ -66,6 +66,7 @@ urlpatterns = [
     url(r'^cargar_inspeccion_final/(?P<pk_tramite>\d+)/$', views.cargar_inspeccion_final, name="cargar_inspeccion_final"),
     url(r'^agendar_inspeccion_final/(?P<pk_tramite>\d+)/$', views.agendar_inspeccion_final, name="agendar_inspeccion_final"),
     url(r'^aceptar_inspeccion_final/(?P<pk_tramite>\d+)/$', views.aceptar_inspeccion_final, name="aceptar_inspeccion_final"),
+    url(r'^listados_inspecciones/$', views.listado_inspecciones, name="listado_inspecciones"),
 
     #director -------------------------------------------------------------------------------------------------------
     url(r'^director$', views.mostrar_director, name="director"),

@@ -652,8 +652,8 @@ def tramites_visados_y_con_inspeccion(request):
 def tramites_inspeccionados_por_inspector(request):
     usuario = request.user
     estados = Estado.objects.all()
-    tipo = 9
-    print (9)
+    tipo = 7 #7
+    print ("estadoss", estados)
     estados_inspeccionados = filter(lambda estado: (estado.usuario is not None and estado.usuario == usuario and estado.tipo == tipo), estados)
     return estados_inspeccionados
 
@@ -759,6 +759,7 @@ def mostrar_jefe_inspector(request):
     contexto = {
         "ctxtramitesconinspeccion": tramite_con_inspecciones_list(request),
         "ctxtramitesagendados": tramites_agendados_por_inspector(request),
+        "ctxlistadosinspecciones":listado_inspecciones(request),
     }
     return render(request, 'persona/jefe_inspector/jefe_inspector.html', contexto)
 
@@ -794,6 +795,10 @@ def ver_inspecciones(request, pk_tramite):
     contexto = {'estados': estados}
     return render(request, 'persona/jefe_inspector/vista_de_inspecciones.html',contexto)
 
+def listado_inspecciones(request):
+    tramites=Tramite.objects.en_estado(Inspeccionado)
+    contexto={'tramites':tramites}
+    return contexto
 #------------------------------------------------------------------------------------------------------------------
 #director ---------------------------------------------------------------------------------------------------------
 from planilla_visado import forms as pforms
