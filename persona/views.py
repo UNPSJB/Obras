@@ -676,11 +676,13 @@ def agendar_tramite(request, pk_tramite):
     messages.add_message(request, messages.SUCCESS, "Inspeccion agendada")
     return redirect('inspector')
 
-def cargar_inspeccion(request, pk_tramite):    
+def cargar_inspeccion(request, pk_tramite):
+    print("holllllllaaaaaaaaaaaaaaa")
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
     id_tramite = int(pk_tramite)
     planilla = PlanillaDeInspeccion()
     planilla.tramite = tramite
+    print("id planilla", planilla.tramite)
     planilla.save()
     list_detalles=[]                    
     for name,value in request.POST.items():        
@@ -688,6 +690,7 @@ def cargar_inspeccion(request, pk_tramite):
             ipk=name.split('-')[1]
             list_detalles.append(ipk)
     detalles = DetalleDeItemInspeccion.objects.all()
+    print("detaallles", detalles)
     for detalle in detalles:
         for i in list_detalles:
             if (detalle.id == int(i)):
@@ -742,11 +745,11 @@ def documentos_inspector_estado(request, pk_estado):
         items = ItemInspeccion.objects.all()
         categorias = CategoriaInspeccion.objects.all()
         detalles = DetalleDeItemInspeccion.objects.all()
-        contexto = {'documentos_de_fecha': documentos_fecha, 'items': items, 'categorias': categorias, 'detalles': detalles}
+        contexto = {'documentos_de_fecha': documentos_fecha, 'items': items, 'categorias': categorias, 'detalles': detalles, 'planilla':planilla}
         #raise Exception(contexto)
     else:
         contexto = {'documentos_de_fecha': documentos_fecha}
-    return render(request, 'persona/inspector/documentos_del_estado.html', contexto)
+    return render(request,'persona/inspector/documentos_del_estado_inspector.html', contexto)
 
 #------------------------------------------------------------------------------------------------------------------
 #jefeinspector ----------------------------------------------------------------------------------------------------
