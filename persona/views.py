@@ -676,22 +676,31 @@ def mostrar_inspector(request):
     contexto = {
         "ctxtramitesvisadosyconinspeccion": tramites_visados_y_con_inspeccion(request),
         "ctxtramitesinspeccionados": tramites_inspeccionados_por_inspector(request),
-        "ctxtramitesagendados": tramites_agendados_por_inspector(request)
+        "ctxtramitesagendados": tramites_agendados_por_inspector(request),
+        "ctxtramis_inspecciones": mis_inspecciones(request)
     }
     return render(request, 'persona/inspector/inspector.html', contexto)
+
+def mis_inspecciones(request):
+    usuario = request.user
+    estados = Estado.objects.all()
+    tipo = 6 #visado    
+    argumentos = [ConInspeccion]
+    tramites = Tramite.objects.en_estado(ConInspeccion)
+    return tramites
 
 def tramites_visados_y_con_inspeccion(request):
     argumentos = [Visado, ConInspeccion]
     tramites = Tramite.objects.en_estado(argumentos)
     return tramites
 
-def tramites_inspeccionados_por_inspector(request):
+def tramites_inspeccionados_por_inspector(request):   
     usuario = request.user
     estados = Estado.objects.all()
     tipo = 7 #7
-    estados_inspeccionados = filter(lambda estado: (estado.usuario is not None and estado.usuario == usuario and estado.tipo == tipo), estados)    
     tramites = Tramite.objects.en_estado(ConInspeccion)
     tramites_del_inspector = filter(lambda t: t.estado().usuario == usuario, tramites)
+    estados_inspeccionados = filter(lambda estado: (estado.usuario is not None and estado.usuario == usuario and estado.tipo == tipo), estados)    
     contexto = {"tramites_del_inspector": tramites_del_inspector}
     return estados_inspeccionados
 
