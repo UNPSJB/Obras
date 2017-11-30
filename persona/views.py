@@ -69,10 +69,9 @@ def tramites_para_financiar(request):
         lambda persona: (persona.usuario is not None and persona.usuario == usuario), personas
     )
     persona = lista_de_persona_que_esta_logueada.pop()  # Saco de la lista la persona porque no puedo seguir trabajando con una lista
-    propietario = persona.get_propietario()  # Me quedo con el atributo propietario de la persona
-    tramites_propietario = Tramite.objects.en_estado(Visado)
-    tramites_propietario = filter(lambda tramite: (tramite.propietario == propietario), tramites)            
-    #raise Exception (tramites_propietario)
+    propietario = persona.get_propietario()  # Me quedo con el atributo propietario de la persona    
+    tramites_propietario = filter(lambda tramite: (tramite.propietario == propietario), tramites)
+    tramites_propietario = Tramite.objects.en_estado(Visado)                
     return tramites_propietario
 
 def listado_tramites_propietario(request):
@@ -283,18 +282,21 @@ def documento_de_estado(request, pk_estado):
         for p in PlanillaDeVisado.objects.all():
             if (p.tramite.pk == estado.tramite.pk):
                 planilla = p                                
-        items = planilla.items.all()
-        filas = FilaDeVisado.objects.all()
-        columnas = ColumnaDeVisado.objects.all()
-        elementos = planilla.elementos.all()                
-        contexto = {
-            'documentos_de_fecha': documentos_fecha,
-            'planilla':planilla,
-            'filas': filas,
-            'columnas': columnas,
-            'items': items,
-            'elementos': elementos,
-        }    
+        if planilla== None:        
+            pass   
+        else:
+            items = planilla.items.all()
+            filas = FilaDeVisado.objects.all()
+            columnas = ColumnaDeVisado.objects.all()
+            elementos = planilla.elementos.all()
+            contexto = {
+                'documentos_de_fecha': documentos_fecha,
+                'planilla':planilla,
+                'filas': filas,
+                'columnas': columnas,
+                'items': items,
+                'elementos': elementos,
+            }    
     if (estado.tipo >5 and estado.tipo <8):                        
         for p in PlanillaDeInspeccion.objects.all():
             if (p.tramite.pk == estado.tramite.pk):
