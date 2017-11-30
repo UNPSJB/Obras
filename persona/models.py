@@ -38,12 +38,13 @@ class Propietario(Rol):
 
 
 class Usuario(Rol, AbstractUser):
-    PROFESIONAL = "profesional"
-    PROPIETARIO = "propietario"
+    DIRECTOR = "director"
     ADMINISTRATIVO = "administrativo"
     VISADOR = "visador"
     INSPECTOR = "inspector"
-    DIRECTOR = "director"
+    PROPIETARIO = "propietario"    
+    PROFESIONAL = "profesional"    
+    JEFEINSPECTOR = "jefeinspector"
     CAJERO = "cajero" #agrego cajero como usuario
 
     def get_view_name(self):
