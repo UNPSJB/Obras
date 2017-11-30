@@ -19,9 +19,9 @@
     <tbody>
         {% for item in planilla_de_visado_form %}
         <tr>
-            <td class="col-xs-4">{{ item.label }}</td>
+            <td class="col-xs-1">{{ item.label }}</td>
             {% for columna in item %}
-            <td class="col-sm-4">{{ columna }}</td>
+            <td class="col-sm-1">{{ columna }}</td>
             {% endfor %}
         </tr>
         {% endfor %}

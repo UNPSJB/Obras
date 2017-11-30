@@ -21,7 +21,7 @@
           <tr>
             <td class="col-xs-1">{{ categoria.nombre }}</td>
             {% for item in items %}
-            <td class="col-sm-4">&nbsp;
+            <td class="col-sm-1">&nbsp;
               {% for detalle in detalles %}
                 {% if categoria.nombre == detalle.categoria_inspeccion.nombre and item.nombre == detalle.item_inspeccion.nombre %}
                     {{ detalle.nombre }}<hr>

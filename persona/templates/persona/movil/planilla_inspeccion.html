@@ -8,53 +8,45 @@
 
 {% block contenido %}
 <div class="container-fluid">
-<form action="" method="post" enctype="multipart/form-data">
-<table class="table table-bordered table-striped table-hover table-condensed" style="text-align:center;">
-    <thead>
-        <tr>
-            <th></th>
-            {% for item in items %}
-                <th>{{item.nombre}}</th>
-            {% endfor %}
-        </tr>
-    </thead>
-    <tbody>
-        {% for categoria in categorias %}
-            <tr>
-                <td class="col-xs-1">{{ categoria.nombre }}</td>
-                {% for item in items %}
-                    <td class="col-sm-4">&nbsp;
-                        {% for detalle in detalles %}
-                            {% if categoria.nombre == detalle.categoria_inspeccion.nombre and item.nombre == detalle.item_inspeccion.nombre %}
-                                {{ detalle.nombre }}
-                                <label class="switch">
-                                    <input name="detalles-{{detalle.pk}}" type="checkbox"><span class="slider round"></span>
-                                </label> 
-                                <br><hr>
-                            {% endif %}
+    <form  action="{% url 'cargar_inspeccion' tramite.id%}" method="post" >
+        <table class="table-bordered table-striped table-hover table-condensed" style="text-align:center;">
+            <thead>
+                <tr>
+                    <th></th>
+                    {% for item in items %}
+                        <th>{{item.nombre}}</th>
+                    {% endfor %}
+                </tr>
+            </thead>
+            <tbody>
+                {% for categoria in categorias %}
+                    <tr>
+                        <td class="col-xs-1">{{ categoria.nombre }}</td>
+                        {% for item in items %}
+                            <td class="col-sm-4">&nbsp;
+                                {% for detalle in detalles %}
+                                    {% if categoria.nombre == detalle.categoria_inspeccion.nombre and item.nombre == detalle.item_inspeccion.nombre %}
+                                        {{ detalle.nombre }}
+                                        <label class="switch">
+                                            <input name="detalles-{{detalle.pk}}" type="checkbox"><span class="slider round"></span>
+                                        </label> 
+                                        <br><hr>
+                                    {% endif %}
+                                {% endfor %}
+                            </td>
                         {% endfor %}
-                    </td>
+                    </tr>
                 {% endfor %}
-            </tr>
-        {% endfor %}
-    </tbody>
-</table>
-</form>
-<br>
-    <a href="{% url 'cargar_inspeccion' tramite.pk %}">
-        <button class="btn btn-info btn-sm" name="Cargar Inspeccion">
-            Cargar Inspeccion
-        </button>    
-    </a>
-    <a href="{% url 'inspector_movil' %}">
-        <button class="btn btn-info btn-sm" name="Volver">
-            Volver
-        </button><br>        
-    </a>
-    
-<br><br><div class="row">
-</div>
-        </a>
+            </tbody>
+        </table>
+        <br>                        
+            <input type="submit" class="btn btn-primary brn-xs" name="Agendar">
+            <a href="{% url 'inspector_movil' %}">
+                <button class="btn btn-info btn-sm" name="Volver">
+                    Volver
+                </button><br>        
+            </a>
+    </form>
 </div>
 <style>
 .btn-info {

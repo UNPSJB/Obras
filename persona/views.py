@@ -303,8 +303,7 @@ def documento_de_estado(request, pk_estado):
                 inspeccion = p                                
         items = ItemInspeccion.objects.all()
         categorias = CategoriaInspeccion.objects.all()
-        #detalles = inspeccion.detalles.all() queda vacio?
-        detalles = DetalleDeItemInspeccion.objects.all()#toma todos "funciona"
+        detalles = inspeccion.detalles.all()
         contexto = {
             'inspeccion': inspeccion,
             'items': items,
@@ -721,16 +720,14 @@ def cargar_inspeccion(request, pk_tramite):
     planilla = PlanillaDeInspeccion()
     planilla.tramite = tramite
     planilla.save()
-    list_detalles=[]                    
+    list_detalles=[] 
     for name,value in request.POST.items():        
         if name.startswith('detalle'):
             ipk=name.split('-')[1]
-            list_detalles.append(ipk)
-    detalles = DetalleDeItemInspeccion.objects.all()
-    for detalle in detalles:
-        for i in list_detalles:
-            if (detalle.id == int(i)):
-                planilla.agregar_detalle(detalle)
+            detalle = DetalleDeItemInspeccion.objects.get(id=ipk)
+            list_detalles.append(detalle)
+    for detalle in list_detalles:
+        planilla.agregar_detalle(detalle)
     planilla.save()
     usuario = request.user
     try:
@@ -776,13 +773,11 @@ def documentos_inspector_estado(request, pk_estado):
         planilla = None
         for p in PlanillaDeInspeccion.objects.all():
             if (p.tramite.pk == estado.tramite.pk):
-                planilla = p
-        #raise Exception(planilla)
+                planilla = p        
         items = ItemInspeccion.objects.all()
         categorias = CategoriaInspeccion.objects.all()
-        detalles = DetalleDeItemInspeccion.objects.all()
+        detalles = planilla.detalles.all()
         contexto = {'documentos_de_fecha': documentos_fecha, 'items': items, 'categorias': categorias, 'detalles': detalles, 'planilla':planilla}
-        #raise Exception(contexto)
     else:
         contexto = {'documentos_de_fecha': documentos_fecha}
     return render(request,'persona/inspector/documentos_del_estado_inspector.html', contexto)

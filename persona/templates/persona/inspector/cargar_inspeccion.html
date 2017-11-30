@@ -50,8 +50,7 @@
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                         <div class="container-fluid">
                             <div class="row">
-                                <hr>
-                                <!---Boton para adjuntar el documento correspondiente a la inspeccion-->
+                                <hr>                                
                                 <form  method="post" enctype="multipart/form-data">
                                     {{ctxdocumentoset}}
                                     <div class="form-group">
@@ -59,12 +58,12 @@
                                         <input type="hidden" id="id_tramite" value="{{tramite.id}}">
                                         <input class="form-control input-sm" id="id_observaciones" name="observaciones" type="text" placeholder="Ingresar observaciones" title="Observaciones" maxlength="100" />
                                     </div>
-                                    <!---<button class="btn btn-primary" type="submit" name="Aceptar">
+                                    <button class="btn btn-primary" type="submit" name="Aceptar">
                                         Aprobar inspeccion
                                     </button>
                                     <button class="btn btn-primary" type="submit" name="Aceptar">
                                         Rechazar inspeccion
-                                    </button>-->
+                                    </button>
                                     <input type="submit" name="aceptar_tramite" value="Aceptar Insepccion">
                                     <input type="submit" name="rechazar_tramite" value="Rechazar Inspeccion">
                                 </form>
