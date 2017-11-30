@@ -35,6 +35,7 @@ import collections
 from planilla_visado.models import ItemDeVisado
 from pago.models import Cuota, Cancelacion,Cancelada,Estado
 from datetime import datetime, date, time, timedelta 
+
 #-------------------------------------------------------------------------------------------------------------------
 #generales ---------------------------------------------------------------------------------------------------------
 
@@ -791,8 +792,6 @@ def documentos_inspector_estado(request, pk_estado):
 @login_required(login_url="login")
 @grupo_requerido('jefeinspector')
 def mostrar_jefe_inspector(request):
-    if (request.user_agent.is_mobile): # returns True
-        return redirect('inspector_movil')
     contexto = {
         "ctxtramitesconinspeccion": tramite_con_inspecciones_list(request),
         "ctxtramitesagendados": tramites_agendados_por_inspector(request),
@@ -837,8 +836,7 @@ def completar_inspeccion_final(request,pk_tramite):
                 planilla.agregar_detalle(detalle)
     planilla.save()
     u = request.user        
-    try:
-        tramite.hacer(Tramite.INSPECCIONAR, usuario=u, inspector=u)#agendado->ConInspeccion
+    try:        
         tramite.hacer(Tramite.INSPECCIONAR, usuario=u)#ConInspeccion->Inspeccionado    
         tramite.save()
         messages.add_message(request, messages.SUCCESS, 'Inspeccion Finalizada') 
