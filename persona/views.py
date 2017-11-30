@@ -466,10 +466,17 @@ def ver_documentos_para_visado(request, pk_tramite):
 def ver_documentos_visados(request, pk_tramite):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
     planilla = get_object_or_404(PlanillaDeVisado, pk=tramite.id)    
-    items = ItemDeVisado.objects.all()
+    items = planilla.items.all()
     filas = FilaDeVisado.objects.all()
     columnas = ColumnaDeVisado.objects.all()
-    elementos = Elemento_Balance_Superficie.objects.all()        
+    elementos = planilla.elementos.all()             
+    contexto = {    
+        'planilla':planilla,
+        'filas': filas,
+        'columnas': columnas,
+        'items': items,
+        'elementos': elementos,
+    }    
     return render(request, 'persona/visador/ver_documentos_visados.html', {'tramite': tramite, 'planilla':planilla, 'filas':filas, 'columnas':columnas, 'elementos':elementos, 'items':items})
 
 from planilla_visado.models import FilaDeVisado, ColumnaDeVisado
