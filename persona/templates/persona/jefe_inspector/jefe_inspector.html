@@ -8,8 +8,8 @@
         <li><a href="#" class="current"><font color="white">Inspector en Jefe</font></a></li>
           <li><a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo" onclick='mostrarSubmenu("sin_submenu")'>Agendar inspeccion</a></li>
           <li><a data-toggle="collapse" data-parent="#accordion" href="#collapsethree" aria-expanded="false" aria-controls="collapsethree" onclick='mostrarSubmenu("sin_submenu")'>Cargar Inspeccion</a></li>
-          <li><a data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour" onclick='mostrarSubmenu("sin_submenu")'>Consultar mis Inspecciones</a></li>
-          <li><a data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="false" aria-controls="collapseFour" onclick='mostrarSubmenu("sin_submenu")'>Consultar otras Inspecciones</a></li>
+          <!--<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour" onclick='mostrarSubmenu("sin_submenu")'>Consultar mis Inspecciones</a></li>-->
+          <li><a data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="false" aria-controls="collapseFour" onclick='mostrarSubmenu("sin_submenu")'>Consultar Inspecciones</a></li>
           <li><a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne" onclick='mostrarSubmenu("sin_submenu")'>Modificar mis datos personales</a></li>
       </font>
   </ul>
@@ -54,7 +54,6 @@
                   <div class="container-fluid">
                       <div class="row">
                           <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-
                             {% block listados_inspecciones %}
                                {% include "persona/jefe_inspector/listado_inspecciones.html" with tramites=ctxlistadosinspecciones.tramites %}
                             {% endblock %}
@@ -65,7 +64,7 @@
           </div>
       </div>
 
-    <div class="panel">
+    <!-- <div class="panel">
       <div class="panel-heading" role="tab" id="headingFour">
         <h5 class="panel-title">
           <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour"  onclick='mostrarSubmenu("sin_submenu")'>
@@ -84,7 +83,7 @@
           </div>
         </div>
       </div>
-    </div>
+    </div> -->
 
     <div class="panel ">
       <div class="panel-heading" role="tab" id="headingthree">
@@ -100,7 +99,7 @@
             <div class="row">
               <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                 {% block contenido_tramites_agendados_jefe_inspector %}
-                  {% include "persona/jefe_inspector/tramites_agendados_jefe_inspector.html" with tramites=ctxtramitesagendados %}
+                  {% include "persona/jefe_inspector/tramites_agendados_jefe_inspector.html" with tramites=ctxlistadosinspecciones.tramites %}
                 {% endblock %}
               </div>
             </div>
