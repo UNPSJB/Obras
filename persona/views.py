@@ -122,7 +122,7 @@ def documentos_de_estado(request, pk_estado):
         items = planilla.items.all()
         filas = FilaDeVisado.objects.all()
         columnas = ColumnaDeVisado.objects.all()
-        elementos = planilla.elementos.all()                
+        elementos = planilla.elementos.all()
         contexto = {
             'documentos_de_fecha': documentos_fecha,
             'planilla':planilla,
@@ -138,7 +138,7 @@ def documentos_de_estado(request, pk_estado):
         items = ItemInspeccion.objects.all()
         categorias = CategoriaInspeccion.objects.all()
         detalles = inspeccion.detalles.all()
-        contexto = {            
+        contexto = {
             'inspeccion': inspeccion,
             'items': items,
             'categorias': categorias,
@@ -303,8 +303,9 @@ def documento_de_estado(request, pk_estado):
                 inspeccion = p                                
         items = ItemInspeccion.objects.all()
         categorias = CategoriaInspeccion.objects.all()
-        detalles = inspeccion.detalles.all()
-        contexto = {            
+        #detalles = inspeccion.detalles.all() queda vacio?
+        detalles = DetalleDeItemInspeccion.objects.all()#toma todos "funciona"
+        contexto = {
             'inspeccion': inspeccion,
             'items': items,
             'categorias': categorias,
@@ -731,7 +732,7 @@ def cargar_inspeccion(request, pk_tramite):
             if (detalle.id == int(i)):
                 planilla.agregar_detalle(detalle)
     planilla.save()
-    usuario = request.user    
+    usuario = request.user
     try:
         tramite.hacer(tramite.INSPECCIONAR, usuario)
         tramite.save()
@@ -1239,7 +1240,6 @@ def listado_comprobantes(request,pk_tramite):
                 canceladas.append(cuota)
     if canceladas is None:
         messages.add_message(request, messages.WARNING, 'No hay pagos registrados para el tramite seleccionado.')
-    print ("canceladas", canceladas)
     return render (request, 'persona/cajero/listado_comprobantes.html', {'cuotas':canceladas})
 
 #------------------------------------------------------------------------------------------------------------------

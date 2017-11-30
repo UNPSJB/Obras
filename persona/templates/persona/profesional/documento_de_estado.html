@@ -108,33 +108,34 @@
                 {% endif %}
 
                 {% if inspeccion %}
+<table class="table table-bordered table-striped table-hover table-condensed" style="text-align:center;">
+    <thead>
+        <tr>
+            <th></th>
+            {% for item in items %}
+                <th>{{item.nombre}}</th>
+            {% endfor %}
+        </tr>
+    </thead>
+    <tbody>
+        {% for categoria in categorias %}
+            <tr>
+                <td class="col-xs-1">{{ categoria.nombre }}</td>
+                {% for item in items %}
+                    <td class="col-sm-4">&nbsp;
+                        {% for detalle in detalles %}
+                            {% if categoria.nombre == detalle.categoria_inspeccion.nombre and item.nombre == detalle.item_inspeccion.nombre %}
+                                {{ detalle.nombre }}
+                        <br>
+                            {% endif %}
+                        {% endfor %}
+                    </td>
+                {% endfor %}
+            </tr>
+        {% endfor %}
+    </tbody>
+</table>
 
-						<table class="table table-bordered table-striped table-hover table-condensed" style="text-align:center;">
-						  <thead>
-							<tr>
-							  <th></th>
-							  {% for item in items %}
-								<th>{{item.nombre}}</th>
-							  {% endfor %}
-							</tr>
-						  </thead>
-						  <tbody>
-							{% for categoria in categorias %}
-							  <tr>
-								<td class="col-xs-1">{{ categoria.nombre }}</td>
-								{% for item in items %}
-								<td class="col-sm-1">&nbsp;
-								  {% for detalle in detalles %}
-									{% if categoria == detalle.categoria_inspeccion and item == detalle.item_inspeccion %}
-                                        <td>{{ detalle.nombre }}</td>
-									{% endif %}
-								  {% endfor %}
-								</td>
-								{% endfor %}
-							  </tr>
-							{% endfor %}
-							</tbody>
-						</table>
 
 					<div class="row">
 					  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
