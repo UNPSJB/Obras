@@ -537,7 +537,33 @@ def aprobar_visado(request, pk_tramite, monto):
     return redirect('visador')
 
 def no_aprobar_visado(request, pk_tramite, observacion):
-    usuario = request.user
+    list_items = []
+    tramite = get_object_or_404(Tramite, pk=pk_tramite)
+    planilla = PlanillaDeVisado()
+    planilla.tramite = tramite
+    planilla.save()
+    for name, value in request.POST.items():
+        if name.startswith('item'):
+            ipk= name.split('-')[1]
+            list_items.append(ipk)            
+    items = ItemDeVisado.objects.all()        
+    for item in items:        
+        for i in list_items:            
+            if (item.id == int(i)):                                
+                planilla.agregar_item(item)                                                                                
+    planilla.save()
+    for name, value in request.POST.items():
+        if name.startswith('elemento'):
+            ipk= name.split('-')[1]
+            list_items.append(ipk)            
+    elementos = Elemento_Balance_Superficie.objects.all()        
+    for elemento in elementos:        
+        for i in list_items:            
+            if (elemento.id == int(i)):                                                
+                planilla.agregar_elemento(elemento)
+                planilla.save()
+    planilla.save()                
+    usuario = request.user            
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
     obs = observacion
     tramite.hacer(tramite.CORREGIR, usuario, obs)
