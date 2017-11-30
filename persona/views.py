@@ -719,7 +719,6 @@ def cargar_inspeccion(request, pk_tramite):
     id_tramite = int(pk_tramite)
     planilla = PlanillaDeInspeccion()
     planilla.tramite = tramite
-    print("id planilla", planilla.tramite)
     planilla.save()
     list_detalles=[]                    
     for name,value in request.POST.items():        
@@ -727,7 +726,6 @@ def cargar_inspeccion(request, pk_tramite):
             ipk=name.split('-')[1]
             list_detalles.append(ipk)
     detalles = DetalleDeItemInspeccion.objects.all()
-    print("detaallles", detalles)
     for detalle in detalles:
         for i in list_detalles:
             if (detalle.id == int(i)):

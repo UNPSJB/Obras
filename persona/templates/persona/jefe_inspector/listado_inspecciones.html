@@ -11,7 +11,6 @@
                 <th>Propietario</th>
                 <th>Medidas en m2</th>
                 <th>Estado</th>
-                <th>...</th>
             </tr>
         </thead>
 
@@ -20,7 +19,7 @@
             {% for tramite in tramites %}
               <tr>
                   <td class="col-xs-1">{{ tramite.id}}</td>
-                  <td class="col-xs-1">{{ tramite.medidas}}</td>
+                  <td class="col-xs-1">{{ tramite.estado.timestamp}}</td>
                   <td class="col-xs-1">{{ tramite.tipo_obra }} </td>
                   <td class="col-xs-3">{{ tramite.profesional}}</td>
                   <td class="col-xs-2">{{ tramite.propietario}}</td>
