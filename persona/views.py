@@ -686,8 +686,10 @@ def tramites_inspeccionados_por_inspector(request):
     usuario = request.user
     estados = Estado.objects.all()
     tipo = 7 #7
-    print ("estadoss", estados)
-    estados_inspeccionados = filter(lambda estado: (estado.usuario is not None and estado.usuario == usuario and estado.tipo == tipo), estados)
+    estados_inspeccionados = filter(lambda estado: (estado.usuario is not None and estado.usuario == usuario and estado.tipo == tipo), estados)    
+    tramites = Tramite.objects.en_estado(ConInspeccion)
+    tramites_del_inspector = filter(lambda t: t.estado().usuario == usuario, tramites)
+    contexto = {"tramites_del_inspector": tramites_del_inspector}
     return estados_inspeccionados
 
 def tramites_agendados_por_inspector(request):
@@ -710,7 +712,6 @@ def agendar_tramite(request, pk_tramite):
     return redirect('inspector')
 
 def cargar_inspeccion(request, pk_tramite):
-    print("holllllllaaaaaaaaaaaaaaa")
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
     id_tramite = int(pk_tramite)
     planilla = PlanillaDeInspeccion()
@@ -810,12 +811,43 @@ def agendar_inspeccion_final(request,pk_tramite):
     tramite.hacer(Tramite.AGENDAR, usuario=request.user, fecha_inspeccion=fecha, inspector=request.user)
     return redirect('jefe_inspector')
 
-def cargar_inspeccion_final(request,pk_tramite):
+def inspeccion_final(request,pk_tramite):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
-    return render(request, 'persona/jefe_inspector/cargar_inspeccion_final.html', {'tramite': tramite})
+    detalles = DetalleDeItemInspeccion.objects.all()        
+    items = ItemInspeccion.objects.all()
+    categorias = CategoriaInspeccion.objects.all()
+    contexto = {"tramite":tramite, "items":items,"detalles":detalles,"categorias":categorias}
+    return render(request, 'persona/jefe_inspector/cargar_inspeccion_final.html', contexto)
+
+def completar_inspeccion_final(request,pk_tramite):
+    tramite = get_object_or_404(Tramite, pk=pk_tramite)
+    id_tramite = int(pk_tramite)
+    planilla = PlanillaDeInspeccion()
+    planilla.tramite = tramite
+    planilla.save()
+    list_detalles=[]                    
+    for name,value in request.POST.items():        
+        if name.startswith('detalle'):
+            ipk=name.split('-')[1]
+            list_detalles.append(ipk)
+    detalles = DetalleDeItemInspeccion.objects.all()
+    for detalle in detalles:
+        for i in list_detalles:
+            if (detalle.id == int(i)):
+                planilla.agregar_detalle(detalle)
+    planilla.save()
+    u = request.user        
+    try:
+        tramite.hacer(Tramite.INSPECCIONAR, usuario=u, inspector=u)#agendado->ConInspeccion
+        tramite.hacer(Tramite.INSPECCIONAR, usuario=u)#ConInspeccion->Inspeccionado    
+        tramite.save()
+        messages.add_message(request, messages.SUCCESS, 'Inspeccion Finalizada') 
+    except:   
+        messages.add_message(request, messages.WARNING, "La inspeccion ya fue cargada")
+    return redirect('jefe_inspector')
+    #return render(request, 'persona/jefe_inspector/cargar_inspeccion_final.html', {'tramite': tramite})
 
 def aceptar_inspeccion_final(request,pk_tramite):
-    tramite = get_object_or_404(Tramite, pk=pk_tramite)
     u = request.user
     tramite.hacer(Tramite.INSPECCIONAR, usuario=u, inspector=u)#agendado->ConInspeccion
     tramite.hacer(Tramite.INSPECCIONAR, usuario=u)#ConInspeccion->Inspeccionado
@@ -827,12 +859,12 @@ def ver_inspecciones(request, pk_tramite):
     pk = int(pk_tramite)
     estados = Estado.objects.all()
     estados_de_tramite = filter(lambda e: (e.tramite.pk == pk), estados)
-    estados = filter(lambda e: (e.tipo == 9), estados_de_tramite)
+    estados = filter(lambda e: (e.tipo == 7), estados_de_tramite)
     contexto = {'estados': estados}
     return render(request, 'persona/jefe_inspector/vista_de_inspecciones.html',contexto)
 
 def listado_inspecciones(request):
-    tramites=Tramite.objects.en_estado(Inspeccionado)
+    tramites=Tramite.objects.en_estado(ConInspeccion)
     contexto={'tramites':tramites}
     return contexto
 #------------------------------------------------------------------------------------------------------------------
@@ -1235,7 +1267,7 @@ def techos(request):
     return render(request,'persona/movil/techos.html')                
 
 def es_inspector(usuario):
-    return usuario.groups.filter(name='inspector').exists()
+    return usuario.groups.filter(name='inspector' or 'jefeinspector').exists()
 
 @user_passes_test(es_inspector)
 def mostrar_inspector_movil(request):

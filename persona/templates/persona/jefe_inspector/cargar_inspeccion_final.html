@@ -40,7 +40,48 @@
                             </div>
                         {% endfor %}
                     </div>
-                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+
+                    <div class="container-fluid">
+                        <form action="" method="post" enctype="multipart/form-data">
+                        <table class="table table-bordered table-striped table-hover table-condensed" style="text-align:center;">
+                            <thead>
+                                <tr>
+                                    <th></th>
+                                    {% for item in items %}
+                                        <th>{{item.nombre}}</th>
+                                    {% endfor %}
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for categoria in categorias %}
+                                    <tr>
+                                        <td class="col-xs-1">{{ categoria.nombre }}</td>
+                                        {% for item in items %}
+                                            <td class="col-sm-4">&nbsp;
+                                                {% for detalle in detalles %}
+                                                    {% if categoria.nombre == detalle.categoria_inspeccion.nombre and item.nombre == detalle.item_inspeccion.nombre %}
+                                                        {{ detalle.nombre }}
+                                                        <label class="switch">
+                                                            <input name="detalles-{{detalle.pk}}" type="checkbox"><span class="slider round"></span>
+                                                        </label> 
+                                                        <br><hr>
+                                                    {% endif %}
+                                                {% endfor %}
+                                            </td>
+                                        {% endfor %}
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                        </form>
+                        <br>
+                        <a href="{% url 'completar_inspeccion_final' tramite.pk %}">
+                            <button class="btn btn-info btn-sm" name="Cargar Inspeccion">
+                                Aprobar inspeccion
+                            </button>    
+                        </a>                        
+                    </div>
+                    <!-- <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                         <div class="container-fluid">
                             <div class="row">
                                 <hr>
@@ -86,11 +127,186 @@
 
                             </div>
                         </div>
-                    </div>
+                    </div> -->
+                    <br><br>
                 </div>
             </div>
         </div>
     </div>
+
+    <style>
+        .btn-info {
+            color: #fff;
+            background-color: #337ab7;
+            border-color: #2e6da4;
+            float:left;
+            margin-right:10px;
+        
+        }
+        ul#menu-horizontal li {
+            float: left;
+            display: inline;
+            position: relative;}
+            #menu-horizontal {
+            width:500px;
+            margin:0 auto;
+        }
+        
+        #menu-horizontal li {
+        margin:0 1px;
+        width:98px;
+        min-height:19px;
+        text-align:center;
+        background:#BBB;
+        list-style:none;
+        padding:2px 0;
+        }
+        
+        ul#menu-horizontal ul {
+            display: none;
+            position: relative;
+            top: 24;
+            left:0;
+            margin:0;
+            padding:0;
+            background:#FFFFFF;
+        }
+        
+        ul#menu-horizontal ul li {
+            display: block !important;
+        }
+        
+        ul#menu-horizontal li:hover ul{
+            display: none;
+        }
+        
+        ul#menu-horizontal li:hover ul{
+            display: block;
+        }
+        
+        
+        #menu-horizontal li:hover {
+            background:#C5014F;
+        }
+        
+        #menu-horizontal li a {
+            font:bold 11px Arial, Helvetica, sans-serif;
+            color:#FFF;
+            text-decoration:none;
+        }
+        
+        #menu-horizontal li ul li{
+            float:none;
+            width:98px;
+            margin:1px 0;
+        }    
+        
+            /* Dropdown Button */
+            .dropbtn {
+            background-color: #2C45D4;
+            color: white;
+            padding: 16px;
+            font-size: 16px;
+            border: none;
+            cursor: pointer;
+        }
+        
+        /* The container <div> - needed to position the dropdown content */
+        .dropdown {
+            position: relative;
+            display: inline-block;
+        }
+        
+        /* Dropdown Content (Hidden by Default) */
+        .dropdown-content {
+            display: none;
+            position: absolute;
+            background-color: #f9f9f9;
+            min-width: 160px;
+            box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
+            z-index: 1;
+        }
+        
+        /* Links inside the dropdown */
+        .dropdown-content a {
+            color: black;
+            padding: 12px 16px;
+            text-decoration: none;
+            display: block;
+        }
+        
+        /* Change color of dropdown links on hover */
+        .dropdown-content a:hover {background-color: #f1f1f1}
+        
+        /* Show the dropdown menu on hover */
+        .dropdown:hover .dropdown-content {
+            display: block;
+        }
+        
+        /* Change the background color of the dropdown button when the dropdown content is shown */
+        .dropdown:hover .dropbtn {
+            background-color: #3F5DB1;
+        } 
+                
+        
+        .switch {
+                position: relative;
+                display: inline-block;
+                width: 30px;
+                height: 17px;
+            }
+                
+            /* Hide default HTML checkbox */
+            .switch input {display:none;}
+                
+            /* The slider */
+            .slider {
+                position: absolute;
+                cursor: pointer;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                background-color: #ccc;
+                -webkit-transition: .3s;
+                transition: .3s;
+            }
+                
+            .slider:before {
+                position: absolute;
+                content: "";
+                height: 13px;
+                width: 13px;
+                left: 2px;
+                bottom: 2px;
+                background-color: white;
+                -webkit-transition: .3s;
+                transition: .3s;
+            }
+                
+            input:checked + .slider {
+                background-color: #2196F3;
+            }
+                
+            input:focus + .slider {
+                box-shadow: 0 0 1px #2196F3;
+            }
+                
+            input:checked + .slider:before {
+                -webkit-transform: translateX(13px);
+                -ms-transform: translateX(13px);
+                transform: translateX(13px);
+            }
+                
+            /* Rounded sliders */
+            .slider.round {
+                border-radius: 34px;
+            }
+                
+            .slider.round:before {
+                border-radius: 80%;
+            }
+        </style>                            
 
 {% endblock %}
 
