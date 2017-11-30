@@ -112,7 +112,7 @@
                         </div>
 					{% endif %}
                     
-                    {% if planilla %}    
+                    {% if inspeccion %}
                         <h5 class="panel-title">
                           <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseSeven" aria-expanded="false" aria-controls="collapseSeven">
                             <label id="documentos2">Planilla de Inspeccion </label>
@@ -153,10 +153,26 @@
 							<div class=" col-xs-12 col-sm-12 col-md-12 col-lg-12">
 							  <ol>
 								<label>Descripcion de categorias:</h2></label>
-								{% for categoria in categorias %}
-								<li> {{categoria.tipo}}</li>
-								<li> {{categoria.descripcion}}</li>
+								<!--{% for categoria in categorias %}-->
+								<!--<li> {{categoria.tipo}}</li>-->
+								<!--<li> {{categoria.descripcion}}</li>-->
+								<!--{% endfor %}-->
+                                  <table  class="table-bordered table-striped table-hover">
+                                  <thead>
+                                      <tr>
+										  <th>categoria</th>
+                                          <th>tipo</th>
+                                          <th>descripcion</th>
+                                      </tr>
+                                  </thead>
+                                {% for categoria in categorias %}
+                                <tr>
+	                               <td id="nombre{{categoria.id}}" class="col-xs-1" align="center">{{categoria.nombre}}</td>
+                                   <td id="tipo{{categoria.id}}" class="col-xs-1" align="center">{{categoria.tipo}}</td>
+                                   <td id="descripcion{{categoria.id}}" class="col-xs-2">{{categoria.descripcion}}</td>
+								</tr>
 								{% endfor %}
+							  </table>
 							  </ol>
 							</div>
 						  </div>

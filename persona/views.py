@@ -281,7 +281,7 @@ def documento_de_estado(request, pk_estado):
     if (estado.tipo >2 and estado.tipo <5):                        
         for p in PlanillaDeVisado.objects.all():
             if (p.tramite.pk == estado.tramite.pk):
-                planilla = p                                
+                planilla = p
         items = planilla.items.all()
         filas = FilaDeVisado.objects.all()
         columnas = ColumnaDeVisado.objects.all()
@@ -297,11 +297,11 @@ def documento_de_estado(request, pk_estado):
     if (estado.tipo >5 and estado.tipo <8):                        
         for p in PlanillaDeInspeccion.objects.all():
             if (p.tramite.pk == estado.tramite.pk):
-                inspeccion = p                                
+                inspeccion = p
         items = ItemInspeccion.objects.all()
         categorias = CategoriaInspeccion.objects.all()
         detalles = inspeccion.detalles.all()
-        contexto = {            
+        contexto = {
             'inspeccion': inspeccion,
             'items': items,
             'categorias': categorias,
@@ -653,7 +653,6 @@ def tramites_inspeccionados_por_inspector(request):
     usuario = request.user
     estados = Estado.objects.all()
     tipo = 7 #7
-    print ("estadoss", estados)
     estados_inspeccionados = filter(lambda estado: (estado.usuario is not None and estado.usuario == usuario and estado.tipo == tipo), estados)
     return estados_inspeccionados
 
@@ -677,12 +676,10 @@ def agendar_tramite(request, pk_tramite):
     return redirect('inspector')
 
 def cargar_inspeccion(request, pk_tramite):
-    print("holllllllaaaaaaaaaaaaaaa")
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
     id_tramite = int(pk_tramite)
     planilla = PlanillaDeInspeccion()
     planilla.tramite = tramite
-    print("id planilla", planilla.tramite)
     planilla.save()
     list_detalles=[]                    
     for name,value in request.POST.items():        
@@ -690,7 +687,6 @@ def cargar_inspeccion(request, pk_tramite):
             ipk=name.split('-')[1]
             list_detalles.append(ipk)
     detalles = DetalleDeItemInspeccion.objects.all()
-    print("detaallles", detalles)
     for detalle in detalles:
         for i in list_detalles:
             if (detalle.id == int(i)):
