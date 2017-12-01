@@ -855,11 +855,20 @@ def aceptar_inspeccion_final(request,pk_tramite):
 
 # ve la inspeccion de un tramite o inspecciones
 def ver_inspecciones(request, pk_tramite):
-    pk = int(pk_tramite)
-    estados = Estado.objects.all()
-    estados_de_tramite = filter(lambda e: (e.tramite.pk == pk), estados)
-    estados = filter(lambda e: (e.tipo == 7), estados_de_tramite)
-    contexto = {'estados': estados}
+    tramite = get_object_or_404(Tramite,pk=pk_tramite)
+    inspecciones = []
+    for p in PlanillaDeInspeccion.objects.all():
+        if (p.tramite.pk == int(pk_tramite)):
+            inspecciones.append(p)              
+    items = ItemInspeccion.objects.all()
+    categorias = CategoriaInspeccion.objects.all()
+    contexto = {
+        'tramite': tramite,
+        'inspecciones':inspecciones,
+        'inspecciones': inspecciones,
+        'items': items,
+        'categorias': categorias
+    }
     return render(request, 'persona/jefe_inspector/vista_de_inspecciones.html',contexto)
 
 def listado_inspecciones(request):
