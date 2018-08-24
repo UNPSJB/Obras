@@ -33,7 +33,7 @@
 		  <div class="panel-body">
 			<div class="container-fluid">
 				<div class="row">
-                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="color: white;">
+                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="...">
                         {% for documento in documentos_de_fecha%}
                                 <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
                                 <div class="thumbnail ">
@@ -52,65 +52,65 @@
                         {% endfor %}
                      </div>
                     </div>
-                    
+
                     {% for planilla in planillas %}
                     {% if planilla %}
                     <table class="table table-bordered table-striped table-hover table-condensed" style="text-align:center;">
                         <thead>
-                            <tr>              
-                                <th></th> 
+                            <tr>
+                                <th></th>
                                 {% for columna in columnas %}
                                     <th>{{columna}}</th>
-                                {% endfor %}              
+                                {% endfor %}
                             </tr>
-                        </thead>        
-                        <tbody>          
+                        </thead>
+                        <tbody>
                             {% for fila in filas %}
                                 <tr>
                                     <td class="col-xs-1">{{ fila }}</td>
-                                        {% for columna in columnas %} 
-                                                <td class="col-sm-1">&nbsp;             
-                                                {% for item in planilla.items.all %}                              
-                                                {% if fila == item.fila_de_visado and columna == item.columna_de_visado %}                       
+                                        {% for columna in columnas %}
+                                                <td class="col-sm-1">&nbsp;
+                                                {% for item in planilla.items.all %}
+                                                {% if fila == item.fila_de_visado and columna == item.columna_de_visado %}
                                                     <label class="switch">
                                                         <input type="checkbox" name="{{fila}}" value="{{fila}}" checked><span class="slider round"></span>
-                                                    </label>                               
+                                                    </label>
                                                 {% endif %}
                                             {% endfor %}
-                                        </td>            
+                                        </td>
                                     {% endfor %}
                                 </tr>
                         {% endfor %}
                         </tbody>
                     </table>
-                <br>                       
+                <br>
                     <div class="table-responsive">
                         <table class="table-bordered table-striped table-hover table-condensed" style="text-align:center;">
                             <thead>
-                                <tr>                                            
-                                    <th></th>                      
-                                    <th>BALANCE DE SUPERFICIE</th> 
+                                <tr>
+                                    <th></th>
+                                    <th>BALANCE DE SUPERFICIE</th>
                                 </tr>
-                            </thead>        
-                            <tbody> 
+                            </thead>
+                            <tbody>
                                 {% for elemento in planilla.elementos.all %}
-                                    <tr>                                                          
-                                        <td class="col-xs-1">{{ elemento }}</td> 
-                                        <td class="col-sm-4">														
+                                    <tr>
+                                        <td class="col-xs-1">{{ elemento }}</td>
+                                        <td class="col-sm-4">
                                                 <label class="switch">
                                                     <input type="checkbox" name="{{elemento}}" value="{{elemento}}" checked><span class="slider round"></span>
-                                                </label>																														
-                                        </td>                                                                                                                        
-                                    </tr>        
+                                                </label>
+                                        </td>
+                                    </tr>
                                     {% endfor %}
                             </tbody>
                         </table>
-                    </div>                            
+                    </div>
                 {% endif %}
                 <hr><br>
                 {% endfor %}
 
-                    
+
                 {% for inspeccion in inspecciones %}
                     {% if inspeccion %}
                        <table class="table table-bordered table-striped table-hover table-condensed" style="text-align:center;">
@@ -140,8 +140,8 @@
                                {% endfor %}
                            </tbody>
                        </table>
-                       
-                       
+
+
                                            <div class="row">
                                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                                                <form action="" >
@@ -175,23 +175,31 @@
                                                </form>
                                            </div>
                                            </div>
-                               {% endif %}                                    
+                               {% endif %}
                            {% endfor %}
-                    
-                    
+
+                    <div class=" col-xs-8 col-sm-8 col-md-8 col-lg-8" align="left">
+                            <a id="crear_detalle" href="{% url 'reporte_tramites_director_excel' %}" class="btn btn-info btn-collapsible btn-sm" title="Generar Archivo Excel" >
+                               <i class="glyphicon glyphicon-list-alt"></i><span>Exportar a EXCEL</span>
+                            </a>
+                            <a href="{% url 'reporte_tramites_profesional_pdf' %}" class="btn btn-info btn-collapsible btn-sm" title="Generar Archivo PDF" >
+                                <i class="glyphicon glyphicon-file"></i><span>Exportar a PDF</span>
+                            </a>
+                        </div>
+
                      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="right">
                         <a href="javascript:history.back(-1);">
                             <button type="button" class="btn btn-primary" name="Volver">
                                 Volver
                             </button>
-                        </a>                        
+                        </a>
                         {% if planilla or inspeccion %}
                         <a href="javascript:history.back(-1);">
                             <button type="button" class="btn btn-primary" name="Imprimir">
                                 Imprimir
                             </button>
                         </a>
-                        {% endif %}    
+                        {% endif %}
                      </div>
 			    </div>
 			</div>
@@ -208,10 +216,10 @@
         width: 60px;
         height: 34px;
     }
-        
+
     /* Hide default HTML checkbox */
     .switch input {display:none;}
-        
+
     /* The slider */
     .slider {
         position: absolute;
@@ -224,7 +232,7 @@
         -webkit-transition: .4s;
         transition: .4s;
     }
-        
+
     .slider:before {
         position: absolute;
         content: "";
@@ -236,26 +244,26 @@
         -webkit-transition: .4s;
         transition: .4s;
     }
-        
+
     input:checked + .slider {
         background-color: #2196F3;
     }
-        
+
     input:focus + .slider {
         box-shadow: 0 0 1px #2196F3;
     }
-        
+
     input:checked + .slider:before {
         -webkit-transform: translateX(26px);
         -ms-transform: translateX(26px);
         transform: translateX(26px);
     }
-        
+
     /* Rounded sliders */
     .slider.round {
         border-radius: 34px;
     }
-        
+
     .slider.round:before {
         border-radius: 50%;
     }

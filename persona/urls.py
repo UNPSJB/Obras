@@ -29,6 +29,7 @@ urlpatterns = [
     url(r'^enviar_correcciones/(?P<pk_tramite>\d+)/$', views.enviar_correcciones, name="enviar_correcciones"),
     url(r'^profesional/estado_tramite$', views.listado_tramites_de_profesional, name="estado_tramite"),
     url(r'^documento_de_estado/(?P<pk_estado>\d+)/$', views.documento_de_estado, name="documento_de_estado"),
+    url(r'^reporte_tramites_profesional_pdf/$', login_required(ReporteTramitesProfesionalPdf.as_view()), name="reporte_tramites_profesional_pdf"),
 
     # administrativo ------------------------------------------------------------------------------------------------
     url(r'^administrativo$', views.mostrar_administrativo, name="administrativo"),
@@ -39,6 +40,9 @@ urlpatterns = [
     url(r'^rechazar_tramite/(?P<pk_tramite>\d+)/$', views.rechazar_tramite, name="rechazar_tramite"),
     url(r'^aceptar_tramite/(?P<pk_tramite>\d+)/$', views.aceptar_tramite, name="aceptar_tramite"),
     url(r'^habilitar_final_obra/(?P<pk_tramite>\d+)/$', views.habilitar_final_obra, name="habilitar_final_obra"),
+    url(r'^listado_profesionales$', views.listado_profesionales, name="listado_profesionales"),
+    url(r'^reporte_listado_profesional_pdf/$', login_required(ReporteProfesionalesPdf.as_view()), name="reporte_listado_profesional_pdf"),
+    url(r'^reporte_listado_profesional_excel/$',  ReporteProfesionalExcel.as_view(), name="reporte_listado_profesional_excel"),
 
     # visador -------------------------------------------------------------------------------------------------------
     url(r'^visador$', views.mostrar_visador, name="visador"),

@@ -14,7 +14,7 @@
 			<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour" onclick='mostrarSubmenu("sin_submenu")'>Modificar mis datos personales</a></li>
 			<li><a href="#" onclick='mostrarSubmenu("consultasInformes")'>Consultas e Informes <span class="caret"></span></a></li>
 				<ul class="sidebar sidebar-2" style="display:none;" id="consultasInformes">
-					<li><a href="#">Consulta 1</a></li>
+					<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseSeven" aria-expanded="false" aria-controls="collapseSeven" onclick='mostrarSubmenu("consultasInformes")'>Listado de profesionales activos</a></li>
 					<li><a href="#">Consulta 2</a></li>
 					<li><a href="#">Consulta 3</a></li>
 				</ul>
@@ -140,6 +140,7 @@
 			</div>
 		</div>
 	</div>
+
 	<div class="panel">
 	    <div class="panel-heading box" role="tab" id="headingFour">
 	      <h5 class="panel-title">
@@ -197,6 +198,28 @@
 				</div>
 			</div>
 	  </div>
+	<div class="panel">
+		<div class="panel-heading box" role="tab" id="headingSeven">
+		  	<h5 class="panel-title">
+				<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseSeven" aria-expanded="false" aria-controls="collapseSeven">
+			  		<font color="#ffffff" size="2">Listado de profesionales activos</font>
+				</a>
+		  	</h5>
+		</div>
+		<div id="collapseSeven" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingSeven">
+			<div class="panel-body">
+				<div class="container-fluid">
+					<div class="row">
+						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+							{% block contenido_listado_profesionales %}
+								{% include "persona/administrativo/listado_profesionales.html" with profesionales=ctxlistprofesional.profesionales %}
+							{% endblock %}
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
 	</div>
 
 {% endblock %}

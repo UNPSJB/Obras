@@ -50,6 +50,12 @@ class FormularioPersona(forms.ModelForm):
             raise ValidationError('La persona ya existe en el sistema')
         return dato
 
+    def clean_mail(self):
+        dato_mail = self.cleaned_data['mail']
+        if Persona.objects.filter(mail=dato_mail).exists():
+            raise ValidationError('El mail ya pertenece a otra persona registrada en el sistema')
+        return dato_mail
+
 class FormularioProfesional(FormularioPersona):
     NAME = 'profesional_form'
     SUBMIT = 'profesional_submit'

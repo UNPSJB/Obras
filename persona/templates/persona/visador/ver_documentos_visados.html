@@ -1,15 +1,11 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
-{% load crispy_forms_tags%}
 
-{% block estilos %}
-
-{% endblock %}
 
 {% block barra %}
 	<ul class="sidebar sidebar-1">
 		<font size="2">
-			<li><a href="javascript:history.back(-1);" class="current"><font color="white">Visador</font></a></li>
+			<li><a href="{% urlt color="white">Visador</font></a></li>
 		</font>
 	</ul>
 {% endblock %}
@@ -49,33 +45,33 @@
                                 </div>
                             {% endfor %}
                             </div>
-						</div>						
+						</div>
 					</div>
 
 					  <div class="table-responsive">
 						<table class="table table-bordered table-striped table-hover table-condensed" style="text-align:center;">
 						  <thead>
-							<tr>              
-							  <th></th> 
+							<tr>
+							  <th></th>
 							  {% for columna in columnas %}
 								<th>{{columna}}</th>
-							  {% endfor %}              
+							  {% endfor %}
 							</tr>
-						  </thead>        
-						  <tbody>          
+						  </thead>
+						  <tbody>
 							{% for fila in filas %}
 							  <tr>
 								<td class="col-xs-1">{{ fila }}</td>
-								{% for columna in columnas %} 
-								<td class="col-sm-1">&nbsp;             
-								  {% for item in items %}                              
-									{% if fila == item.fila_de_visado and columna == item.columna_de_visado %}                       
+								{% for columna in columnas %}
+								<td class="col-sm-1">&nbsp;
+								  {% for item in items %}
+									{% if fila == item.fila_de_visado and columna == item.columna_de_visado %}
 										<label class="switch">
 											<input type="checkbox" name="{{fila}}" value="{{fila}}" checked><span class="slider round"></span>
-										</label>                               
+										</label>
 									{% endif %}
 								  {% endfor %}
-								</td>            
+								</td>
 								{% endfor %}
 							  </tr>
 							{% endfor %}
@@ -88,45 +84,45 @@
 								<div class="table-responsive">
 									<table class="table table-bordered table-striped table-hover table-condensed" style="text-align:center;">
 										<thead>
-											<tr>                                            
-												<th></th>                      
-												<th>BALANCE DE SUPERFICIE</th> 
+											<tr>
+												<th></th>
+												<th>BALANCE DE SUPERFICIE</th>
 											</tr>
-										</thead>        
-										<tbody> 
+										</thead>
+										<tbody>
 											{% for elemento in elementos %}
-												<tr>                                                          
-													<td class="col-xs-1">{{ elemento }}</td> 
-													<td class="col-sm-4">														
+												<tr>
+													<td class="col-xs-1">{{ elemento }}</td>
+													<td class="col-sm-4">
 															<label class="switch">
 																<input type="checkbox" name="{{elemento}}" value="{{elemento}}" checked><span class="slider round"></span>
-															</label>																														
-													</td>                                                                                                                        
-												</tr>        
+															</label>
+													</td>
+												</tr>
 											{% endfor %}
 										</tbody>
 									</table>
 								</div>
 							</div>
 						</div>
-					
-					<div class="container-fluid">						
+
+					<div class="container-fluid">
 						<div class="row">
-							<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="right">								
+							<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="right">
 								<a href="{% url 'visador' %}">
 									<button type="button" class="btn btn-primary" name="habilitar">
 										Volver
 									</button>
 								</a>
-							</div>							
+							</div>
 						</div>
 					</div>
-					
+
                 </div>
             </div>
         </div>
 	</div>
-	
+
 	<style>
 		.switch {
 			position: relative;
@@ -134,10 +130,10 @@
 			width: 60px;
 			height: 34px;
 		}
-			
+
 		/* Hide default HTML checkbox */
 		.switch input {display:none;}
-			
+
 		/* The slider */
 		.slider {
 			position: absolute;
@@ -146,9 +142,9 @@
 			left: 0;
 			right: 0;
 			bottom: 0;
-			background-color: #ccc;			
+			background-color: #ccc;
 		}
-			
+
 		.slider:before {
 			position: absolute;
 			content: "";
@@ -156,33 +152,33 @@
 			width: 26px;
 			left: 4px;
 			bottom: 4px;
-			background-color: white;						
+			background-color: white;
 		}
-			
+
 		input:checked + .slider {
 			background-color: #2196F3;
 		}
-			
+
 		input:focus + .slider {
 			box-shadow: 0 0 1px #2196F3;
 		}
-			
+
 		input:checked + .slider:before {
 			-webkit-transform: translateX(26px);
 			-ms-transform: translateX(26px);
 			transform: translateX(26px);
 		}
-			
+
 		/* Rounded sliders */
 		.slider.round {
 			border-radius: 34px;
 		}
-			
+
 		.slider.round:before {
 			border-radius: 50%;
 		}
 	  </style>
-		  
+
 {% endblock %}
 
 {% block scripts %}

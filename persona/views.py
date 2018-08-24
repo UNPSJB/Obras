@@ -69,9 +69,9 @@ def tramites_para_financiar(request):
         lambda persona: (persona.usuario is not None and persona.usuario == usuario), personas
     )
     persona = lista_de_persona_que_esta_logueada.pop()  # Saco de la lista la persona porque no puedo seguir trabajando con una lista
-    propietario = persona.get_propietario()  # Me quedo con el atributo propietario de la persona    
+    propietario = persona.get_propietario()  # Me quedo con el atributo propietario de la persona
+    tramites_propietario = Tramite.objects.en_estado(Visado)
     tramites_propietario = filter(lambda tramite: (tramite.propietario == propietario), tramites)
-    tramites_propietario = Tramite.objects.en_estado(Visado)                
     return tramites_propietario
 
 def listado_tramites_propietario(request):
@@ -309,6 +309,67 @@ def documento_de_estado(request, pk_estado):
         }    
     return render(request, 'persona/profesional/documento_de_estado.html', contexto)
 
+class ReporteTramitesProfesionalPdf(View):
+
+    def get(self, request, *args, **kwargs):
+
+        filename = "Informe de tramites.pdf"
+        response = HttpResponse(content_type='application/pdf')
+        response['Content-Disposition'] = 'attachment; filename="%s"' % filename
+        doc = SimpleDocTemplate(
+            response,
+            pagesize=letter,
+            rightMargin=72,
+            leftMargin=72,
+            topMargin=15,
+            bottomMargin=28,
+        )
+        Story = []
+        styles = getSampleStyleSheet()
+        styles.add(ParagraphStyle(name='Usuario', alignment=TA_RIGHT, fontName='Helvetica', fontSize=8))
+        styles.add(ParagraphStyle(name='Titulo', alignment=TA_RIGHT, fontName='Helvetica', fontSize=18))
+        styles.add(ParagraphStyle(name='Subtitulo', alignment=TA_RIGHT, fontName='Helvetica', fontSize=12))
+        usuario = 'Usuario: ' + request.user.username + ' -  Fecha:' + ' ... aca va la fecha'
+        Story.append(Paragraph(usuario, styles["Usuario"]))
+        Story.append(Spacer(0, cm * 0.15))
+        im0 = Image(settings.MEDIA_ROOT + '/imagenes/espacioPDF.png', width=490, height=3)
+        im0.hAlign = 'CENTER'
+        Story.append(im0)
+        titulo = 'SISTEMA OBRAS PARTICULARES'
+        Story.append(Paragraph(titulo, styles["Titulo"]))
+        Story.append(Spacer(0, cm * 0.20))
+        subtitulo = 'Reporte de tramites'
+        Story.append(Paragraph(subtitulo, styles["Subtitulo"]))
+        Story.append(Spacer(0, cm * 0.15))
+        Story.append(im0)
+        Story.append(Spacer(0, cm * 0.5))
+        encabezados = ('PLANILLA DE VISADO')
+        detalles = [(columna, fila, '*')
+            # for columna in
+            # ColumnaDeVisado.objects.all()
+           for fila in
+             FilaDeVisado.objects.all()
+                    for columna in ColumnaDeVisado.objects.all()
+                        for item in ItemDeVisado.objects.all()
+                            if fila == item.fila_de_visado and columna == item.columna_de_visado]
+            # for item in
+            # ItemDeVisado.objects.all()]
+        detalle_orden = Table([encabezados] + detalles, colWidths=[5 * cm, 7 * cm, 6 * cm, 6 * cm, 4 * cm, 4 * cm])
+        detalle_orden.setStyle(TableStyle(
+            [
+                ('ALIGN', (0, 0), (0, 0), 'CENTER'),
+                ('GRID', (0, 0), (-1, -1), 1, colors.gray),
+                ('FONTSIZE', (0, 0), (-1, -1), 8),
+                ('LINEBELOW', (0, 0), (-1, 0), 2, colors.darkblue),
+                ('BACKGROUND', (0, 0), (-1, 0), colors.dodgerblue),
+                ('TEXTCOLOR', (0, 0), (-1, 0), colors.white),
+            ]
+        ))
+        detalle_orden.hAlign = 'CENTER'
+        Story.append(detalle_orden)
+        doc.build(Story)
+        return response
+
 #-------------------------------------------------------------------------------------------------------------------
 #administrativo ----------------------------------------------------------------------------------------------------
 
@@ -322,7 +383,8 @@ def mostrar_administrativo(request):
         "ctxtramitesiniciados": listado_de_tramites_iniciados(request),
         "ctxtramitescorregidos": tramite_corregidos_list(request),
         "ctxsolicitudesfinalobra": solicitud_final_obra_list(request),
-        "ctxpago": registrar_pago_tramite(request)
+        "ctxpago": registrar_pago_tramite(request),
+        "ctxlistprofesional": listado_profesionales(request)
     }
     return render(request, 'persona/administrativo/administrativo.html', contexto)
 
@@ -417,6 +479,121 @@ def ver_documentos_tramite_administrativo(request, pk_tramite):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
     return render(request, 'persona/administrativo/vista_de_documentos_administrativo.html', {'tramite': tramite})
 
+def listado_profesionales(request):
+    personas = Profesional.objects.all()
+    profesionales = filter(lambda persona: (persona is not None), personas)
+    contexto = {'profesionales': personas}
+    return contexto
+
+#from datetime import date, time
+class ReporteProfesionalExcel(TemplateView):
+    def get(self, request, *args, **kwargs):
+        profesionales = Profesional.objects.all()
+        wb = Workbook()
+        ws = wb.active
+        ws['A1'] = 'REPORTE DE TRAMITES'
+        ws.merge_cells('B1:G1')
+        # ws['B2'] = 'FECHA_INICIO'
+        ws['B2'] = 'NOMBRE'
+        ws['C2'] = 'APELLIDO'
+        ws['D2'] = 'DNI'
+        ws['E2'] = 'TELEFONO'
+        ws['F2'] = 'PROFESION'
+        ws['G2'] = 'CATEGORIA'
+        ws['H2'] = 'MATRICULA'
+        ws['I2'] = 'DOMICILIO'
+        ws['J2'] = 'MAIL'
+        cont = 3
+        for profesional in profesionales:
+            # ws.cell(row=cont, column=2).value = convertidor_de_fechas(tramite.estado.timestamp)
+            # ws.cell(row=cont, column=2).value = tramite.estado.timestamp
+            ws.cell(row=cont, column=2).value = str(profesional.persona.nombre)
+            ws.cell(row=cont, column=3).value = str(profesional.persona.apellido)
+            ws.cell(row=cont, column=4).value = str(profesional.persona.dni)
+            ws.cell(row=cont, column=5).value = str(profesional.persona.telefono)
+            ws.cell(row=cont, column=6).value = str(profesional.profesion)
+            ws.cell(row=cont, column=7).value = profesional.categoria
+            ws.cell(row=cont, column=8).value = profesional.matricula
+            ws.cell(row=cont, column=9).value = str(profesional.persona.domicilio)
+            ws.cell(row=cont, column=10).value = str(profesional.persona.mail)
+            cont = cont + 1
+        nombre_archivo = "ReportePersonasExcel.xlsx"
+        response = HttpResponse(content_type="application/ms-excel")
+        contenido = "attachment; filename={0}".format(nombre_archivo)
+        response["Content-Disposition"] = contenido
+        wb.save(response)
+        return response
+
+class ReporteProfesionalesPdf(View):
+
+    def get(self, request, *args, **kwargs):
+
+        filename = "Informe de tramites.pdf"
+        response = HttpResponse(content_type='application/pdf')
+        response['Content-Disposition'] = 'attachment; filename="%s"' % filename
+        doc = SimpleDocTemplate(
+            response,
+            pagesize=letter,
+            rightMargin=72,
+            leftMargin=72,
+            topMargin=15,
+            bottomMargin=28,
+        )
+        Story = []
+        styles = getSampleStyleSheet()
+        styles.add(ParagraphStyle(name='Usuario', alignment=TA_RIGHT, fontName='Helvetica', fontSize=8))
+        styles.add(ParagraphStyle(name='Titulo', alignment=TA_RIGHT, fontName='Helvetica', fontSize=18))
+        styles.add(ParagraphStyle(name='Subtitulo', alignment=TA_RIGHT, fontName='Helvetica', fontSize=12))
+        fecha = timezone.now().strftime('%Y-%m-%d')
+        usuario = 'Usuario: ' + request.user.username + ' -  Fecha:' + str(fecha)
+        Story.append(Paragraph(usuario, styles["Usuario"]))
+        Story.append(Spacer(0, cm * 0.1))
+        im0 = Image(settings.MEDIA_ROOT + '/imagenes/espacioPDF.png', width=490, height=3)
+        im0.hAlign = 'CENTER'
+        Story.append(im0)
+        titulo = 'SISTEMA OBRAS PARTICULARES'
+        Story.append(Paragraph(titulo, styles["Titulo"]))
+        Story.append(Spacer(0, cm * 0.20))
+        subtitulo = 'Listado de Profesionales activos'
+        Story.append(Paragraph(subtitulo, styles["Subtitulo"]))
+        Story.append(Spacer(0, cm * 0.15))
+        Story.append(im0)
+        Story.append(Spacer(0, cm * 0.5))
+        encabezados = ('Nombre', 'Apellido', 'DNI', 'Telefono','Profesion',
+                       'Categoria','Matricula','Domicilio','mail')
+        detalles = [(profesional.persona.nombre, profesional.persona.apellido,
+                     profesional.persona.dni,
+                     profesional.persona.telefono, profesional.profesion,
+                    profesional.categoria, profesional.matricula,
+                     profesional.persona.domicilio,
+                     profesional.persona.mail) for
+                    profesional in
+                    Profesional.objects.all()
+                    #
+                    # persona.nombre, persona.apellido, persona.dni, persona.cuil,
+                    # persona.telefono, persona.domicilio, persona.mail) for
+                    # persona in
+                    # Persona.objects.all()
+
+                    ]
+        detalle_orden = Table([encabezados] + detalles, colWidths=[2 * cm, 2 * cm, 2 * cm, 2 * cm, 2 * cm,
+                                                                   2 * cm, 2 * cm, 2 * cm, 4 * cm])
+        detalle_orden.setStyle(TableStyle(
+            [
+                ('ALIGN', (0, 0), (0, 0), 'CENTER'),
+                ('GRID', (0, 0), (-1, -1), 1, colors.gray),
+                ('FONTSIZE', (0, 0), (-1, -1), 8),
+                ('LINEBELOW', (0, 0), (-1, 0), 2, colors.darkblue),
+                ('BACKGROUND', (0, 0), (-1, 0), colors.dodgerblue),
+                ('TEXTCOLOR', (0, 0), (-1, 0), colors.white),
+            ]
+        ))
+        detalle_orden.hAlign = 'CENTER'
+        Story.append(detalle_orden)
+        doc.build(Story)
+        return response
+
+
 #-------------------------------------------------------------------------------------------------------------------
 #visador -----------------------------------------------------------------------------------------------------------
 
@@ -464,18 +641,18 @@ def ver_documentos_para_visado(request, pk_tramite):
 
 def ver_documentos_visados(request, pk_tramite):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
-    planilla = get_object_or_404(PlanillaDeVisado, pk=tramite.id)    
+    planilla = get_object_or_404(PlanillaDeVisado, pk=tramite.id)
     items = planilla.items.all()
     filas = FilaDeVisado.objects.all()
     columnas = ColumnaDeVisado.objects.all()
-    elementos = planilla.elementos.all()             
-    contexto = {    
+    elementos = planilla.elementos.all()
+    contexto = {
         'planilla':planilla,
         'filas': filas,
         'columnas': columnas,
         'items': items,
         'elementos': elementos,
-    }    
+    }
     return render(request, 'persona/visador/ver_documentos_visados.html', {'tramite': tramite, 'planilla':planilla, 'filas':filas, 'columnas':columnas, 'elementos':elementos, 'items':items})
 
 from planilla_visado.models import FilaDeVisado, ColumnaDeVisado
