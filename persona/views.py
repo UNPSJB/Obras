@@ -58,7 +58,33 @@ def mostrar_propietario(request):
     return render(request, 'persona/propietario/propietario.html', contexto)
 
 def elegir_financiacion_propietario(request,pk_tramite):
-    tramite = get_object_or_404(Tramite, pk=pk_tramite)
+    tramite = get_object_or_404(Tramite, pk=pk_tramite)        
+    if request.method == "POST":
+        if "Guardar" in request.POST: 
+            pago = Pago()  
+            contador = 31
+            fms = "%A"              
+            for name, value in request.POST.items():
+                if name.startswith('cantidadCuotas'):                                        
+                    pago.cantidadCuotas=value                                 
+            total = tramite.monto_a_pagar/pago.cantidadCuotas
+            pago.save()
+            for i in range(1, int(pago.cantidadCuotas)+1):
+                cuota = Cuota(monto=total, numeroCuota=i, pago=pago)                
+                cuota.fechaVencimiento=date.today() + timedelta(days=contador)
+                dia=cuota.fechaVencimiento.strftime(fms)
+                if dia=="Sunday":
+                    cuota.fechaVencimiento==date.today() + timedelta(days=contador+1)
+                else:
+                    if dia=="Saturday":
+                        cuota.fechaVencimiento = date.today() + timedelta(days=contador +2)
+                contador=contador+31
+                cuota.save()
+                cuota.hacer("Cancelacion")
+            messages.add_message(request, messages.SUCCESS, 'Todo bien =)')                    
+            tramite.pago = pago
+            tramite.save()
+        return redirect('propietario')                              
     return render(request, 'persona/propietario/elegir_financiacion_propietario.html',{'tramite': tramite, 'ctxpago':registrar_pago(request,tramite.id)})
 
 def tramites_para_financiar(request):
@@ -1329,9 +1355,35 @@ def listado_tramites_para_financiar(request):
     contexto = {'tramites':listado}
     return contexto
 
-def elegir_financiacion(request,pk_tramite):    
-    tramite = get_object_or_404(Tramite, pk=pk_tramite)
-    return render(request, 'persona/cajero/elegir_financiacion.html',{'tramite': tramite, 'ctxpago':registrar_pago(request,tramite.id)})
+def elegir_financiacion(request,pk_tramite):        
+    tramite = get_object_or_404(Tramite, pk=pk_tramite)        
+    if request.method == "POST":
+        if "Guardar" in request.POST: 
+            pago = Pago()  
+            contador = 31
+            fms = "%A"              
+            for name, value in request.POST.items():
+                if name.startswith('cantidadCuotas'):                                        
+                    pago.cantidadCuotas=value                         
+            total = tramite.monto_a_pagar/int(pago.cantidadCuotas)
+            pago.save()
+            for i in range(1, int(pago.cantidadCuotas)+1):
+                cuota = Cuota(monto=total, numeroCuota=i, pago=pago)                
+                cuota.fechaVencimiento=date.today() + timedelta(days=contador)
+                dia=cuota.fechaVencimiento.strftime(fms)
+                if dia=="Sunday":
+                    cuota.fechaVencimiento==date.today() + timedelta(days=contador+1)
+                else:
+                    if dia=="Saturday":
+                        cuota.fechaVencimiento = date.today() + timedelta(days=contador +2)
+                contador=contador+31
+                cuota.save()
+                cuota.hacer("Cancelacion")
+            messages.add_message(request, messages.SUCCESS, 'Todo bien =)')                    
+            tramite.pago = pago
+            tramite.save()
+        return redirect('cajero')                          
+    return render(request, 'persona/cajero/elegir_financiacion.html',{'tramite': tramite})
 
 def registrar_pago(request,pk_tramite):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
