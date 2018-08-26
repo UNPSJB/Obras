@@ -95,10 +95,10 @@ def tramites_para_financiar(request):
         lambda persona: (persona.usuario is not None and persona.usuario == usuario), personas
     )
     persona = lista_de_persona_que_esta_logueada.pop()  # Saco de la lista la persona porque no puedo seguir trabajando con una lista
-    propietario = persona.get_propietario()  # Me quedo con el atributo propietario de la persona
-    tramites_propietario = Tramite.objects.en_estado(Visado)
-    tramites_propietario = filter(lambda tramite: (tramite.propietario == propietario), tramites)
-    return tramites_propietario
+    propietario = persona.get_propietario()  # Me quedo con el atributo propietario de la persona        
+    tramites_propietario = Tramite.objects.en_estado(Visado) 
+    tramites = filter(lambda tramite: (tramite.propietario == propietario), tramites_propietario)
+    return tramites
 
 def listado_tramites_propietario(request):
     tramites = Tramite.objects.all()
