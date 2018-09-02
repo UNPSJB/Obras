@@ -7,9 +7,9 @@
     <font size="2">
 		<li><a class="current"><font color="white">Inspector</font> </a></li>
 		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo" onclick='mostrarSubmenu("sin_submenu")'>Agendar inspeccion</a></li>
-		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree" onclick='mostrarSubmenu("sin_submenu")'>Consultar ultima Inspeccion</a></li>
-		<!-- <li><a data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour" onclick='mostrarSubmenu("sin_submenu")'>Consultar mis Inspecciones</a></li> -->
+		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree" onclick='mostrarSubmenu("sin_submenu")'>Consultar ultima Inspeccion</a></li>		
 		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne" onclick='mostrarSubmenu("sin_submenu")'>Modificar mis datos personales</a></li>
+		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour" onclick='mostrarSubmenu("sin_submenu")'>Cargar inspeccion</a></li>
 	</font>
   </ul>
 {% endblock %}
@@ -75,36 +75,37 @@
 		  </div>
 		</div>
 	  </div>
-
-      <!-- <div class="panel panel-custom">
-		<div class="panel-heading panel-heading-custom box" role="tab" id="headingFour">
-		  <h5 class="panel-title">
-			<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour" onclick='mostrarSubmenu("sin_submenu")'>
-			  <font color="#ffffff" size="2">Consultar mis Inspecciones</font>
-			</a>
-		  </h5>
+		
+	<div class="panel panel-custom">
+	    <div class="panel-heading panel-heading-custom box" role="tab" id="headingFour">
+			<h5 class="panel-title">
+                <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour" onclick='mostrarSubmenu("sin_submenu")'>
+                    <font color="#ffffff" size="2">Cargar inspeccion</font>
+                </a>
+			</h5>
 		</div>
-		<div id="collapseFour" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFour">
-		  <div class="panel-body">
-			<div class="container-fluid">
-				<div class="row">
-					<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                        <div class="container-fluid">
-                          <div class="row">
-                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                              {% block contenido_tramites_agendados %}
-                                {% include "persona/inspector/tramites_agendados.html" with tramites_del_inspector=ctxtramitesagendados.tramites %}
-                              {% endblock %}
-                            </div>
+        <div id="collapseFour" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFour">
+            <div class="panel-body">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                            <div class="container-fluid">
+                                <div class="row">
+                                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                        {% block listado_inspector_movil  %}
+                                            {% include "persona/movil/listado_inspector_movil.html" with tramites_del_inspector=ctxlistado_inspector.tramites %}
+                                        {% endblock %}
+                                    </div>
+                                </div>
                             </div>
                         </div>
-					</div>
-				</div>
-			</div>
-		  </div>
-		</div>
-	  </div> -->
-
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+	
+		
 	  <div class="panel panel-custom">
 		<div class="panel-heading panel-heading-custom box" role="tab" id="headingOne">
 		  <h5 class="panel-title">

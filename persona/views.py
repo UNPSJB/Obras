@@ -690,6 +690,14 @@ def ver_planilla_visado(request):
     elementos = Elemento_Balance_Superficie.objects.all()        
     return render(request, 'persona/visador/ver_planilla_visado.html', {'tramite': tramite, 'items':items, 'filas':filas, 'columnas':columnas, 'elementos':elementos})    
 
+def generar_planilla_impresa(request, pk_tramite):      
+    tramite = get_object_or_404(Tramite, pk=pk_tramite)
+    items = ItemDeVisado.objects.all()    
+    filas = FilaDeVisado.objects.all()
+    columnas = ColumnaDeVisado.objects.all()
+    elementos = Elemento_Balance_Superficie.objects.all()        
+    return render(request, 'persona/visador/generar_planilla_impresa.html', {'tramite': tramite, 'items':items, 'filas':filas, 'columnas':columnas, 'elementos':elementos})    
+
 def planilla_visado(request, pk_tramite):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
     items = ItemDeVisado.objects.all()
@@ -860,7 +868,7 @@ class ReporteTramitesAceptadosPdf(View):
         detalle_orden.hAlign = 'CENTER'
         Story.append(detalle_orden)
         doc.build(Story)
-        return response
+        return response    
 
 #-------------------------------------------------------------------------------------------------------------------
 #inspector ---------------------------------------------------------------------------------------------------------
@@ -876,7 +884,8 @@ def mostrar_inspector(request):
         "ctxtramitesvisadosyconinspeccion": tramites_visados_y_con_inspeccion(request),
         "ctxtramitesinspeccionados": tramites_inspeccionados_por_inspector(request),
         "ctxtramitesagendados": tramites_agendados_por_inspector(request),
-        "ctxtramis_inspecciones": mis_inspecciones(request)
+        "ctxtramis_inspecciones": mis_inspecciones(request),
+        "ctxlistado_inspector": listado_inspector_movil(request),
     }
     return render(request, 'persona/inspector/inspector.html', contexto)
 
@@ -922,29 +931,30 @@ def agendar_tramite(request, pk_tramite):
     messages.add_message(request, messages.SUCCESS, "Inspeccion agendada")
     return redirect('inspector')
 
-def cargar_inspeccion(request, pk_tramite):
-    tramite = get_object_or_404(Tramite, pk=pk_tramite)
-    id_tramite = int(pk_tramite)
-    planilla = PlanillaDeInspeccion()
-    planilla.tramite = tramite
-    planilla.save()
-    list_detalles=[] 
-    for name,value in request.POST.items():        
-        if name.startswith('detalle'):
-            ipk=name.split('-')[1]
-            detalle = DetalleDeItemInspeccion.objects.get(id=ipk)
-            list_detalles.append(detalle)
-    for detalle in list_detalles:
-        planilla.agregar_detalle(detalle)
-    planilla.save()
-    usuario = request.user
-    try:
-        tramite.hacer(tramite.INSPECCIONAR, usuario)
-        tramite.save()
-        messages.add_message(request,messages.SUCCESS,"Inspeccion cargada")
-    except:
-        messages.add_message(request, messages.WARNING, "La inspeccion ya fue cargada")
-    return redirect('inspector_movil')
+def cargar_inspeccion(request, pk_tramite):        
+    if request.method == "POST":
+        if "Agendar" in request.POST: 
+            tramite = get_object_or_404(Tramite, pk=pk_tramite)
+            id_tramite = int(pk_tramite)
+            planilla = PlanillaDeInspeccion()
+            planilla.tramite = tramite
+            planilla.save()
+            list_detalles=[] 
+            for name,value in request.POST.items():        
+                if name.startswith('detalle'):
+                    ipk=name.split('-')[1]
+                    detalle = DetalleDeItemInspeccion.objects.get(id=ipk)
+                    list_detalles.append(detalle)
+            for detalle in list_detalles:
+                planilla.agregar_detalle(detalle)
+            planilla.save()
+            usuario = request.user        
+            tramite.hacer(tramite.INSPECCIONAR, usuario)
+            tramite.save()
+            messages.add_message(request,messages.SUCCESS,"Inspeccion cargada")        
+        else:        
+            messages.add_message(request,messages.ERROR,"No se cargo la inspeccion")
+    return redirect('inspector')
 
 def rechazar_inspeccion(request, pk_tramite):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
@@ -968,7 +978,7 @@ def ver_documentos_tramite_inspector(request, pk_tramite):
     contexto1 = {'estados_del_tramite': estados_de_tramite}
     fechas_del_estado = [];
     for est in estados_de_tramite:
-        fechas_del_estado.append(est.timestamp.strftime("%d/%m/%Y"));
+        fechas_del_estado.append(est.timestamp.strftime("%d/%m/%Y"));    
     return render(request, 'persona/inspector/documentos_tramite_inspector.html', {"tramite": contexto0, "estadosp": contexto1, "fechas":fechas_del_estado})
 
 def documentos_inspector_estado(request, pk_estado):
