@@ -30,6 +30,7 @@ urlpatterns = [
     url(r'^profesional/estado_tramite$', views.listado_tramites_de_profesional, name="estado_tramite"),
     url(r'^documento_de_estado/(?P<pk_estado>\d+)/$', views.documento_de_estado, name="documento_de_estado"),
     url(r'^reporte_tramites_profesional_pdf/$', login_required(ReporteTramitesProfesionalPdf.as_view()), name="reporte_tramites_profesional_pdf"),
+    #url(r'^generar_planilla_impresa/(?P<pk_tramite>\d+)/$', views.generar_planilla_impresa, name="generar_planilla_impresa"),
 
     # administrativo ------------------------------------------------------------------------------------------------
     url(r'^administrativo$', views.mostrar_administrativo, name="administrativo"),
@@ -42,7 +43,6 @@ urlpatterns = [
     url(r'^habilitar_final_obra/(?P<pk_tramite>\d+)/$', views.habilitar_final_obra, name="habilitar_final_obra"),
     url(r'^listado_profesionales$', views.listado_profesionales, name="listado_profesionales"),
     url(r'^reporte_listado_profesional_pdf/$', login_required(ReporteProfesionalesPdf.as_view()), name="reporte_listado_profesional_pdf"),
-    url(r'^reporte_listado_profesional_excel/$',  ReporteProfesionalExcel.as_view(), name="reporte_listado_profesional_excel"),
 
     # visador -------------------------------------------------------------------------------------------------------
     url(r'^visador$', views.mostrar_visador, name="visador"),
@@ -52,8 +52,8 @@ urlpatterns = [
     url(r'^ver_documentos_visados/(?P<pk_tramite>\d+)/$', views.ver_documentos_visados, name="ver_documentos_visados"),
     url(r'^reporte_tramites_aceptados_excel/', ReporteTramitesAceptadosExcel.as_view(), name="reporte_tramites_aceptados_excel"),
     url(r'^reporte_tramites_aceptados_pdf/$', login_required(ReporteTramitesAceptadosPdf.as_view()), name="reporte_tramites_aceptados_pdf"),
-    url(r'^visador/planilla_visado/(?P<pk_tramite>\d+)/$', views.planilla_visado, name="planilla_visado"),    
-    #url(r'^visador/ver_planilla_visado/', views.ver_planilla_visado, name="ver_planilla_visado"),    
+    url(r'^visador/planilla_visado/(?P<pk_tramite>\d+)/$', views.planilla_visado, name="planilla_visado"),
+    url(r'^generar_planilla_impresa/(?P<pk_tramite>\d+)/$', views.generar_planilla_impresa, name="generar_planilla_impresa"),
 
     # inspector -----------------------------------------------------------------------------------------------------
     url(r'^inspector$', views.mostrar_inspector, name="inspector"),
@@ -65,6 +65,7 @@ urlpatterns = [
     url(r'^documentos_tramite_inspector/(?P<pk_tramite>\d+)/$', views.ver_documentos_tramite_inspector, name="documentos_tramite_inspector"),
     url(r'^inspector/documentos_del_estado_inspector/(?P<pk_estado>\d+)/$', views.documentos_inspector_estado, name="documentos_del_estado_inspector"),
 
+url(r'^generar_planilla_impresa_inspeccion/(?P<pk_tramite>\d+)/$', views.generar_planilla_impresa_inspeccion, name="generar_planilla_impresa_inspector"),
     #jefeinspector --------------------------------------------------------------------------------------------------
     url(r'^jefeinspector$', views.mostrar_jefe_inspector, name="jefe_inspector"),
     url(r'^inspeccion_final/(?P<pk_tramite>\d+)/$', views.inspeccion_final, name="inspeccion_final"),

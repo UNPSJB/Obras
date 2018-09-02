@@ -585,25 +585,18 @@ class ReporteProfesionalesPdf(View):
         Story.append(Spacer(0, cm * 0.15))
         Story.append(im0)
         Story.append(Spacer(0, cm * 0.5))
-        encabezados = ('Nombre', 'Apellido', 'DNI', 'Telefono','Profesion',
-                       'Categoria','Matricula','Domicilio','mail')
+        encabezados = ('Nombre', 'Apellido', 'Telefono','Profesion',
+                       'Matricula','Domicilio','correo')
         detalles = [(profesional.persona.nombre, profesional.persona.apellido,
-                     profesional.persona.dni,
                      profesional.persona.telefono, profesional.profesion,
-                    profesional.categoria, profesional.matricula,
+                     profesional.matricula,
                      profesional.persona.domicilio,
                      profesional.persona.mail) for
                     profesional in
                     Profesional.objects.all()
-                    #
-                    # persona.nombre, persona.apellido, persona.dni, persona.cuil,
-                    # persona.telefono, persona.domicilio, persona.mail) for
-                    # persona in
-                    # Persona.objects.all()
-
                     ]
         detalle_orden = Table([encabezados] + detalles, colWidths=[2 * cm, 2 * cm, 2 * cm, 2 * cm, 2 * cm,
-                                                                   2 * cm, 2 * cm, 2 * cm, 4 * cm])
+                                                                   4 * cm, 6 * cm])
         detalle_orden.setStyle(TableStyle(
             [
                 ('ALIGN', (0, 0), (0, 0), 'CENTER'),
@@ -689,6 +682,31 @@ def ver_planilla_visado(request):
     columnas = ColumnaDeVisado.objects.all()
     elementos = Elemento_Balance_Superficie.objects.all()        
     return render(request, 'persona/visador/ver_planilla_visado.html', {'tramite': tramite, 'items':items, 'filas':filas, 'columnas':columnas, 'elementos':elementos})    
+
+def generar_planilla_impresa(request, pk_tramite):
+    tramite = get_object_or_404(Tramite, pk=pk_tramite)
+    planilla = get_object_or_404(PlanillaDeVisado, pk=tramite.id)
+    items = planilla.items.all()
+    filas = FilaDeVisado.objects.all()
+    columnas = ColumnaDeVisado.objects.all()
+    elementos = planilla.elementos.all()
+    contexto = {
+        'planilla': planilla,
+        'filas': filas,
+        'columnas': columnas,
+        'items': items,
+        'elementos': elementos,
+    }
+    return render(request, 'persona/visador/generar_planilla_impresa.html',
+                  {'tramite': tramite, 'planilla': planilla, 'filas': filas, 'columnas': columnas,
+                   'elementos': elementos, 'items': items})
+
+    # tramite = get_object_or_404(Tramite, pk=pk_tramite)
+    # items = ItemDeVisado.objects.all()
+    # filas = FilaDeVisado.objects.all()
+    # columnas = ColumnaDeVisado.objects.all()
+    # elementos = Elemento_Balance_Superficie.objects.all()
+    # return render(request, 'persona/visador/generar_planilla_impresa.html', {'tramite': tramite, 'items':items, 'filas':filas, 'columnas':columnas, 'elementos':elementos})
 
 def planilla_visado(request, pk_tramite):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
@@ -953,23 +971,56 @@ def rechazar_inspeccion(request, pk_tramite):
     messages.add_message(request, messages.ERROR, 'Inspeccion rechazada')
     return redirect('inspector')
 
+# def aceptar_inspeccion(request, pk_tramite):
+#     list_detalles = []
+#     tramite = get_object_or_404(Tramite, pk=pk_tramite)
+#     planilla = PlanillaDeInspeccion()
+#     planilla.tramite = tramite
+#     planilla.save()
+#     for name, value in request.POST.detalles():
+#         if name.startswith('detalle'):
+#             ipk= name.split('-')[1]
+#             list_detalles.append(ipk)
+#     detalles = DetalleDeItemInspeccion.objects.all()
+#     for detalle in detalles:
+#         for i in list_detalles:
+#             if (detalle.id == int(i)):
+#                 planilla.agregar_detalle(detalle)
+#     planilla.save()
+#     usuario = request.user
+#     tramite.hacer(Tramite.INSPECCIONAR, request.user)
+#     tramite.save()
+#     messages.add_message(request, messages.SUCCESS, 'Tramite inspeccionado')
+#     return redirect('inspector')
 def aceptar_inspeccion(request, pk_tramite):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
     tramite.hacer(Tramite.INSPECCIONAR, request.user)
     messages.add_message(request, messages.SUCCESS, 'Inspeccion aprobada')
     return redirect('inspector')
 
+# def ver_documentos_tramite_inspector(request, pk_tramite):
+#     tramite = get_object_or_404(Tramite, pk=pk_tramite)
+#     contexto0 = {'tramite': tramite}
+#     pk = int(pk_tramite)
+#     estados = Estado.objects.all()
+#     estados_de_tramite = filter(lambda e: (e.tramite.pk == pk), estados)
+#     contexto1 = {'estados_del_tramite': estados_de_tramite}
+#     fechas_del_estado = [];
+#     for est in estados_de_tramite:
+#         fechas_del_estado.append(est.timestamp.strftime("%d/%m/%Y"));
+#     return render(request, 'persona/inspector/documentos_tramite_inspector.html', {"tramite": contexto0, "estadosp": contexto1, "fechas":fechas_del_estado})
+
 def ver_documentos_tramite_inspector(request, pk_tramite):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
-    contexto0 = {'tramite': tramite}
-    pk = int(pk_tramite)
-    estados = Estado.objects.all()
-    estados_de_tramite = filter(lambda e: (e.tramite.pk == pk), estados)
-    contexto1 = {'estados_del_tramite': estados_de_tramite}
-    fechas_del_estado = [];
-    for est in estados_de_tramite:
-        fechas_del_estado.append(est.timestamp.strftime("%d/%m/%Y"));
-    return render(request, 'persona/inspector/documentos_tramite_inspector.html', {"tramite": contexto0, "estadosp": contexto1, "fechas":fechas_del_estado})
+    planilla = get_object_or_404(PlanillaDeInspeccion, pk=pk_tramite)
+    items = ItemInspeccion.objects.all()
+    categorias = CategoriaInspeccion.objects.all()
+    detalles = planilla.detalles.all()
+    contexto = {'planilla': planilla,'items':items,'categorias':categorias,'detalles':detalles}
+    return render(request, 'persona/inspector/documentos_del_estado_inspector.html', {"tramite": tramite,
+                                                                                   'planilla': planilla, 'items': items,
+                                                                                   'categorias': categorias,
+                                                                                   'detalles': detalles})
 
 def documentos_inspector_estado(request, pk_estado):
     estado = get_object_or_404(Estado, pk=pk_estado)
@@ -990,6 +1041,22 @@ def documentos_inspector_estado(request, pk_estado):
         contexto = {'documentos_de_fecha': documentos_fecha}
     return render(request,'persona/inspector/documentos_del_estado_inspector.html', contexto)
 
+
+def generar_planilla_impresa_inspeccion(request, pk_tramite):
+    tramite = get_object_or_404(Tramite, pk=pk_tramite)
+    planilla = get_object_or_404(PlanillaDeInspeccion, pk=tramite.id)
+    items = ItemInspeccion.objects.all()
+    categorias = CategoriaInspeccion.objects.all()
+    detalles = planilla.detalles.all()
+    contexto = {
+        'planilla': planilla,
+        'items': items,
+        'categorias': categorias,
+        'detalles': detalles,
+    }
+    return render(request, 'persona/inspector/generar_planilla_impresa_inspeccion.html',
+                  {'tramite': tramite, 'planilla': planilla, 'items': items, 'categorias': categorias,
+                   'detalles': detalles})
 #------------------------------------------------------------------------------------------------------------------
 #jefeinspector ----------------------------------------------------------------------------------------------------
 
@@ -1527,7 +1594,7 @@ def listado_inspector_movil(request):
 def planilla_inspeccion_movil(request,pk_tramite):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
     contexto = {'tramite': tramite}
-    detalles = DetalleDeItemInspeccion.objects.all()        
+    detalles = DetalleDeItemInspeccion.objects.all()
     items = ItemInspeccion.objects.all()
     categorias = CategoriaInspeccion.objects.all()
     contexto = {"tramite":tramite, "items":items,"detalles":detalles,"categorias":categorias}
