@@ -118,6 +118,11 @@
 					{% endif %}
 
 					<br>
+					 <a href="{% url 'generar_planilla_impresa_inspector' tramite.id %}">
+               			 <button type="button" class="btn btn-primary" name="Imprimir">
+                    	Ver
+                	</button>
+            		</a>
                      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="right">
                         <a href="javascript:history.back(-1);">
                             <button type="button" class="btn btn-primary" name="Volver">
