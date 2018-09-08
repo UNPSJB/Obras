@@ -7,10 +7,8 @@
                         <tr>
                             <th>Nombre</th>
                             <th>Apellido</th>
-                            <th>DNI</th>
                             <th>Telefono</th>
                             <th>Profesion</th>
-                            <th>Categoria</th>
                             <th>Matricula</th>
                             <th>Domicilio</th>
                             <th>Mail</th>
@@ -22,10 +20,8 @@
                         <tr>
                             <td class="col-xs-1">{{ profesional.persona.nombre }}</td>
                             <td class="col-xs-1">{{ profesional.persona.apellido }} </td>
-                            <td class="col-xs-1">{{profesional.persona.dni}}</td>
                             <td class="col-xs-1">{{ profesional.persona.telefono }}</td>
                             <td class="col-xs-2">{{ profesional.profesion }}</td>
-                            <td class="col-xs-2">{{ profesional.categoria }}</td>
                             <td class="col-xs-2">{{ profesional.matricula }}</td>
                             <td class="col-xs-2">{{profesional.persona.domicilio}}</td>
                             <td class="col-xs-2">{{profesional.persona.mail}}</td>
@@ -37,48 +33,14 @@
           <br>
 </table>
 <br>
-    <div class=" col-xs-8 col-sm-8 col-md-8 col-lg-8" align="left">
-        <a id="crear_detalle" href="{% url 'reporte_listado_profesional_excel' %}" class="btn btn-info btn-collapsible btn-sm" title="Generar Archivo Excel" >
-            <i class="glyphicon glyphicon-list-alt"></i><span>Exportar a EXCEL</span>
-        </a>
-        <a href="{% url 'reporte_listado_profesional_pdf' %}" class="btn btn-info btn-collapsible btn-sm" title="Generar Archivo PDF" >
-            <i class="glyphicon glyphicon-file"></i><span>Exportar a PDF</span>
-        </a>
+<p align="right">
+    <a href="{% url 'lista_profesionales_imprimible' %}">
+            <button type="submit" class="btn btn-primary btn-lg" style="text-align:right" name="B1"><span
+                    class="glyphicon glyphicon-print"></span> Vista imprimible</button>
+        </button>
+    </a>
     </div>
 </div>
 </div>
 {% endblock %}
 
-
-<!--<ol>-->
-                            <!--<label>Nombre:</label>-->
-                            <!--<li>{{profesional.persona.nombre}}</li>-->
-                            <!--<label>Apellido:</label>-->
-                            <!--<li>{{profesional.persona.apellido}}</li>-->
-                            <!--<label>DNI:</label>-->
-                            <!--<li>{{profesional.persona.dni}}</li>-->
-                            <!--<label>Domicilio:</label>-->
-                            <!--<li>{{profesional.persona.domicilio}}</li>-->
-                            <!--<label>Telefono:</label>-->
-                            <!--<li>{{profesional.persona.telefono}}</li>-->
-                        <!--</ol>-->
-          <!--<tbody>-->
-          <!--{% if personas %}-->
-            <!--{% for persona in personas %}-->
-            <!--<tr>-->
-                <!--<td class="col-xs-1">{{ persona.nombre }}</td>-->
-                <!--<td class="col-xs-1">{{ persona.apellido }} </td>-->
-                <!--<td class="col-xs-1">{{persona.dni}}</td>-->
-                <!--<td class="col-xs-1">{{ persona.cuil }}</td>-->
-                <!--<td class="col-xs-1">{{ persona.telefono }}</td>-->
-                <!--<td class="col-xs-2">{{ persona.profesional.profesion }}</td>-->
-                <!--<td class="col-xs-2">{{ persona.profesional.categoria }}</td>-->
-                <!--<td class="col-xs-2">{{ persona.profesional.matricula }}</td>-->
-                <!--<td class="col-xs-2">{{persona.domicilio}}</td>-->
-                <!--<td class="col-xs-2">{{persona.mail}}</td>-->
-                <!--<td align="center" class="col-xs-1">-->
-            <!--</tr>-->
-
-          <!--{% endfor %}-->
-          <!--{% endif%}-->
-          <!--</tbody>-->
