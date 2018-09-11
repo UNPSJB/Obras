@@ -141,7 +141,7 @@ def documentos_de_estado(request, pk_estado):
     contexto = {'documentos_de_fecha': documentos_fecha}
     planillas = []
     inspecciones = []
-    if (estado.tipo >2 and estado.tipo <5):                        
+    if (estado.tipo >2 and estado.tipo <5):
         for p in PlanillaDeVisado.objects.all():
             if (p.tramite.pk == estado.tramite.pk):
                 planillas.append(p)
@@ -227,7 +227,8 @@ def mostrar_profesional(request):
         'tramite_form': tramite_form,
         'propietario_form': propietario_form,
         'documento_set': documento_set,
-        'ctxtramcorregidos':tramites_corregidos(request)
+        'ctxtramcorregidos':tramites_corregidos(request),
+       # 'ctxvisadosprofesional':visados_del_profesional(request),
     }
     return render(request, 'persona/profesional/profesional.html', contexto)
 
@@ -319,7 +320,7 @@ def documento_de_estado(request, pk_estado):
             'columnas': columnas,
             #'items': items,
             #'elementos': elementos,
-        }    
+        }
     if (estado.tipo >5 and estado.tipo <8):                        
         for p in PlanillaDeInspeccion.objects.all():
             if (p.tramite.pk == estado.tramite.pk):
@@ -334,6 +335,35 @@ def documento_de_estado(request, pk_estado):
             #'detalles': detalles,                        
         }    
     return render(request, 'persona/profesional/documento_de_estado.html', contexto)
+
+# def visados_profesional(request):
+#     usuario = request.user
+#     estados = Estado.objects.all()
+#     tipo = 3 #visado
+#     argumentos = [Visado]
+#     tramites = Tramite.objects.en_estado(Visado)
+#     visados_del_profesional = filter(lambda t: t.estado().usuario == usuario, tramites)
+#     contexto = {"visados_del_profesional": visados_del_profesional}
+#     return contexto
+
+def planilla_visado_impresa(request, pk_tramite):
+    tramite = get_object_or_404(Tramite, pk=pk_tramite)
+    planilla = get_object_or_404(PlanillaDeVisado, pk=tramite.id)
+    tramites = Tramite.objects.all()
+    items = planilla.items.all()
+    filas = FilaDeVisado.objects.all()
+    columnas = ColumnaDeVisado.objects.all()
+    elementos = planilla.elementos.all()
+    contexto = {
+        'planilla': planilla,
+        'filas': filas,
+        'columnas': columnas,
+        'items': items,
+        'elementos': elementos,
+    }
+    return render(request, 'persona/profesional/planilla_visado_impresa.html',
+                  {'tramite': tramite, 'planilla': planilla, 'filas': filas, 'columnas': columnas,
+                   'elementos': elementos, 'items': items})
 
 class ReporteTramitesProfesionalPdf(View):
 
@@ -510,6 +540,13 @@ def listado_profesionales(request):
     profesionales = filter(lambda persona: (persona is not None), personas)
     contexto = {'profesionales': personas}
     return contexto
+
+def lista_profesionales_imprimible(request):
+    personas = Profesional.objects.all()
+    profesionales = filter(lambda persona: (persona is not None), personas)
+    contexto = {'profesionales': personas}
+    return render(request, 'persona/administrativo/lista_profesionales_imprimible.html', contexto)
+
 
 #from datetime import date, time
 class ReporteProfesionalExcel(TemplateView):

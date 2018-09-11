@@ -2,28 +2,43 @@
 {% load staticfiles %}
 {% load crispy_forms_tags%}
 
+<p lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Planilla de inspeccion</title>
+</head>
+
 {% block barra %}
-  <ul class="sidebar sidebar-1">
-    <font size="2">
-		<li><a class="current"><font color="white">Planilla de inspeccion</font> </a></li>
-	</font>
-  </ul>
+	<ul class="sidebar sidebar-1">
+		<font size="2">
+			<li><a href="{% url 'visador'  %}" class="current"><font color="white">Inspector</font></a></li>
+		</font>
+	</ul>
 {% endblock %}
 
 {% block contenido %}
 <p>
-        <div id="printReady">
-    <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" >
-        <div class="panel">
-          <div class="panel-heading box" role="tab" id="headingOne">
-            <h5 class="panel-title">
-              <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
-                <div id="boton_tipo_pago" class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="center">
-                  <font color="#ffffff" size="4">PLANILLA DE INSPECCION</font><br>
-                </div>
-              </a>
-            </h5>
-
+<div id="printReady">
+        <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" >
+		  <div class="row" style="background:white;">
+              <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                  <div style="background-color:#2c3e50;">
+                      <p>
+                          <img src="/media/imagenes/Escudobanner.png"
+                               class="img-responsive" alt="Imagen responsive" width="100" height="100"/>
+                      </p>
+                  </div>
+                       <div align="justify" style="font-size:9px; text-align:left;">
+                      <br>  &nbsp; MUNICIPALIDAD DE TRELEW
+                      <br>
+                      &nbsp; Rivadavia 390 <br>
+                      &nbsp; 9100 TRELEW- Provincia del Chubut
+                  </div>
+                      <h3 align="center">
+                          PLANILLA DE INSPECCION &nbsp;  &nbsp;
+                      </h3>
+                      <hr style="border-width:">
+                      <br>
           <div class="row">
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
               <form action="" >
@@ -40,23 +55,17 @@
                   </div>
                 </div>
               </form>
-            </div>
           </div>
           </div>
-    <form action="" method="post" enctype="multipart/form-data">
-    <div class="container-fluid">
-      <div class="table-responsive">
-        <table class="table table-bordered table-striped table-hover table-condensed" style="text-align:center;">
-          <thead>
+    <div class="table-responsive">
+        <table align="center" class="table table-bordered table-striped table-hover table-condensed" style="text-align:center;">
             <tr>
-              <th></th>
-                {% for item in items %}
-                <th>{{item.nombre}}</th>
-                {% endfor %}
-
-          </thead>
-            <tbody>
-            {% for categoria in categorias %}
+                <th></th>
+              {% for item in items %}
+                <th>{{item}}</th>
+              {% endfor %}
+            </tr>
+          {% for categoria in categorias %}
             <tr>
                 <td class="col-xs-1">{{ categoria.nombre }}</td>
                 {% for item in items %}
@@ -72,60 +81,45 @@
             </tr>
             {% endfor %}
             </tbody>
-        </table>
-          <div class="row">
-              <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                  <form action="" >
-                      <div class="row" style="color:#fff;">
-                          <div class=" col-xs-12 col-sm-12 col-md-12 col-lg-12">
-							  <ol>
-								<label>Descripcion de categorias:</h2></label>
-								  <table  class="table-bordered table-striped table-hover">
-                                  <thead>
-                                      <tr>
-										  <th>categoria</th>
-                                          <th>tipo</th>
-                                          <th>descripcion</th>
-                                      </tr>
-                                  </thead>
-                                  <tbody>
-								  {% for categoria in categorias %}
-                                        <tr>
-	                                       <td id="nombre{{categoria.id}}" class="col-xs-1" align="center">{{categoria.nombre}}</td>
-                                            <td id="tipo{{categoria.id}}" class="col-xs-1" align="center">{{categoria.tipo}}</td>
-                                            <td id="descripcion{{categoria.id}}" class="col-xs-2">{{categoria.descripcion}}</td>
-										</tr>
-								  {% endfor %}
-								  </tbody>
-								  </table>
-							  </ol>
-							</div>
-						  </div>
-						</form>
-					  </div>
-					</div>
-      </div>
+    <br>
+            <table class="table table-bordered table-striped table-hover table-condensed" style="text-align:center;">
+                  <thead>
+                  <tr>
+                      <th>categoria</th>
+                      <th>tipo</th>
+                      <th>descripcion</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  {% for categoria in categorias %}
+                  <tr>
+                      <td id="nombre{{categoria.id}}" class="col-xs-1" align="center">{{categoria.nombre}}</td>
+                      <td id="tipo{{categoria.id}}" class="col-xs-1" align="center">{{categoria.tipo}}</td>
+                      <td id="descripcion{{categoria.id}}" class="col-xs-2">{{categoria.descripcion}}</td>
+                  </tr>
+                  {% endfor %}
+                  </tbody>
+              </table>
+          </div>
       </div>
     </div>
-    </div>
+</div>
+</div>
 </p>
+</div>
     </div>
     </div>
 </div>
-    <div class="row">
-            <div class="col-xs-4 col-sm-4 col-md-12 col-lg-12" align="right">
-                <form id="printMe" name="printMe">
-                    <input type="button" name="printMe" onclick="printSpecial()" value="Imprimir">
-                </form>
-            </div>
-            <div class="col-xs-4 col-sm-4 col-md-12 col-lg-12" align="right">
-                <a href="{% url 'inspector' %}">
-                    <button type="button" class="btn btn-primary" name="volver">
-                        volver
-                    </button>
-                </a>
-            </div>
-        </div>
+
+
+<div class="row">
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-right">
+        <a href="{% url 'inspector' %}">
+            <input type="button" onclick="printSpecial()" value="Imprimir"></span></input>
+                <button type="submit" value="Atras">Atras</button>
+        </a>
+    </div>
+</div>
         <style>
             body{
                 background:radial-gradient(circle at 1.98% 14.97%,#6699CC, transparent 100%),
@@ -187,67 +181,6 @@
 
         </body>
         </html>
-
-
-<style>
-  .switch {
-      position: relative;
-      display: inline-block;
-      width: 60px;
-      height: 34px;
-  }
-
-  /* Hide default HTML checkbox */
-  .switch input {display:none;}
-
-  /* The slider */
-  .slider {
-      position: absolute;
-      cursor: pointer;
-      top: 0;
-      left: 0;
-      right: 0;
-      bottom: 0;
-      background-color: #ccc;
-      -webkit-transition: .4s;
-      transition: .4s;
-  }
-
-  .slider:before {
-      position: absolute;
-      content: "";
-      height: 26px;
-      width: 26px;
-      left: 4px;
-      bottom: 4px;
-      background-color: white;
-      -webkit-transition: .4s;
-      transition: .4s;
-  }
-
-  input:checked + .slider {
-      background-color: #2196F3;
-  }
-
-  input:focus + .slider {
-      box-shadow: 0 0 1px #2196F3;
-  }
-
-  input:checked + .slider:before {
-      -webkit-transform: translateX(26px);
-      -ms-transform: translateX(26px);
-      transform: translateX(26px);
-  }
-
-  /* Rounded sliders */
-  .slider.round {
-      border-radius: 34px;
-  }
-
-  .slider.round:before {
-      border-radius: 50%;
-  }
-</style>
 
 {% endblock %}
 {% block scrip %}

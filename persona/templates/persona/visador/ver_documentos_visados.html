@@ -67,7 +67,7 @@
 								  {% for item in items %}
 									{% if fila == item.fila_de_visado and columna == item.columna_de_visado %}
 										<label class="switch">
-											<input type="checkbox" name="{{fila}}" value="{{fila}}" checked><span class="slider round"></span>
+											<input type="checkbox" disabled="disabled" checked="checked" name="{{fila}}" value="{{fila}}" checked><span class="slider round"></span>
 										</label>
 									{% endif %}
 								  {% endfor %}
@@ -95,7 +95,7 @@
 													<td class="col-xs-1">{{ elemento }}</td>
 													<td class="col-sm-4">
 															<label class="switch">
-																<input type="checkbox" name="{{elemento}}" value="{{elemento}}" checked><span class="slider round"></span>
+																<input type="checkbox" disabled="disabled" checked="checked" name="{{elemento}}" value="{{elemento}}" checked><span class="slider round"></span>
 															</label>
 													</td>
 												</tr>
@@ -113,6 +113,11 @@
 									<button type="button" class="btn btn-primary" name="habilitar">
 										Volver
 									</button>
+									<a href="{% url 'generar_planilla_impresa' tramite.id %}">
+									<button type="button" class="btn btn-primary" name="Imprimir">
+										Ver
+									</button>
+								</a>
 								</a>
 							</div>
 						</div>
@@ -122,6 +127,7 @@
             </div>
         </div>
 	</div>
+
 
 	<style>
 		.switch {
