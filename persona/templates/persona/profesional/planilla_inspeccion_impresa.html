@@ -1,0 +1,178 @@
+
+<p lang="es">
+<head>
+    <meta charset="UTF-8">
+    <title>Planilla de inspeccion</title>
+</head>
+
+<p>
+<div id="printReady">
+        <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" >
+		  <div class="row" style="background:white;">
+              <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                  <div style="background-color:#2c3e50;">
+                      <p>
+                          <img src="/media/imagenes/Escudobanner.png"
+                               class="img-responsive" alt="Imagen responsive" width="100" height="100"/>
+                      </p>
+                  </div>
+                       <div align="justify" style="font-size:9px; text-align:left;">
+                      <br>  &nbsp; MUNICIPALIDAD DE TRELEW
+                      <br>
+                      &nbsp; Rivadavia 390 <br>
+                      &nbsp; 9100 TRELEW- Provincia del Chubut
+                  </div>
+                      <h3 align="center">
+                          PLANILLA DE INSPECCION &nbsp;  &nbsp;
+                      </h3>
+                      <hr style="border-width:">
+                      <br>
+
+          <div class="row">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+              <form action="" >
+                <div class="row" style="color:#fff;">
+                  <div class=" col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                    <ol>
+                      <label>PADRON:</h2></label>
+                      <li> {{tramite.parcela}}</li>
+                      <label>DATOS PROPIETARIO:</label>
+                      <li> {{tramite.propietario.persona}}</li>
+                      <label>DATOS PROFESIONAL:</label>
+                      <li> {{tramite.profesional}}</li>
+                    </ol>
+                  </div>
+                </div>
+              </form>
+          </div>
+          </div>
+         <table class="table table-bordered table-striped table-hover table-condensed" style="text-align:center;">
+             <thead>
+             <tr>
+                 <th></th>
+                 {% for item in items %}
+                 <th>{{item.nombre}}</th>
+                 {% endfor %}
+             </tr>
+             </thead>
+             <tbody>
+             {% for categoria in categorias %}
+             <tr>
+                 <td class="col-xs-1">{{ categoria.nombre }}</td>
+                 {% for item in items %}
+                 <td class="col-sm-4">&nbsp;
+                     {% for detalle in inspeccion.detalles.all %}
+                     {% if categoria.nombre == detalle.categoria_inspeccion.nombre and item.nombre == detalle.item_inspeccion.nombre %}
+                     {{ detalle.nombre }}
+                     <br>
+                     {% endif %}
+                     {% endfor %}
+                 </td>
+                 {% endfor %}
+             </tr>
+             {% endfor %}
+             </tbody>
+         </table>
+                                <table  class="table-bordered table-striped table-hover">
+                                    <thead>
+                                    <tr>
+                                        <th>categoria</th>
+                                        <th>tipo</th>
+                                        <th>descripcion</th>
+                                    </tr>
+                                    </thead>
+                                    {% for categoria in categorias %}
+                                    <tr>
+                                        <td id="nombre{{categoria.id}}" class="col-xs-1" align="center">{{categoria.nombre}}</td>
+                                        <td id="tipo{{categoria.id}}" class="col-xs-1" align="center">{{categoria.tipo}}</td>
+                                        <td id="descripcion{{categoria.id}}" class="col-xs-2">{{categoria.descripcion}}</td>
+                                    </tr>
+                                    {% endfor %}
+                                </table>
+                            </ol>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+      </div>
+    </div>
+</div>
+</div>
+</p>
+</div>
+    </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-right">
+        <a href="{% url 'profesional' %}">
+            <input type="button" onclick="printSpecial()" value="Imprimir"></span></input>
+                <button type="submit" value="Atras">Atras</button>
+        </a>
+    </div>
+</div>
+
+    <style>
+            body{
+                background:radial-gradient(circle at 1.98% 14.97%,#6699CC, transparent 100%),
+                radial-gradient(circle at 98.02% 52.96%, #66CCFF, transparent 100%),
+                radial-gradient(circle at 50% 50%, #66CCFF,#66CCFF 100%);
+            }
+            th{
+                background-color:#2c3e50;
+                color:white;
+            }
+
+        </style>
+        <script language="JavaScript">
+        var gAutoPrint = true; // Flag for whether or not to automatically call the print function
+
+        function printSpecial()
+        {
+            if (document.getElementById != null)
+            {
+                var html = '<HTML>\n<HEAD>\n';
+
+                if (document.getElementsByTagName != null)
+                {
+                    var headTags = document.getElementsByTagName("head");
+                    if (headTags.length > 0)
+                        html += headTags[0].innerHTML;
+                }
+
+                html += '\n</HE' + 'AD>\n<BODY>\n';
+
+                var printReadyElem = document.getElementById("printReady");
+
+                if (printReadyElem != null)
+                {
+                        html += printReadyElem.innerHTML;
+                }
+                else
+                {
+                    alert("Could not find the printReady section in the HTML");
+                    return;
+                }
+
+                html += '\n</BO' + 'DY>\n</HT' + 'ML>';
+
+                var printWin = window.open("","printSpecial");
+                printWin.document.open();
+                printWin.document.write(html);
+                printWin.document.close();
+                if (gAutoPrint)
+                    printWin.print();
+            }
+            else
+            {
+                alert("Sorry, the print ready feature is only available in modern browsers.");
+            }
+        }
+
+        </script>
+
+        </body>
+        </html>
