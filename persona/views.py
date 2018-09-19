@@ -34,7 +34,7 @@ import time
 import collections
 from planilla_visado.models import ItemDeVisado
 from pago.models import Cuota, Cancelacion,Cancelada,Estado
-from datetime import datetime, date, time, timedelta 
+from datetime import datetime, date, time, timedelta
 
 #-------------------------------------------------------------------------------------------------------------------
 #generales ---------------------------------------------------------------------------------------------------------
@@ -1292,10 +1292,54 @@ def ver_listado_todos_usuarios(request):
             cant_usuarios_grupos.append(gu)
     total_usuarios_grupos = dict(collections.Counter(cant_usuarios_grupos))
     for lg in grupos:
-        if (not total_usuaxrios_grupos.has_key(lg)):
+        if (not total_usuarios_grupos.has_key(lg)):
             total_usuarios_grupos.setdefault(lg, 0)
     datos_grupos = total_usuarios_grupos.values()
     return render(request, 'persona/director/vista_de_usuarios.html', {"label_grupos":label_grupos, "datos_grupos":datos_grupos})
+
+
+# def ver_listado_todos_usuarios(request):
+#     grupos = Group.objects.all()
+#     label_grupos = []
+#     for g in grupos:
+#         if g.name != 'profesional' and g.name != 'propietario':
+#             label_grupos.append(g.name)
+#     usuarios = Usuario.objects.all()
+#     cant_usuarios_grupos = []
+#     for u in usuarios:
+#         for gu in u.get_view_groups():
+#             if str(gu) != 'profesional' and str(gu) != 'propietario':
+#                 cant_usuarios_grupos.append(gu)
+#     total_usuarios_grupos = dict(collections.Counter(cant_usuarios_grupos))
+#     for lg in label_grupos:
+#         if not total_usuarios_grupos.has_key(lg):
+#             total_usuarios_grupos.setdefault(lg, 0)
+#     datos_grupos = total_usuarios_grupos.values()
+#     usuarios = empleados()
+#     usuario = request.user
+#     return render(request, 'persona/director/vista_de_usuarios.html', {'usuarios': usuarios, "label_grupos": label_grupos, "datos_grupos": datos_grupos})
+
+def ver_categorias_mas_frecuentes(request):
+    planillas = PlanillaDeInspeccion.objects.all()
+    tramites = Tramite.objects.all()
+    tipos_categorias = CategoriaInspeccion.objects.all()
+    detalles = DetalleDeItemInspeccion.objects.all()
+    total = dict(collections.Counter(tipos_categorias))    
+    a = 0
+    b = 0
+    c = 0
+    for t in tramites:
+        if t.tipo_obra.id == 1:            
+            a+=1
+        if t.tipo_obra.id == 2:            
+            b+=1
+        if t.tipo_obra.id == 3:            
+            c+=1
+    return render(request,'persona/director/categorias_mas_frecuentes.html',{"tipos_categorias": tipos_categorias,
+                                                                             "detalles":detalles,
+                                                                             "totala":a,
+                                                                             "totalb":b,
+                                                                             "totalc":c})
 
 def detalle_de_tramite(request, pk_tramite):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
