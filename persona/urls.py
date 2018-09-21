@@ -89,6 +89,7 @@ urlpatterns = [
     url(r'^listado_planilla_visado', views.generar_planilla_visado, name="listado_planilla_visado"),
     url(r'^ver_planilla_inspeccion$', views.ver_planilla_inspeccion, name="ver_planilla_inspeccion"),
     url(r'^categorias_mas_frecuentes', views.ver_categorias_mas_frecuentes, name="categorias_mas_frecuentes"),
+    url(r'^tipos_de_obras_mas_frecuentes', views.ver_tipos_de_obras_mas_frecuentes, name="tipos_de_obras_mas_frecuentes"),
     
     #cajero -------------------------------------------------------------------------------------------------------
     url(r'^cajero$', views.mostrar_cajero, name="cajero"),

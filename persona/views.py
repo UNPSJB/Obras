@@ -1319,15 +1319,15 @@ def ver_listado_todos_usuarios(request):
 #     usuario = request.user
 #     return render(request, 'persona/director/vista_de_usuarios.html', {'usuarios': usuarios, "label_grupos": label_grupos, "datos_grupos": datos_grupos})
 
-def ver_categorias_mas_frecuentes(request):
-    planillas = PlanillaDeInspeccion.objects.all()
+def ver_tipos_de_obras_mas_frecuentes(request):
     tramites = Tramite.objects.all()
-    tipos_categorias = CategoriaInspeccion.objects.all()
-    detalles = DetalleDeItemInspeccion.objects.all()
-    total = dict(collections.Counter(tipos_categorias))    
+    tipos_obras = TipoObra.objects.all()
     a = 0
+    descripcion_a = ""
     b = 0
+    descripcion_b = ""
     c = 0
+    descripcion_c = ""
     for t in tramites:
         if t.tipo_obra.id == 1:            
             a+=1
@@ -1335,11 +1335,34 @@ def ver_categorias_mas_frecuentes(request):
             b+=1
         if t.tipo_obra.id == 3:            
             c+=1
-    return render(request,'persona/director/categorias_mas_frecuentes.html',{"tipos_categorias": tipos_categorias,
-                                                                             "detalles":detalles,
-                                                                             "totala":a,
-                                                                             "totalb":b,
-                                                                             "totalc":c})
+    return render(request,'persona/director/tipos_de_obras_mas_frecuentes.html',{"tipos_obras":tipos_obras, "totala":a,"totalb":b,"totalc":c,"descripcion_a":descripcion_a,"descripcion_b":descripcion_b,"descripcion_c":descripcion_c})
+
+def ver_categorias_mas_frecuentes(request):
+    planillas = PlanillaDeInspeccion.objects.all()    
+    tramites_inspeccionados = Tramite.objects.en_estado(Inspeccionado)    
+    tramites = Tramite.objects.all()    
+    tipos_categorias = CategoriaInspeccion.objects.all()
+    detalles = DetalleDeItemInspeccion.objects.all()
+    list = []
+    for p in planillas:
+        for t in tramites:            
+            if t.id == p.tramite.id:
+                list.append(p)                
+    a = 0
+    b = 0
+    c = 0  
+    m = []    
+    for l in list:
+        list_categorias = l.detalles.values_list('categoria_inspeccion_id')
+        m.append(list_categorias)
+        for i in list_categorias:
+            if 1 in i:
+                a+=1
+            if 2 in i:
+                b+=1
+            if 3 in i:
+                c+=1    
+    return render(request,'persona/director/categorias_mas_frecuentes.html',{"tipos_categorias": tipos_categorias,"detalles":detalles,"totala":a,"totalb":b,"totalc":c})
 
 def detalle_de_tramite(request, pk_tramite):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
@@ -1361,7 +1384,6 @@ def documentos_del_estado(request, pk_estado):
     documentos_fecha = filter(lambda e:(date.strftime(e.fecha, '%d/%m/%Y %H:%M') == fecha_str), documentos)
     contexto= {'documentos_de_fecha': documentos_fecha}
     return render(request, 'persona/director/documentos_del_estado.html', contexto)
-
 
 def generar_planilla_visado(request):
     filas = FilaDeVisado.objects.all()

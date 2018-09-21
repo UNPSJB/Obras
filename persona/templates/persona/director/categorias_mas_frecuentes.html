@@ -80,25 +80,14 @@
 
 <body>
 
-<div style="float:left;margin-right:50px;">
+<div style="float:left;margin-left:50px;">
 
 	<canvas id="canvas1"></canvas>
-
+	<br>
+	<h2>Referencias</h2>
 	<div id="leyenda1" class="leyenda"></div>
 
 </div>
-
-
-
-<div style="float:left;">
-
-	<canvas id="canvas2"></canvas>
-
-	<div id="leyenda2" class="leyenda leyendaH"></div>
-
-</div>
-
-
 
 <script>
 
@@ -195,46 +184,6 @@ var miPastel=function(canvasId,width,height,valores) {
 
 	}
 
-
-
-	/**
-
-	 * Dibuja un gráfico de pastel con una redonda en medio en modo de donut
-
-	 * Tiene que recibir:
-
-	 *	el tamaño de la redonda central (0 no hay redonda - 1 es todo)
-
-	 *	el color de la redonda
-
-	 */
-
-	this.dibujarDonut=function(tamano,color) {
-
-		this.tamanoDonut=tamano;
-
-		this.dibujar();
-
-
-
-		// creamos un circulo del color recibido en medio
-
-		this.context.fillStyle=color;
-
-		this.context.beginPath();
-
-		this.context.moveTo(this.canvas.width/2, this.canvas.height/2);
-
-		this.context.arc(this.canvas.width/2, this.canvas.height/2, this.radio*tamano, 0, 2*Math.PI);
-
-		this.context.closePath();
-
-		this.context.fill();
-
-	}
-
-
-
 	/**
 
 	 * Pone el tanto por ciento de cada uno de los valores
@@ -271,8 +220,6 @@ var miPastel=function(canvasId,width,height,valores) {
 
 			incrementar=(this.radio*this.tamanoDonut)/2;
 
-
-
 		this.context.font="bold 12pt Calibri";
 
 		this.context.fillStyle=color;
@@ -285,14 +232,11 @@ var miPastel=function(canvasId,width,height,valores) {
 
 			angulo=2*Math.PI*valor/this.total;
 
-
-
 			// calculamos la posición del texto
 
 			etiquetaX=this.canvas.width/2+(incrementar+this.radio/2)*Math.cos(inicioAngulo+angulo/2);
 
 			etiquetaY=this.canvas.height/2+(incrementar+this.radio/2)*Math.sin(inicioAngulo+angulo/2);
-
 
 
 			texto=Math.round(100*valor/this.total);
@@ -308,7 +252,6 @@ var miPastel=function(canvasId,width,height,valores) {
 				etiquetaX-=10;
 
 
-
 			// ponemos los valores
 
 			this.context.beginPath();
@@ -316,8 +259,6 @@ var miPastel=function(canvasId,width,height,valores) {
 			this.context.fillText(texto+"%", etiquetaX, etiquetaY);
 
 			this.context.stroke();
-
-
 
 			inicioAngulo+=angulo;
 
@@ -365,7 +306,7 @@ var miPastel=function(canvasId,width,height,valores) {
 
 		{
 
-			codigoHTML+="<li><span style='background-color:"+valores[i]["color"]+"'></span>"+i+"</li>";
+			codigoHTML+="<li>"+i+"<span style='background-color:"+valores[i]["color"]+"'></span></li>";
 
 		}
 
