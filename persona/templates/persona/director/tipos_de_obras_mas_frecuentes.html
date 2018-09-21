@@ -324,13 +324,13 @@
 
     var valores={
         {% if totala != 0 %}
-            "Obra nueva":{valor:{{ totala }},color:"blue"},
+            "{{descripcion_a}}":{valor:{{ totala }},color:"blue"},
         {% endif %}
         {% if totalb != 0 %}
-            "Ampliacion":{valor:{{ totalb }},color:"red"},
+            "{{descripcion_b}}":{valor:{{ totalb }},color:"orange"},
         {% endif %}
         {% if totalc != 0 %}
-            "Relevamiento":{valor:{{ totalc }},color:"green"},
+            "{{descripcion_c}}":{valor:{{ totalc }},color:"purple"},
         {% endif %}	
     }
 

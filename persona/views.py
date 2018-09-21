@@ -1331,10 +1331,13 @@ def ver_tipos_de_obras_mas_frecuentes(request):
     for t in tramites:
         if t.tipo_obra.id == 1:            
             a+=1
+            descripcion_a = t.tipo_obra.descripcion
         if t.tipo_obra.id == 2:            
             b+=1
+            descripcion_b = t.tipo_obra.descripcion
         if t.tipo_obra.id == 3:            
             c+=1
+            descripcion_c = t.tipo_obra.descripcion
     return render(request,'persona/director/tipos_de_obras_mas_frecuentes.html',{"tipos_obras":tipos_obras, "totala":a,"totalb":b,"totalc":c,"descripcion_a":descripcion_a,"descripcion_b":descripcion_b,"descripcion_c":descripcion_c})
 
 def ver_categorias_mas_frecuentes(request):
