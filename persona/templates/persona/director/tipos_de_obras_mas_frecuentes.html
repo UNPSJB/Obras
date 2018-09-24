@@ -40,18 +40,25 @@
             </h3>
             <hr style="border-width:">
             <br>
-
             <div class="table-responsive">
-
-                <tr>
-                    <th></th>
+                <table align="center" class="table table-bordered table-striped table-hover" style="width:500px;">
+                    <th>Tipo obra</th>
+                    <th>Descripcion</th>
+                    </tr>
+                    </thead>
+                    <tbody>
                     {% for tipo in tipos_obras %}
-                        <li><h4> {{tipo.descripcion}} </h4></li>
+                    <tr>
+                        <td class="col-xs-1">{{ tipo.nombre }}</td>
+                        <td class="col-xs-1">{{ tipo.descripcion }}</td>
+                    </tr>
                     {% endfor %}
-                </tr>
+                    </tbody>
+                </table>
             </div>
 		<br>
-        </div>
+</div>
+
     <head>
 
 	<meta charset="utf-8">
@@ -88,6 +95,7 @@
 	<div id="leyenda1" class="leyenda"></div>
 
 </div>
+
 
 <script>
 
@@ -346,6 +354,19 @@
     pastel.ponerLeyenda("leyenda1");
 
 </script>
+
+</body>
+      </div>
+    </div>
+      </div>
+    </div>
+</div>
+</div>
+</p>
+</div>
+    </div>
+    </div>
+</div>
 
 <div class="row">
     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-right">

@@ -5,7 +5,7 @@
 <p lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Reporte de categorias mas frecuentes</title>
+    <title>Reporte de materiales mas utilizados</title>
 </head>
 
 {% block barra %}
@@ -35,27 +35,11 @@
                       &nbsp; 9100 TRELEW- Provincia del Chubut
                   </div>
                       <h3 align="center">
-                          CATEGORIAS DE VIVIENDAS MAS FRECUENTES &nbsp;  &nbsp;
+                          TIPOS DE MATERIALES MAS UTILIZADOS CIELORRASOS&nbsp;  &nbsp;
                       </h3>
                       <hr style="border-width:">
                       <br>
-                    <div class="table-responsive">
-                        <table align="center" class="table table-bordered table-striped table-hover" style="width:1000px;">
-                            <th>Tipo Categoria</th>
-                            <th>Descripcion</th>
 
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {% for tipo_cat in tipos_categorias %}
-                        <tr>
-                            <td class="col-xs-1">{{ tipo_cat.nombre }}</td>
-                            <td class="col-xs-1">{{ tipo_cat.descripcion }}</td>
-                        </tr>
-                            {% endfor %}
-                        </tbody>
-                        </table>
-                         </div>
 		  <br>
           </div>
 <head>
@@ -86,14 +70,25 @@
 
 <body>
 
-<div style="float:left;margin-left:50px;">
+<div style="float:left;margin-right:50px;">
 
 	<canvas id="canvas1"></canvas>
-	<br>
-	<h2>Referencias</h2>
+
 	<div id="leyenda1" class="leyenda"></div>
 
 </div>
+
+
+
+<div style="float:left;">
+
+	<canvas id="canvas2"></canvas>
+
+	<div id="leyenda2" class="leyenda leyendaH"></div>
+
+</div>
+
+
 
 <script>
 
@@ -190,6 +185,46 @@ var miPastel=function(canvasId,width,height,valores) {
 
 	}
 
+
+
+	/**
+
+	 * Dibuja un gráfico de pastel con una redonda en medio en modo de donut
+
+	 * Tiene que recibir:
+
+	 *	el tamaño de la redonda central (0 no hay redonda - 1 es todo)
+
+	 *	el color de la redonda
+
+	 */
+
+	this.dibujarDonut=function(tamano,color) {
+
+		this.tamanoDonut=tamano;
+
+		this.dibujar();
+
+
+
+		// creamos un circulo del color recibido en medio
+
+		this.context.fillStyle=color;
+
+		this.context.beginPath();
+
+		this.context.moveTo(this.canvas.width/2, this.canvas.height/2);
+
+		this.context.arc(this.canvas.width/2, this.canvas.height/2, this.radio*tamano, 0, 2*Math.PI);
+
+		this.context.closePath();
+
+		this.context.fill();
+
+	}
+
+
+
 	/**
 
 	 * Pone el tanto por ciento de cada uno de los valores
@@ -226,6 +261,8 @@ var miPastel=function(canvasId,width,height,valores) {
 
 			incrementar=(this.radio*this.tamanoDonut)/2;
 
+
+
 		this.context.font="bold 12pt Calibri";
 
 		this.context.fillStyle=color;
@@ -238,11 +275,14 @@ var miPastel=function(canvasId,width,height,valores) {
 
 			angulo=2*Math.PI*valor/this.total;
 
+
+
 			// calculamos la posición del texto
 
 			etiquetaX=this.canvas.width/2+(incrementar+this.radio/2)*Math.cos(inicioAngulo+angulo/2);
 
 			etiquetaY=this.canvas.height/2+(incrementar+this.radio/2)*Math.sin(inicioAngulo+angulo/2);
+
 
 
 			texto=Math.round(100*valor/this.total);
@@ -258,6 +298,7 @@ var miPastel=function(canvasId,width,height,valores) {
 				etiquetaX-=10;
 
 
+
 			// ponemos los valores
 
 			this.context.beginPath();
@@ -265,6 +306,8 @@ var miPastel=function(canvasId,width,height,valores) {
 			this.context.fillText(texto+"%", etiquetaX, etiquetaY);
 
 			this.context.stroke();
+
+
 
 			inicioAngulo+=angulo;
 
@@ -312,7 +355,7 @@ var miPastel=function(canvasId,width,height,valores) {
 
 		{
 
-			codigoHTML+="<li>"+i+"<span style='background-color:"+valores[i]["color"]+"'></span></li>";
+			codigoHTML+="<li><span style='background-color:"+valores[i]["color"]+"'></span>"+i+"</li>";
 
 		}
 
@@ -330,15 +373,23 @@ var miPastel=function(canvasId,width,height,valores) {
 
 var valores={
 	{% if totala != 0 %}
-		"Categoria A":{valor:{{ totala }},color:"blue"},
+		"{{tipo1}}":{valor:{{ totala }},color:"blue"},
 	{% endif %}
 	{% if totalb != 0 %}
-		"Categoria B":{valor:{{ totalb }},color:"red"},
+		"{{tipo2}}":{valor:{{ totalb }},color:"red"},
 	{% endif %}
 	{% if totalc != 0 %}
-		"Categoria C":{valor:{{ totalc }},color:"green"},
+		"{{tipo3}}":{valor:{{ totalc }},color:"green"},
 	{% endif %}	
-	<!--"C++":{valor:30,color:"Cyan"}-->
+	{% if totalh != 0 %}
+		"{{tipo4}}":{valor:{{ totalh }},color:"violet"},
+	{% endif %}
+	{% if totale != 0 %}
+		"{{tipo5}}":{valor:{{ totale }},color:"black"},
+	{% endif %}
+	{% if totalf != 0 %}
+		"{{tipo6}}":{valor:{{ totalf }},color:"pink"},
+	{% endif %}
 
 }
 

@@ -41,7 +41,15 @@
 					<li><a href="vista_de_usuarios">Usuarios por grupo</a></li>
 					<li><a href="categorias_mas_frecuentes">categorias mas frecuentes</a></li>
 					<li><a href="tipos_de_obras_mas_frecuentes">tipos de obras mas frecuentes</a></li>
-				</ul>
+					<li><a href="profesionales_mas_requeridos">Ver profesionales mas requeridos</a></li>
+                    <li><a data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour" onclick='mostrarSubmenu("informesMateriales")'>Tipos de materiales mas utilizados <span class="caret"></span></a></li>
+                </ul>
+                    <ul class="sidebar sidebar-2" style="display:none;" id="informesMateriales">
+                        <li><a href="materiales_mas_usados_frente">Materiales mas utilizados en frente o fachada</a></li>
+                        <li><a href="materiales_mas_usados_paredes">Materiales mas utilizados en paredes</a></li>
+                        <li><a href="materiales_mas_usados_techos">Materiales mas utilizados en techos</a></li>
+                        <li><a href="materiales_mas_usados_cielorrasos">Materiales mas utilizados en cielorrasos</a></li>
+                    </ul>
 		</font>
 	</ul>
 {% endblock %}
@@ -513,6 +521,19 @@
 		  </h5>
 		</div>
 		<div id="collapseFour" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFour">
+		  <div class="panel-body">
+		  </div>
+		</div>
+	  </div>
+        <div class="panel" style="display: none;">
+		<div class="panel-heading box" role="tab" id="headingFour">
+		  <h5 class="panel-title">
+			<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+			  <font color="#ffffff" size="2">Tipos de materiales mas utilizados</font>
+			</a>
+		  </h5>
+		</div>
+		<div id="collapseTen" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFour">
 		  <div class="panel-body">
 		  </div>
 		</div>

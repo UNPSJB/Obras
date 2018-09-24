@@ -1367,6 +1367,265 @@ def ver_categorias_mas_frecuentes(request):
                 c+=1    
     return render(request,'persona/director/categorias_mas_frecuentes.html',{"tipos_categorias": tipos_categorias,"detalles":detalles,"totala":a,"totalb":b,"totalc":c})
 
+def ver_profesionales_mas_requeridos(request):
+    planillas = PlanillaDeInspeccion.objects.all()
+    tramites_inspeccionados = Tramite.objects.en_estado(ConInspeccion) #aca deberia ir estado Finalizado
+    tramites = Tramite.objects.all()                #puse con inspeccion solo para fines de mostrar algo
+    profesionales = Profesional.objects.all()
+    personas = Persona.objects.all()
+    profesionales_atributos = filter(lambda persona:(persona is not None), profesionales)
+    list = []
+    for t in tramites:
+        for p in profesionales:
+            if t.profesional_id == p.id:
+                list.append(t)
+    a = 0
+    b = 0
+    c = 0
+    d = 0
+    e = 0
+    f = 0
+    m = []
+    tipo1 = ''
+    tipo2 = ''
+    tipo3 = ''
+    tipo4 = ''
+    tipo5 = ''
+    tipo6 = ''
+    iterador = 0
+
+    for l in list:
+        if l.profesional_id == 1:
+            a += 1
+            tipo1 = l.profesional_id
+        if l.profesional_id == 2:
+            b += 1
+            tipo2 = l.profesional_id
+        if l.profesional_id == 3:
+            c += 1
+            tipo3 = l.profesional_id
+        if l.profesional_id == 4:
+            d += 1
+            tipo4 = l.profesional_id
+        if l.profesional_id == 5:
+            e += 1
+            tipo5 = l.profesional_id
+        if l.profesional_id == 6:
+            f += 1
+            tipo6 = l.profesional_id
+    return render(request, 'persona/director/profesionales_mas_requeridos.html',
+                  { "profesionales_atributos":profesionales_atributos, "tipo1":tipo1, "tipo2":tipo2, "tipo3": tipo3, "tipo4":tipo4,
+                    "tipo5": tipo5, "tipo6": tipo6,
+                    "totala": a, "totalb": b, "totalc": c, "totald": d, "totale":e, "totalf":f})
+
+def ver_tipos_de_materiales_frente(request):
+    planillas = PlanillaDeInspeccion.objects.all()
+    tramites_inspeccionados = Tramite.objects.en_estado(Inspeccionado)
+    tramites = Tramite.objects.all()
+    item_inspeccion =ItemInspeccion.objects.all()
+    detalles = DetalleDeItemInspeccion.objects.all()
+    list = []
+    for p in planillas:
+        for t in tramites:
+            if t.id == p.tramite.id:
+                list.append(p)
+    a = 0
+    b = 0
+    c = 0
+    h = 0
+    e = 0
+    f = 0
+    m = []
+    tipo1 = ''
+    tipo2 = ''
+    tipo3 = ''
+    tipo4 = ''
+    tipo5 = ''
+    tipo6 = ''
+    for l in list:
+        list_detalles = l.detalles.values_list('id','categoria_inspeccion_id','item_inspeccion_id')
+        m.append(list_detalles)
+
+        for d in list_detalles:
+            if 1 in d and 1 in d and 1 in d:
+                a+=1
+                tipo1 = 'marmol o piedra'
+            if 2 in d and 1 in d and 1 in d:
+                b+=1
+                tipo2 = 'acero o aluminio'
+            if 3 in d and 2 in d and 1 in d:
+                c+=1
+                tipo3 = 'ladrillo bolseado'
+            if 4 in d and 3 in d and 1 in d:
+                h+= 1
+                tipo4 = 'pintura latex comun'
+            if 13 in d and 2 in d and 1 in d:
+                e+= 1
+                tipo5 = 'ladrillo visto enrasado'
+            if 14 in d and 3 in d and 1 in d:
+                f+= 1
+                tipo6 = 'salpicados varios'
+
+    return render(request,'persona/director/materiales_mas_usados_frente.html',{"list_detalles": detalles,"totala":a,"totalb":b,
+                        "totalc":c, "totalh":h,"totale":e, "totalf":f,"tipo1":tipo1, "tipo2":tipo2,"tipo3":tipo3,
+                        "tipo4":tipo4, "tipo5":tipo5, "tipo6": tipo6})
+
+def ver_tipos_de_materiales_paredes(request):
+    planillas = PlanillaDeInspeccion.objects.all()
+    tramites_inspeccionados = Tramite.objects.en_estado(Inspeccionado)
+    tramites = Tramite.objects.all()
+    item_inspeccion =ItemInspeccion.objects.all()
+    detalles = DetalleDeItemInspeccion.objects.all()
+    list = []
+    for p in planillas:
+        for t in tramites:
+            if t.id == p.tramite.id:
+                list.append(p)
+    a = 0
+    b = 0
+    c = 0
+    h = 0
+    e = 0
+    f = 0
+    m = []
+    tipo1 = ''
+    tipo2 = ''
+    tipo3 = ''
+    tipo4 = ''
+    tipo5 = ''
+    tipo6 = ''
+    for l in list:
+        list_detalles = l.detalles.values_list('id','categoria_inspeccion_id','item_inspeccion_id')
+        m.append(list_detalles)
+
+        for d in list_detalles:
+            if 5 in d and 1 in d and 2 in d:
+                a+=1
+                tipo1 = 'ladrillo de maquina o hueco'
+            if 6 in d and 2 in d and 2 in d:
+                b+=1
+                tipo2 = 'bloques de hormigon'
+            if 7 in d and 3 in d and 2 in d:
+                c+=1
+                tipo3 = 'ladrillo macizo comun'
+            if 15 in d and 1 in d and 2 in d:
+                h+= 1
+                tipo4 = 'doble con aislaciones'
+            if 16 in d and 2 in d and 2 in d:
+                e+= 1
+                tipo5 = 'ladrillo media maquina'
+            if 17 in d and 3 in d and 2 in d:
+                f+= 1
+                tipo6 = 'ladrillo ceramico hueco comun'
+
+    return render(request,'persona/director/materiales_mas_usados_paredes.html',{"list_detalles": detalles,"totala":a,"totalb":b,
+                        "totalc":c, "totalh":h,"totale":e, "totalf":f,"tipo1":tipo1, "tipo2":tipo2,"tipo3":tipo3,
+                        "tipo4":tipo4, "tipo5":tipo5, "tipo6": tipo6})
+
+def ver_tipos_de_materiales_techos(request):
+    planillas = PlanillaDeInspeccion.objects.all()
+    tramites_inspeccionados = Tramite.objects.en_estado(Inspeccionado)
+    tramites = Tramite.objects.all()
+    item_inspeccion =ItemInspeccion.objects.all()
+    detalles = DetalleDeItemInspeccion.objects.all()
+    list = []
+    for p in planillas:
+        for t in tramites:
+            if t.id == p.tramite.id:
+                list.append(p)
+    a = 0
+    b = 0
+    c = 0
+    h = 0
+    e = 0
+    f = 0
+    m = []
+    tipo1 = ''
+    tipo2 = ''
+    tipo3 = ''
+    tipo4 = ''
+    tipo5 = ''
+    tipo6 = ''
+    for l in list:
+        list_detalles = l.detalles.values_list('id','categoria_inspeccion_id','item_inspeccion_id')
+        m.append(list_detalles)
+
+        for d in list_detalles:
+            if 8 in d and 1 in d and 3 in d:
+                a+=1
+                tipo1 = 'chapa prepintada'
+            if 9 in d and 1 in d and 3 in d:
+                b+=1
+                tipo2 = 'pizarra clasica'
+            if 18 in d and 2 in d and 3 in d:
+                c+=1
+                tipo3 = 'chapa galvanizada'
+            if 19 in d and 2 in d and 3 in d:
+                h+= 1
+                tipo4 = 'losa de hormigon con aislaciones'
+            if 20 in d and 3 in d and 3 in d:
+                e+= 1
+                tipo5 = 'chapa galvanizada comun'
+            if 21 in d and 3 in d and 3 in d:
+                f+= 1
+                tipo6 = 'tejas ceramica comun'
+
+    return render(request,'persona/director/materiales_mas_usados_techos.html',{"list_detalles": detalles,"totala":a,"totalb":b,
+                        "totalc":c, "totalh":h,"totale":e, "totalf":f,"tipo1":tipo1, "tipo2":tipo2,"tipo3":tipo3,
+                        "tipo4":tipo4, "tipo5":tipo5, "tipo6": tipo6})
+
+def ver_tipos_de_materiales_cielorrasos(request):
+    planillas = PlanillaDeInspeccion.objects.all()
+    tramites_inspeccionados = Tramite.objects.en_estado(Inspeccionado)
+    tramites = Tramite.objects.all()
+    item_inspeccion =ItemInspeccion.objects.all()
+    detalles = DetalleDeItemInspeccion.objects.all()
+    list = []
+    for p in planillas:
+        for t in tramites:
+            if t.id == p.tramite.id:
+                list.append(p)
+    a = 0
+    b = 0
+    c = 0
+    h = 0
+    e = 0
+    f = 0
+    m = []
+    tipo1 = ''
+    tipo2 = ''
+    tipo3 = ''
+    tipo4 = ''
+    tipo5 = ''
+    tipo6 = ''
+    for l in list:
+        list_detalles = l.detalles.values_list('id','categoria_inspeccion_id','item_inspeccion_id')
+        m.append(list_detalles)
+
+        for d in list_detalles:
+            if 10 in d and 1 in d and 4 in d:
+                a+=1
+                tipo1 = 'susp. o aplicado de yeso'
+            if 11 in d and 2 in d and 4 in d:
+                b+=1
+                tipo2 = 'madera machiembrada'
+            if 12 in d and 3 in d and 4 in d:
+                c+=1
+                tipo3 = 'revoque a la cal/fino a la cal'
+            if 22 in d and 1 in d and 4 in d:
+                h+= 1
+                tipo4 = 'susp. o aplicado de madera especial'
+            if 23 in d and 2 in d and 4 in d:
+                e+= 1
+                tipo5 = 'suspendido o aplicado a la cal'
+            if 24 in d and 3 in d and 4 in d:
+                f+= 1
+                tipo6 = 'hormigon visto'
+
+    return render(request,'persona/director/materiales_mas_usados_cielorrasos.html',{"list_detalles": detalles,"totala":a,"totalb":b,
+                        "totalc":c, "totalh":h,"totale":e, "totalf":f,"tipo1":tipo1, "tipo2":tipo2,"tipo3":tipo3,
+                        "tipo4":tipo4, "tipo5":tipo5, "tipo6": tipo6})
+
 def detalle_de_tramite(request, pk_tramite):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
     contexto0 = {'tramite': tramite}
