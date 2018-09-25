@@ -1386,29 +1386,30 @@ def ver_profesionales_mas_requeridos(request):
     }
     return render(request, 'persona/director/profesionales_mas_requeridos.html',contexto)
 
-'''def ver_barra_materiales(request):
+def ver_barra_materiales(request):
     items = ItemInspeccion.objects.all()    
     planillas = PlanillaDeInspeccion.objects.all()
     contexto = {
         "items":items,
     }             
-    if "Guardar" in request.POST:      
+    if "Guardar" in request.POST:              
         for name, value in request.POST.items():
-            if name.startswith('tipoItem'):                                        
-                raise Exception (value)           
-        redirect('materiales_mas_usados',pk)
+            if name.startswith('item'):              
+                detalles = __busco_item__(value)                                                                           
+                return render(request, 'persona/director/materiales_mas_usados.html',{"detalles":detalles,"tipo_item":value})
     if "Volver" in request.POST: 
         pass
     return render(request,'persona/director/barra_materiales.html',contexto)    
-'''
-def ver_materiales_mas_usados(request):  
-    items = ItemInspeccion.objects.all()
+
+def __busco_item__(item):    
     detalles = DetalleDeItemInspeccion.objects.all()
-    planillas = PlanillaDeInspeccion.objects.all()   
+    planillas = PlanillaDeInspeccion.objects.all()                   
+    i = get_object_or_404(ItemInspeccion, nombre=item)
     list = []
-    for d in detalles:
-        m = [d.nombre,0]
-        list.append(m)        
+    for d in detalles:                    
+        if i == d.item_inspeccion:            
+            m = [d.nombre,0]
+            list.append(m)            
     list_detalles = []
     for p in planillas:
         for d in p.detalles.all():
@@ -1420,10 +1421,7 @@ def ver_materiales_mas_usados(request):
                 aux += value +1
                 i = list.index([name,value])
                 list[i] = [name,aux]
-    contexto = {
-        "detalles":list,
-    }
-    return render(request, 'persona/director/materiales_mas_usados.html',contexto)
+    return list
 
 def detalle_de_tramite(request, pk_tramite):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
