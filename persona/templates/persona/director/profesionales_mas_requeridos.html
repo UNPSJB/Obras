@@ -19,49 +19,49 @@
 {% block contenido %}
 <p>
 <div id="printReady">
-        <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" >
-		  <div class="row" style="background:white;">
-              <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                  <div style="background-color:#2c3e50;">
-                      <p>
-                          <img src="/media/imagenes/Escudobanner.png"
-                               class="img-responsive" alt="Imagen responsive" width="100" height="100"/>
-                      </p>
-                  </div>
-                       <div align="justify" style="font-size:9px; text-align:left;">
-                      <br>  &nbsp; MUNICIPALIDAD DE TRELEW
-                      <br>
-                      &nbsp; Rivadavia 390 <br>
-                      &nbsp; 9100 TRELEW- Provincia del Chubut
-                  </div>
-                      <h3 align="center">
-                          PROFESIONALES MAS REQUERIDOS &nbsp;  &nbsp;
-                      </h3>
-                      <hr style="border-width:">
-                      <br>
-
-						 <div class="table-responsive">
-                        <table align="center" class="table table-bordered table-striped table-hover" style="width:500px;">
-                            <th>Id</th>
-                            <th>Nombre</th>
-                            <th>Apellido</th>
-
-                        </tr>
-                        </thead>
+	<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" >
+		<div class="row" style="background:white;">
+        	<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+				<div style="background-color:#2c3e50;">
+				<p>
+					<img src="/media/imagenes/Escudobanner.png"
+						class="img-responsive" alt="Imagen responsive" width="100" height="100"/>
+				</p>
+			</div>
+			<div align="justify" style="font-size:9px; text-align:left;">
+				<br>  &nbsp; MUNICIPALIDAD DE TRELEW
+				<br>
+				&nbsp; Rivadavia 390 <br>
+				&nbsp; 9100 TRELEW- Provincia del Chubut
+			</div>
+			<h3 align="center">
+				PROFESIONALES MAS REQUERIDOS &nbsp;  &nbsp;
+			</h3>
+			<hr style="border-width:">
+			<br>
+				<div class="table-responsive">
+					<table align="center" class="table table-bordered table-striped table-hover" style="width:500px;">
+						<th>Id</th>
+						<th>Nombre</th>
+						<th>Apellido</th>                        
+						<th>Cantidad de tramites</th>
                         <tbody>
-                        {% for profesional in profesionales_atributos %}
-                        <tr>
-                            <td class="col-xs-1">{{ profesional.id }}</td>
-                            <td class="col-xs-1">{{ profesional.persona.nombre }}</td>
-                            <td class="col-xs-1">{{ profesional.persona.apellido }} </td>
-                        </tr>
+                        	{% for name,value in profesionales %}
+                        	<tr>
+                            	<td class="col-xs-1">{{ name.id }}</td>
+								<td class="col-xs-1">{{ name.persona.nombre }}</td>
+								<td class="col-xs-1">{{ name.persona.apellido }} </td>
+								<td class="col-xs-1">{{ value }} </td>
+                        	</tr>
                             {% endfor %}
                         </tbody>
-                        </table>
-                         </div>
-		  <br>
-          </div>
-<head>
+					</table>
+					<br>
+					<br>
+                </div>
+			<br>	
+		</div>
+	<head>
 
 	<meta charset="utf-8">
 
@@ -89,7 +89,7 @@
 
 <body>
 
-<div style="float:left;margin-right:50px;">
+<div style="float:left;margin-left:150px;">
 
 	<canvas id="canvas1"></canvas>
 
@@ -280,8 +280,6 @@ var miPastel=function(canvasId,width,height,valores) {
 
 			incrementar=(this.radio*this.tamanoDonut)/2;
 
-
-
 		this.context.font="bold 12pt Calibri";
 
 		this.context.fillStyle=color;
@@ -294,19 +292,13 @@ var miPastel=function(canvasId,width,height,valores) {
 
 			angulo=2*Math.PI*valor/this.total;
 
-
-
 			// calculamos la posición del texto
 
 			etiquetaX=this.canvas.width/2+(incrementar+this.radio/2)*Math.cos(inicioAngulo+angulo/2);
 
 			etiquetaY=this.canvas.height/2+(incrementar+this.radio/2)*Math.sin(inicioAngulo+angulo/2);
 
-
-
 			texto=Math.round(100*valor/this.total);
-
-
 
 			// movemos la posición unos pixels si estamos en la parte izquierda
 
@@ -316,8 +308,6 @@ var miPastel=function(canvasId,width,height,valores) {
 
 				etiquetaX-=10;
 
-
-
 			// ponemos los valores
 
 			this.context.beginPath();
@@ -325,8 +315,6 @@ var miPastel=function(canvasId,width,height,valores) {
 			this.context.fillText(texto+"%", etiquetaX, etiquetaY);
 
 			this.context.stroke();
-
-
 
 			inicioAngulo+=angulo;
 
@@ -390,26 +378,21 @@ var miPastel=function(canvasId,width,height,valores) {
 
 // definimos los valores de nuestra gráfica
 
+function getRandomColor() {
+	var letters = '0123456789ABCDEF';
+  	var color = '#';
+  	for (var i = 0; i < 3; i++) {
+    	color += letters[Math.floor(Math.random() * 6)];
+  	}
+  	return color;
+}
+function setRandomColor() {
+  $("#colorpad").css("background-color", getRandomColor());
+}
 var valores={
-	{% if totala != 0 %}
-		"{{tipo1}}":{valor:{{ totala }},color:"blue"},
-	{% endif %}
-	{% if totalb != 0 %}
-		"{{tipo2}}":{valor:{{ totalb }},color:"red"},
-	{% endif %}
-	{% if totalc != 0 %}
-		"{{tipo3}}":{valor:{{ totalc }},color:"green"},
-	{% endif %}	
-	{% if totald != 0 %}
-		"{{tipo4}}":{valor:{{ totald }},color:"violet"},
-	{% endif %}
-	{% if totale != 0 %}
-		"{{tipo5}}":{valor:{{ totale }},color:"yellow"},
-	{% endif %}
-	{% if totalf != 0 %}
-		"{{tipo6}}":{valor:{{ totalf }},color:"brown"},
-	{% endif %}
-
+	{% for name,value in profesionales%}		
+		"{{value}}":{valor:{{ value }},color:getRandomColor()},				
+	{% endfor %}
 }
 
 

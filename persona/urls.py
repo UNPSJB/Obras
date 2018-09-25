@@ -91,11 +91,9 @@ urlpatterns = [
     url(r'^categorias_mas_frecuentes', views.ver_categorias_mas_frecuentes, name="categorias_mas_frecuentes"),
     url(r'^tipos_de_obras_mas_frecuentes', views.ver_tipos_de_obras_mas_frecuentes, name="tipos_de_obras_mas_frecuentes"),
     url(r'^profesionales_mas_requeridos', views.ver_profesionales_mas_requeridos, name="profesionales_mas_requeridos"),
-    url(r'^materiales_mas_usados_frente', views.ver_tipos_de_materiales_frente, name="materiales_mas_usados_frente"),
-    url(r'^materiales_mas_usados_paredes', views.ver_tipos_de_materiales_paredes, name="materiales_mas_usados_paredes"),
-    url(r'^materiales_mas_usados_techos', views.ver_tipos_de_materiales_techos, name="materiales_mas_usados_techos"),
-    url(r'^materiales_mas_usados_cielorrasos', views.ver_tipos_de_materiales_cielorrasos, name="materiales_mas_usados_cielorrasos"),
-
+    #url(r'^ver_barra_materiales', views.ver_barra_materiales, name="ver_barra_materiales"),
+    url(r'^materiales_mas_usados', views.ver_materiales_mas_usados, name="materiales_mas_usados"),
+    
     #cajero -------------------------------------------------------------------------------------------------------
     url(r'^cajero$', views.mostrar_cajero, name="cajero"),
     url(r'^cajero/tramites_para_financiar$', views.listado_tramites_para_financiar, name="tramites_para_financiar"),
