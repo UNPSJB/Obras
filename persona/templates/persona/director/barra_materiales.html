@@ -14,44 +14,49 @@
 {% endblock %}
 {% block contenido %}
 
-<div class="panel">
-    <h5 class="panel-title">
-        <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo" onclick='mostrarSubmenu("tareasTramite")'>
-            <font color="#ffffff" size="2">Datos Trámite</font>
-        </a>
-    </h5>
-</div>
-
-<div class="container-fluid">    
-    <h5>
-        LISTADO
-    </h5>    
-<label> Seleccione el material</label>    
-
-<form action="" method="post" enctype="multipart/form-data">
-    <input name="guardar_financiacion" type="hidden"> 
-    <div id="div_id_item" class="form-group"> 
-        <label for="id_item" class="control-label ">
-            Item
-        </label> 
-        <div class="controls "> 
-            <select name="item" placeholder="Ingresar el Item" class="select form-control input-sm" id="id_item" required> 
-                <option value="" selected="#">---------</option> 
-                {% for i in items %}
-                    <option value="{{i}}">{{i}}</option> 
-                {% endfor %}
-            </select> 
-        </div> 
-    </div>          
-
-    <div class="form-group"> 
-        <div class="controls ">                                              
-            <button class="btn btn-primary btn-sm" type="submit" name="Guardar">
-                Enviar
-            </button>                                       
-            <button class="btn btn-primary btn-sm" type="submit" name="Volver">
-                Volver
-            </button>                           
+<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" >
+	  <div class="panel">
+		<div class="panel-heading box" role="tab" id="headingFive">
+		  <h5 class="panel-title">
+			<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+			  <font color="#ffffff" size="2">Materiales mas utilizados segun item de inspeccion</font>
+			</a>
+		  </h5>
+		</div>
+        <div id="collapseFive" class="panel-collapse" role="tabpanel" aria-labelledby="headingFive">
+		  <div class="panel-body">
+			<div class="container-fluid">
+				<div class="row">
+                    <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                <label> Seleccione el item de inspeccion</label>
+                <form action="" method="post" enctype="multipart/form-data">
+                    <input name="guardar_financiacion" type="hidden">
+                    <div id="div_id_item" class="form-group">
+                        <label for="id_item" class="control-label ">
+                            Item
+                        </label>
+                        <div class="controls ">
+                            <select name="item" placeholder="Ingresar el Item" class="select form-control input-sm" id="id_item" required>
+                                <option value="" selected="#">---------</option>
+                                {% for i in items %}
+                                    <option value="{{i}}">{{i}}</option>
+                                {% endfor %}
+                            </select>
+                        </div>
+                    </div>
+                        <button class="btn btn-primary btn-sm" type="submit" name="Guardar">
+                            Ver
+                        </button>
+                        <a href="javascript:history.back(-1);">
+                            <button type="button" class="btn btn-primary" name="Volver">
+                                Volver
+                            </button>
+                        </a>
+                </form>
+                </div>
+            </div>
+          </div>
+      </div>
         </div> 
     </div>     
 </form>
