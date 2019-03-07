@@ -47,11 +47,13 @@
                     </tr>
                     </thead>
                     <tbody>
-                    {% for tipo in tipos_obras %}
-                    <tr>
-                        <td class="col-xs-1">{{ tipo.nombre }}</td>
-                        <td class="col-xs-1">{{ tipo.descripcion }}</td>
-                    </tr>
+                    {% for name,value in tipos_obras %}
+                        {% if value != 0 %}
+                            <tr>
+                                <td class="col-xs-1">{{ name }}</td>
+                                <td class="col-xs-1">{{ value }}</td>
+                            </tr>
+                        {% endif %}
                     {% endfor %}
                     </tbody>
                 </table>
@@ -328,20 +330,24 @@
 
 
 
-    // definimos los valores de nuestra gráfica
 
-    var valores={
-        {% if totala != 0 %}
-            "{{descripcion_a}}":{valor:{{ totala }},color:"blue"},
-        {% endif %}
-        {% if totalb != 0 %}
-            "{{descripcion_b}}":{valor:{{ totalb }},color:"orange"},
-        {% endif %}
-        {% if totalc != 0 %}
-            "{{descripcion_c}}":{valor:{{ totalc }},color:"purple"},
-        {% endif %}	
+    // definimos los valores de nuestra gráfica
+    function getRandomColor() {
+        var letters = '0123456789ABCDEF';
+        var color = '#';
+        for (var i = 0; i < 3; i++) {
+            color += letters[Math.floor(Math.random() * 6)];
+        }
+  	    return color;
     }
 
+    var valores={
+        {% for name,value in tipos_obras %}
+            {% if value != 0 %}
+                "{{name}}":{valor:{{ value }},color:getRandomColor()},
+            {% endif %}
+        {% endfor %}
+    }
 
     // generamos el primer pastel
 

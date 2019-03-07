@@ -57,6 +57,13 @@ urlpatterns = [
     url(r'^visador/planilla_visado/(?P<pk_tramite>\d+)/$', views.planilla_visado, name="planilla_visado"),
     url(r'^generar_planilla_impresa/(?P<pk_tramite>\d+)/$', views.generar_planilla_impresa, name="generar_planilla_impresa"),
 
+    url(r'^tramites_visados_imprimible', views.tramites_visados_imprimible, name="tramites_visados_imprimible"),
+
+    url(r'^reporte_tramites_visados_excel/', ReporteTramitesVisadosExcel.as_view(),
+        name="reporte_tramites_visados_excel"),
+    url(r'^reporte_tramites_visados_pdf/$', login_required(ReporteTramitesVisadosPdf.as_view()),
+        name="reporte_tramites_visados_pdf"),
+
     # inspector -----------------------------------------------------------------------------------------------------
     url(r'^inspector$', views.mostrar_inspector, name="inspector"),
     url(r'^vista_de_inspecciones/(?P<pk_tramite>\d+)/$', views.ver_inspecciones, name="ver_inspecciones"),
@@ -68,6 +75,10 @@ urlpatterns = [
     url(r'^inspector/documentos_del_estado_inspector/(?P<pk_estado>\d+)/$', views.documentos_inspector_estado, name="documentos_del_estado_inspector"),
     url(r'^generar_planilla_impresa_inspeccion/(?P<pk_tramite>\d+)/$', views.generar_planilla_impresa_inspeccion, name="generar_planilla_impresa_inspeccion"),
 
+    url(r'^reporte_tramites_agendar_excel/', ReporteTramitesAgendarInspeccionExcel.as_view(),
+        name="reporte_tramites_agendar_excel"),
+    url(r'^reporte_tramites_agendar_pdf/$', login_required(ReporteTramitesAgendarInspeccionPdf.as_view()),
+        name="reporte_tramites_agendar_pdf"),
     #jefeinspector --------------------------------------------------------------------------------------------------
     url(r'^jefeinspector$', views.mostrar_jefe_inspector, name="jefe_inspector"),
     url(r'^inspeccion_final/(?P<pk_tramite>\d+)/$', views.inspeccion_final, name="inspeccion_final"),
@@ -91,8 +102,11 @@ urlpatterns = [
     url(r'^categorias_mas_frecuentes', views.ver_categorias_mas_frecuentes, name="categorias_mas_frecuentes"),
     url(r'^tipos_de_obras_mas_frecuentes', views.ver_tipos_de_obras_mas_frecuentes, name="tipos_de_obras_mas_frecuentes"),
     url(r'^profesionales_mas_requeridos', views.ver_profesionales_mas_requeridos, name="profesionales_mas_requeridos"),
-    url(r'^ver_barra_materiales', views.ver_barra_materiales, name="ver_barra_materiales"),    
-    
+    url(r'^ver_barra_materiales', views.ver_barra_materiales, name="ver_barra_materiales"),
+
+    url(r'^ver_filtro_obra_fechas', views.ver_filtro_obra_fechas, name="ver_filtro_obra_fechas"),
+#    url(r'^tipos_obras_periodo_fechas', views.ver_filtro_obra_fechas, name="tipos_obras_periodo_fechas"),
+
     #cajero -------------------------------------------------------------------------------------------------------
     url(r'^cajero$', views.mostrar_cajero, name="cajero"),
     url(r'^cajero/tramites_para_financiar$', views.listado_tramites_para_financiar, name="tramites_para_financiar"),

@@ -834,6 +834,17 @@ def no_aprobar_visado(request, pk_tramite, observacion):
     messages.add_message(request, messages.SUCCESS, 'Tramite con visado no aprobado')
     return redirect('visador')
 
+def tramites_visados_imprimible(request):
+    usuario = request.user
+    estados = Estado.objects.all()
+    tipo = 3  # visado
+    argumentos = [Visado]
+    tramites = Tramite.objects.en_estado(Visado)
+    tramites_del_visador = filter(lambda t: t.estado().usuario == usuario, tramites)
+    contexto = {"tramites_del_visador": tramites_del_visador}
+    return render(request, 'persona/visador/tramites_visados_imprimible.html', contexto)
+
+
 class ReporteTramitesAceptadosExcel(TemplateView):
 
     def get(self, request, *args, **kwargs):
@@ -883,7 +894,7 @@ class ReporteTramitesAceptadosPdf(View):
         styles.add(ParagraphStyle(name='Usuario', alignment=TA_RIGHT, fontName='Helvetica', fontSize=8))
         styles.add(ParagraphStyle(name='Titulo', alignment=TA_RIGHT, fontName='Helvetica', fontSize=18))
         styles.add(ParagraphStyle(name='Subtitulo', alignment=TA_RIGHT, fontName='Helvetica', fontSize=12))
-        usuario = 'Usuario: ' + request.user.username + ' -  Fecha:' + ' ... aca va la fecha'
+        usuario = 'Usuario: ' + request.user.username + ' - Fecha: ' + datetime.datetime.now().strftime("%Y/%m/%d")
         Story.append(Paragraph(usuario, styles["Usuario"]))
         Story.append(Spacer(0, cm * 0.15))
         im0 = Image(settings.MEDIA_ROOT + '/imagenes/espacioPDF.png', width=490, height=3)
@@ -902,6 +913,93 @@ class ReporteTramitesAceptadosPdf(View):
                     tramite in
                     Tramite.objects.en_estado(Aceptado)]
         detalle_orden = Table([encabezados] + detalles, colWidths=[4 * cm, 4 * cm, 4 * cm, 3 * cm, 2 * cm])
+        detalle_orden.setStyle(TableStyle(
+            [
+                ('ALIGN', (0, 0), (0, 0), 'CENTER'),
+                ('GRID', (0, 0), (-1, -1), 1, colors.gray),
+                ('FONTSIZE', (0, 0), (-1, -1), 8),
+                ('LINEBELOW', (0, 0), (-1, 0), 2, colors.darkblue),
+                ('BACKGROUND', (0, 0), (-1, 0), colors.dodgerblue),
+                ('TEXTCOLOR', (0, 0), (-1, 0), colors.white),
+            ]
+        ))
+        detalle_orden.hAlign = 'CENTER'
+        Story.append(detalle_orden)
+        doc.build(Story)
+        return response
+
+  #  reporte_tramites_visados_pdf
+
+class ReporteTramitesVisadosExcel(TemplateView):
+    def get(self, request, *args, **kwargs):
+        tramites = Tramite.objects.en_estado(Visado)
+        wb = Workbook()
+        ws = wb.active
+        ws['B1'] = 'REPORTE DE TRAMITES VISADOS'
+        ws.merge_cells('B1:F1')
+            # ws['B2'] = 'FECHA_INICIO'
+        ws['B2'] = 'NRO'
+        ws['C2'] = 'MEDIDAS'
+        ws['D2'] = 'TIPO'
+        ws['E2'] = 'PROFESIONAL'
+        ws['F2'] = 'PROPIETARIO'
+        ws['G2'] = 'DOMICILIO'
+        cont = 3
+        for tramite in tramites:
+                # ws.cell(row=cont, column=2).value = convertidor_de_fechas(tramite.estado.timestamp)
+                # ws.cell(row=cont, column=2).value = tramite.estado.timestamp
+            ws.cell(row=cont, column=2).value = str(tramite.id)
+            ws.cell(row=cont, column=3).value = str(tramite.medidas)
+            ws.cell(row=cont, column=4).value = str(tramite.tipo_obra)
+            ws.cell(row=cont, column=5).value = str(tramite.profesional)
+            ws.cell(row=cont, column=6).value = str(tramite.propietario)
+            ws.cell(row=cont, column=7).value = str(tramite.domicilio)
+            cont = cont + 1
+        nombre_archivo = "ReportePersonasExcel.xlsx"
+        response = HttpResponse(content_type="application/ms-excel")
+        contenido = "attachment; filename={0}".format(nombre_archivo)
+        response["Content-Disposition"] = contenido
+        wb.save(response)
+        return response
+
+class ReporteTramitesVisadosPdf(View):
+    def get(self, request, *args, **kwargs):
+        filename = "Informe de tramites visados " + datetime.datetime.now().strftime("%d/%m/%Y") + " .pdf"
+        response = HttpResponse(content_type='application/pdf')
+        response['Content-Disposition'] = 'attachment; filename="%s"' % filename
+        doc = SimpleDocTemplate(
+            response,
+            pagesize=letter,
+            rightMargin=72,
+            leftMargin=72,
+            topMargin=15,
+            bottomMargin=28,
+        )
+        Story = []
+        styles = getSampleStyleSheet()
+        styles.add(ParagraphStyle(name='Usuario', alignment=TA_RIGHT, fontName='Helvetica', fontSize=8))
+        styles.add(ParagraphStyle(name='Titulo', alignment=TA_RIGHT, fontName='Helvetica', fontSize=18))
+        styles.add(ParagraphStyle(name='Subtitulo', alignment=TA_RIGHT, fontName='Helvetica', fontSize=12))
+        usuario = 'Usuario: ' + request.user.username + ' - Fecha: ' + datetime.datetime.now().strftime("%Y/%m/%d")
+        Story.append(Paragraph(usuario, styles["Usuario"]))
+        Story.append(Spacer(0, cm * 0.15))
+        im0 = Image(settings.MEDIA_ROOT + '/imagenes/espacioPDF.png', width=490, height=3)
+        im0.hAlign = 'CENTER'
+        Story.append(im0)
+        titulo = 'SISTEMA OBRAS PARTICULARES'
+        Story.append(Paragraph(titulo, styles["Titulo"]))
+        Story.append(Spacer(0, cm * 0.20))
+        subtitulo = 'Reporte De Tramites Visados'
+        Story.append(Paragraph(subtitulo, styles["Subtitulo"]))
+        Story.append(Spacer(0, cm * 0.15))
+        Story.append(im0)
+        Story.append(Spacer(0, cm * 0.5))
+        encabezados = ('NRO', 'MEDIDAS', 'TIPO','PROFESIONAL', 'PROPIETARIO', 'DOMICILIO')
+        detalles = [(tramite.id, tramite.medidas, tramite.tipo_obra, tramite.profesional, tramite.propietario, tramite.domicilio)
+                    for
+                    tramite in
+                    Tramite.objects.en_estado(Visado)]
+        detalle_orden = Table([encabezados] + detalles, colWidths=[2 * cm, 2 * cm, 3 * cm, 3 * cm, 4 * cm])
         detalle_orden.setStyle(TableStyle(
             [
                 ('ALIGN', (0, 0), (0, 0), 'CENTER'),
@@ -1099,6 +1197,96 @@ def generar_planilla_impresa_inspeccion(request, pk_tramite):
         'categorias': categorias,
         'detalles': detalles
         })
+
+#REPORTES INSPECTOR //DE TODOS LOS LISTADOS HICE REPORTES
+
+
+class ReporteTramitesAgendarInspeccionExcel(TemplateView):
+    def get(self, request, *args, **kwargs):
+        tramites = Tramite.objects.all()
+        tramites_aagendar = filter(lambda t: t.estado == 3 or t.estado == 6, tramites)
+        wb = Workbook()
+        ws = wb.active
+        ws['B1'] = 'REPORTE DE TRAMITES VISADOS'
+        ws.merge_cells('B1:F1')
+            # ws['B2'] = 'FECHA_INICIO'
+        ws['B2'] = 'NRO'
+        ws['C2'] = 'MEDIDAS'
+        ws['D2'] = 'TIPO'
+        ws['E2'] = 'PROFESIONAL'
+        ws['F2'] = 'PROPIETARIO'
+        ws['G2'] = 'DOMICILIO'
+        cont = 3
+        for tramite in tramites:
+                # ws.cell(row=cont, column=2).value = convertidor_de_fechas(tramite.estado.timestamp)
+                # ws.cell(row=cont, column=2).value = tramite.estado.timestamp
+            ws.cell(row=cont, column=2).value = str(tramite.id)
+            ws.cell(row=cont, column=3).value = str(tramite.medidas)
+            ws.cell(row=cont, column=4).value = str(tramite.tipo_obra)
+            ws.cell(row=cont, column=5).value = str(tramite.profesional)
+            ws.cell(row=cont, column=6).value = str(tramite.propietario)
+            ws.cell(row=cont, column=7).value = str(tramite.domicilio)
+            cont = cont + 1
+        nombre_archivo = "ReportePersonasExcel.xlsx"
+        response = HttpResponse(content_type="application/ms-excel")
+        contenido = "attachment; filename={0}".format(nombre_archivo)
+        response["Content-Disposition"] = contenido
+        wb.save(response)
+        return response
+
+class ReporteTramitesAgendarInspeccionPdf(View):
+    def get(self, request, *args, **kwargs):
+        filename = "Informe de tramites.pdf"
+        response = HttpResponse(content_type='application/pdf')
+        response['Content-Disposition'] = 'attachment; filename="%s"' % filename
+        doc = SimpleDocTemplate(
+            response,
+            pagesize=letter,
+            rightMargin=72,
+            leftMargin=72,
+            topMargin=15,
+            bottomMargin=28,
+        )
+        Story = []
+        styles = getSampleStyleSheet()
+        styles.add(ParagraphStyle(name='Usuario', alignment=TA_RIGHT, fontName='Helvetica', fontSize=8))
+        styles.add(ParagraphStyle(name='Titulo', alignment=TA_RIGHT, fontName='Helvetica', fontSize=18))
+        styles.add(ParagraphStyle(name='Subtitulo', alignment=TA_RIGHT, fontName='Helvetica', fontSize=12))
+        usuario = 'Usuario: ' + request.user.username + ' - Fecha: ' + datetime.datetime.now().strftime("%Y/%m/%d")
+        Story.append(Paragraph(usuario, styles["Usuario"]))
+        Story.append(Spacer(0, cm * 0.15))
+        im0 = Image(settings.MEDIA_ROOT + '/imagenes/espacioPDF.png', width=490, height=3)
+        im0.hAlign = 'CENTER'
+        Story.append(im0)
+        titulo = 'SISTEMA OBRAS PARTICULARES'
+        Story.append(Paragraph(titulo, styles["Titulo"]))
+        Story.append(Spacer(0, cm * 0.20))
+        subtitulo = 'Reporte De Tramites Visados'
+        Story.append(Paragraph(subtitulo, styles["Subtitulo"]))
+        Story.append(Spacer(0, cm * 0.15))
+        Story.append(im0)
+        Story.append(Spacer(0, cm * 0.5))
+        encabezados = ('NRO', 'MEDIDAS', 'TIPO','PROFESIONAL', 'PROPIETARIO', 'DOMICILIO')
+        detalles = [(tramite.id, tramite.medidas, tramite.tipo_obra, tramite.profesional, tramite.propietario, tramite.domicilio)
+                    for
+                    tramite in
+                    Tramite.objects.en_estado(Visado)]
+        detalle_orden = Table([encabezados] + detalles, colWidths=[2 * cm, 2 * cm, 3 * cm, 3 * cm, 4 * cm])
+        detalle_orden.setStyle(TableStyle(
+            [
+                ('ALIGN', (0, 0), (0, 0), 'CENTER'),
+                ('GRID', (0, 0), (-1, -1), 1, colors.gray),
+                ('FONTSIZE', (0, 0), (-1, -1), 8),
+                ('LINEBELOW', (0, 0), (-1, 0), 2, colors.darkblue),
+                ('BACKGROUND', (0, 0), (-1, 0), colors.dodgerblue),
+                ('TEXTCOLOR', (0, 0), (-1, 0), colors.white),
+            ]
+        ))
+        detalle_orden.hAlign = 'CENTER'
+        Story.append(detalle_orden)
+        doc.build(Story)
+        return response
+
 
 #------------------------------------------------------------------------------------------------------------------
 #jefeinspector ----------------------------------------------------------------------------------------------------
@@ -1299,31 +1487,25 @@ def ver_listado_todos_usuarios(request):
 def ver_tipos_de_obras_mas_frecuentes(request):
     tramites = Tramite.objects.all()
     tipos_obras = TipoObra.objects.all()
-    a = 0
-    descripcion_a = ""
-    b = 0
-    descripcion_b = ""
-    c = 0
-    descripcion_c = ""
+    list = []
+    list_obras = []
+    for o in tipos_obras:
+        l = [o,0]
+        list.append(l)
     for t in tramites:
-        if t.tipo_obra.id == 1:            
-            a+=1
-            descripcion_a = t.tipo_obra.descripcion
-        if t.tipo_obra.id == 2:            
-            b+=1
-            descripcion_b = t.tipo_obra.descripcion
-        if t.tipo_obra.id == 3:            
-            c+=1
-            descripcion_c = t.tipo_obra.descripcion
-    contexto = {
-        "tipos_obras":tipos_obras, 
-        "totala":a,
-        "totalb":b,
-        "totalc":c,
-        "descripcion_a":descripcion_a,
-        "descripcion_b":descripcion_b,
-        "descripcion_c":descripcion_c,
-    }            
+        for o in tipos_obras:
+            if t.tipo_obra.id == o.id:
+                list_obras.append(o)
+    for name,value in list:
+        aux = 0
+        for o in list_obras:
+            if name.id == o.id:
+                l = [name,aux]
+                i = list.index(l)
+                aux += 1
+                l = [name,aux]
+                list[i] = l
+    contexto = {"tipos_obras": list}
     return render(request,'persona/director/tipos_de_obras_mas_frecuentes.html',contexto)
 
 def ver_categorias_mas_frecuentes(request):
@@ -1462,6 +1644,47 @@ def ver_planilla_inspeccion(request):
      #return render(request, 'persona/director/ver_planilla_inspeccion.html', {"items":items, "detalles": detalles, "categorias":categorias})
      return render(request, 'persona/director/ver_planilla_inspeccion.html', contexto)
 
+def ver_filtro_obra_fechas(request):
+    listado_tramites = []
+    list_estados_fechas = []
+    if "Guardar" in request.POST:
+        tipos = TipoObra.objects.all()
+        tramites = Tramite.objects.all()
+        estados = Estado.objects.all()
+      #  tramites_estados = Tramite.objects.en_estado(Aceptado)
+        list = []
+        list_obras = []
+        for name, value in request.POST.items():
+             if name == 'fechaInicial':
+                 fechaInicial = value
+             if name == 'fechaFinal':
+                 fechaFinal = value
+        for t in tramites:
+            if (str(t.estado().timestamp) >= fechaInicial) and (str(t.estado().timestamp) <= fechaFinal):
+                list_estados_fechas.append(t)
+        for o in tipos:
+            l = [o, 0]
+            list.append(l)
+        for t in tramites:
+            for o in tipos:
+                if t.tipo_obra.id == o.id:
+                    list_obras.append(o)
+        for name, value in list:
+            aux = 0
+            for o in list_obras:
+                if name.id == o.id:
+                    l = [name, aux]
+                    i = list.index(l)
+                    aux += 1
+                    l = [name, aux]
+                    list[i] = l
+        contexto = {"tipos_obras": list}
+        return render(request, 'persona/director/tipos_obras_periodo_fechas.html', contexto)
+    else:
+        pass
+    return render(request,'persona/director/filtro_obra_fechas.html')
+
+
 class ReporteTramitesDirectorExcel(TemplateView):
 
     def get(self, request, *args, **kwargs):
@@ -1546,6 +1769,89 @@ class ReporteTramitesDirectorPdf(View):
         Story.append(detalle_orden)
         doc.build(Story)
         return response
+
+# class ReporteInspectoresDirectorExcel(TemplateView):
+#     def get(self, request, *args, **kwargs):
+#         tramites = Tramite.objects.all()
+#         wb = Workbook()
+#         ws = wb.active
+#         ws['A1'] = 'REPORTE DE TRAMITES'
+#         ws.merge_cells('B1:G1')
+#         # ws['B2'] = 'FECHA_INICIO'
+#         ws['B2'] = 'NRO'
+#         ws['C2'] = 'TIPO_DE_OBRA'
+#         ws['D2'] = 'PROFESIONAL'
+#         ws['E2'] = 'PROPIETARIO'
+#         ws['F2'] = 'MEDIDAS'
+#         cont = 3
+#         for tramite in tramites:
+#                 # ws.cell(row=cont, column=2).value = convertidor_de_fechas(tramite.estado.timestamp)
+#                 # ws.cell(row=cont, column=2).value = tramite.estado.timestamp
+#             ws.cell(row=cont, column=2).value = tramite.id
+#             ws.cell(row=cont, column=3).value = str(tramite.tipo_obra)
+#             ws.cell(row=cont, column=4).value = str(tramite.profesional)
+#             ws.cell(row=cont, column=5).value = str(tramite.propietario)
+#             ws.cell(row=cont, column=6).value = tramite.medidas
+#             cont = cont + 1
+#         nombre_archivo = "ReportePersonasExcel.xlsx"
+#         response = HttpResponse(content_type="application/ms-excel")
+#         contenido = "attachment; filename={0}".format(nombre_archivo)
+#         response["Content-Disposition"] = contenido
+#         wb.save(response)
+#         return response
+#
+# class ReporteInspectoresDirectorPdf(View):
+#     def get(self, request, *args, **kwargs):
+#         filename = "Informe de tramites.pdf"
+#         response = HttpResponse(content_type='application/pdf')
+#         response['Content-Disposition'] = 'attachment; filename="%s"' % filename
+#         doc = SimpleDocTemplate(
+#             response,
+#             pagesize=letter,
+#             rightMargin=72,
+#             leftMargin=72,
+#             topMargin=15,
+#             bottomMargin=28,
+#         )
+#         Story = []
+#         styles = getSampleStyleSheet()
+#         styles.add(ParagraphStyle(name='Usuario', alignment=TA_RIGHT, fontName='Helvetica', fontSize=8))
+#         styles.add(ParagraphStyle(name='Titulo', alignment=TA_RIGHT, fontName='Helvetica', fontSize=18))
+#         styles.add(ParagraphStyle(name='Subtitulo', alignment=TA_RIGHT, fontName='Helvetica', fontSize=12))
+#         usuario = 'Usuario: ' + request.user.username + ' -  Fecha:' + ' ... aca va la fecha'
+#         Story.append(Paragraph(usuario, styles["Usuario"]))
+#         Story.append(Spacer(0, cm * 0.15))
+#         im0 = Image(settings.MEDIA_ROOT + '/imagenes/espacioPDF.png', width=490, height=3)
+#         im0.hAlign = 'CENTER'
+#         Story.append(im0)
+#         titulo = 'SISTEMA OBRAS PARTICULARES'
+#         Story.append(Paragraph(titulo, styles["Titulo"]))
+#         Story.append(Spacer(0, cm * 0.20))
+#         subtitulo = 'Reporte de tramites'
+#         Story.append(Paragraph(subtitulo, styles["Subtitulo"]))
+#         Story.append(Spacer(0, cm * 0.15))
+#         Story.append(im0)
+#         Story.append(Spacer(0, cm * 0.5))
+#         encabezados = ('NRO', 'TIPO_DE_OBRA', 'PROFESIONAL', 'PROPIETARIO', 'MEDIDAS', 'ESTADO')
+#         detalles = [
+#             (tramite.id, tramite.tipo_obra, tramite.profesional, tramite.propietario, tramite.medidas, tramite.estado())
+#             for tramite in
+#             Tramite.objects.all()]
+#         detalle_orden = Table([encabezados] + detalles, colWidths=[1 * cm, 3 * cm, 4 * cm, 4 * cm, 2 * cm, 3 * cm])
+#         detalle_orden.setStyle(TableStyle(
+#             [
+#                 ('ALIGN', (0, 0), (0, 0), 'CENTER'),
+#                 ('GRID', (0, 0), (-1, -1), 1, colors.gray),
+#                 ('FONTSIZE', (0, 0), (-1, -1), 8),
+#                 ('LINEBELOW', (0, 0), (-1, 0), 2, colors.darkblue),
+#                 ('BACKGROUND', (0, 0), (-1, 0), colors.dodgerblue),
+#                 ('TEXTCOLOR', (0, 0), (-1, 0), colors.white),
+#             ]
+#         ))
+#         detalle_orden.hAlign = 'CENTER'
+#         Story.append(detalle_orden)
+#         doc.build(Story)
+#         return response
 
 
 #-------------------------------------------------------------------------------------------------------------------
