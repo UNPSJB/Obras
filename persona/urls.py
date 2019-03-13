@@ -46,6 +46,21 @@ urlpatterns = [
     url(r'^reporte_listado_profesional_pdf/$', login_required(ReporteProfesionalesPdf.as_view()), name="reporte_listado_profesional_pdf"),
     url(r'^lista_profesionales_imprimible', views.lista_profesionales_imprimible, name="lista_profesionales_imprimible"),
 
+    url(r'^reporte_tramites_corregidos_excel/', ReporteTramitesCorregidosExcel.as_view(),
+        name="reporte_tramites_corregidos_excel"),
+    url(r'^reporte_tramites_corregidos_pdf/$', login_required(ReporteTramitesCorregidosPdf.as_view()),
+        name="reporte_tramites_corregidos_pdf"),
+
+    url(r'^reporte_tramites_iniciados_excel/', ReporteTramitesIniciadosExcel.as_view(),
+        name="reporte_tramites_iniciados_excel"),
+    url(r'^reporte_tramites_iniciados_pdf/$', login_required(ReporteTramitesIniciadosPdf.as_view()),
+        name="reporte_tramites_iniciados_pdf"),
+
+    url(r'^reporte_profesionales_activos_excel/', ReporteProfesionalesActivosExcel.as_view(),
+        name="reporte_profesionales_activos_excel"),
+    url(r'^reporte_profesionales_activos_pdf/$', login_required(ReporteProfesionalesActivosPdf.as_view()),
+        name="reporte_profesionales_activos_pdf"),
+
     # visador -------------------------------------------------------------------------------------------------------
     url(r'^visador$', views.mostrar_visador, name="visador"),
     url(r'^ver_documentos_para_visado/(?P<pk_tramite>\d+)/$', views.ver_documentos_para_visado, name="ver_documentos_para_visado"),
