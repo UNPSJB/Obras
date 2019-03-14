@@ -662,7 +662,7 @@ class ReporteTramitesIniciadosExcel(TemplateView):
         tramites = Tramite.objects.en_estado(Iniciado)
         wb = Workbook()
         ws = wb.active
-        ws['B1'] = 'REPORTE DE TRAMITES CORREGIDOS'
+        ws['B1'] = 'REPORTE DE TRAMITES INICIADOS'
         ws.merge_cells('B1:F1')
             # ws['B2'] = 'FECHA_INICIO'
         ws['B2'] = 'NRO'
@@ -716,7 +716,7 @@ class ReporteTramitesIniciadosPdf(View):
         titulo = 'SISTEMA OBRAS PARTICULARES'
         Story.append(Paragraph(titulo, styles["Titulo"]))
         Story.append(Spacer(0, cm * 0.20))
-        subtitulo = 'Reporte De Tramites Visados'
+        subtitulo = 'Reporte De Tramites Iniciados'
         Story.append(Paragraph(subtitulo, styles["Subtitulo"]))
         Story.append(Spacer(0, cm * 0.15))
         Story.append(im0)
@@ -804,7 +804,7 @@ class ReporteTramitesCorregidosPdf(View):
         titulo = 'SISTEMA OBRAS PARTICULARES'
         Story.append(Paragraph(titulo, styles["Titulo"]))
         Story.append(Spacer(0, cm * 0.20))
-        subtitulo = 'Reporte De Tramites Visados'
+        subtitulo = 'Reporte De Tramites Corregidos'
         Story.append(Paragraph(subtitulo, styles["Subtitulo"]))
         Story.append(Spacer(0, cm * 0.15))
         Story.append(im0)
@@ -838,7 +838,7 @@ class ReporteProfesionalesActivosExcel(TemplateView):
         profesionales = Profesional.objects.all()
         wb = Workbook()
         ws = wb.active
-        ws['A1'] = 'REPORTE DE TRAMITES'
+        ws['A1'] = 'REPORTE DE PROFESIONALES ACTIVOS'
         ws.merge_cells('B1:G1')
         # ws['B2'] = 'FECHA_INICIO'
         ws['B2'] = 'NOMBRE'
@@ -930,7 +930,98 @@ class ReporteProfesionalesActivosPdf(View):
         doc.build(Story)
         return response
 
+#reporte tramites con final de obra solicitado
 
+class ReporteSolicitudFinalObraExcel(TemplateView):
+    def get(self, request, *args, **kwargs):
+        tramites = Tramite.objects.en_estado(FinalObraSolicitado)
+        wb = Workbook()
+        ws = wb.active
+        ws['A1'] = 'REPORTE DE TRAMITES FINAL OBRA SOLICITADO'
+        ws.merge_cells('B1:G1')
+        # ws['B2'] = 'FECHA_INICIO'
+        ws['B2'] = 'NUMERO'
+        ws['C2'] = 'MEDIDAS'
+        ws['D2'] = 'TIPO'
+        ws['E2'] = 'ESTADO'
+        ws['F2'] = 'PROFESIONAL'
+        ws['G2'] = 'PROPIETARIO'
+        cont = 3
+        for tramite in tramites:
+            # ws.cell(row=cont, column=2).value = convertidor_de_fechas(tramite.estado.timestamp)
+            # ws.cell(row=cont, column=2).value = tramite.estado.timestamp
+            ws.cell(row=cont, column=2).value = tramite.id
+            ws.cell(row=cont, column=3).value = tramite.medidas
+            ws.cell(row=cont, column=4).value = str(tramite.tipo_obra)
+            ws.cell(row=cont, column=5).value = str(tramite.estado())
+            ws.cell(row=cont, column=6).value = str(tramite.profesional)
+            ws.cell(row=cont, column=7).value = str(tramite.propietario)
+            cont = cont + 1
+        nombre_archivo = "ReportePersonasExcel.xlsx"
+        response = HttpResponse(content_type="application/ms-excel")
+        contenido = "attachment; filename={0}".format(nombre_archivo)
+        response["Content-Disposition"] = contenido
+        wb.save(response)
+        return response
+
+class ReporteSolicitudFinalObraPdf(View):
+
+    def get(self, request, *args, **kwargs):
+
+        filename = "Informe de tramites.pdf"
+        response = HttpResponse(content_type='application/pdf')
+        response['Content-Disposition'] = 'attachment; filename="%s"' % filename
+        doc = SimpleDocTemplate(
+            response,
+            pagesize=letter,
+            rightMargin=72,
+            leftMargin=72,
+            topMargin=15,
+            bottomMargin=28,
+        )
+        Story = []
+        styles = getSampleStyleSheet()
+        styles.add(ParagraphStyle(name='Usuario', alignment=TA_RIGHT, fontName='Helvetica', fontSize=8))
+        styles.add(ParagraphStyle(name='Titulo', alignment=TA_RIGHT, fontName='Helvetica', fontSize=18))
+        styles.add(ParagraphStyle(name='Subtitulo', alignment=TA_RIGHT, fontName='Helvetica', fontSize=12))
+        fecha = timezone.now().strftime('%Y-%m-%d')
+        usuario = 'Usuario: ' + request.user.username + ' - Fecha: ' + datetime.datetime.now().strftime("%Y/%m/%d")
+        Story.append(Paragraph(usuario, styles["Usuario"]))
+        Story.append(Spacer(0, cm * 0.1))
+        im0 = Image(settings.MEDIA_ROOT + '/imagenes/espacioPDF.png', width=490, height=3)
+        im0.hAlign = 'CENTER'
+        Story.append(im0)
+        titulo = 'SISTEMA OBRAS PARTICULARES'
+        Story.append(Paragraph(titulo, styles["Titulo"]))
+        Story.append(Spacer(0, cm * 0.20))
+        subtitulo = 'Listado de tramites con solicitud final de obra'
+        Story.append(Paragraph(subtitulo, styles["Subtitulo"]))
+        Story.append(Spacer(0, cm * 0.15))
+        Story.append(im0)
+        Story.append(Spacer(0, cm * 0.5))
+        encabezados = ('NUMERO', 'MEDIDAS', 'TIPO','ESTADO',
+                       'PROFESIONAL','PROPIETARIO')
+        detalles = [(tramite.id, tramite.medidas, tramite.tipo_obra, tramite.estado(),
+                     tramite.profesional, tramite.propietario)
+                    for
+                    tramite in
+                    Tramite.objects.en_estado(FinalObraSolicitado)]
+        detalle_orden = Table([encabezados] + detalles, colWidths=[2 * cm, 2 * cm, 4 * cm, 3 * cm, 3 * cm,
+                                                                   3 * cm])
+        detalle_orden.setStyle(TableStyle(
+            [
+                ('ALIGN', (0, 0), (0, 0), 'CENTER'),
+                ('GRID', (0, 0), (-1, -1), 1, colors.gray),
+                ('FONTSIZE', (0, 0), (-1, -1), 8),
+                ('LINEBELOW', (0, 0), (-1, 0), 2, colors.darkblue),
+                ('BACKGROUND', (0, 0), (-1, 0), colors.dodgerblue),
+                ('TEXTCOLOR', (0, 0), (-1, 0), colors.white),
+            ]
+        ))
+        detalle_orden.hAlign = 'CENTER'
+        Story.append(detalle_orden)
+        doc.build(Story)
+        return response
 #-------------------------------------------------------------------------------------------------------------------
 #visador -----------------------------------------------------------------------------------------------------------
 

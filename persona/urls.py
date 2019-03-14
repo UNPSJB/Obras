@@ -61,6 +61,11 @@ urlpatterns = [
     url(r'^reporte_profesionales_activos_pdf/$', login_required(ReporteProfesionalesActivosPdf.as_view()),
         name="reporte_profesionales_activos_pdf"),
 
+    url(r'^reporte_solicitud_final_obra_excel/', ReporteSolicitudFinalObraExcel.as_view(),
+        name="reporte_solicitud_final_obra_excel"),
+    url(r'^reporte_solicitud_final_obra_pdf/$', login_required(ReporteSolicitudFinalObraPdf.as_view()),
+        name="reporte_solicitud_final_obra_pdf"),
+
     # visador -------------------------------------------------------------------------------------------------------
     url(r'^visador$', views.mostrar_visador, name="visador"),
     url(r'^ver_documentos_para_visado/(?P<pk_tramite>\d+)/$', views.ver_documentos_para_visado, name="ver_documentos_para_visado"),
