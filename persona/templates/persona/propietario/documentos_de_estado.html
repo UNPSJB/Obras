@@ -19,7 +19,7 @@
 
 
 {% block contenido %}
-
+<div class="container-fluid" id="a">
 	<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" >
 	  <div class="panel">
 		<div class="panel-heading box" role="tab" id="headingFive">
@@ -87,7 +87,7 @@
       </div>
     </div>
 
-
+</div>
 <style>
     .switch {
         position: relative;
@@ -154,12 +154,9 @@
 <script>
 	$(document).ready(function() {
 	var font=0;
-	if(Cookies.get("temporal")) {
-		$("link").attr("href",Cookies.get("temporal"));
-		if (Cookies.get("fs")){
-			font=Cookies.get("fs");
-		    document.body.style.fontSize = font + "em";
-		}
+	if (Cookies.get("fs")){
+		font=Cookies.get("fs");
+	    document.body.style.fontSize = font + "em";
 	}
 });
 </script>

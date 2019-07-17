@@ -27,6 +27,7 @@ class Profesional(Rol):
 
 
 class Propietario(Rol):
+    estilo=models.CharField(max_length=100,null=True)
     def __str__(self):
         try:
             return str(self.persona)

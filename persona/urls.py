@@ -16,8 +16,8 @@ urlpatterns = [
     # propietario ---------------------------------------------------------------------------------------------------
     url(r'^propietario$', views.mostrar_propietario, name="propietario"),
     url(r'^ver_historial_tramite/(?P<pk_tramite>\d+)/$', views.ver_historial_tramite, name="ver_historial_tramite"),
-    url(r'^solicitud_final_obra_propietario/(?P<pk_tramite>\d+)/$', views.propietario_solicita_final_obra, name="propietario_solicita_final_obra"),
-    url(r'^documentos_de_estado/(?P<pk_estado>\d+)/$', views.documentos_de_estado, name="documentos_de_estado"),
+    url(r'^solicitud_final_obra_propietario/(?P<pk_tramite>\d+)/$', views.propietario_solicita_final_obra,name="propietario_solicita_final_obra"),
+    url(r'^propietario/documentos_de_estado/(?P<pk_estado>\d+)/$', views.documentos_de_estado, name="documentos_de_estado"),
     url(r'^propietario/financiar', views.tramites_para_financiar, name="financiar"),
     url(r'^propietario/elegir_financiacion_propietario/(?P<pk_tramite>\d+)/$', views.elegir_financiacion_propietario, name="financiar_propietario"),
 

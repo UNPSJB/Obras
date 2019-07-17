@@ -2,195 +2,250 @@
 {% load staticfiles %}
 {% load crispy_forms_tags%}
 
+{%block style %}
+.loader {
+    position: fixed;
+    left: 0px;
+    top: 0px;
+    width: 100%;
+    height: 100%;
+    z-index: 9999;
+    background: url('images/pageLoader.gif') 50% 50% no-repeat rgb(249,249,249);
+    opacity: .8;
+}
+{%endblock%}
+
 {%block barrapropietario%}
-	<br>
-		<div id="nav">
-			<div class="col-xs-2 col-sm-2 col-md-2 col-lg-2" style="background-color:#336699!important; border-color:#2c3e50!important; color:white!important; border-style:inset; border-width: thick;">
-				<li id="estilom"><a link href="#" rel="/static/css/base2.css"><label  style="color:white!important;" >Estilo Base</label></a></li>
-			</div>
-			<div class="col-xs-2 col-sm-2 col-md-2 col-lg-2"style="background-color:#e4d62f!important; border-color:#333333!important; text-color:#ab1515!important; border-style:inset;    border-width: thick;">
-				<li id="estilol"><a  link href="#" rel="/static/css/estilo1.css"><label style="color:#ab1515!important;">Estilo 1</label></a></li>
-			</div>
-			<div class="col-xs-2 col-sm-2 col-md-2 col-lg-2" style="background-color:mediumspringgreen!important; border-color:#144431!important; text-color:#136948!important!; border-style:inset; border-width: thick;">
-				<li id="estilo"><a  link href="#" rel="/static/css/estilo2.css"><label style="color:#136948!important;">Estilo 2</label></a></li>
-			</div>
-			<div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
+    <div class="container">
+   <a href="#accesibilidad" class="btn btn-info btn-lg" style="color:black; font-weight:bolder;"data-toggle="collapse">Accesibilidad</a>
+  <div id="accesibilidad" class="collapse">
+
+            <div class="col-sm-2 ">
 				<input type=image src="/media/imagenes/zoom_in.ico" onclick="zoomIn()" style="width:35px; height:35px;"></input>
 			</div>
-			<div class="col-xs-2 col-sm-2 col-md-2 col-lg-2">
-				<input type=image src="/media/imagenes/zoom_out.ico" style="width:35px; height:35px;" onclick="zoomOut()"></input>
+			<div class=" col-sm-2 ">
+				<input type=image src="/media/imagenes/zoom_out.ico" style="width:35px; height:35px;" onclick="zoomOut()">
 			</div>
-		</div>
+            <div class=" col-sm-6">
+            <br>
+            <form action="propietario" method="post" enctype="multipart/form-data">
+                <input type="hidden" name="Aceptar" value="Aceptar">
+               <div class="controls ">
+                   <select  placeholder="seleccione estilo" class="select form-control input-sm " id="estilo" name="estilo"  onchange="this.form.submit();" required>
+                       <option value="" selected="">Selector de tema</option>
+                       <option value="estilo3">Negro</option>
+                       <option value="estilo4">Violeta</option>
+                       <option value="estilo5">Azul</option>
+                       <option value="base">Por defecto</option>
+                   </select>
+               </div>
+            </form>
+
+        </div>
+
+
+
+
+
+  </div>
+</div>
+
 {% endblock %}
 
 {% block barra %}
-<br>
-	<ul class="sidebar sidebar-1">
-		<li><a href="#" class="current"><label>Propietario</label></a></li>
-		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour"><label id="i">Consultar estado de mis tramites</label></a></li>		
-		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseOne"><label id="k">Seleccionar forma de financiacion</label></a></li>
-		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne"><label id="j">Modificar mis datos personales</label></a></li>
 
-	</ul>
+<br>
+    <ul class="sidebar sidebar-1">
+        <li><a href="#" class="current"><label id="propietario">Propietario</label></a></li>
+        <li><a data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour"><label id="i">Consultar estado de mis tramites</label></a></li>
+        <li><a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseOne"><label id="k">Seleccionar forma de financiacion</label></a></li>
+        <li><a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne"><label id="j">Modificar mis datos personales</label></a></li>
+
+    </ul>
+
 {% endblock %}
 
 {% block contenido %}
 <br>
-	<div class="panel-group" id="#accordion" role="tablist" aria-multiselectable="true">
-		<div class="panel panel-custom">
-			<div class="panel-heading panel-heading-custom box" role="tab" id="headingFour">
-				<a class="panel-title">
-					<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
-						<label id="a">Consultar estado de mis Tramites</label>
-					</a>
-				</a>
-			</div>
-			<div id="collapseFour" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFour">
-				<div class="panel-body">
-					<div class="container-fluid">
-						<div class="row">
-							<div id="columna" class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-								{% block contenido_tramite_estado %}
-									{% include "persona/propietario/consultar_estado_tramite_propietario.html" with tramites_de_propietario=ctxtramitespropietario %}
-								{% endblock %}
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
+    <div class="panel-group" id="#accordion" role="tablist" aria-multiselectable="true">
+        <div class="panel panel-custom">
+            <div class="panel-heading panel-heading-custom box" role="tab" id="headingFour">
+                <a class="panel-title">
+                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                        <label id="a">Consultar estado de mis Tramites</label>
+                    </a>
+                </a>
+            </div>
+            <div id="collapseFour" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFour">
+                <div class="panel-body">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div id="columna" class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                {% block contenido_tramite_estado %}
+                                    {% include "persona/propietario/consultar_estado_tramite_propietario.html" with tramites_de_propietario=ctxtramitespropietario %}
+                                {% endblock %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-		<div class="panel panel-custom">
-			<div class="panel-heading panel-heading-custom box" role="tab" id="headingTwo">
-				<a class="panel-title">
-					<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-						<label id="g">Seleccionar forma de financiacion</label>
-					</a>
-				</a>
-			</div>
-			<div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
-				<div class="panel-body">
-					<div class="container-fluid">
-						<div class="row">
-							<div id="columna2" class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-								{% block contenido_mis_tramites_para_financiar %}									
-									{% include "persona/propietario/financiar.html" with tramites=ctxmis_tramites_para_financiar %}
-								{% endblock %}
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
+        <div class="panel panel-custom">
+            <div class="panel-heading panel-heading-custom box" role="tab" id="headingTwo">
+                <a class="panel-title">
+                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                        <label id="g">Seleccionar forma de financiacion</label>
+                    </a>
+                </a>
+            </div>
+            <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+                <div class="panel-body">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div id="columna2" class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                {% block contenido_mis_tramites_para_financiar %}
+                                    {% include "persona/propietario/financiar.html" with tramites=ctxmis_tramites_para_financiar %}
+                                {% endblock %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-		<div class="panel panel-custom">
-			<div class="panel-heading panel-heading-custom box" role="tab" id="headingOne">
-			  <a class="panel-title">
-				<a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-					<label id="b">Modificar mis datos personales</label>
-				</a>
-			  </a>
-			</div>
-			 <div id="collapseOne" class="panel-collapse collapse " role="tabpanel" aria-labelledby="headingOne">
-			  <div class="panel-body">
-				<div class="container-fluid">
-					<div class="row">
-						<div id="columna1" class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-							<div class="container-fluid" id="contenedor1">
-							<br>
-								<form action="" class="" >
-									<div class="row">
-										<div id="columna1a" class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
-												<div class="form-group">
-													<label id="c"> Nro. de telefono:</label>
-													<input class="form-control input-sm" id="" name="" type="text" placeholder="Ingresar Nro de telefono" title="Ingresar nuevo Nro de telefono" maxlength="13" autofocus />
-												</div>
-										</div>
-										<div id="columna1b" class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
-												<div class="form-group">
-													<label id="d"> E-Mail:</label>
-													<input class="form-control input-sm" id="email" name="" type="email" placeholder="Ingresar e-mail" title="Ingresar nuevo e-mail" maxlength="20" />
-												</div>
-										</div>
-										<div id="columna1c" class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
-											<label id="e">Cambiar Foto de perfil:</label>
-											<br>
-											<input class="file" id="perfil" type="file" data-preview-file-type="any" title="Cargar nueva foto de perfil">
-										</div>
-									</div>
-									<div id="contenedor1a" class="container-fluid">
-										<br>
-										<div class="row">
-											<div id="columna1d" class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="right">
-												<button class="btn btn-primary btn-sm" type="submit" title="Enviar modificaciÃ³n de mis datos">
-													<label id="f">Modificar mis datos</label>
-												</button>
-												<button class="btn btn-danger btn-sm" type="reset" title="Borrar datos del formulario">
-													<label>Limpiar</label>
-												</button>
-											</div>
-										</div>
-									</div>
-								</form>
-								<br>
-							</div>
-						</div>
-					</div>
-				</div>
-			  </div>
-			</div>
-		</div>
-		
-	</div>
+        <div class="panel panel-custom">
+            <div class="panel-heading panel-heading-custom box" role="tab" id="headingOne">
+              <a class="panel-title">
+                <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                    <label id="b">Modificar mis datos personales</label>
+                </a>
+              </a>
+            </div>
+             <div id="collapseOne" class="panel-collapse collapse " role="tabpanel" aria-labelledby="headingOne">
+              <div class="panel-body">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div id="columna1" class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                            <div class="container-fluid" id="contenedor1">
+                            <br>
+                                <form action="" class="" >
+                                    <div class="row">
+                                        <div id="columna1a" class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+                                                <div class="form-group">
+                                                    <label id="c"> Nro. de telefono:</label>
+                                                    <input class="form-control input-sm" id="" name="" type="text" placeholder="Ingresar Nro de telefono" title="Ingresar nuevo Nro de telefono" maxlength="13" autofocus />
+                                                </div>
+                                        </div>
+                                        <div id="columna1b" class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+                                                <div class="form-group">
+                                                    <label id="d"> E-Mail:</label>
+                                                    <input class="form-control input-sm" id="email" name="" type="email" placeholder="Ingresar e-mail" title="Ingresar nuevo e-mail" maxlength="20" />
+                                                </div>
+                                        </div>
+                                        <div id="columna1c" class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+                                            <label id="e">Cambiar Foto de perfil:</label>
+                                            <br>
+                                            <input class="file" id="perfil" type="file" data-preview-file-type="any" title="Cargar nueva foto de perfil">
+                                        </div>
+                                    </div>
+                                    <div id="contenedor1a" class="container-fluid">
+                                        <br>
+                                        <div class="row">
+                                            <div id="columna1d" class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="right">
+                                                <button class="btn btn-primary btn-sm" type="submit" title="Enviar modificacion de mis datos">
+                                                    <label id="f">Modificar mis datos</label>
+                                                </button>
+                                                <button class="btn btn-danger btn-sm" type="reset" title="Borrar datos del formulario">
+                                                    <label id="limpiar">Limpiar</label>
+                                                </button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </form>
+                                <br>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+              </div>
+            </div>
+        </div>
+
+
+    </div>
 {% endblock %}
+
 
 
 {% block scripts %}
 
+<script type="text/javascript">
+$(document).ready(function() {
+
+
+return new Promise( function( resolve, reject ) {
+ var font=0;
+     if (Cookies.get("fs")){
+            font=Cookies.get("fs");
+            document.body.style.fontSize = font + "em";
+      }
+if(Cookies.get("temporal")) {
+		$("#estilo").attr("href",Cookies.get("temporal"));
+		if (Cookies.get("fs")){
+			font=Cookies.get("fs");
+		    document.body.style.fontSize = font + "em";
+		}
+	}
+	$("#nav li a").click(function() {
+		$("#estilo").attr("href",$(this).attr('rel'));
+		Cookies.set("temporal",$(this).attr('rel'), {expires: 365, path: '/'});
+		return false;
+	});
+});
+    });
+
+
+
+</script>
+
 <script>
-		$("#perfil").fileinput({
-			showCaption: false,
-			browseClass: "btn btn-primary btn-sm",
-			fileType: "any",
-			maxFileCount: 1,
-			browseLabel: 'Cargar nueva foto de perfil',
-			showUpload: false,
-			showRemove: false
-		});
-	</script>
+        $("#perfil").fileinput({
+            showCaption: false,
+            browseClass: "btn btn-primary btn-sm",
+            fileType: "any",
+            maxFileCount: 1,
+            browseLabel: 'Cargar nueva foto de perfil',
+            showUpload: false,
+            showRemove: false
+        });
+    </script>
 
-	<script>
-		$("#final").fileinput({
-			showCaption: false,
-			browseClass: "btn btn-primary btn-sm",
-			fileType: "any",
-			maxFileCount: 1,
-			browseLabel: 'Cargar constancia de CACH',
-			showUpload: false,
-			showRemove: false
-		});
-	</script>
-	<!--<script type="text/javascript">
-			function changeLetra(){
-			document.body.style.fontSize="24px"
-			document.getElementById("id").style.property="value"
-			}
-	</script>-->
-
-	    <script>
+    <script>
+        $("#final").fileinput({
+            showCaption: false,
+            browseClass: "btn btn-primary btn-sm",
+            fileType: "any",
+            maxFileCount: 1,
+            browseLabel: 'Cargar constancia de CACH',
+            showUpload: false,
+            showRemove: false
+        });
+    </script>
+    <script>
 
         var fontSize = 1;
         // funcion para aumentar la fuente
         function zoomIn() {
-        	fontSize += 0.1;
+            fontSize += 0.1;
             document.body.style.fontSize = fontSize + "em";
-           	Cookies.set("fs",fontSize, {expires: 365, path: '/'});
-	    }
+            Cookies.set("fs",fontSize, {expires: 365, path: '/'});
+        }
         // funcion para disminuir la fuente
         function zoomOut() {
             fontSize -= 0.1;
             document.body.style.fontSize = fontSize + "em";
-           	Cookies.set("fs",fontSize, {expires: 365, path: '/'});
+            Cookies.set("fs",fontSize, {expires: 365, path: '/'});
 
         }
     </script>
@@ -225,25 +280,4 @@
    });
   });
  </script>
-<script>
-	$(document).ready(function() {
-	var font=0;
-	if(Cookies.get("temporal")) {
-		$("link").attr("href",Cookies.get("temporal"));
-		if (Cookies.get("fs")){
-			font=Cookies.get("fs");
-		    document.body.style.fontSize = font + "em";
-		}
-	}
-	$("#nav li a").click(function() {
-		$("link").attr("href",$(this).attr('rel'));
-		Cookies.set("temporal",$(this).attr('rel'), {expires: 365, path: '/'});
-		return false;
-	});
-});
-
-</script>
-
-
-
 {% endblock %}

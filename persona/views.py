@@ -22,6 +22,7 @@ from django.http.response import HttpResponse
 from django.views.generic import View
 from django.conf import settings
 from io import BytesIO
+from datetime import date
 
 from reportlab.pdfgen import canvas
 from reportlab.platypus import SimpleDocTemplate, Paragraph, TableStyle, Table, Image, Spacer
@@ -51,13 +52,30 @@ def convertidor_de_fechas(fecha):
 @login_required(login_url="login")
 @grupo_requerido('propietario')
 def mostrar_propietario(request):
+    estilos = ''
+    usuario = request.user
+    propietario = get_object_or_404(Propietario, pk=usuario.persona.propietario.pk)
+    if request.method == "POST":
+        if "Aceptar" in request.POST:
+            estilos = request.POST.get('estilo')
+            usuario = request.user
+            propietario = Propietario.objects.filter(id=usuario.persona.propietario.pk).update(estilo=estilos)
+    else:
+        if propietario.estilo:
+            estilos = propietario.estilo
     contexto = {
         "ctxtramitespropietario": listado_tramites_propietario(request),
         "ctxmis_tramites_para_financiar": tramites_para_financiar(request),
-    }    
+        'estilos': estilos,
+    }
     return render(request, 'persona/propietario/propietario.html', contexto)
 
 def elegir_financiacion_propietario(request,pk_tramite):
+    estilos = ''
+    usuario = request.user
+    propietario = get_object_or_404(Propietario, pk=usuario.persona.propietario.pk)
+    if propietario.estilo:
+        estilos = propietario.estilo
     tramite = get_object_or_404(Tramite, pk=pk_tramite)        
     if request.method == "POST":
         if "Guardar" in request.POST: 
@@ -85,7 +103,7 @@ def elegir_financiacion_propietario(request,pk_tramite):
             tramite.pago = pago
             tramite.save()
         return redirect('propietario')                              
-    return render(request, 'persona/propietario/elegir_financiacion_propietario.html',{'tramite': tramite, 'ctxpago':registrar_pago(request,tramite.id)})
+    return render(request, 'persona/propietario/elegir_financiacion_propietario.html',{'tramite': tramite, 'ctxpago':registrar_pago(request,tramite.id),'estilos':estilos})
 
 def tramites_para_financiar(request):
     tramites = Tramite.objects.all()
@@ -121,6 +139,11 @@ def propietario_solicita_final_obra(request, pk_tramite):
         return redirect('propietario')
 
 def ver_historial_tramite(request, pk_tramite):
+    estilos = ''
+    usuario = request.user
+    propietario = get_object_or_404(Propietario, pk=usuario.persona.propietario.pk)
+    if propietario.estilo:
+        estilos = propietario.estilo
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
     contexto0 = {'tramite': tramite}
     pk = int(pk_tramite)
@@ -130,15 +153,20 @@ def ver_historial_tramite(request, pk_tramite):
     fechas_del_estado = [];
     for est in estados_de_tramite:
         fechas_del_estado.append(est.timestamp.strftime("%d/%m/%Y"));
-    return render(request, 'persona/propietario/ver_historial_tramite.html', {"tramite": contexto0, "estadosp": contexto1, "fecha":fechas_del_estado})
+    return render(request, 'persona/propietario/ver_historial_tramite.html', {"tramite": contexto0, "estadosp": contexto1, "fecha":fechas_del_estado,'estilos':estilos})
 
 def documentos_de_estado(request, pk_estado):
+    estilos = ''
+    usuario = request.user
+    propietario = get_object_or_404(Propietario, pk=usuario.persona.propietario.pk)
+    if propietario.estilo:
+        estilos = propietario.estilo
     estado = get_object_or_404(Estado, pk=pk_estado)
     fecha = estado.timestamp
     fecha_str = date.strftime(fecha, '%d/%m/%Y %H:%M')
     documentos = estado.tramite.documentos.all()
     documentos_fecha = filter(lambda e:(date.strftime(e.fecha, '%d/%m/%Y %H:%M') == fecha_str), documentos)    
-    contexto = {'documentos_de_fecha': documentos_fecha}
+    contexto = {'documentos_de_fecha': documentos_fecha,'estilos':estilos}
     planillas = []
     inspecciones = []
     if (estado.tipo >2 and estado.tipo <5):
@@ -153,6 +181,7 @@ def documentos_de_estado(request, pk_estado):
             'planillas':planillas,
             'filas': filas,
             'columnas': columnas,
+            'estilos':estilos
             #'items': items,
             #'elementos': elementos,
         }    
@@ -167,8 +196,9 @@ def documentos_de_estado(request, pk_estado):
             'inspecciones': inspecciones,
             'items': items,
             'categorias': categorias,
-            #'detalles': detalles,                        
-        }    
+            'estilos':estilos
+            #'detalles': detalles,
+        }
     return render(request, 'persona/propietario/documentos_de_estado.html', contexto)
 
 #-------------------------------------------------------------------------------------------------------------------
@@ -2355,3 +2385,16 @@ def planilla_inspeccion_movil(request,pk_tramite):
     categorias = CategoriaInspeccion.objects.all()
     contexto = {"tramite":tramite, "items":items,"detalles":detalles,"categorias":categorias}
     return render(request, 'persona/movil/planilla_inspeccion.html', contexto)
+
+def inspecciones_realizadas_durante_el_anio(request):
+    year=date.today()
+    tramitesEstado=Estado.objects.filter(timestamp__range=(datetime.date(year.year,01,01), datetime.date(year.year,12,12)))
+    tramitesFecha=filter(lambda t:(t.tipo==6),tramitesEstado)
+    tramitesConInspeccion=Tramite.objects.en_estado(ConInspeccion)
+    tramites=[]
+    for i in range (0, len(tramitesConInspeccion)):
+          for i in range(0, len(tramitesFecha)):
+             aux=tramitesConInspeccion.filter(id=tramitesFecha[i].tramite_id).exclude(id__isnull=True)
+             tramites.append(aux)
+            #len o count de tramites
+    return tramites
