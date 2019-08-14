@@ -7,15 +7,19 @@ body {
 	background:  #0925c4!important;
 		
 }
-
 img.logo {
 	height: 50px;
 
 }
-
 .sticky img.logo {
 	height: 40px;
 
+}
+div#container-visado, div#container-inspeccion{
+background-color:#083868!important;
+}
+#municipalidadVisado,#planillaVisado, #planillaInspeccion, #municipalidadInspeccion,#documentos,#tituloVisado{
+color:white;
 }
 .navbar-default {
 
@@ -358,13 +362,8 @@ footer {
 #columnab1.col-xs-12.col-sm-12.col-md-2.col-lg-2,#columnab2.col-xs-12.col-sm-12.col-md-10.col-lg-10{
 background-color:trasnparent!important;
 }*/
-#documentos,#tituloVisado,#municipalidadVisado,#planillaVisado{
-color:white;
-}
-#rowVisado{
-background-color:white;
-}
-#filasVisado,#columnasVisado,#columnaBalance,#filasBalance,#municipalidadInspeccion,#tituloInspeccion{
+
+#filasVisado,#columnasVisado,#columnaBalance,#filasBalance,#tituloInspeccion{
 font-weight:bold;
 color:black;
 font-size:13px;

@@ -14,14 +14,15 @@
 
     <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" >
         <div class="panel">
-          <div class="panel-heading box" role="tab" id="headingOne">
-            <h5 class="panel-title">
-              <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+          <div class="panel-heading" role="tab" id="headingOne">
+            <div class="panel-title">
+             <!-- <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
                 <div id="boton_tipo_pago" class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="center">
-                  <font color="#ffffff" size="4">PLANILLA DE VISADO TECNICO</font><br>
+             -->     <!--  <font color="#ffffff" size="4">--><h3 ><font color="#ffffff" align="center" >PLANILLA DE VISADO TECNICO</font></h3>
+                <br><!--</font><br>
                 </div>
-              </a>
-            </h5>
+              </a>-->
+            </div>
 
           <div class="row">
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
@@ -111,7 +112,7 @@
               <div class="form-group">
                 <label for="id_monto_a_pagar">Monto:</label>
                 <input type="hidden" id="id_tram" value="{{tramite.id}}">
-                <input class="form-control input-sm" id="id_monto_a_pagar" name="monto" type="number" step="any" placeholder="Ingresar monto" title="Monto" maxlength="10" value="ingresar monto"/>
+                <input class="form-control input-sm" id="id_monto_a_pagar" name="monto" type="number" step="any" placeholder="Ingresar monto" title="Monto" min=0 maxlength="10" value="ingresar monto"/>
               </div>
               <button class="btn btn-primary btn-sm" type="submit" title="Aprobar el visado" name="Aprobar el visado">
                 Aprobar visado
@@ -136,6 +137,20 @@
 
 
 <style>
+
+
+        input, button, select, textarea {
+            display: none;
+        }
+        .dataTables_wrapper .dataTables_paginate .paginate_button.current, .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
+            display: none;
+        }
+        #tabla_length{
+        display:none;
+        }
+        #tabla_filter{
+        display:none;
+        }
   .switch {
       position: relative;
       display: inline-block;

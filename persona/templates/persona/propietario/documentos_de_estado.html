@@ -1,14 +1,6 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
 
-{% block estilos %}
-
-    <style>
-
-    </style>
-
-{% endblock %}
-
 {% block barra %}
 	<ul class="sidebar sidebar-1">
 		<font size="2">
@@ -34,6 +26,7 @@
 			<div class="container-fluid">
 				<div class="row">
                      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="color: white;">
+
                         {% for documento in documentos_de_fecha%}
                                 <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
                                     <div class="thumbnail ">
@@ -51,21 +44,118 @@
                                 </div>
                         {% endfor %}
                      </div>
-                    {% for planilla in planillas %}
-                    {% if planilla %}
-						{% block contenido_tramites_visados%}
-							{% include "persona/profesional/planilla_visado_impresa.html" with tramites=ctxvisadosprofesional.visados_del_profesional %}
-						{% endblock %}
-                    {% endif %}
-                    {% endfor %}
-                    {% for inspeccion in inspecciones %}
-                    {% if inspeccion %}
-                        {% block contenido_tramites_inspeccionados%}
-							{% include "persona/profesional/planilla_inspeccion_impresa.html" %}
-						{% endblock %}
-                    {% endif %}
-                    {% endfor %}
+                    {% if planillas %}
+                        <table class="table-bordered table-striped table-hover table-condensed">
+                            <thead>
+                                <tr>
+                                    <th> Numero de Visado</th>
+                                    <th> Numero de tramite</th>
+                                    <th> </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for planilla in planillas %}
+                                    <tr>
+                                    {% if planilla %}
+                                          <td  class="col-xs-1" align="center">{{planilla.id}}</td>
+                                          <td  class="col-xs-1" align="center">{{planilla.tramite_id}}</td>
+                                          <td>
+                                              <div>
+                                                <div class="col-md-4 col-sm-5 col-xs-4 text-center">
+                                                    <button type="button" class="btn btn-primary btn-md" data-toggle="modal" data-target="#{{planilla.id}}">
+                                                        <span class="glyphicon glyphicon-search" aria-hidden="true"> Ver</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal" id="{{planilla.id}}" role="document">
+                                                    <div class="modal-dialog">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                              <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                              <h4 class="modal-title">Planilla de Visado</h4>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                <div id="modalContainer1" class="container-fluid">
+                                                                    <div id="container-visado">
+                                                                    {% block contenido_tramites_visados%}
+                                                                        {% include "persona/profesional/planilla_visado_impresa.html" with tramites=ctxvisadosprofesional.visados_del_profesional %}
+                                                                    {% endblock %}
+                                                                    </div>
+                                                                    <br>
+                                                                    <div class="row">
+                                                                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-center">
+                                                                            <button type="button" class="btn btn-info btn-md " data-dismiss="modal">Cerrar</button>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+											            <br>
+                                                    </div>
+										        </div>
+                                          </div>
+                                          </td>
+                                    {% endif %}
+                                     </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    {%endif%}
+                    {%if inspecciones %}
+                        <table class="table-bordered table-striped table-hover table-condensed">
+                            <thead>
+                                <tr>
+                                    <th> Numero de inspeccion</th>
+                                    <th> Numero de tramite</th>
+                                    <th> </th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for inspeccion in inspecciones %}
+                                    <tr>
+                                    {% if inspeccion %}
+                                          <td   align="center">{{inspeccion.id}}</td>
+                                          <td   align="center">{{inspeccion.tramite_id}}</td>
+                                          <td>
+                                                <div class="col-md-4 col-sm-5 col-xs-4 text-center">
+                                                    <button type="button" class="btn btn-primary btn-md" data-toggle="modal" data-target="#{{inspeccion.id}}">
+                                                        <span class="glyphicon glyphicon-search" aria-hidden="true"> Ver</span>
+                                                    </button>
+                                                </div>
+                                                <div class="modal" id="{{inspeccion.id}}" role="document">
+                                                    <div class="modal-dialog">
+                                                        <div class="modal-content">
+                                                            <div class="modal-header">
+                                                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                                                <h4 class="modal-title">Planilla de Inspeccion</h4>
+                                                            </div>
+                                                            <div class="modal-body">
+                                                                <div id="modalContainer" class="container-fluid">
+                                                                    <div id="container-inspeccion">
+                                                                        {% block contenido_tramites_inspeccionados%}
+                                                                            {% include 'persona/profesional/planilla_inspeccion_impresa.html' %}
+                                                                        {% endblock %}
+                                                                    </div>
+                                                                    <br>
+                                                                    <div class="row">
+                                                                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-center">
+                                                                              <button type="button" class="btn btn-info btn-md " data-dismiss="modal">
+                                                                                  Cerrar</button>
+                                                                        </div>
 
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <br>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                          </td>
+                                    {% endif %}
+                                    </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    {%endif%}
                      <!--<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="right">-->
                         <!--<a href="javascript:history.back(-1);">-->
                             <!--<button type="button" class="btn btn-primary" name="Volver">-->
@@ -80,13 +170,20 @@
                         <!--</a>-->
                         <!--{% endif %}    -->
                      <!--</div>-->
-			    </div>
-			</div>
+                    <br>
+                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="right">
+                            <a href="javascript:history.back(-1);">
+                                <button type="button" class="btn btn-primary" name="Volver">
+                                    Volver
+                                </button>
+                            </a>
+                        </div>
+                </div>
+            </div>
           </div>
         </div>
       </div>
     </div>
-
 </div>
 <style>
     .switch {

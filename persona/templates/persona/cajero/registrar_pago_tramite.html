@@ -1,0 +1,77 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load crispy_forms_tags%}
+
+{% block barra %}
+    <ul class="sidebar sidebar-1">
+        <font size="2">
+            <li><a class="current"><font color="white">Registrar Pago</font> </a></li>
+        </font>
+      </ul>
+{% endblock %}
+{% block contenido %}
+<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" >
+	  <div class="panel" id="panelprop">
+            <div class="panel-heading box" role="tab" id="headingFive">
+              <h5 class="panel-title">
+                <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+                  <label id="financiacion">Registrar Pago</label>
+                </a>
+              </h5>
+            </div>
+
+            <div id="collapseFive" class="panel-collapse" role="tabpanel" aria-labelledby="headingFive">
+                <div class="panel-body">
+                    <div class="container-fluid">
+                        <div class="row" id="fila1">
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-sm-6 col-md-6">
+                                        <label> Numero de Tramite : {{ tramite.id }} </label>
+                                        <br><br><br>
+                                        <label>  Propietario : </label>
+                                        <label> {{ tramite.propietario }}</label><br>
+                                        <label>Dni : {{ tramite.propietario.persona.dni}}</label> <br>
+                                        <label> Obra : </label> <br>
+                                        <label> Domicilio : {{tramite.domicilio}}</label><br>
+                                        <label>Tipo de Obra : {{ tramite.tipo_obra }}</label><br>
+                                    </div>
+                                    <div class="col-sm-6 col-md-6">
+                                        <label> Cuota :{{ cuota.numeroCuota }} /{{cuota.pago.cantidadCuotas}}</label><br>
+                                        <label> Fecha de Vencimiento : {{ cuota.fechaVencimiento }}</label>
+                                        <br><br>
+                                        <label>Profesional : </label>
+                                        <label> {{tramite.profesion}} {{tramite.profesional}}</label>
+                                        <label>M.P: {{tramite.profesional.matricula}}</label><br>
+                                        <br> <br>
+                                        <label> Forma de pago  : {{ cuota.pago.tipoPago}} </label><br>
+                                        <label> Total : {{tramite.monto_a_pagar}}</label>
+                                    </div>
+                                </div>
+                                <br>
+                                <div class="form-group">
+                                    <div class="controls ">
+                                        <div class="row">
+                                            <div class="col-sm-6 col-md-6 col-xs-6" align="right" >
+                                                <a href="javascript:history.back(-1);">
+                                                    <button type="button" class="btn btn-primary" name="Volver"> Volver </button>
+                                                </a>
+                                            </div>
+                                            <div class="col-sm-6 col-md-6 col-xs-6" >
+                                                <a href="{% url 'elegir_cuota' cuota.id %}">
+                                                    <button type="button" onclick="return confirm('Desea registrar el pago de la cuota?')" class="btn btn-primary brn-xs" name="Guardar">
+                                                        Aceptar
+                                                    </button>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+      </div>
+</div>
+{% endblock %}

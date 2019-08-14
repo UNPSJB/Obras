@@ -10,7 +10,7 @@
       </ul>
 {% endblock %}
 
-{% block tramites_para_financiar %}
+{% block contenido %}
 <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" >
 	  <div class="panel" id="panelprop">
 		<div class="panel-heading box" role="tab" id="headingFive">
@@ -20,8 +20,88 @@
 			</a>
 		  </h5>
 		</div>
+<div id="collapseFive" class="panel-collapse" role="tabpanel" aria-labelledby="headingFive">
+                <div class="panel-body">
+                    <div class="container-fluid">
+                        <div class="row" id="fila1">
+                            <div class="form-group">
+                                <div class="row">
+                                    <div class="col-sm-6 col-md-6">
+                                        <label>  Tramite : </label><br>
+                                        <label> Numero de Tramite : {{ tramite.id }} </label>
+                                        <br>
+                                        <label>  Propietario : </label><br>
+                                        <label> Apellido, Nombre : {{ tramite.propietario }}</label><br>
+                                        <label>Dni : {{ tramite.propietario.persona.dni}}</label> <br>
+                                        <br>
+                                        <form action="" method="post" enctype="multipart/form-data">
+                                            <input name="guardar_financiacion" type="hidden">
+                                            <div id="div_id_tipoPago" class="form-group">
+                                                <label for="id_tipoPago" class="control-label ">
+                                                    Seleccione el tipo de pago
+                                                </label>
 
-        <div id="collapseFive" class="panel-collapse" role="tabpanel" aria-labelledby="headingFive">
+                                                <div class="controls ">
+                                                    <select name="tipoPago" placeholder="Ingresar Tipo de Pago" class="select form-control input-sm" id="id_tipoPago" required>
+                                                        <option value="" selected="">---------</option>
+                                                        <option value="1">Debito</option>
+                                                        <option value="2">Tarjeta de credito</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div id="div_id_cantidadCuotas" class="form-group">
+                                                <label for="id_cantidadCuotas" class="control-label ">
+                                                    Seleccione la cantidad de cuotas
+                                                </label>
+                                                <div class="controls ">
+                                                    <select name="cantidadCuotas-" placeholder="Seleccione la cantidad de cuotas" class="select form-control input-sm" id="id_cantidadCuotas" value="" onclick="javascript:subtotal()"required>
+                                                        <option value="" selected="">---------</option>
+                                                        <option value="1">Una Cuota</option>
+                                                        <option value="3">Tres Cuotas</option>
+                                                        <option value="6">Seis Cuotas</option>
+                                                        <option value="12">Doce Cuotas</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <input type="hidden" id="total" value="{{tramite.monto_a_pagar}}">
+                                            <br>
+                                            <div class="form-group">
+                                                <div class="controls ">
+                                                    <div class="row">
+                                                        <div class="col-sm-10 col-md-10 col-xs-6" align="right">
+                                                            <a href="javascript:history.back(-1);">
+                                                                <button type="button" class="btn btn-primary" name="Volver">
+                                                                    Volver
+                                                                </button>
+                                                            </a>
+                                                        </div>
+                                                        <div class="col-sm-2 col-md-2 col-xs-6" >
+                                                            <button class="btn btn-primary btn-sm" type="submit" name="Guardar">
+                                                                Aceptar
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </form>
+                                    </div>
+                                    <div class="col-sm-6 col-md-6" >
+                                        <label> Obra : </label> <br>
+                                        <label> Direccion : {{tramite.domicilio}}</label><br>
+                                        <label> Sector : {{tramite.sector}} </label><br>
+                                        <label>Tipo de Obra : {{ tramite.tipo_obra }}</label><br>
+                                        <label>Medidas : {{ tramite.medidas }}</label><br>
+                                        <br><br>
+                                        <label>Total : $ {{tramite.monto_a_pagar}}</label><br>
+                                        <label> Subtotal: <label id="subtotal"></label></label>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <!--<div id="collapseFive" class="panel-collapse" role="tabpanel" aria-labelledby="headingFive">
 		    <div class="panel-body">
 			    <div class="container-fluid">
 				    <div class="row" id="fila1">
@@ -37,7 +117,7 @@
                                     </label> 
                                     <div class="controls "> 
                                         <select name="tipoPago" placeholder="Ingresar Tipo de Pago" class="select form-control input-sm" id="id_tipoPago" required> 
-                                            <option value="" selected="">---------</option> 
+                                            <option value="" selected="">-&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;</option>
                                             <option value="1">debito</option> 
                                             <option value="2">tarjeta credito</option>
                                         </select> 
@@ -49,7 +129,7 @@
                                     </label> 
                                     <div class="controls "> 
                                         <select name="cantidadCuotas-" placeholder="Ingresar cantidad de cuotas" class="select form-control input-sm" id="id_cantidadCuotas" required> 
-                                            <option value="" selected="">---------</option> 
+                                            <option value="" selected="">-&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;</option>
                                             <option value="1">Una Cuota</option> 
                                             <option value="3">Tres Cuotas</option> 
                                             <option value="6">Seis Cuotas</option> 
@@ -74,10 +154,19 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div>-->
     </div>
 </div>
+<script type="text/javascript">
+   function subtotal(){
+      var cantCuotas = parseInt($("#id_cantidadCuotas").val(),10);
+      var total=parseInt($("#total").val(),10);
+      var subtotal=total/cantCuotas;
+      $("#subtotal").html(subtotal);
+   }
+</script>
 {% endblock %}
+
 {% block estilos %}
 <style>
   select.input-sm {

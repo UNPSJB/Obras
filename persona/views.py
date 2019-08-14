@@ -85,7 +85,7 @@ def elegir_financiacion_propietario(request,pk_tramite):
             for name, value in request.POST.items():
                 if name.startswith('cantidadCuotas'):                                        
                     pago.cantidadCuotas=value                                 
-            total = tramite.monto_a_pagar/pago.cantidadCuotas
+            total = tramite.monto_a_pagar/int(pago.cantidadCuotas)
             pago.save()
             for i in range(1, int(pago.cantidadCuotas)+1):
                 cuota = Cuota(monto=total, numeroCuota=i, pago=pago)                
@@ -99,7 +99,7 @@ def elegir_financiacion_propietario(request,pk_tramite):
                 contador=contador+31
                 cuota.save()
                 cuota.hacer("Cancelacion")
-            messages.add_message(request, messages.SUCCESS, 'Todo bien =)')                    
+            messages.add_message(request, messages.SUCCESS, 'Financiacion registrada')
             tramite.pago = pago
             tramite.save()
         return redirect('propietario')                              
@@ -115,7 +115,7 @@ def tramites_para_financiar(request):
     persona = lista_de_persona_que_esta_logueada.pop()  # Saco de la lista la persona porque no puedo seguir trabajando con una lista
     propietario = persona.get_propietario()  # Me quedo con el atributo propietario de la persona        
     tramites_propietario = Tramite.objects.en_estado(Visado) 
-    tramites = filter(lambda tramite: (tramite.propietario == propietario), tramites_propietario)
+    tramites = filter(lambda tramite: (tramite.propietario == propietario and tramite.pago is  None), tramites_propietario)
     return tramites
 
 def listado_tramites_propietario(request):
@@ -2310,6 +2310,13 @@ def comprobante_pago_cuota(request,pk_cuota):
     pago = cuota.pago
     tramite = get_object_or_404(Tramite, pago=pago)
     return render(request, 'persona/cajero/comprobante.html',{'cuota': cuota, 'pago':pago,'tramite':tramite})
+
+def registrar_el_pago_tramite(request, pk_cuota):
+    cuota = get_object_or_404(Cuota, pk=pk_cuota)
+    pago=cuota.pago
+    tramite = get_object_or_404(Tramite, pago=pago)
+    contexto = {'tramite': tramite,'pago':pago, 'cuota': cuota}
+    return render ( request,'persona/cajero/registrar_pago_tramite.html', contexto)
 
 def listado_tramites(request):
     objetos=Tramite.objects.all()

@@ -96,8 +96,8 @@ class FormularioPropietario(FormularioPersona):
 
     def __init__(self, *args, **kwargs):
         super(FormularioPropietario, self).__init__(*args, **kwargs)
-        self.fields['estilo'].widget.attrs['placeholder'] = "Ingresar Estilo"
-        self.fields['estilo'].widget.attrs['title'] = "Ingresar Estilo"
+        # self.fields['estilo'].widget.attrs['placeholder'] = "Ingresar Estilo"
+        # self.fields['estilo'].widget.attrs['title'] = "Ingresar Estilo"
         self.helper = FormHelper()
         self.helper.form_tag = False
 

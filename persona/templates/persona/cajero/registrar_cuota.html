@@ -13,6 +13,41 @@
 {% block contenido %}
 {% block registrar_cuota %}
 <div class="container-fluid">
+    <div class="table-responsive">
+            <table class="table table-bordered table-striped table-hover table-condensed" style="background: white;">
+                <thead>
+                    <tr>
+                        <th>FechaVencimiento</th>
+                        <th>Monto</th>
+                        <th>Numero de Cuota</th>
+                        <th>Registrar Pago</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for cuota in cuotas %}
+                        <tr>
+                            <td class="col-xs-3">{{ cuota.fechaVencimiento }}</td>
+                            <td class="col-xs-3">{{ cuota.monto }}</td>
+                            <td class="col-xs-3">{{ cuota.numeroCuota }}</td>
+                            <td>
+                                <a href="{% url 'registrar_pago_tramite' cuota.id %}">
+                                    <button type="button"  class="btn btn-primary brn-xs" name="RegistrarPago">
+                                         Seleccionar
+                                    </button>
+                                </a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        <div class="col-xs-4 col-sm-4 col-md-12 col-lg-12" style="float: right; width: 20%; margin-top: -20px; "><br>
+            <form action='/persona/cajero'>
+                &nbsp;<Button class="btn btn-primary btn-sm" type="submit" value="Atras">Volver</Button>
+            </form><br>
+        </div>
+    </div>
+</div>
+<!--<div class="container-fluid">
 <div class="table-responsive">
 
         <table class="table table-bordered table-striped table-hover table-condensed" style="background: white;">
@@ -48,6 +83,7 @@
         </form><br>
     </div>
     </div>
-</div>
+</div>-->
+
 {% endblock %}
 {% endblock %}

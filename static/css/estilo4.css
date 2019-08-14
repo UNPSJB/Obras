@@ -12,11 +12,16 @@ body {
 body {
     margin: 0;
 }
+div#container-visado, div#container-inspeccion{
+background-color:#9d70ec!important;
+}
+#municipalidadVisado,#planillaVisado, #planillaInspeccion, #municipalidadInspeccion,#documentos,#tituloVisado{
+color:white;
+}
 header {
     /* background: #04142b; */
     transition: 0.5s;
 }
-
 header.sticky {
     position: fixed;
     left: 0;
@@ -162,9 +167,11 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
     z-index: 1030;
 }
 
+/*
 #headingFive.panel-heading.box{
 background-color:#f8f7f0!important;
 }
+*/
 
 .col-sm-10, .col-md-10,.col-xs-12,
 
@@ -174,16 +181,6 @@ background-color:#f8f7f0!important;
 
     margin-right: -15px;
     margin-left: -15px;
-}
-
-.col-xs-1, .col-sm-1, .col-md-1, .col-lg-1, .col-xs-2, .col-sm-2, .col-md-2, .col-lg-2, .col-xs-3, .col-sm-3, .col-md-3, .col-lg-3, .col-xs-4, .col-sm-4, .col-md-4, .col-lg-4, .col-xs-5, .col-sm-5, .col-md-5, .col-lg-5, .col-xs-6, .col-sm-6, .col-md-6, .col-lg-6, .col-xs-7, .col-sm-7, .col-md-7, .col-lg-7, .col-xs-8, .col-sm-8, .col-md-8, .col-lg-8, .col-xs-9, .col-sm-9, .col-md-9, .col-lg-9, .col-xs-10, .col-sm-10, .col-md-10, .col-lg-10, .col-xs-11, .col-sm-11, .col-md-11, .col-lg-11, .col-xs-12, .col-sm-12, .col-md-12, .col-lg-12 {
-/*
-        background-color:#333!important;
-*/
-    position: relative;
-    min-height: 1px;
-    padding-right: 15px;
-    padding-left: 15px;
 }
 .navbar-default .navbar-toggle {
     border-color: #ddd;
@@ -793,10 +790,67 @@ html {
     background-color: #6d08b1;
     border-left: 5px solid #746d80;
 }
+.switch {
+        position: relative;
+        display: inline-block;
+        width: 60px;
+        height: 34px;
+    }
+
+    /* Hide default HTML checkbox */
+    .switch input {display:none;}
+
+    /* The slider */
+    .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        -webkit-transition: .4s;
+        transition: .4s;
+    }
+
+    .slider:before {
+        position: absolute;
+        content: "";
+        height: 26px;
+        width: 26px;
+        left: 4px;
+        bottom: 4px;
+        background-color: white;
+        -webkit-transition: .4s;
+        transition: .4s;
+    }
+
+    input:checked + .slider {
+        background-color: #2196F3;
+    }
+
+    input:focus + .slider {
+        box-shadow: 0 0 1px #2196F3;
+    }
+
+    input:checked + .slider:before {
+        -webkit-transform: translateX(26px);
+        -ms-transform: translateX(26px);
+        transform: translateX(26px);
+    }
+
+    /* Rounded sliders */
+    .slider.round {
+        border-radius: 34px;
+    }
+
+    .slider.round:before {
+        border-radius: 50%;
+    }
 #tablaOl{
 color:white;
 }
-#planillaInspeccionContainer,#contenido3{
+#contenido3{
 background-color:#eae2e2!important;
 }
 ol li {
