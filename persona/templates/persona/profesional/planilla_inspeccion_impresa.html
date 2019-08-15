@@ -2,131 +2,142 @@
 <p lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Planilla de inspeccion</title>
+    <title id="tituloInspeccion">Planilla de inspeccion</title>
 </head>
-
+</p>
 <p>
-<div id="printReady">
-        <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" >
-		  <div class="row" style="background:white;">
-              <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                  <div style="background-color:#2c3e50;">
-                      <p>
-                          <img src="/media/imagenes/Escudobanner.png"
-                               class="img-responsive" alt="Imagen responsive" width="100" height="100"/>
-                      </p>
-                  </div>
-                       <div align="justify" style="font-size:9px; text-align:left;">
-                      <br>  &nbsp; MUNICIPALIDAD DE TRELEW
-                      <br>
-                      &nbsp; Rivadavia 390 <br>
-                      &nbsp; 9100 TRELEW- Provincia del Chubut
-                  </div>
-                      <h3 align="center">
-                          PLANILLA DE INSPECCION &nbsp;  &nbsp;
-                      </h3>
-                      <hr style="border-width:">
-                      <br>
+    <div id="printReady">
+        <div class="container-fluid" id="planillaInspeccionContainer">
+            <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" >
+              <div class="row" >
+                  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                      <div style="background-color:#2c3e50;">
+                           <img src="/media/imagenes/Escudobanner.png" class="img-responsive" alt="Escudo" width="100" height="100">
+                      </div>
+                      <div id="municipalidadInspeccion" align="justify" style="font-size:9px; text-align:left;">
+                          <br>  &nbsp; MUNICIPALIDAD DE TRELEW
+                          <br>
+                          &nbsp; Rivadavia 390 <br>
+                          &nbsp; 9100 TRELEW- Provincia del Chubut
 
-          <div class="row">
-            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-              <form action="" >
-                <div class="row" style="color:#fff;">
-                  <div class=" col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                    <ol>
-                      <label>PADRON:</h2></label>
-                      <li> {{tramite.parcela}}</li>
-                      <label>DATOS PROPIETARIO:</label>
-                      <li> {{tramite.propietario.persona}}</li>
-                      <label>DATOS PROFESIONAL:</label>
-                      <li> {{tramite.profesional}}</li>
-                    </ol>
+                          <h3 id="planillaInspeccion" align="center">
+                              PLANILLA DE INSPECCION &nbsp;  &nbsp;
+                          </h3>
+                          <hr style="border-width:">
+                          <br>
+                       </div>
+                         <div class="row">
+                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" >
+                              <form action="" >
+                                <div class="row">
+                                  <div class=" col-xs-12 col-sm-12 col-md-12 col-lg-12" >
+                                    <ol>
+                                      <label style="color:black!important;">PADRON:</label>
+                                      <li style="color:black!important;"> {{tramite.parcela}}</li>
+                                      <label style="color:black!important;">DATOS PROPIETARIO:</label>
+                                      <li style="color:black!important;"> {{tramite.propietario.persona}}</li>
+                                      <label style="color:black!important;">DATOS PROFESIONAL:</label>
+                                      <li style="color:black!important;"> {{tramite.profesional}}</li>
+                                    </ol>
+                                  </div>
+                                </div>
+                              </form>
+                             </div>
+                         </div>
+                         <table class="table table-bordered table-striped table-hover table-condensed " id="tabla">
+                             <thead>
+                             <tr  style="text-align:center;">
+                                 <th></th>
+                                 {% for item in items %}
+                                 <th>{{item.nombre}}</th>
+                                 {% endfor %}
+                             </tr>
+                             </thead>
+                             <tbody>
+                             {% for categoria in categorias %}
+                             <tr>
+                                 <td class="col-xs-1">{{ categoria.nombre }}</td>
+                                 {% for item in items %}
+                                 <td class="col-sm-4">&nbsp;
+                                     {% for detalle in inspeccion.detalles.all %}
+                                     {% if categoria.nombre == detalle.categoria_inspeccion.nombre and item.nombre == detalle.item_inspeccion.nombre %}
+                                     {{ detalle.nombre }}
+                                     <br>
+                                     {% endif %}
+                                     {% endfor %}
+                                 </td>
+                                 {% endfor %}
+                             </tr>
+                             {% endfor %}
+                             </tbody>
+                         </table>
+                         <table  class="table-bordered table-striped table-hover">
+                            <thead>
+                                <tr>
+                                    <th>categoria</th>
+                                    <th>tipo</th>
+                                    <th>descripcion</th>
+                                </tr>
+                            </thead>
+                            {% for categoria in categorias %}
+                                <tr>
+                                    <td id="nombre{{categoria.id}}" class="col-xs-1" align="center">{{categoria.nombre}}</td>
+                                    <td id="tipo{{categoria.id}}" class="col-xs-1" align="center">{{categoria.tipo}}</td>
+                                    <td id="descripcion{{categoria.id}}" class="col-xs-2">{{categoria.descripcion}}</td>
+                                </tr>
+                            {% endfor %}
+                         </table>
                   </div>
-                </div>
-              </form>
-          </div>
-          </div>
-         <table class="table table-bordered table-striped table-hover table-condensed" style="text-align:center;">
-             <thead>
-             <tr>
-                 <th></th>
-                 {% for item in items %}
-                 <th>{{item.nombre}}</th>
-                 {% endfor %}
-             </tr>
-             </thead>
-             <tbody>
-             {% for categoria in categorias %}
-             <tr>
-                 <td class="col-xs-1">{{ categoria.nombre }}</td>
-                 {% for item in items %}
-                 <td class="col-sm-4">&nbsp;
-                     {% for detalle in inspeccion.detalles.all %}
-                     {% if categoria.nombre == detalle.categoria_inspeccion.nombre and item.nombre == detalle.item_inspeccion.nombre %}
-                     {{ detalle.nombre }}
-                     <br>
-                     {% endif %}
-                     {% endfor %}
-                 </td>
-                 {% endfor %}
-             </tr>
-             {% endfor %}
-             </tbody>
-         </table>
-                                <table  class="table-bordered table-striped table-hover">
-                                    <thead>
-                                    <tr>
-                                        <th>categoria</th>
-                                        <th>tipo</th>
-                                        <th>descripcion</th>
-                                    </tr>
-                                    </thead>
-                                    {% for categoria in categorias %}
-                                    <tr>
-                                        <td id="nombre{{categoria.id}}" class="col-xs-1" align="center">{{categoria.nombre}}</td>
-                                        <td id="tipo{{categoria.id}}" class="col-xs-1" align="center">{{categoria.tipo}}</td>
-                                        <td id="descripcion{{categoria.id}}" class="col-xs-2">{{categoria.descripcion}}</td>
-                                    </tr>
-                                    {% endfor %}
-                                </table>
-                            </ol>
-                        </div>
-                    </div>
-                </form>
+              </div>
             </div>
         </div>
-
-      </div>
     </div>
-</div>
-</div>
 </p>
-</div>
-    </div>
+<div class="container-fluid">
+    <div class="row">
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 ">
+<!--
+            <a href="{% url 'profesional' %}" //  en propietario da error si la url es profesional>
+-->
+                <div class="row">
+                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-center">
+                         <button class="btn btn-primary" type="submit" onclick="printSpecial()">Imprimir</button>
+                     </div>
+                     <!--<div class="col-lg-6 col-md-6 col-sm-12 col-xs-12 text-center">
+                          <a href="javascript:history.back(-1);">
+                              <button class="btn btn-primary " type="submit" value="Atras">Volver</button>
+                          </a>
+                     </div>-->
+                </div>
+
+        <!--    </a>-->
+             <br> <br>
+        </div>
     </div>
 </div>
 
-<div class="row">
-    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-right">
-        <a href="{% url 'profesional' %}">
-            <input type="button" onclick="printSpecial()" value="Imprimir"></span></input>
-                <button type="submit" value="Atras">Atras</button>
-        </a>
-    </div>
-</div>
 
     <style>
-            body{
-                background:radial-gradient(circle at 1.98% 14.97%,#6699CC, transparent 100%),
-                radial-gradient(circle at 98.02% 52.96%, #66CCFF, transparent 100%),
-                radial-gradient(circle at 50% 50%, #66CCFF,#66CCFF 100%);
-            }
-            th{
-                background-color:#2c3e50;
-                color:white;
-            }
-
-        </style>
+         .dataTables_length, .dataTables_filter, .dataTables_info,.dataTables_wrapper .dataTables_paginate .paginate_button.disabled, .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:hover, .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:active {
+          display: none !important;
+       }
+       th{
+          background-color:#2c3e50;
+          color:white;
+       }
+        input, button, select, textarea {
+            display: none;
+        }
+        .dataTables_wrapper .dataTables_paginate .paginate_button.current, .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
+            display: none;
+        }
+        #tabla_length{
+        display:none;
+        }
+        #tabla_filter{
+        display:none;
+        }
+    </style>
         <script language="JavaScript">
         var gAutoPrint = true; // Flag for whether or not to automatically call the print function
 
@@ -135,7 +146,7 @@
             if (document.getElementById != null)
             {
                 var html = '<HTML>\n<HEAD>\n';
-
+                html+='<style> select{ display:none;} .dataTables_wrapper .dataTables_length, .dataTables_wrapper .dataTables_filter, .dataTables_wrapper .dataTables_info, .dataTables_wrapper .dataTables_processing, .dataTables_wrapper .dataTables_paginate label{display: none;} .dataTables_wrapper .dataTables_paginate .paginate_button.disabled, .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:hover, .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:active{display: none;} .dataTables_wrapper .dataTables_paginate .paginate_button{display: none!important;}</style>'
                 if (document.getElementsByTagName != null)
                 {
                     var headTags = document.getElementsByTagName("head");
@@ -149,7 +160,7 @@
 
                 if (printReadyElem != null)
                 {
-                        html += printReadyElem.innerHTML;
+                    html += printReadyElem.innerHTML;
                 }
                 else
                 {
@@ -158,7 +169,6 @@
                 }
 
                 html += '\n</BO' + 'DY>\n</HT' + 'ML>';
-
                 var printWin = window.open("","printSpecial");
                 printWin.document.open();
                 printWin.document.write(html);
@@ -173,6 +183,15 @@
         }
 
         </script>
+<!--<script>
+    $(document).ready(function () {
+  $('#tabla').DataTable({
+    "paging": true // false to disable pagination (or any other option)
+    "lengthMenu": [1]
 
-        </body>
-        </html>
+  });
+  $('.dataTables_length').addClass('bs-select');
+});
+
+</script>-->
+
