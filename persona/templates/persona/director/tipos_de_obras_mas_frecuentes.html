@@ -1,71 +1,45 @@
-{% extends 'base.html' %}
-{% load staticfiles %}
-{% load crispy_forms_tags%}
-
-<p lang="es">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Reporte de categorias mas frecuentes</title>
+    <title></title>
 </head>
 
-{% block barra %}
-	<ul class="sidebar sidebar-1">
-		<font size="2">
-			<li><a href="{% url 'director'  %}" class="current"><font color="white">Director</font></a></li>
-		</font>
-	</ul>
-{% endblock %}
-
-{% block contenido %}
 <p>
 <div id="printReady">
-    <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" >
-		<div class="row" style="background:white;">
-        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-            <div style="background-color:#2c3e50;">
-                <p>
-                    <img src="/media/imagenes/Escudobanner.png"
-                        class="img-responsive" alt="Imagen responsive" width="100" height="100"/>
-                </p>
-            </div>
-            <div align="justify" style="font-size:9px; text-align:left;">
-            <br>  &nbsp; MUNICIPALIDAD DE TRELEW
-            <br>
-            &nbsp; Rivadavia 390 <br>
-            &nbsp; 9100 TRELEW- Provincia del Chubut
-            </div>
+        <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" >
+		  <div class="row" style="background:white;">
+              <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                  <div style="background-color:#2c3e50;">
+                      <p>
+                          <img src="/media/imagenes/Escudobanner.png"
+                               class="img-responsive" alt="Imagen responsive" width="100" height="100"/>
+                      </p>
+                  </div>
+                       <div align="justify" style="font-size:9px; text-align:left;">
+                      <br>  &nbsp; MUNICIPALIDAD DE TRELEW
+                      <br>
+                      &nbsp; Rivadavia 390 <br>
+                      &nbsp; 9100 TRELEW- Provincia del Chubut
+                  </div>
+                      <h3 align="center">
+                          TIPO DE OBRAS MAS FRECUENTES &nbsp;  &nbsp;
+                       </h3>
+                      <hr style="border-width:">
+                      <br>
 
-            <h3 align="center">
-                TIPOS DE OBRAS MAS FRECUENTES &nbsp;  &nbsp;
-            </h3>
-            <hr style="border-width:">
-            <br>
-            <div class="table-responsive">
-                <table align="center" class="table table-bordered table-striped table-hover" style="width:500px;">
-                    <th>Tipo obra</th>
-                    <th>Descripcion</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {% for name,value in tipos_obras %}
-                        {% if value != 0 %}
-                            <tr>
-                                <td class="col-xs-1">{{ name }}</td>
-                                <td class="col-xs-1">{{ value }}</td>
-                            </tr>
-                        {% endif %}
-                    {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-		<br>
-</div>
+                    <div class="table-responsive">
+                        <div align="justify" style="font-size:9px; text-align:left;">
+                      <br>
+                        <table align="center" class="table table-bordered table-striped table-hover" style="width:1000px;">
+                             <br>
+                        <br><br>
+                        <br>
+                        </tr>
 
-    <head>
+                        <tbody>
 
-	<meta charset="utf-8">
+                        </tbody>
 
-	<title>gráfico de pastel con cavas en HTML5</title>
 
 	<style>
 
@@ -88,7 +62,7 @@
 
 
 <body>
-
+<!--
 <div style="float:left;margin-left:50px;">
 
 	<canvas id="canvas1"></canvas>
@@ -96,8 +70,52 @@
 	<h2>Referencias</h2>
 	<div id="leyenda1" class="leyenda"></div>
 
+</div>-->
+
+<body>
+
+<div class="row">
+    <div class="col-xs-4 col-sm-4 col-md-12 col-lg-12" style="float: right; width: 70%;">
+	<form>
+        <canvas id="canvas1"></canvas>
+    </form>
+	<div class="col-xs-4 col-sm-4 col-md-12 col-lg-12" style="float: right; width: 55%;">
+        <form>
+           <h2>Referencias</h2>
+	        <div id="leyenda1" class="leyenda"></div>
+        </form>
+    </div>
+    </div>
+
+
+<div>
+
+            <div class="table-responsive">
+                <table align="center" class="table table-bordered table-striped table-hover" style="width:500px;">
+                    <th p style="color:#FFFFFF"bgcolor="#2c3e50">Tipo obra</th>
+                    <th p style="color:#FFFFFF"bgcolor="#2c3e50">Descripcion</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for name,value in tipos_obras %}
+                        {% if value != 0 %}
+                            <tr>
+                                <td class="col-xs-1">{{ name }}</td>
+                                <td class="col-xs-1">{{ value }}</td>
+                            </tr>
+                        {% endif %}
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+		<br>
 </div>
 
+    <head>
+
+	<meta charset="utf-8">
+
+	<title>gráfico de pastel con cavas en HTML5</title>
 
 <script>
 
@@ -443,6 +461,3 @@
 
     </body>
 </html>
-{% endblock %}
-{% block scrip %}
-{% endblock %}

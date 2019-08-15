@@ -10,7 +10,7 @@
 
 <ul class="sidebar sidebar-1">
 
-    <li><a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne"><label id="j">Mis inspecciones agendadas</label></a></li>    
+    <li><a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne"><label id="j">Mis inspecciones agendadas</label></a></li>
 </ul>
 
 <div class="panel panel-custom">
@@ -21,18 +21,17 @@
         </a>
       </h5>
     </div>
-     <div id="collapseOne" class="panel-collapse collapse " role="tabpanel" aria-labelledby="headingOne">      
+     <div id="collapseOne" class="panel-collapse collapse " role="tabpanel" aria-labelledby="headingOne">
         <div class="table-responsive">
             {% block listado_inspector_movil  %}
                 {% include "persona/movil/listado_inspector_movil.html" with tramites_del_inspector=ctxlistado_inspector.tramites %}
             {% endblock %}
         </div>
-    </div>  
+    </div>
 </div>
-    
+
 {% endblock %}
-    
-    
+
+
 {% block scripts %}
 {% endblock %}
-    

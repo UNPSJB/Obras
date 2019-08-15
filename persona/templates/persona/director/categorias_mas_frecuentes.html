@@ -1,22 +1,9 @@
-{% extends 'base.html' %}
-{% load staticfiles %}
-{% load crispy_forms_tags%}
-
-<p lang="es">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Reporte de categorias mas frecuentes</title>
+    <title></title>
 </head>
 
-{% block barra %}
-	<ul class="sidebar sidebar-1">
-		<font size="2">
-			<li><a href="{% url 'director'  %}" class="current"><font color="white">Director</font></a></li>
-		</font>
-	</ul>
-{% endblock %}
-
-{% block contenido %}
 <p>
 <div id="printReady">
         <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" >
@@ -40,29 +27,18 @@
                       <hr style="border-width:">
                       <br>
                     <div class="table-responsive">
+                        <div align="justify" style="font-size:9px; text-align:left;">
+                      <br>
                         <table align="center" class="table table-bordered table-striped table-hover" style="width:1000px;">
-                            <th>Tipo Categoria</th>
-                            <th>Descripcion</th>
-
+                             <br>
+                        <br><br>
+                        <br>
                         </tr>
-                        </thead>
+
                         <tbody>
-                        {% for tipo_cat in tipos_categorias %}
-                        <tr>
-                            <td class="col-xs-1">{{ tipo_cat.nombre }}</td>
-                            <td class="col-xs-1">{{ tipo_cat.descripcion }}</td>
-                        </tr>
-                            {% endfor %}
+
                         </tbody>
-                        </table>
-                         </div>
-		  <br>
-          </div>
-<head>
 
-	<meta charset="utf-8">
-
-	<title>gráfico de pastel con cavas en HTML5</title>
 
 	<style>
 
@@ -80,20 +56,53 @@
 
 	</style>
 
-</head>
+
 
 
 
 <body>
 
-<div style="float:left;margin-left:50px;">
+<div class="row">
+    <div class="col-xs-4 col-sm-4 col-md-12 col-lg-12" style="float: right; width: 70%;">
+	<form>
+        <canvas id="canvas1"></canvas>
+    </form>
+	<div class="col-xs-4 col-sm-4 col-md-12 col-lg-12" style="float: right; width: 55%;">
+        <form>
+           <h2>Referencias</h2>
+	        <div id="leyenda1" class="leyenda"></div>
+        </form>
+    </div>
+    </div>
 
-	<canvas id="canvas1"></canvas>
-	<br>
-	<h2>Referencias</h2>
-	<div id="leyenda1" class="leyenda"></div>
 
-</div>
+<div>
+
+    <div class="table-responsive">
+                        <div align="justify" style="font-size:9px; text-align:left;">
+                      <br>
+                        <table align="center" class="table table-bordered table-striped table-hover" style="width:1000px;">
+                             <br>
+                        <br><br>
+                        <br>
+                            <th p style="color:#FFFFFF"bgcolor="#2c3e50">Tipo Categoria</th>
+                            <th p style="color:#FFFFFF"bgcolor="#2c3e50">Descripcion</th>
+
+                        </tr>
+
+                        <tbody>
+                        {% for tipo_cat in tipos_categorias %}
+                        <tr>
+                            <td class="col-xs-1">{{ tipo_cat.nombre }}</td>
+                            <td class="col-xs-1">{{ tipo_cat.descripcion }}</td>
+                        </tr>
+                            {% endfor %}
+                        </tbody>
+                        </table>
+                        </div>
+    </div>
+
+
 
 <script>
 
@@ -337,7 +346,7 @@ var valores={
 	{% endif %}
 	{% if totalc != 0 %}
 		"Categoria C":{valor:{{ totalc }},color:"green"},
-	{% endif %}	
+	{% endif %}
 	<!--"C++":{valor:30,color:"Cyan"}-->
 
 }
@@ -354,10 +363,15 @@ pastel.ponerPorCiento("white");
 pastel.ponerLeyenda("leyenda1");
 
 </script>
-
-
-
 </body>
+                        </table>
+
+
+
+                         </div>
+		  <br>
+          </div>
+
       </div>
     </div>
       </div>
@@ -367,79 +381,81 @@ pastel.ponerLeyenda("leyenda1");
 </p>
 </div>
     </div>
-    </div>
+
 </div>
 
 <div class="row">
-    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-right">
-        <a href="{% url 'director' %}">
-            <input type="button" onclick="printSpecial()" value="Imprimir"></span></input>
-                <button type="submit" value="Atras">Atras</button>
-        </a>
+    <div class="col-xs-4 col-sm-4 col-md-12 col-lg-12" style="float: left; width: 45%;">
+        <form id="printMe" name="printMe">
+            <input type="button" name="printMe" onclick="printSpecial()" value="Imprimir">
+            <link rel="stylesheet" type="text/css" href="base.css" />
+        </form>
+    </div>
+    <div class="col-xs-4 col-sm-4 col-md-12 col-lg-12" style="float: right; width: 45%; margin-top: -20px;">
+        <br><form action='/persona/director'>
+            &nbsp;<Button class="btn btn-primary btn-sm" type="submit" value="Atras">Atras</Button>
+        </form><br>
     </div>
 </div>
+<style>
+    body{
+        background:radial-gradient(circle at 1.98% 14.97%,#6699CC, transparent 100%),
+        radial-gradient(circle at 98.02% 52.96%, #66CCFF, transparent 100%),
+        radial-gradient(circle at 50% 50%, #66CCFF,#66CCFF 100%);
+    }
+    th{
+        background-color:#2c3e50;
+        color:white;
+    }
 
-    <style>
-            body{
-                background:radial-gradient(circle at 1.98% 14.97%,#6699CC, transparent 100%),
-                radial-gradient(circle at 98.02% 52.96%, #66CCFF, transparent 100%),
-                radial-gradient(circle at 50% 50%, #66CCFF,#66CCFF 100%);
-            }
-            th{
-                background-color:#2c3e50;
-                color:white;
-            }
+</style>
+<script language="JavaScript">
+var gAutoPrint = true; // Flag for whether or not to automatically call the print function
 
-        </style>
-        <script language="JavaScript">
-        var gAutoPrint = true; // Flag for whether or not to automatically call the print function
+function printSpecial()
+{
+	if (document.getElementById != null)
+	{
+		var html = '<HTML>\n<HEAD>\n';
 
-        function printSpecial()
-        {
-            if (document.getElementById != null)
-            {
-                var html = '<HTML>\n<HEAD>\n';
+		if (document.getElementsByTagName != null)
+		{
+			var headTags = document.getElementsByTagName("head");
+			if (headTags.length > 0)
+				html += headTags[0].innerHTML;
+		}
 
-                if (document.getElementsByTagName != null)
-                {
-                    var headTags = document.getElementsByTagName("head");
-                    if (headTags.length > 0)
-                        html += headTags[0].innerHTML;
-                }
+		html += '\n</HE' + 'AD>\n<BODY>\n';
 
-                html += '\n</HE' + 'AD>\n<BODY>\n';
+		var printReadyElem = document.getElementById("printReady");
 
-                var printReadyElem = document.getElementById("printReady");
+		if (printReadyElem != null)
+		{
+				html += printReadyElem.innerHTML;
+		}
+		else
+		{
+			alert("Could not find the printReady section in the HTML");
+			return;
+		}
 
-                if (printReadyElem != null)
-                {
-                        html += printReadyElem.innerHTML;
-                }
-                else
-                {
-                    alert("Could not find the printReady section in the HTML");
-                    return;
-                }
+		html += '\n</BO' + 'DY>\n</HT' + 'ML>';
 
-                html += '\n</BO' + 'DY>\n</HT' + 'ML>';
+		var printWin = window.open("","printSpecial");
+		printWin.document.open();
+		printWin.document.write(html);
+		printWin.document.close();
+		if (gAutoPrint)
+			printWin.print();
+	}
+	else
+	{
+		alert("Sorry, the print ready feature is only available in modern browsers.");
+	}
+}
 
-                var printWin = window.open("","printSpecial");
-                printWin.document.open();
-                printWin.document.write(html);
-                printWin.document.close();
-                if (gAutoPrint)
-                    printWin.print();
-            }
-            else
-            {
-                alert("Sorry, the print ready feature is only available in modern browsers.");
-            }
-        }
+</script>
 
-        </script>
+</body>
 
-        </body>
-        </html>
-{% endblock %}
-{% block scrip %}
-{% endblock %}
+</html>
