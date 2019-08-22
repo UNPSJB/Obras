@@ -1,22 +1,9 @@
-{% extends 'base.html' %}
-{% load staticfiles %}
-{% load crispy_forms_tags%}
-
-<p lang="es">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Reporte de sectores con mas obras realizadas</title>
+    <title></title>
 </head>
-</p>
-{% block barra %}
-	<ul class="sidebar sidebar-1">
-		<font size="2">
-			<li><a href="{% url 'director'  %}" class="current"><font color="white">Director</font></a></li>
-		</font>
-	</ul>
-{% endblock %}
 
-{% block contenido %}
 <p>
 <div id="printReady">
     <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" >
@@ -200,8 +187,4 @@ var chart = new Chart(ctx, {
 </p>
 </body>
 </html>
-{% endblock %}
-{% block scrip %}
-{% endblock %}
-
 
