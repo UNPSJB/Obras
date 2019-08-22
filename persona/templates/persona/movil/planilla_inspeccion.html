@@ -7,75 +7,48 @@
 {% endblock %}
 
 {% block contenido %}
-
 <div class="container-fluid">
-
-    <div class="tab">
-        {% for item in items %}
-            <button class="tablinks" onclick="openItem(event, 'item')">{{item.nombre}}</button>
-        {% endfor %}
-    </div>
-
-    <br>
     <form  action="{% url 'cargar_inspeccion' tramite.id%}" method="post" >
-        <div class="table-responsive">
-            <table class="table table-bordered table-striped table-hover table-condensed" style="text-align:center;">
-                <thead>
+        <table class="table-bordered table-striped table-hover table-condensed" style="text-align:center;">
+            <thead>
                 <tr>
+                    <th></th>
                     {% for item in items %}
-                    <th>{{item.nombre}}</th>
+                        <th>{{item.nombre}}</th>
                     {% endfor %}
                 </tr>
-                </thead>
-                <tbody>
+            </thead>
+            <tbody>
                 {% for categoria in categorias %}
                     <tr>
-                    {% for item in items %}
-                    <td class="col-sm-1">&nbsp;
-                        {% for detalle in detalles %}
-                        {% if categoria.nombre == detalle.categoria_inspeccion.nombre and item.nombre == detalle.item_inspeccion.nombre %}
-                            {{ detalle.nombre }}<hr>
-                        {% endif %}
+                        <td class="col-xs-1">{{ categoria.nombre }}</td>
+                        {% for item in items %}
+                            <td class="col-sm-4">&nbsp;
+                                {% for detalle in detalles %}
+                                    {% if categoria.nombre == detalle.categoria_inspeccion.nombre and item.nombre == detalle.item_inspeccion.nombre %}
+                                        {{ detalle.nombre }}
+                                        <label class="switch">
+                                            <input name="detalles-{{detalle.pk}}" type="checkbox"><span class="slider round"></span>
+                                        </label>
+                                        <br><hr>
+                                    {% endif %}
+                                {% endfor %}
+                            </td>
                         {% endfor %}
-                    </td>
-                    {% endfor %}
                     </tr>
                 {% endfor %}
-                </tbody>
-            </table>
-        </div>
-
+            </tbody>
+        </table>
         <br>
-        <input type="submit" class="btn btn-primary brn-xs" name="Agendar">
-        <a href="{% url 'inspector_movil' %}">
-            <button class="btn btn-info btn-sm" name="Volver">
-                Volver
-            </button><br>
-        </a>
+            <input type="submit" class="btn btn-primary brn-xs" name="Agendar">
+            <a href="{% url 'inspector_movil' %}">
+                <button class="btn btn-info btn-sm" name="Volver">
+                    Volver
+                </button><br>
+            </a>
     </form>
 </div>
 <style>
-
-@media screen and (max-width: 600px) {
-    table {
-        width:100%;
-    }
-
-    tr:nth-of-type(2n) {
-        background-color: inherit;
-    }
-    tbody td {
-        display: block;
-        text-align:center;
-    }
-    tbody td:before {
-        content: attr(data-th);
-        display: block;
-        text-align:center;
-    }
-}
-
-
 .btn-info {
     color: #fff;
     background-color: #337ab7;
@@ -253,5 +226,4 @@ ul#menu-horizontal li:hover ul{
 
 {% block scripts %}
 {% endblock %}
-
 
