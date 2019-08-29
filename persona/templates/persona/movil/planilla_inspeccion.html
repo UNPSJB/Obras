@@ -29,7 +29,7 @@
                                         {{ detalle.nombre }}
                                         <label class="switch">
                                             <input name="detalles-{{detalle.pk}}" type="checkbox"><span class="slider round"></span>
-                                        </label> 
+                                        </label>
                                         <br><hr>
                                     {% endif %}
                                 {% endfor %}
@@ -39,12 +39,12 @@
                 {% endfor %}
             </tbody>
         </table>
-        <br>                        
+        <br>
             <input type="submit" class="btn btn-primary brn-xs" name="Agendar">
             <a href="{% url 'inspector_movil' %}">
                 <button class="btn btn-info btn-sm" name="Volver">
                     Volver
-                </button><br>        
+                </button><br>
             </a>
     </form>
 </div>
@@ -113,7 +113,7 @@ ul#menu-horizontal li:hover ul{
     float:none;
     width:98px;
     margin:1px 0;
-}    
+}
 
  /* Dropdown Button */
  .dropbtn {
@@ -160,8 +160,8 @@ ul#menu-horizontal li:hover ul{
 /* Change the background color of the dropdown button when the dropdown content is shown */
 .dropdown:hover .dropbtn {
     background-color: #3F5DB1;
-} 
-        
+}
+
 
 .switch {
         position: relative;
@@ -169,10 +169,10 @@ ul#menu-horizontal li:hover ul{
         width: 30px;
         height: 17px;
     }
-        
+
     /* Hide default HTML checkbox */
     .switch input {display:none;}
-        
+
     /* The slider */
     .slider {
         position: absolute;
@@ -185,7 +185,7 @@ ul#menu-horizontal li:hover ul{
         -webkit-transition: .3s;
         transition: .3s;
     }
-        
+
     .slider:before {
         position: absolute;
         content: "";
@@ -197,26 +197,26 @@ ul#menu-horizontal li:hover ul{
         -webkit-transition: .3s;
         transition: .3s;
     }
-        
+
     input:checked + .slider {
         background-color: #2196F3;
     }
-        
+
     input:focus + .slider {
         box-shadow: 0 0 1px #2196F3;
     }
-        
+
     input:checked + .slider:before {
         -webkit-transform: translateX(13px);
         -ms-transform: translateX(13px);
         transform: translateX(13px);
     }
-        
+
     /* Rounded sliders */
     .slider.round {
         border-radius: 34px;
     }
-        
+
     .slider.round:before {
         border-radius: 80%;
     }

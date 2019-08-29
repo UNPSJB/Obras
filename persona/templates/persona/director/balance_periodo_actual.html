@@ -1,0 +1,120 @@
+
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block estilos %}
+
+{% endblock %}
+
+{% block barra %}
+	<ul class="sidebar sidebar-1">
+		<font size="2">
+			<li><a href="{% url 'director'  %}" class="current"><font color="white">Director</font></a></li>
+		</font>
+	</ul>
+{% endblock %}
+{% block contenido %}
+
+<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" >
+	  <div class="panel">
+		<div class="panel-heading box" role="tab" id="headingFive">
+		  <h5 class="panel-title">
+			<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+			  <font color="#ffffff" size="2">Balance periodo actual</font>
+			</a>
+		  </h5>
+		</div>
+          <div id="collapseFive" class="panel-collapse" role="tabpanel" aria-labelledby="headingFive">
+		  <div class="panel-body">
+			<div class="container-fluid">
+				<div class="row">
+                    <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                <label> Seleccione fecha inicial</label>
+                        <input id="datetime" type="date" value="" >
+                </div>
+                       <button class="btn btn-primary btn-sm" type="submit" name="Guardar_fecha1">Seleccionar
+                        </button>
+                    <div class="row">
+                    <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                <label> Seleccione fecha final</label>
+                        <input id="datetime" type="date" value="" >
+                </div>
+                       <button class="btn btn-primary btn-sm" type="submit" name="Guardar_fecha2">Seleccionar
+                        </button>
+            </div>
+          </div>
+                <br>
+                <br>
+                <br>
+                <button class="btn btn-primary btn-sm" type="submit" name="Guardar">
+                            Ver
+                        </button>
+                        <a href="javascript:history.back(-1);">
+                            <button type="button" class="btn btn-primary" name="Volver">
+                                Volver
+                            </button>
+                        </a>
+          </div>
+      </div>
+</div>
+      </div>
+</div>
+
+<!--        <div id="collapseFive" class="panel-collapse" role="tabpanel" aria-labelledby="headingFive">
+		  <div class="panel-body">
+			<div class="container-fluid">
+				<div class="row">
+                    <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                <label> Seleccione fecha inicial</label>
+                <form action="" method="post" enctype="multipart/form-data">
+                    <input name="guardar_fecha1" type="hidden">
+                    <div id="div_id_fecha1" class="form-group">
+                        <div class="controls ">
+                            <select name="fecha1" placeholder="Ingresar la fechainicial" class="select form-control input-sm" id="fecha1" required>
+                                <option value="" selected="#">-&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;</option>
+                                <input name="fecha_alta" required="" placeholder="Ingresar Fecha de Alta" class="datepicker dateinput form-control input-sm hasDatepicker" id="id_fecha_alta" type="text">
+                            </select>
+                        </div>
+                    </div>
+                     <label> Seleccione fecha final</label>
+                <form action="" method="post" enctype="multipart/form-data">
+                    <input name="guardar_fecha2" type="hidden">
+                    <div id="div_id_fecha2" class="form-group">
+                        <div class="controls ">
+                            <select name="fecha2" placeholder="Ingresar la fechafinal" class="select form-control input-sm" id="fecha2" required>
+                                <option value="" selected="#">-&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;</option>
+                            </select>
+                        </div>
+                    </div>
+                        <button class="btn btn-primary btn-sm" type="submit" name="Guardar">
+                            Ver
+                        </button>
+                        <a href="javascript:history.back(-1);">
+                            <button type="button" class="btn btn-primary" name="Volver">
+                                Volver
+                            </button>
+                        </a>
+                </form>
+                </div>
+            </div>
+          </div>
+      </div>
+        </div>-->
+{% endblock %}
+
+
+        {% block scripts %}
+
+	<script type="text/javascript">
+	(function(){
+		$(".datepicker").datepicker({
+				changeDay: true,
+				changeMonth: true,
+				changeYear: true,
+				yearRange: "1990:2030",
+				dateFormat: 'dd/mm/yy'
+		});
+	})();
+	</script>
+
+    {% endblock %}

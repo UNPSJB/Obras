@@ -2,37 +2,92 @@
 {% load staticfiles %}
 {% load crispy_forms_tags%}
 
-{% block estilos %}
-
+{% block barra %}
+  <ul class="sidebar sidebar-1">
+    <font size="2">
+		<li><a class="current"><font color="tomato">Inspector Vista Movil</font> </a></li>
+		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree" onclick='mostrarSubmenu("sin_submenu")'>Cargar Inspeccion</a></li>
+		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour" onclick='mostrarSubmenu("sin_submenu")'>Consultar mi agenda</a></li>
+	</font>
+  </ul>
 {% endblock %}
 
 {% block contenido %}
 
-<ul class="sidebar sidebar-1">
+	<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+      <div class="panel panel-custom">
+		<div class="panel-heading panel-heading-custom box" role="tab" id="headingThree">
+		  <h5 class="panel-title">
+			<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree" onclick='mostrarSubmenu("sin_submenu")'>
+			  <font color="#ffffff" size="2">Cargar Inspeccion</font>
+			</a>
+		  </h5>
+		</div>
+		<div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+		  <div class="panel-body">
+			<div class="container-fluid">
+				<div class="row">
+					<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+						<div class="container-fluid">
+                          <div class="row">
+                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+															{% include "persona/movil/planilla_inspeccion.html" with items=items%}
 
-    <li><a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne"><label id="j">Mis inspecciones agendadas</label></a></li>    
-</ul>
+                            </div>
+                          </div>
+					    </div>
+					</div>
+				</div>
+			</div>
+		  </div>
+		</div>
+	  </div>
 
-<div class="panel panel-custom">
-    <div class="panel-heading panel-heading-custom box" role="tab" id="headingOne">
-      <h5 class="panel-title">
-        <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
-            <label id="b">Mis inspecciones agendadas</label>
-        </a>
-      </h5>
+      <div class="panel panel-custom">
+		<div class="panel-heading panel-heading-custom box" role="tab" id="headingFour">
+		  <h5 class="panel-title">
+			<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour" onclick='mostrarSubmenu("sin_submenu")'>
+			  <font color="#ffffff" size="2">Consultar mis Inspecciones</font>
+			</a>
+		  </h5>
+		</div>
+		<div id="collapseFour" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFour">
+		  <div class="panel-body">
+			<div class="container-fluid">
+				<div class="row">
+					<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                        <div class="container-fluid">
+                          <div class="row">
+                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+								{% block listado_inspector_movil  %}
+                                {% include "persona/inspector_movil/listado_inspector_movil.html" with tramites_del_inspector=ctxlistado_inspector.tramites %}
+                              {% endblock %}
+                            </div>
+                            </div>
+                        </div>
+					</div>
+				</div>
+			</div>
+		  </div>
+		</div>
     </div>
-     <div id="collapseOne" class="panel-collapse collapse " role="tabpanel" aria-labelledby="headingOne">      
-        <div class="table-responsive">
-            {% block listado_inspector_movil  %}
-                {% include "persona/movil/listado_inspector_movil.html" with tramites_del_inspector=ctxlistado_inspector.tramites %}
-            {% endblock %}
-        </div>
-    </div>  
-</div>
-    
+    </div>
+
 {% endblock %}
-    
-    
+
+
 {% block scripts %}
-{% endblock %}
-    
+
+  <script>
+    $("#perfil").fileinput({
+      showCaption: false,
+      browseClass: "btn btn-primary btn-sm",
+      fileType: "any",
+      maxFileCount: 1,
+      browseLabel: 'Cargar nueva foto de perfil',
+      showUpload: false,
+      showRemove: false
+    });
+  </script>
+
+{% endblock%}

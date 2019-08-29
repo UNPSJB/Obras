@@ -125,6 +125,7 @@ urlpatterns = [
     url(r'^ver_barra_materiales', views.ver_barra_materiales, name="ver_barra_materiales"),
 
     url(r'^ver_filtro_obra_fechas', views.ver_filtro_obra_fechas, name="ver_filtro_obra_fechas"),
+    url(r'^ver_sectores_con_mas_obras', views.ver_sectores_con_mas_obras, name="ver_sectores_con_mas_obras"),
 #    url(r'^tipos_obras_periodo_fechas', views.ver_filtro_obra_fechas, name="tipos_obras_periodo_fechas"),
 
     #cajero -------------------------------------------------------------------------------------------------------

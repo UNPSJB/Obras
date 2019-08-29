@@ -1,22 +1,9 @@
-{% extends 'base.html' %}
-{% load staticfiles %}
-{% load crispy_forms_tags%}
-
-<p lang="es">
+<html lang="es">
 <head>
     <meta charset="UTF-8">
-    <title>Reporte de categorias mas frecuentes</title>
+    <title></title>
 </head>
 
-{% block barra %}
-	<ul class="sidebar sidebar-1">
-		<font size="2">
-			<li><a href="{% url 'director'  %}" class="current"><font color="white">Director</font></a></li>
-		</font>
-	</ul>
-{% endblock %}
-
-{% block contenido %}
 <p>
 <div id="printReady">
     <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" >
@@ -38,34 +25,20 @@
             <h3 align="center">
                 TIPOS DE OBRAS MAS FRECUENTES EN RANGO DE FECHAS SELECCIONADO &nbsp;  &nbsp;
             </h3>
-            <hr style="border-width:">
-            <br>
-            <div class="table-responsive">
-                <table align="center" class="table table-bordered table-striped table-hover" style="width:500px;">
-                    <th>Tipo obra</th>
-                    <th>Descripcion</th>
-                    </tr>
-                    </thead>
-                    <tbody>
-                    {% for name,value in tipos_obras %}
-                        {% if value != 0 %}
-                            <tr>
-                                <td class="col-xs-1">{{ name }}</td>
-                                <td class="col-xs-1">{{ value }}</td>
-                            </tr>
-                        {% endif %}
-                    {% endfor %}
-                    </tbody>
-                </table>
-            </div>
-		<br>
-</div>
+                      <hr style="border-width:">
+                      <br>
+                    <div class="table-responsive">
+                        <div align="justify" style="font-size:9px; text-align:left;">
+                      <br>
+                        <table align="center" class="table table-bordered table-striped table-hover" style="width:1000px;">
+                             <br>
+                        <br><br>
+                        <br>
+                        </tr>
 
-    <head>
+                        <tbody>
 
-	<meta charset="utf-8">
-
-	<title>gráfico de pastel con cavas en HTML5</title>
+                        </tbody>
 
 	<style>
 
@@ -83,20 +56,49 @@
 
 	</style>
 
-</head>
 
 
 
 <body>
 
-<div style="float:left;margin-left:50px;">
+<div class="row">
+    <div class="col-xs-4 col-sm-4 col-md-12 col-lg-12" style="float: right; width: 70%;">
+	<form>
+        <canvas id="canvas1"></canvas>
+    </form>
+	<div class="col-xs-4 col-sm-4 col-md-12 col-lg-12" style="float: right; width: 55%;">
+        <form>
+           <h2>Referencias</h2>
+	        <div id="leyenda1" class="leyenda"></div>
+        </form>
+    </div>
+    </div>
 
-	<canvas id="canvas1"></canvas>
-	<br>
-	<h2>Referencias</h2>
-	<div id="leyenda1" class="leyenda"></div>
 
 </div>
+ <div class="table-responsive">
+                <table align="center" class="table table-bordered table-striped table-hover" style="width:500px;">
+                              <br>
+                        <br><br>
+                        <br>
+                            <th p style="color:#FFFFFF"bgcolor="#2c3e50">Tipo de obra</th>
+                            <th p style="color:#FFFFFF"bgcolor="#2c3e50">Cantidad de obras</th>
+
+                        </tr>
+                    {% for name,value in tipos_obras %}
+                        {% if value != 0 %}
+                            <tr>
+                                <td class="col-xs-1">{{ name }}</td>
+                                <td class="col-xs-1">{{ value }}</td>
+                            </tr>
+                        {% endif %}
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+		<br>
+</div>
+
 
 
 <script>
@@ -373,12 +375,18 @@
     </div>
 </div>
 
+
 <div class="row">
-    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-right">
-        <a href="{% url 'director' %}">
-            <input type="button" onclick="printSpecial()" value="Imprimir"></span></input>
-                <button type="submit" value="Atras">Atras</button>
-        </a>
+    <div class="col-xs-4 col-sm-4 col-md-12 col-lg-12" style="float: left; width: 45%;">
+        <form id="printMe" name="printMe">
+            <input type="button" name="printMe" onclick="printSpecial()" value="Imprimir">
+            <link rel="stylesheet" type="text/css" href="base.css" />
+        </form>
+    </div>
+    <div class="col-xs-4 col-sm-4 col-md-12 col-lg-12" style="float: right; width: 45%; margin-top: -20px;">
+        <br><form action='/persona/director'>
+            &nbsp;<Button class="btn btn-primary btn-sm" type="submit" value="Atras">Atras</Button>
+        </form><br>
     </div>
 </div>
 
@@ -442,6 +450,3 @@
 
     </body>
 </html>
-{% endblock %}
-{% block scrip %}
-{% endblock %}

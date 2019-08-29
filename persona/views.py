@@ -2098,6 +2098,31 @@ def ver_filtro_obra_fechas(request):
         pass
     return render(request,'persona/director/filtro_obra_fechas.html')
 
+def ver_sectores_con_mas_obras(request):
+    tramites = Tramite.objects.all()
+    sectores = []
+    list = []
+    for t in tramites:
+        if not t.sector in sectores:
+            sectores.append(t.sector)
+
+    for s in sectores:
+        list.append([s, 0])
+
+    sectores = list
+    list_sectores = []
+
+    for name, value in sectores:
+        v = 0
+        for t in tramites:
+            if t.sector == name:
+                v += 1
+        list_sectores.append([name, v])
+    contexto = {
+        "sectores": list_sectores,
+        "nombres": list
+    }
+    return render(request,'persona/director/ver_sectores_con_mas_obras.html',contexto)
 
 class ReporteTramitesDirectorExcel(TemplateView):
 

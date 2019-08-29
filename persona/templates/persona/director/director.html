@@ -7,11 +7,11 @@
 	<ul class="sidebar sidebar-1">
 		<font size="2">
 			<li><a href="#" class="current"><font color="white">Director</font></a></li>
-			<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="false" aria-controls="collapseFive" onclick='mostrarSubmenu("tareasUsuario"),opcionesUsuario("nada")'>Usuarios <span class="caret"></span></a></li>
+			<!--<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="false" aria-controls="collapseFive" onclick='mostrarSubmenu("tareasUsuario"),opcionesUsuario("nada")'>Usuarios <span class="caret"></span></a></li>
 				<ul class="sidebar sidebar-2" style="display:none;" id="tareasUsuario">
 					<li><a href="#" onclick='opcionesUsuario("alta_usuario")'>Crear Usuario</a></li>
 					<li><a href="#" onclick='opcionesUsuario("modificar_usuario_grupo")'>Cambiar usuario de grupo</a></li>
-				</ul>
+				</ul>-->
 			<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo" onclick='mostrarSubmenu("tareasTramite"),opcionesDatosTramite("nada")'>Datos tramite <span class="caret"></span></a></li>
 				<ul class="sidebar sidebar-2" style="display:none;" id="tareasTramite">
 					<li><a href="#" onclick='opcionesDatosTramite("alta_tipo_documento")'>Crear tipo de documento</a></li>
@@ -33,7 +33,7 @@
 					<li><a href="#" onclick='opcionesInspeccion("alta_detalle_item")'>Crear detalle inspeccion</a></li>
 					<li><a href="#" onclick='opcionesInspeccion("generar_planilla_inspeccion")'>Ver planilla de inspeccion</a></li>
 				</ul>			
-			<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseSix" aria-expanded="false" aria-controls="collapseSix" onclick='mostrarSubmenu("sin_submenu")'>Modificar mis datos personales</a></li>
+			<!--<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseSix" aria-expanded="false" aria-controls="collapseSix" onclick='mostrarSubmenu("sin_submenu")'>Modificar mis datos personales</a></li>-->
 			<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseFour" onclick='mostrarSubmenu("consultasInformes")'>Consultas e Informes <span class="caret"></span></a></li>
 				<ul class="sidebar sidebar-2" style="display:none;" id="consultasInformes">
 					<li><a href="vista_de_tramites">Tramites en curso</a></li>
@@ -43,6 +43,7 @@
 					<!-- <li><a href="materiales_mas_usados">Ver materiales mas utilizados</a></li> -->
 					<li><a href="ver_barra_materiales">Ver materiales mas usados</a></li>
 					<li><a href="ver_filtro_obra_fechas">Ver tipos de obras segun fecha</a></li>
+					<li><a href="ver_sectores_con_mas_obras">Ver sectores con mas obras</a></li>
 				</ul>
 		</font>
 	</ul>
@@ -50,82 +51,6 @@
 
 {% block contenido %}
 	<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" >
-		<div class="panel">
-			<div class="panel-heading box" role="tab" id="headingFive">
-				<h5 class="panel-title">
-					<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="false" aria-controls="collapseFive" onclick='mostrarSubmenu("tareasUsuario")'>
-			  			<font color="#ffffff" size="2">Usuarios</font>
-					</a>
-		  		</h5>
-			</div>
-			<div id="collapseFive" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFive">
-		  		<div class="panel-body">
-					<div class="container-fluid">
-						<div class="row">
-							<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-								<div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
-									<select class="form-control input-sm" id="opcionesDelUsuario" name="Opciones de usuario" onChange="opcionesUsuario(this.value);">
-										<option selected value="nada"> ¿Que desea hacer? </option>
-										<option value="alta_usuario">Crear Usuario</option>
-										<option value="modificar_usuario_grupo">Cambiar usuario de grupo</option>
-									</select>
-								</div>
-							</div>
-						</div>
-					</div>
-			  		<div class="container-fluid" id="alta_usuario" style="display: none;">
-						<div class="row">
-							<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-								<hr>
-								<div style="display:none">
-									{% block alta_administrativo %}
-										{% crispy usuario_persona_form %}
-									{% endblock %}
-								</div>
-								<form method="post" enctype="multipart/form-data"> {% csrf_token %}
-									<div id="persona_administrativo" class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
-									</div>
-									<div id="profesional_administrativo" class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
-									</div>
-									<div id="usuario_administrativo" class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
-									</div>
-									<div id="boton_administrativo" class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="right">
-										<button class="btn btn-danger btn-sm" type="reset" title="Borrar datos del formulario">
-											Limpiar
-										</button>
-									</div>
-									<br>
-								</form>
-							</div>
-						</div>
-			  		</div>
-				<div class="container-fluid" id="modificar_usuario_grupo" style="display: none;">
-					<div class="row">
-						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-							<hr>
-							<div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
-								<form action="" method="">
-									<select class="form-control input-sm" id="" name="" onChange="" title="Selecciona nombre del grupo que vas a modificar" >
-										<option selected value=""> ¿Que usuario desea cambiar? </option>
-										<option value="">Usuario 1</option>
-										<option value="">Usuario 2</option>
-										<option value="">Usuario 3</option>
-									</select>
-								</form>
-							</div>
-						</div>
-						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-							<hr>
-							{% block cambiar_usuario_grupo %}
-								{% include "persona/director/cambiar_usuario_de_grupo.html" %}
-							{% endblock %}
-						</div>
-					</div>
-				</div>
-		  	</div>
-		</div>
-	</div>
-
 	<div class="panel">
 		<div class="panel-heading box" role="tab" id="headingTwo">
 			<h5 class="panel-title">
@@ -445,7 +370,7 @@
 			</div>
 		</div>
 	</div>
-
+<!--
 	<div class="panel">
 		<div class="panel-heading box" role="tab" id="headingSix">
 			<h5 class="panel-title">
@@ -502,9 +427,9 @@
 				</div>
 		  	</div>
 		</div>
-	</div>
+	</div>-->
 
-	<div class="panel">
+<!--	<div class="panel">
 		<div class="panel-heading box" role="tab" id="headingOne">
 			<h5 class="panel-title">
 				<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne" onclick='mostrarSubmenu("tareasInformes")'>
@@ -518,7 +443,7 @@
 					<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 						<div class="col-xs-12 col-sm-12 col-md-3 col-lg-3">
 							<select class="form-control input-sm" id="opcionesInformes" name="Opciones de Informes" onchange="opcionesInformes(this.value)">
-								<option selected value="nada">--------------</option>
+								<option selected value="nada">&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;</option>
 								<option value="alta_columna">Categoria mas frecuente</option>
 								<option value="alta_columna">Tipos de obras mas frecuentes</option>
 								<option value="alta_columna">Profesionales mas requeridos</option>
@@ -529,15 +454,15 @@
 				</div>
 			</div>
 		</div>
-		<!-- aca irian los submenus -->
+		&lt;!&ndash; aca irian los submenus &ndash;&gt;
 		<div class="container-fluid" id="ver_categorias_mas_frecuentes" style="display:none;">
 			<div class="row">
 				<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">					
 				</div>
 			</div>
 		</div>
-		<!-- uno por cada submenu-->
-	</div>
+		&lt;!&ndash; uno por cada submenu&ndash;&gt;
+	</div>-->
 </div>
 
 {% endblock %}

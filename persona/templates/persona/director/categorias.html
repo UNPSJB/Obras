@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block estilos %}
+
+{% endblock %}
+
+
+{% block contenido %}
+
+<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" >
+	  <div class="panel">
+		<div class="panel-heading box" role="tab" id="headingFive">
+		  <h5 class="panel-title">
+			<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+			  <font color="#ffffff" size="2">Categorias mas utilizadas</font>
+			</a>
+		  </h5>
+		</div>
+		  <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                <form action="" method="post" enctype="multipart/form-data">
+                     <button class="btn btn-primary btn-sm" type="submit" name="Ver">
+                            Ver
+                        </button>
+                        <a href="javascript:history.back(-1);">
+                            <button type="button" class="btn btn-primary" name="Volver">
+                                Volver
+                            </button>
+                        </a>
+                </form>
+          </div>
+    </div>
+</form>
+
+{% endblock %}
