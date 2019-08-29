@@ -377,7 +377,16 @@ def documento_de_estado(request, pk_estado):
 
 def planilla_visado_impresa(request, pk_tramite):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
-    planilla = get_object_or_404(PlanillaDeVisado, pk=tramite.id)
+    planillas = PlanillaDeVisado.objects.filter(pk_tramite=tramite.id)# busca las planillas que tengan el id del tramite
+    if (len(planillas) > 1):
+        aux = planillas[0]
+        for p in planillas:
+            if (p.id > aux.id):  #obtiene el ultimo visado del tramite
+                planilla = p
+            else:
+                planilla = aux
+    else:
+        planilla = planillas
     tramites = Tramite.objects.all()
     items = planilla.items.all()
     filas = FilaDeVisado.objects.all()
@@ -1576,7 +1585,16 @@ def documentos_inspector_estado(request, pk_estado):
 
 def generar_planilla_impresa_inspeccion(request, pk_tramite):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
-    planilla = get_object_or_404(PlanillaDeInspeccion, pk=tramite.id)
+    planillas = PlanillaDeInspeccion.objects.filter(tramite_id=tramite.id) #busca las planillas que tengan el id del tramite
+    if (len(planillas)>1):
+        aux=planillas[0]
+        for p in planillas:
+            if (p.id>aux.id):
+                planilla=p
+            else:
+                planilla=aux
+    else:
+        planilla=planillas
     items = ItemInspeccion.objects.all()
     categorias = CategoriaInspeccion.objects.all()
     detalles = planilla.detalles.all()
@@ -1587,12 +1605,12 @@ def generar_planilla_impresa_inspeccion(request, pk_tramite):
         'detalles': detalles,
     }
     return render(request, 'persona/inspector/generar_planilla_impresa_inspeccion.html',{
-        'tramite': tramite, 
-        'planilla': planilla, 
-        'items': items, 
-        'categorias': categorias,
-        'detalles': detalles
-        })
+       'tramite': tramite,
+       'planilla': planilla,
+       'items': items,
+       'categorias': categorias,
+       'detalles': detalles
+       })
 
 #REPORTES INSPECTOR //DE TODOS LOS LISTADOS HICE REPORTES
 
@@ -1718,7 +1736,7 @@ def inspeccion_final(request,pk_tramite):
 
 def completar_inspeccion_final(request,pk_tramite):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
-    id_tramite = int(pk_tramite)
+   # id_tramite = int(pk_tramite)
     planilla = PlanillaDeInspeccion()
     planilla.tramite = tramite
     planilla.save()
@@ -1756,7 +1774,7 @@ def ver_inspecciones(request, pk_tramite):
     inspecciones = []
     for p in PlanillaDeInspeccion.objects.all():
         if (p.tramite.pk == int(pk_tramite)):
-            inspecciones.append(p)              
+            inspecciones.append(p)
     items = ItemInspeccion.objects.all()
     categorias = CategoriaInspeccion.objects.all()
     contexto = {
