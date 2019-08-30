@@ -21,28 +21,29 @@ class FormularioPersona(forms.ModelForm):
         super(FormularioPersona, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.add_input(Submit(self.SUBMIT, 'Enviar Solicitud'))
-        #self.helper.form_tag = False
         for field_name in self.fields:
             field = self.fields.get(field_name)
             if field:
                 if type(field.widget) in (forms.TextInput, forms.DateInput):
                     field.widget = forms.TextInput(attrs={'placeholder': "Ingresar " + str(field.label)})
 
-        self.fields['mail'].widget.attrs['placeholder'] = "Ingresar Mail"
         self.fields['dni'].widget.attrs['placeholder'] = "Ingresar Dni"
         self.fields['dni'].widget.attrs['max'] = "99999999"
         self.fields['dni'].widget.attrs['min'] = "9999999"
+        self.fields['dni'].widget.attrs['title'] = "Ingresar Nro de documento"
         self.fields['cuil'].widget.attrs['pattern'] = "^[0-9]{2}-[0-9]{8}/[0-9]$"
         self.fields['cuil'].widget.attrs['title'] = "Ingresar Cuil con formato xx-xxxxxxxx/x"
         self.fields['cuil'].widget.attrs['placeholder'] = "Ingresar Cuil - Formato: xx-xxxxxxxx/x"
-        self.fields['dni'].widget.attrs['title'] = "Ingresar Nro de documento"
         self.fields['nombre'].widget.attrs['title'] = "Ingresar Nombre"
+        self.fields['nombre'].widget.attrs['pattern'] = "^[A-Za-z]{0,50}[A-Za-z ]{0,50}"
         self.fields['apellido'].widget.attrs['title'] = "Ingresar Apellido"
+        self.fields['apellido'].widget.attrs['pattern'] = "^[A-Za-z]{0,50}[A-Za-z ]{0,50}"
         self.fields['telefono'].widget.attrs['title'] = "Ingresar Nro de Telefono"
+        self.fields['telefono'].widget.attrs['pattern'] = "^[0-9]{0,15}"
         self.fields['domicilio'].widget.attrs['title'] = "Ingresar Domicilio"
+        self.fields['domicilio'].widget.attrs['pattern'] = "^[A-Za-z]{0,50}[A-Za-z ]{0,50} [0-9]{0,5}$"
         self.fields['mail'].widget.attrs['title'] = "Ingresar Mail"
-        self.fields['nombre'].widget.attrs['pattern'] = "[A-Za-z]{0,50}"
-        self.fields['apellido'].widget.attrs['pattern'] = "[A-Za-z]{0,50}"
+        self.fields['mail'].widget.attrs['placeholder'] = "Ingresar Mail - Formato: xxxxxxx@xxx.xxx"
 
     def clean_dni(self):
         dato = self.cleaned_data['dni']
