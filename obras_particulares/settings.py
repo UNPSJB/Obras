@@ -159,6 +159,6 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_PORT = 25
 
 # Optional SMTP authentication information for EMAIL_HOST.
-EMAIL_HOST_USER = 'infosopunpsjb@gmail.com'
-EMAIL_HOST_PASSWORD = 'unpsjb2016'
+EMAIL_HOST_USER = 'desarrolloobrasfacu@gmail.com'#os.environ["EMAILUSER"]
+EMAIL_HOST_PASSWORD ='obras1234' #os.environ["EMAILPASSWORD"]
 EMAIL_USE_TLS = True
