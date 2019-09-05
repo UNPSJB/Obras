@@ -30,7 +30,7 @@
                 <div class="row" style="color:#fff;">
                   <div class=" col-xs-12 col-sm-12 col-md-12 col-lg-12">
                     <ol>
-                      <label>PADRON:</h2></label>
+                      <label>PADRON:</label>
                       <li> {{tramite.parcela}}</li>
                       <label>DATOS PROPIETARIO:</label>
                       <li> {{tramite.propietario.persona}}</li>
@@ -112,7 +112,7 @@
               <div class="form-group">
                 <label for="id_monto_a_pagar">Monto:</label>
                 <input type="hidden" id="id_tram" value="{{tramite.id}}">
-                <input class="form-control input-sm" id="id_monto_a_pagar" name="monto" type="number" step="any" placeholder="Ingresar monto" title="Monto" min=0 maxlength="10" value="ingresar monto"/>
+                <input class="form-control input-sm" id="id_monto_a_pagar" name="monto" type="number" step="any" placeholder="Ingresar monto" title="Monto" min=0 maxlength="10" value="ingresar monto" required/>
               </div>
               <button class="btn btn-primary btn-sm" type="submit" title="Aprobar el visado" name="Aprobar el visado">
                 Aprobar visado

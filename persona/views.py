@@ -377,7 +377,7 @@ def documento_de_estado(request, pk_estado):
 
 def planilla_visado_impresa(request, pk_tramite):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
-    planillas = PlanillaDeVisado.objects.filter(pk_tramite=tramite.id)# busca las planillas que tengan el id del tramite
+    planillas = PlanillaDeVisado.objects.filter(tramite_id=tramite.id)# busca las planillas que tengan el id del tramite
     if (len(planillas) > 1):
         aux = planillas[0]
         for p in planillas:
@@ -1133,21 +1133,38 @@ def ver_planilla_visado(request):
 
 def generar_planilla_impresa(request, pk_tramite):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
-    planilla = get_object_or_404(PlanillaDeVisado, pk=tramite.id)
-    items = planilla.items.all()
+    planillas = PlanillaDeVisado.objects.filter(tramite_id=tramite.id)# busca las planillas que tengan el id del tramite
+    if (len(planillas) > 1):
+        aux = planillas[0]
+        for p in planillas:
+            if (p.id > aux.id):  #obtiene el ultimo visado del tramite
+                planilla = p
+            else:
+                planilla = aux
+    else:
+        planilla = planillas
     filas = FilaDeVisado.objects.all()
     columnas = ColumnaDeVisado.objects.all()
-    elementos = planilla.elementos.all()
+    try:
+        elementos = planilla.elementos.all()
+        items = planilla.items.all()
+    except:
+        contexto = {
+            'tramite': tramite,
+            'planilla': planilla,
+            'filas': filas,
+            'columnas': columnas,
+        }
+        return render(request, 'persona/visador/generar_planilla_impresa.html', contexto)
     contexto = {
+        'tramite':tramite,
         'planilla': planilla,
         'filas': filas,
         'columnas': columnas,
         'items': items,
         'elementos': elementos,
     }
-    return render(request, 'persona/visador/generar_planilla_impresa.html',
-                  {'tramite': tramite, 'planilla': planilla, 'filas': filas, 'columnas': columnas,
-                   'elementos': elementos, 'items': items})
+    return render(request, 'persona/visador/generar_planilla_impresa.html',contexto)
 
 def planilla_visado(request, pk_tramite):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
@@ -1597,20 +1614,24 @@ def generar_planilla_impresa_inspeccion(request, pk_tramite):
         planilla=planillas
     items = ItemInspeccion.objects.all()
     categorias = CategoriaInspeccion.objects.all()
-    detalles = planilla.detalles.all()
+    try:
+        detalles = planilla.detalles.all()
+    except:
+        contexto = {
+            'tramite':tramite,
+            'planilla': planilla,
+            'items': items,
+            'categorias': categorias,
+        }
+        return render(request, 'persona/inspector/generar_planilla_impresa_inspeccion.html', contexto)
     contexto = {
+        'tramite':tramite,
         'planilla': planilla,
         'items': items,
         'categorias': categorias,
         'detalles': detalles,
     }
-    return render(request, 'persona/inspector/generar_planilla_impresa_inspeccion.html',{
-       'tramite': tramite,
-       'planilla': planilla,
-       'items': items,
-       'categorias': categorias,
-       'detalles': detalles
-       })
+    return render(request, 'persona/inspector/generar_planilla_impresa_inspeccion.html',contexto)
 
 #REPORTES INSPECTOR //DE TODOS LOS LISTADOS HICE REPORTES
 
