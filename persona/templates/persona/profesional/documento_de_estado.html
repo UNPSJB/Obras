@@ -73,6 +73,10 @@
                                                 <div class="col-md-4 col-sm-5 col-xs-4 text-center">
                                                     <button type="button" class="btn btn-primary btn-md" data-toggle="modal" data-target="#{{planilla.id}}">
                                                         <span class="glyphicon glyphicon-search" aria-hidden="true"> Ver</span>
+
+                                                        <a href="javascript:history.back(-1);">
+                                                        <button  class="btn btn-primary" type="submit" value="Atras">Volver</button>
+                                                        </a>
                                                     </button>
                                                 </div>
                                                 <div class="modal" id="{{planilla.id}}" role="document">
@@ -88,17 +92,9 @@
                                                                     {% block contenido_tramites_visados%}
                                                                         {% include "persona/profesional/planilla_visado_impresa.html" with tramites=ctxvisadosprofesional.visados_del_profesional %}
                                                                     {% endblock %}
+
                                                                     </div>
                                                                     <br>
-                                                                    <div class="row">
-                                                                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-center">
-                                                                            <button type="button" class="btn btn-info btn-md " data-dismiss="modal">Cerrar</button>
-                                                                        </div>
-                                                                    </div>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-											            <br>
                                                     </div>
 										        </div>
                                           </div>
@@ -122,13 +118,18 @@
                                 {% for inspeccion in inspecciones %}
                                     <tr>
                                     {% if inspeccion %}
-                                          <td   align="center">{{inspeccion.id}}</td>
-                                          <td   align="center">{{inspeccion.tramite_id}}</td>
+                                          <td  class="col-xs-1" align="center">{{inspeccion.id}}</td>
+                                          <td  class="col-xs-1" align="center">{{inspeccion.tramite_id}}</td>
                                           <td>
+                                              <div>
                                                 <div class="col-md-4 col-sm-5 col-xs-4 text-center">
                                                     <button type="button" class="btn btn-primary btn-md" data-toggle="modal" data-target="#{{inspeccion.id}}">
                                                         <span class="glyphicon glyphicon-search" aria-hidden="true"> Ver</span>
+                                                        <div class="col-md-4 col-sm-5 col-xs-4 text-center">
+                                                        <a href="javascript:history.back(-1);">
+                                                        <button  class="btn btn-primary" type="submit" value="Atras">Volver</button>
                                                     </button>
+
                                                 </div>
                                                 <div class="modal" id="{{inspeccion.id}}" role="document">
                                                     <div class="modal-dialog">
@@ -145,19 +146,14 @@
                                                                         {% endblock %}
                                                                     </div>
                                                                     <br>
-                                                                    <div class="row">
-                                                                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-center">
-                                                                              <button type="button" class="btn btn-info btn-md " data-dismiss="modal">
-                                                                                  Cerrar</button>
-                                                                        </div>
 
-                                                                    </div>
                                                                 </div>
                                                             </div>
                                                             <br>
                                                         </div>
                                                     </div>
                                                 </div>
+                                              </div>
                                           </td>
                                     {% endif %}
                                     </tr>
