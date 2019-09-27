@@ -1,61 +1,58 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load crispy_forms_tags%}
+
 {%block contenido%}
-<p lang="es">
-<head>
-    <meta charset="UTF-8">
-    <title id="tituloVisado">Planilla de visado</title>
-</head>
-</p>
-<p>
     <div id="printReady">
-        <div class="container-fluid">
+        <div class="container-fluid" style="background:white;">
             <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" >
-              <div class="row">
-                  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                      <div style="background-color:2c3e50;">
-                         <img src="/media/imagenes/Escudobanner.png" class="img-responsive" alt="Escudo banner" width="100" height="100">
-                      </div>
-                      <div align="justify" id="municipalidadVisado" style="font-size:9px; text-align:left;">
-                          <br>  &nbsp; MUNICIPALIDAD DE TRELEW
-                          <br>
+                <div class="row">
+                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                        <div style="background-color:2c3e50;">
+                            <img src="/media/imagenes/Escudobanner.png" class="img-responsive" alt="Escudo banner" width="100" height="100">
+                        </div>
+                        <div align="justify" id="municipalidadVisado" style="font-size:9px; text-align:left;">
+                            <br>  &nbsp; MUNICIPALIDAD DE TRELEW
+                            <br>
                           &nbsp; Rivadavia 390 <br>
                           &nbsp; 9100 TRELEW- Provincia del Chubut
-                      </div>
-                          <h3 id="planillaVisado" align="center">
+                        </div>
+                        <h3 id="planillaVisado" align="center">
                               PLANILLA DE VISADO &nbsp;  &nbsp;
-                          </h3>
+                        </h3>
                           <hr style="border-width:">
                           <br>
-                      <div id="rowVisado" class="row">
-                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                          <form action="" >
-                            <div class="row" >
-                              <div class=" col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                                <ol>
-                                  <label>PADRON:</h2></label>
-                                  <li> {{tramite.parcela}}</li>
-                                  <label>DATOS PROPIETARIO:</label>
-                                  <li> {{tramite.propietario.persona}}</li>
-                                  <label>DATOS PROFESIONAL:</label>
-                                  <li> {{tramite.profesional}}</li>
-                                </ol>
-                              </div>
+                        <div id="rowVisado" class="row">
+                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                <form action="" >
+                                    <div class="row" >
+                                        <div class=" col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                            <ol>
+                                                <label>PADRON:</h2></label>
+                                                <li> {{tramite.parcela}}</li>
+                                                <label>DATOS PROPIETARIO:</label>
+                                                <li> {{tramite.propietario.persona}}</li>
+                                                <label>DATOS PROFESIONAL:</label>
+                                                <li> {{tramite.profesional}}</li>
+                                            </ol>
+                                        </div>
+                                    </div>
+                                </form>
                             </div>
-                          </form>
                         </div>
-                      </div>
-                      <div class="table-responsive">
-                          <table align="center" class="table table-bordered table-striped table-hover table-condensed" style="text-align:center;">
-                              <thead>
+                        <div class="table-responsive">
+                            <table align="center" class="table table-bordered table-striped table-hover table-condensed" style="text-align:center;">
+                                <thead>
                                 <tr id="columnasVisado">
                                     <th> </th>
                                     {% for columna in columnas %}
                                         <th>{{columna}}</th>
                                     {% endfor %}
                                 </tr>
-                              </thead>
-                              <tbody>
+                                </thead>
+                                <tbody>
                                 {% for fila in filas %}
-                                <tr id="filasVisado">
+                                    <tr id="filasVisado">
                                     <td class="col-xs-1">{{ fila }}</td>
                                     {% for columna in columnas %}
                                     <td class="col-sm-1">&nbsp;
@@ -70,18 +67,18 @@
                                     {% endfor %}
                                 </tr>
                                 {% endfor %}
-                              </tbody>
-                          </table>
-                        <br>
-                        <div class="table-responsive">
-                            <table class="table-bordered table-striped table-hover table-condensed" style="text-align:center;">
-                                <thead>
+                                </tbody>
+                            </table>
+                            <br>
+                            <div class="table-responsive">
+                                <table class="table-bordered table-striped table-hover table-condensed" style="text-align:center;">
+                                    <thead>
                                 <tr id="columnaBalance">
                                     <th></th>
                                     <th>BALANCE DE SUPERFICIE</th>
                                 </tr>
                                 </thead>
-                                <tbody>
+                                    <tbody>
                                     {% for elemento in planilla.elementos.all %}
                                     <tr id="filasBalance">
                                         <td class="col-xs-1">{{ elemento }}</td>
@@ -93,62 +90,78 @@
                                     </tr>
                                     {% endfor %}
                                 </tbody>
-                            </table>
-                        </div>
-                      </div>
-                  </div>
-              </div>
-            </div>
-            <hr><br>
-        </div>
-    </div>
-</p>
-<div class="container-fluid" id="botones_visado" >
-    <div class="row">
-        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-right">
-
-                <!--<a href="{% url 'profesional' %}">  //  en propietario da error si la url es profesional-->
-                <div class="row">
-                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-center">
-                        <button type="type"  class="btn btn-primary" onclick="printSpecial()"> Imprimir</button>
-                        <button type="button" class="btn btn-info btn-md " data-dismiss="modal">Cerrar</button>
+                                </table>
                             </div>
                         </div>
                     </div>
                 </div>
-
+            </div>
+            <hr>
         </div>
-    </div>
 </div>
-{%endblock%}
- {%block style%}
+<br>
+    <div class="container-fluid" id="botones_visado" >
+
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-center">
+                             <button type="button" class="btn btn-default" onclick="printDiv('printReady')">Imprimir</button>
+                                                <a href="javascript:history.back(-1);">
+                                <button class="btn btn-primary " type="submit" value="Atras">Volver</button>
+                              </a>
+                    </div>
+                </div>
+            </div>
+
+<br>
+<!--input, button, select, textarea, input.btn-xs {
+          display: none!important;
+       }-->
     <style>
-        .dataTables_length, .dataTables_filter, .dataTables_info,.dataTables_wrapper .dataTables_paginate .paginate_button.disabled, .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:hover, .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:active {
+       .dataTables_length, .dataTables_filter, .dataTables_info,.dataTables_wrapper .dataTables_paginate .paginate_button.disabled, .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:hover, .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:active {
           display: none !important;
        }
        th{
           background-color:#2c3e50;
-          color:white;
-       }
-       input, button, select, textarea {
-          display: none;
+          color:red;
        }
        .dataTables_wrapper .dataTables_paginate .paginate_button.current, .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
           display: none;
        }
-
-        #tabla_length{
+       #tabla_length{
         display:none;
-        }
-        #tabla_filter{
+       }
+       #tabla_filter{
         display:none;
-        }
+       }
 
     </style>
-{%endblock%}
-{%block scripts%}
+
+<script>
+    function printDiv(div) {
+    // Create and insert new print section
+
+    var elem = document.getElementById(div);
+    var domClone = elem.cloneNode(true);
+    var $printSection = document.createElement("div");
+    $printSection.id = "printSection";
+    $printSection.appendChild(domClone);
+    $('head').append('<style> select{ display:none;}  #botones_visado{display:none;} .dataTables_wrapper .dataTables_length, .dataTables_wrapper .dataTables_filter, .dataTables_wrapper .dataTables_info, .dataTables_wrapper .dataTables_processing, .dataTables_wrapper .dataTables_paginate label{display: none;} .dataTables_wrapper .dataTables_paginate .paginate_button.disabled, .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:hover, .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:active{display: none;} .dataTables_wrapper .dataTables_paginate .paginate_button{display: none!important;}</style>');
+    //document.body.insertBefore($printSection, document.body.firstChild);
+
+    window.print();
+
+    // Clean up print section for future use
+    var oldElem = document.getElementById("printSection");
+    if (oldElem != null) { oldElem.parentNode.removeChild(oldElem); }
+                          //oldElem.remove() not supported by IE
+
+    return true;
+}
+
+</script>
         <script language="JavaScript">
         var gAutoPrint = true; // Flag for whether or not to automatically call the print function
+        var $printSection;
 
         function printSpecial()
         {

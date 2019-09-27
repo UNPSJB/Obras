@@ -5,20 +5,22 @@
 {% block barra %}
   <ul class="sidebar sidebar-1">
     <font size="2">
-		<li><a class="current"><font color="tomato">Inspector Vista Movil</font> </a></li>
-		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree" onclick='mostrarSubmenu("sin_submenu")'>Cargar Inspeccion</a></li>
-		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour" onclick='mostrarSubmenu("sin_submenu")'>Consultar mi agenda</a></li>
+		<li><a class="current"><font color="white">Inspector Vista Movil</font> </a></li>
+<!--
+		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">Cargar Inspeccion</a></li>
+-->
+		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour" >Consultar mi agenda</a></li>
 	</font>
   </ul>
 {% endblock %}
 
 {% block contenido %}
 
-	<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+	<!--<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
       <div class="panel panel-custom">
 		<div class="panel-heading panel-heading-custom box" role="tab" id="headingThree">
 		  <h5 class="panel-title">
-			<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree" onclick='mostrarSubmenu("sin_submenu")'>
+			<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree" >
 			  <font color="#ffffff" size="2">Cargar Inspeccion</font>
 			</a>
 		  </h5>
@@ -31,7 +33,9 @@
 						<div class="container-fluid">
                           <div class="row">
                             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-															{% include "persona/movil/planilla_inspeccion.html" with items=items%}
+                            &lt;!&ndash;   block cargar_inspeccion
+							include "persona/movil/planilla_inspeccion.html" with items=items
+endblock}&ndash;&gt;
 
                             </div>
                           </div>
@@ -42,11 +46,11 @@
 		  </div>
 		</div>
 	  </div>
-
+-->
       <div class="panel panel-custom">
 		<div class="panel-heading panel-heading-custom box" role="tab" id="headingFour">
 		  <h5 class="panel-title">
-			<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour" onclick='mostrarSubmenu("sin_submenu")'>
+			<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
 			  <font color="#ffffff" size="2">Consultar mis Inspecciones</font>
 			</a>
 		  </h5>
@@ -60,7 +64,7 @@
                           <div class="row">
                             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 								{% block listado_inspector_movil  %}
-                                {% include "persona/inspector_movil/listado_inspector_movil.html" with tramites_del_inspector=ctxlistado_inspector.tramites %}
+                                {% include "persona/movil/listado_inspector_movil.html" with tramites_del_inspector=ctxlistado_inspector.tramites %}
                               {% endblock %}
                             </div>
                             </div>

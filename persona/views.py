@@ -376,19 +376,8 @@ def documento_de_estado(request, pk_estado):
 #     return contexto
 
 def planilla_visado_impresa(request, pk_tramite):
-    tramite = get_object_or_404(Tramite, pk=pk_tramite)
-    planillas = PlanillaDeVisado.objects.filter(tramite_id=tramite.id)# busca las planillas que tengan el id del tramite
-    if (len(planillas) > 1):
-        aux = planillas[0]
-        for p in planillas:
-            if (p.id > aux.id):  #obtiene el ultimo visado del tramite
-                plan = p
-            else:
-                plan= aux
-        planilla = get_object_or_404(PlanillaDeVisado,id=plan.id)  # PlanillaDeVisado.objects.filter(tramite_id=tramite.id)# busca las planillas que tengan el id del tramite
-    else:
-        planilla = get_object_or_404(PlanillaDeVisado,tramite_id=pk_tramite)
-    tramites = Tramite.objects.all()
+    planilla = get_object_or_404(PlanillaDeVisado,id=pk_tramite)
+    tramite = get_object_or_404(Tramite, pk=planilla.tramite_id)
     filas = FilaDeVisado.objects.all()
     columnas = ColumnaDeVisado.objects.all()
     try:
@@ -409,6 +398,32 @@ def planilla_visado_impresa(request, pk_tramite):
              'columnas': columnas,
          }
          return render(request, 'persona/profesional/planilla_visado_impresa.html', contexto)
+
+def planilla_inspeccion_impresa(request, pk_tramite):
+    planilla = get_object_or_404(PlanillaDeInspeccion, id=pk_tramite)
+    tramite=get_object_or_404(Tramite, id=planilla.tramite_id)
+    items = ItemInspeccion.objects.all()
+    categorias = CategoriaInspeccion.objects.all()
+    try:
+        detalles = planilla.detalles.all()
+        contexto = {
+            'tramite': tramite,
+            'planilla': planilla,
+            'items': items,
+            'categorias': categorias,
+            'detalles': detalles,
+        }
+        return render(request, 'persona/profesional/planilla_inspeccion_impresa.html', contexto)
+
+    except:
+        contexto = {
+            'tramite':tramite,
+            'planilla': planilla,
+            'items': items,
+            'categorias': categorias,
+        }
+        return render(request, 'persona/profesional/planilla_inspeccion_impresa.html', contexto)
+
 
 class ReporteTramitesProfesionalPdf(View):
 
@@ -1454,7 +1469,7 @@ from planilla_inspeccion.models import *
 @grupo_requerido('inspector')
 def mostrar_inspector(request):    
     if (request.user_agent.is_mobile): # returns True
-        return redirect('inspector_movil')
+        return redirect('movil')
     contexto = {
         "ctxtramitesvisadosyconinspeccion": tramites_visados_y_con_inspeccion(request),
         "ctxtramitesinspeccionados": tramites_inspeccionados_por_inspector(request),
@@ -2415,13 +2430,25 @@ def listado_comprobantes(request,pk_tramite):
 
 #------------------------------------------------------------------------------------------------------------------
 #movil ---------------------------------------------------------------------------------------------------------
+#
+# def movil_login(request):
+#     return render(request, 'movil/templates/login.html', contexto)
+def es_inspector(usuario):
+    return usuario.groups.filter(name='inspector' or 'jefeinspector').exists()
 
-def movil_login(request):        
-    return render(request, 'movil/templates/login.html', contexto)
+@user_passes_test(es_inspector)
+def mostrar_inspector_movil(request):
+    if (request.user_agent.is_mobile):
+        contexto = {
+            "ctxlistado_inspector":listado_inspector_movil(request)
+        }
+    else:
+        return redirect('inspector')
+    return render(request, 'persona/movil/inspector_movil.html',contexto)
 
 def movil_inspector(request):
     #return render(request, 'persona/movil/inspector.html')
-    return render(request, 'persona/movil/planilla_inspeccion.html')
+    return render(request, 'persona/movil/inspector_movil.html')
 
 def frente_o_fachada(request):
     return render(request,'persona/movil/frente_o_fachada.html')    
@@ -2434,19 +2461,6 @@ def cocinas(request):
 
 def techos(request):    
     return render(request,'persona/movil/techos.html')                
-
-def es_inspector(usuario):
-    return usuario.groups.filter(name='inspector' or 'jefeinspector').exists()
-
-@user_passes_test(es_inspector)
-def mostrar_inspector_movil(request):
-    if (request.user_agent.is_mobile):
-        contexto = {
-            "ctxlistado_inspector":listado_inspector_movil(request)
-        }
-    else:
-        return redirect('inspector')
-    return render(request, 'persona/movil/inspector_movil.html',contexto)        
 
 def listado_inspector_movil(request):
     usuario = request.user

@@ -30,7 +30,7 @@ urlpatterns = [
     url(r'^profesional/estado_tramite$', views.listado_tramites_de_profesional, name="estado_tramite"),
     url(r'^documento_de_estado/(?P<pk_estado>\d+)/$', views.documento_de_estado, name="documento_de_estado"),
     url(r'^reporte_tramites_profesional_pdf/$', login_required(ReporteTramitesProfesionalPdf.as_view()), name="reporte_tramites_profesional_pdf"),
-    #url(r'^generar_planilla_impresa/(?P<pk_tramite>\d+)/$', views.generar_planilla_impresa, name="generar_planilla_impresa"),
+    url(r'^planilla_inspeccion_impresa/(?P<pk_tramite>\d+)/$', views.planilla_inspeccion_impresa, name="planilla_inspeccion_impresa"),
     url(r'^planilla_visado_impresa/(?P<pk_tramite>\d+)/$', views.planilla_visado_impresa, name="planilla_visado_impresa"),
 
     # administrativo ------------------------------------------------------------------------------------------------
@@ -142,7 +142,8 @@ urlpatterns = [
 
 
     #movil -------------------------------------------------------------------------------------------------------
-    url(r'^movil$', views.movil_inspector, name="movil_inspector"),
+    url(r'^movil$', views.mostrar_inspector_movil, name="movil"),
+    #url(r'^movil$', views.movil_inspector, name="movil_inspector"),
     url(r'^inspector_movil$', views.mostrar_inspector_movil, name="inspector_movil"),
     url(r'^inspector_movil/listado_inspector_movil$', views.listado_inspector_movil, name="listado_inspector_movil"),
 

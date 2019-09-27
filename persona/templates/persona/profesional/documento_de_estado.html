@@ -71,40 +71,53 @@
                                           <td>
                                               <div>
                                                 <div class="col-md-4 col-sm-5 col-xs-4 text-center">
-                                                    <button type="button" class="btn btn-primary btn-md" data-toggle="modal" data-target="#{{planilla.id}}">
+                                                     <a  href="{% url 'planilla_visado_impresa' planilla.id %}">
+
+                                                    <button type="button" class="btn btn-primary btn-md">
                                                         <span class="glyphicon glyphicon-search" aria-hidden="true"> Ver</span>
 
-                                                        <a href="javascript:history.back(-1);">
-                                                        <button  class="btn btn-primary" type="submit" value="Atras">Volver</button>
-                                                        </a>
                                                     </button>
+
+                            </a>
+                                                       <!--<a href="javascript:history.back(-1);">-->
+                                                       <!--<button  class="btn btn-primary" type="submit" value="Atras">Volver</button>-->
+                                                        <!--</a>-->
+                                                </div>
+                                                  <!--<div class="col-md-4 col-sm-5 col-xs-4 text-center">
+                                                                                                        <a href="javascript:history.back(-1);">
+                                                       <button  class="btn btn-primary" type="submit" value="Atras">Volver</button>
+                                                        </a>
                                                 </div>
                                                 <div class="modal" id="{{planilla.id}}" role="document">
                                                     <div class="modal-dialog">
                                                         <div class="modal-content">
                                                             <div class="modal-header">
-                                                              <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                                              <h4 class="modal-title">Planilla de Visado</h4>
+                                                              <button type="button" class="close" data-dismiss="modal">X</button>
+                                                              <h4 class="modal-title">Planillita de Visado</h4>
                                                             </div>
                                                             <div class="modal-body">
                                                                 <div id="modalContainer1" class="container-fluid">
                                                                     <div id="container-visado">
-                                                                    {% block contenido_tramites_visados%}
-                                                                        {% include "persona/profesional/planilla_visado_impresa.html" with tramites=ctxvisadosprofesional.visados_del_profesional %}
-                                                                    {% endblock %}
-
+                                                                    block contenido_tramites_visados
+                                                                         include "persona/profesional/planilla_visado_impresa.html" with tramites=ctxvisadosprofesional.visados_del_profesional
+                                                                     endblock
                                                                     </div>
                                                                     <br>
+                                                                </div>
+                                                            </div>
+                                                        </div>
                                                     </div>
-										        </div>
-                                          </div>
+                                                </div>-->
+                                              </div>
                                           </td>
                                     {% endif %}
                                      </tr>
                                 {% endfor %}
                             </tbody>
                         </table>
+
                     {%endif%}
+
                     {%if inspecciones %}
                         <table class="table-bordered table-striped table-hover table-condensed">
                             <thead>
@@ -122,16 +135,15 @@
                                           <td  class="col-xs-1" align="center">{{inspeccion.tramite_id}}</td>
                                           <td>
                                               <div>
-                                                <div class="col-md-4 col-sm-5 col-xs-4 text-center">
-                                                    <button type="button" class="btn btn-primary btn-md" data-toggle="modal" data-target="#{{inspeccion.id}}">
-                                                        <span class="glyphicon glyphicon-search" aria-hidden="true"> Ver</span>
-                                                        <div class="col-md-4 col-sm-5 col-xs-4 text-center">
-                                                        <a href="javascript:history.back(-1);">
-                                                        <button  class="btn btn-primary" type="submit" value="Atras">Volver</button>
-                                                    </button>
+                                                    <div class="col-md-4 col-sm-5 col-xs-4 text-center">
+                                                        <a  href="{% url 'planilla_inspeccion_impresa' inspeccion.id %}">
+                                                            <button type="button" class="btn btn-primary btn-md">
+                                                                <span class="glyphicon glyphicon-search" aria-hidden="true"> Ver</span>
+                                                            </button>
+                                                         </a>
+                                                    </div>
 
-                                                </div>
-                                                <div class="modal" id="{{inspeccion.id}}" role="document">
+                                                <!--<div class="modal" id="{{inspeccion.id}}" role="document">
                                                     <div class="modal-dialog">
                                                         <div class="modal-content">
                                                             <div class="modal-header">
@@ -141,9 +153,9 @@
                                                             <div class="modal-body">
                                                                 <div id="modalContainer" class="container-fluid">
                                                                     <div id="container-inspeccion">
-                                                                        {% block contenido_tramites_inspeccionados%}
-                                                                            {% include 'persona/profesional/planilla_inspeccion_impresa.html' %}
-                                                                        {% endblock %}
+                                                                        contenido_tramites_inspeccionados
+                                                                             include 'persona/profesional/planilla_inspeccion_impresa.html'
+                                                                         endblock
                                                                     </div>
                                                                     <br>
 
@@ -152,7 +164,8 @@
                                                             <br>
                                                         </div>
                                                     </div>
-                                                </div>
+                                                </div>-->
+
                                               </div>
                                           </td>
                                     {% endif %}
@@ -161,6 +174,7 @@
                             </tbody>
                         </table>
                     {%endif%}
+
                     <!-- sin modal
                     for planilla in planillas
                      if planilla
@@ -303,18 +317,14 @@
                            <!--{% endfor %}-->
 
                      <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="right">
-                       <!-- <a href="javascript:history.back(-1);">
-                            <button type="button" class="btn btn-primary" name="Volver">
-                                Volver
-                            </button>-->
-                            <!-- ACA DEBERIA LLAMAR A LA URL PARA IMPRIMIR LA PLANILLA-->
-                        {% if planilla or inspeccion %}
+                       <div class="row">
+                           <br>
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-center">
                         <a href="javascript:history.back(-1);">
-                            <button type="button" class="btn btn-primary" name="Imprimir">
-                                Imprimir
-                            </button>
-                        </a>
-                        {% endif %}
+                              <button class="btn btn-primary " type="submit" value="Atras">Volver</button>
+                          </a>
+                    </div>
+            </div>
                      </div>
 			    </div>
 			</div>
