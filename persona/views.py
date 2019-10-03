@@ -1469,7 +1469,7 @@ from planilla_inspeccion.models import *
 @grupo_requerido('inspector')
 def mostrar_inspector(request):    
     if (request.user_agent.is_mobile): # returns True
-        return redirect('movil')
+        return redirect('movil_')
     contexto = {
         "ctxtramitesvisadosyconinspeccion": tramites_visados_y_con_inspeccion(request),
         "ctxtramitesinspeccionados": tramites_inspeccionados_por_inspector(request),
@@ -2474,12 +2474,19 @@ def listado_inspector_movil(request):
 
 def planilla_inspeccion_movil(request,pk_tramite):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
+    movil=es_movil(request)
     contexto = {'tramite': tramite}
     detalles = DetalleDeItemInspeccion.objects.all()        
     items = ItemInspeccion.objects.all()
     categorias = CategoriaInspeccion.objects.all()
-    contexto = {"tramite":tramite, "items":items,"detalles":detalles,"categorias":categorias}
+    contexto = {"tramite":tramite, "items":items,"detalles":detalles,"categorias":categorias,"movil":movil}
     return render(request, 'persona/movil/planilla_inspeccion.html', contexto)
+
+def es_movil(request):
+    if (request.user_agent.is_mobile):
+        return True
+    else:
+        return False
 
 def inspecciones_realizadas_durante_el_anio(request):
     year=date.today()

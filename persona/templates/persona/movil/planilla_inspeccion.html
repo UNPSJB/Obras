@@ -8,48 +8,128 @@
 
 {% block contenido %}
 <div class="container-fluid">
-    <form  action="{% url 'cargar_inspeccion' tramite.id%}" method="post" >
-        <table class="table-bordered table-striped table-hover table-condensed" style="text-align:center;">
-            <thead>
-                <tr>
-                    <th></th>
-                    {% for item in items %}
-                        <th>{{item.nombre}}</th>
-                    {% endfor %}
-                </tr>
-            </thead>
-            <tbody>
-                {% for categoria in categorias %}
-                    <tr>
-                        <td class="col-xs-1">{{ categoria.nombre }}</td>
+
+        <div class="row">
+
+            {% if movil %}
+
+            <div class="col-sm-1 col-xs-1 col-md-1"></div>
+            <div class="col-sm-10 col-xs-10 col-md-10 ">
+                <form  action="{% url 'cargar_inspeccion' tramite.id%}" method="post" >
+                    {% for categoria in categorias %}
+
+
+                    <h3>{{ categoria.nombre }}</h3>
+
+                    <table class="table-bordered table-striped table-hover table-condensed" style="text-align:center;">
                         {% for item in items %}
-                            <td class="col-sm-4">&nbsp;
+                        <thead>
+                        <tr>
+
+                            <th>{{item.nombre}}</th>
+
+                        </tr>
+                        </thead>
+                        <tbody>
+
+                        <tr>
+
+                            <td class="col-sm-6">&nbsp;
                                 {% for detalle in detalles %}
-                                    {% if categoria.nombre == detalle.categoria_inspeccion.nombre and item.nombre == detalle.item_inspeccion.nombre %}
+                                {% if categoria.nombre == detalle.categoria_inspeccion.nombre and item.nombre == detalle.item_inspeccion.nombre %}
+                                <div>
+                                    <div class="col-xs-8 col-sm-8 col-md-8">
                                         {{ detalle.nombre }}
+                                    </div>
+
+                                    <div class="col-xs-4 col-sm-4 col-md-4">
                                         <label class="switch">
                                             <input name="detalles-{{detalle.pk}}" type="checkbox"><span class="slider round"></span>
                                         </label>
-                                        <br><hr>
-                                    {% endif %}
+                                    </div>
+                                    <br>
+                                    <hr>
+                                </div>
+                                {% endif %}
                                 {% endfor %}
                             </td>
+
+                        </tr>
+                        </tbody>
+                        {% endfor %}
+                    </table>
+
+                    {% endfor %}
+
+<br>
+                        <div class="col-sm-6 col-xs-6 col-md-6">
+
+                <input type="submit" class="btn btn-primary brn-xs" name="Agendar">
+                    </div>
+                <div class="col-sm-6 col-xs-6 col-md-6">
+        <a href="{% url 'inspector_movil' %}">
+            <button class="btn btn-info btn-sm" name="Volver">
+                Volver
+            </button><br>
+        </a>
+    </div>
+                </form>
+            </div>
+            <div class="col-sm-1 col-xs-1 col-md-1">
+
+            </div>
+            {%else%}
+            <form  action="{% url 'cargar_inspeccion' tramite.id%}" method="post" >
+                <table class="table-bordered table-striped table-hover table-condensed" style="text-align:center;">
+                    <thead>
+                    <tr>
+                        <th></th>
+                        {% for item in items %}
+                        <th>{{item.nombre}}</th>
                         {% endfor %}
                     </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-        <br>
-            <input type="submit" class="btn btn-primary brn-xs" name="Agendar">
+                    </thead>
+                    <tbody>
+                    {% for categoria in categorias %}
+                    <tr>
+                        <td class="col-xs-1">{{ categoria.nombre }}</td>
+                        {% for item in items %}
+                        <td class="col-sm-4">&nbsp;
+                            {% for detalle in detalles %}
+                            {% if categoria.nombre == detalle.categoria_inspeccion.nombre and item.nombre == detalle.item_inspeccion.nombre %}
+                            {{ detalle.nombre }}
+                            <label class="switch">
+                                <input name="detalles-{{detalle.pk}}" type="checkbox"><span class="slider round"></span>
+                            </label>
+                            <br><hr>
+                            {% endif %}
+                            {% endfor %}
+                        </td>
+                        {% endfor %}
+                    </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+                <br>
+                    <div class="col-sm-6 col-xs-6 col-md-6">
 
-    </form>
+                <input type="submit" class="btn btn-primary brn-xs" name="Agendar">
+                    </div>
+                <div class="col-sm-6 col-xs-6 col-md-6">
+        <a href="{% url 'inspector_movil' %}">
+            <button class="btn btn-info btn-sm" name="Volver">
+                Volver
+            </button><br>
+        </a>
+    </div>
+            </form>
+            {%endif%}
+        </div>
+    </div>
 
-      <a href="{% url 'inspector_movil' %}">
-                <button class="btn btn-info btn-sm" name="Volver">
-                    Volver
-                </button><br>
-            </a>
 </div>
+</div>
+
 <style>
 .btn-info {
     color: #fff;

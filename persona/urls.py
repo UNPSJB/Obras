@@ -142,7 +142,7 @@ urlpatterns = [
 
 
     #movil -------------------------------------------------------------------------------------------------------
-    url(r'^movil$', views.mostrar_inspector_movil, name="movil"),
+    url(r'^movil$', views.mostrar_inspector_movil, name="movil_"),
     #url(r'^movil$', views.movil_inspector, name="movil_inspector"),
     url(r'^inspector_movil$', views.mostrar_inspector_movil, name="inspector_movil"),
     url(r'^inspector_movil/listado_inspector_movil$', views.listado_inspector_movil, name="listado_inspector_movil"),
