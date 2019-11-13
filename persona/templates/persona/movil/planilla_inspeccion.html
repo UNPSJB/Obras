@@ -6,6 +6,16 @@
 
 {% endblock %}
 
+{% block barra %}
+<div id="noImprimir">
+	<ul class="sidebar sidebar-1">
+		<font size="2">
+			<li><a href="{% url 'inspector'  %}" class="current"><font color="white">Inspector</font></a></li>
+		</font>
+	</ul>
+</div>
+{% endblock %}
+
 {% block contenido %}
 <div class="container-fluid">
 
@@ -302,6 +312,34 @@ ul#menu-horizontal li:hover ul{
     .slider.round:before {
         border-radius: 80%;
     }
+
+    html {
+  height: 1000%;
+}
+body {
+  height: 1000vh;
+  display: flex;
+  flex-direction: column;
+}
+div.container {
+  max-width: 1000px;
+  background-color: #aaa;
+  flex-grow: 1;
+  display: flex;
+  flex-direction: column;
+  font-family: 'Roboto', sans-serif;
+  font-size: 20px;
+  line-height: 1.5;
+}
+div.content {
+  margin: 8px;
+  flex-grow: 1;
+}
+div.header,
+div.footer {
+  background-color: black;
+  color: #fff;
+}
 </style>
 {% endblock %}
 
