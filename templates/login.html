@@ -14,7 +14,7 @@
 
 
 
-	<form action="{%url "login"%}" method="POST" >
+	<form action="{%url 'login'%}" method="POST" >
 		{{ form | crispy }}
 		{% csrf_token %}
 		<input class="btn btn-primary btn-sm" type="submit" value="Ingresar">

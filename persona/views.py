@@ -1858,7 +1858,8 @@ def mostrar_director(request):
     columnas = ColumnaDeVisado.objects.all()
     itemsVisados = ItemDeVisado.objects.all()
     elementos = Elemento_Balance_Superficie.objects.all()
-    values = {"items":items, "categorias":categorias, "detalles":detalles, "filas": filas, "columnas":columnas, "itemsVisados":itemsVisados, "elementos":elementos}
+    values = {"items":items, "categorias":categorias, "detalles":detalles, "filas": filas, "columnas":columnas, "itemsVisados":itemsVisados, "elementos":elementos, "ctxtramites_anuales":inspecciones_realizadas_durante_el_anio(request),
+}
     FORMS_DIRECTOR.update({(k.NAME, k.SUBMIT): k for k in [
         pforms.PlanillaDeVisadoFormFactory(pmodels.FilaDeVisado.objects.all(), pmodels.ColumnaDeVisado.objects.all()),
           ]})
@@ -2490,13 +2491,10 @@ def es_movil(request):
 
 def inspecciones_realizadas_durante_el_anio(request):
     year=date.today()
-    tramitesEstado=Estado.objects.filter(timestamp__range=(datetime.date(year.year,01,01), datetime.date(year.year,12,12)))
-    tramitesFecha=filter(lambda t:(t.tipo==6),tramitesEstado)
-    tramitesConInspeccion=Tramite.objects.en_estado(ConInspeccion)
+    tramites1=Tramite.objects.all()
+    tramitesEstado=Estado.objects.filter(timestamp__range=(datetime.date(year.year,01,01), datetime.date(year.year,12,12)), tipo=(6))
     tramites=[]
-    for i in range (0, len(tramitesConInspeccion)):
-          for i in range(0, len(tramitesFecha)):
-             aux=tramitesConInspeccion.filter(id=tramitesFecha[i].tramite_id).exclude(id__isnull=True)
-             tramites.append(aux)
-            #len o count de tramites
-    return tramites
+    for i in range(0, len(tramitesEstado)):
+        aux=tramites1.filter(id=tramitesEstado[i].tramite_id).exclude(id__isnull=True)
+        tramites.append({"tramite": aux, "fecha": tramitesEstado[i].timestamp})
+    return {"tramites":tramites}

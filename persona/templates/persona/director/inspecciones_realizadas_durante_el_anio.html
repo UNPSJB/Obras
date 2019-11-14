@@ -1,0 +1,107 @@
+{% load staticfiles %}
+
+{% block contenido_inspecciones_realizadas_durante_el_anio %}
+<div class="container-fluid">
+
+    <div class="table-responsive">
+        <table align="center" class="table table-bordered table-striped table-hover">
+            <thead>
+            <tr>
+                <th>Tramite</th>
+                <th>Propietario</th>
+                <th>Profesional</th>
+                <th>Fecha</th>
+            </tr>
+            </thead>
+            <tbody>
+            {% for obj in tramites%}
+
+            {% for tramite in obj.tramite%}
+            <tr>
+                <td class="col-xs-1">{{ tramite.id }}</td>
+                <td class="col-xs-3">{{ tramite.propietario }}, DNI: {{ tramite.propietario.persona.dni}}</td>
+                <td class="col-xs-4">{{ tramite.profesional }}</td>
+
+                {% endfor %}
+                <td class="col-xs-4">{{ obj.fecha }}</td>
+            </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    <!--
+                        <div class="container-fluid " id="botones_director">
+                            <div class="row">
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-center">
+                                    <button type="button" class="btn btn-primary btn-md" onclick="printDiv('printReady')">Imprimir</button>
+                                    <a href="javascript:history.back(-1);">
+                                        <button class="btn btn-primary btn-md" type="submit" value="Atras">Volver</button>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+    -->
+    <br>
+</div>
+
+
+<!--
+
+<style>
+
+	.leyendaH {text-align:center;}
+
+	.leyenda  ul {list-style-type:none;padding:0 10px;}
+
+	.leyendaH ul {display:inline-block;}
+
+	.leyenda  ul>li {font-size:14px;}
+
+	.leyendaH ul>li {float:left;margin-right:10px;}
+
+	.leyenda  ul>li>span {width:12px;height:12px;display:inline-block;margin-right:3px;}
+
+
+       .dataTables_length, .dataTables_filter, .dataTables_info,.dataTables_wrapper .dataTables_paginate .paginate_button.disabled, .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:hover, .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:active {
+          display: none !important;
+       }
+       th{
+          background-color:#2c3e50;
+          color:white;
+       }
+        .dataTables_wrapper .dataTables_paginate .paginate_button.current, .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
+            display: none;
+        }
+        #tabla_length{
+        display:none;
+        }
+        #tabla_filter{
+        display:none;
+        }
+        span { display: block; }
+    </style>-->
+<script>
+    function printDiv(div) {
+    // Create and insert new print section
+
+    var elem = document.getElementById(div);
+    var domClone = elem.cloneNode(true);
+    var $printSection = document.createElement("div");
+    $printSection.id = "printSection";
+    $printSection.appendChild(domClone);
+    $('head').append('<style> #botones_director,#noImprimir,select{ display:none;} .dataTables_wrapper .dataTables_length, .dataTables_wrapper .dataTables_filter, .dataTables_wrapper .dataTables_info, .dataTables_wrapper .dataTables_processing, .dataTables_wrapper .dataTables_paginate label{display: none;} .dataTables_wrapper .dataTables_paginate .paginate_button.disabled, .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:hover, .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:active{display: none;} .dataTables_wrapper .dataTables_paginate .paginate_button{display: none!important;}</style>');
+    //document.body.insertBefore($printSection, document.body.firstChild);
+
+    window.print();
+
+    // Clean up print section for future use
+    var oldElem = document.getElementById("printSection");
+    if (oldElem != null) { oldElem.parentNode.removeChild(oldElem); }
+                          //oldElem.remove() not supported by IE
+
+    return true;
+}
+
+
+</script>
+{%endblock%}

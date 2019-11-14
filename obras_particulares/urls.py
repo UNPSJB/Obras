@@ -5,6 +5,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 urlpatterns = [
+    url(r'^homemovil$', views.home1, name='home1'),
     url(r'^$', views.home, name='home'),
     url(r'^login$', views.login_view, name='login'),
     url(r'^logout$', views.logout_view, name='logout'),
@@ -14,5 +15,5 @@ urlpatterns = [
     url(r'^tramite/', include('tramite.urls')),
     url(r'^documento/', include('documento.urls')),
     url(r'^movil/', include('movil.urls')),
-
+    url(r'^registrarse', views.registrarse, name='registrarse'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
