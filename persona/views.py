@@ -602,14 +602,11 @@ def listado_profesionales(request):
     for t in tramites:
         for p in profesionales:
             if t.profesional.id == p.id:
-                personas.append(p)
+                if p not in personas:
+                    personas.append(p)
     contexto = {
         "profesionales": personas}
     return contexto
-    # personas = Profesional.objects.all()
-    # profesionales = filter(lambda persona: (persona is not None), personas)
-    # contexto = {'profesionales': personas}
-    # return contexto
 
 def lista_profesionales_imprimible(request):
     personas = Profesional.objects.all()
@@ -912,7 +909,8 @@ class ReporteProfesionalesActivosExcel(TemplateView):
         for t in tramites:
             for p in personas:
                 if t.profesional.id == p.id:
-                    profesionales.append(p)
+                    if p not in profesionales:
+                        profesionales.append(p)
         wb = Workbook()
         ws = wb.active
         ws['A1'] = 'REPORTE DE PROFESIONALES ACTIVOS'
@@ -987,7 +985,8 @@ class ReporteProfesionalesActivosPdf(View):
         for t in tramites:
             for p in personas:
                 if t.profesional.id == p.id:
-                    profesionales.append(p)
+                    if p not in profesionales:
+                        profesionales.append(p)
         detalles = [(profesional.persona.nombre, profesional.persona.apellido,
                      profesional.persona.telefono,
                      profesional.profesion,
