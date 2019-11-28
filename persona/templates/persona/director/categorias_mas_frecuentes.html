@@ -16,7 +16,7 @@
         <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" >
             <div class="row" style="background:white;">
                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                    <div style="background-color:#2c3e50;">
+                    <div id="logob" style="background-color:#2c3e50;">
                           <img src="/media/imagenes/Escudobanner.png"
                                class="img-responsive" alt="Imagen responsive" width="100" height="100"/>
                     </div>
@@ -32,23 +32,25 @@
                       <hr style="border-width:">
                       <br>
                     <div class="row">
-                        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4" style="float: right;">
-                            <form>
+                            <img src="data:image/png;base64,{{grafico}}" width="800px" height="300px">
+
+                       <!-- <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4" style="float: right;">
+                            &lt;!&ndash;<form>
                                 <canvas style="height:230px;" id="canvas1"></canvas>
-                            </form>
-                        </div>
-                            <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4" style="float: right;">
+                            </form>&ndash;&gt;
+                        </div>-->
+                            <!--<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4" style="float: right;">
                                 <form>
                                   <h3>Referencias</h3>
                                     <div id="leyenda1" class="leyenda"> </div>
                                 </form>
-                        </div>
+                        </div>-->
 <br>
                         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                             <div class="table-responsive">
                                 <div align="justify" style="font-size:12px; text-align:left;">
                                     <br>
-                                    <table align="center" class="table table-bordered table-striped table-hover" style="width:1000px;">
+                                    <table id="table" align="center" class="table table-bordered table-striped table-hover" style="width:1000px;">
                                         <thead>
                                         <tr>
                                             <th p style="color:#FFFFFF"bgcolor="#2c3e50">Tipo Categoria</th>
@@ -312,20 +314,38 @@ var miPastel=function(canvasId,width,height,valores) {
 	 */
 
 	this.ponerLeyenda=function(leyendaId) {
+var num=0;
 
-		var codigoHTML="<ul class='leyenda'>";
-
+	var	codigoHTML="";
+	codigoHTML+="<ul class='leyenda'>";
+num=0;
+var codigoEstilo="";
+    	var estilo= document.createElement("style");
 		for(var i in this.valores)
-
 		{
-
-			codigoHTML+="<li>"+i+"<span style='background-color:"+valores[i]["color"]+"'></span></li>";
-
+			codigoHTML+="<li><span style='background-color:"+valores[i]["color"]+"'></span>"+i+"</li>";		num+=1;
 		}
 
 		codigoHTML+="</ul>";
 
-		document.getElementById(leyendaId).innerHTML=codigoHTML;
+
+    	var head="";
+		head+="";
+		num=0;
+		estilo.innerHTML+="";
+		for(var i in this.valores)
+				{
+		<!--document.getElementById("estilo").style.background=valores[i]["color"];-->
+ estilo.innerHTML+=`.z`+num+`{background-color:`+valores[i]['color']+`;} `;
+codigoEstilo+=`.z`+num+`{background-color:`+valores[i]['color']+`;} `;
+		num+=1;
+		}
+		estilo.innerHTML+="";
+		    	document.head.appendChild(estilo);
+		    	document.getElementById(leyendaId).innerHTML=codigoHTML;
+<!--head+="";-->
+		   <!--console.log(document.getElementById("estilo").style);-->
+
 
 	}
 
@@ -384,19 +404,101 @@ pastel.ponerLeyenda("leyenda1");
     function printDiv(div) {
     // Create and insert new print section
 
+        $('head').append('<style> #pie,#botones_director,#noImprimir,select{ display:none;} .dataTables_wrapper .dataTables_length, .dataTables_wrapper .dataTables_filter, .dataTables_wrapper .dataTables_info, .dataTables_wrapper .dataTables_processing, .dataTables_wrapper .dataTables_paginate label{display: none;} .dataTables_wrapper .dataTables_paginate .paginate_button.disabled, .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:hover, .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:active{display: none;} .dataTables_wrapper .dataTables_paginate .paginate_button{display: none!important;}</style>');   console.log(document.getElementsByTagName("head")[0]);
     var elem = document.getElementById(div);
-    var domClone = elem.cloneNode(true);
+     var domClone = elem.cloneNode(true);
     var $printSection = document.createElement("div");
     $printSection.id = "printSection";
     $printSection.appendChild(domClone);
-    $('head').append('<style> #botones_director,#noImprimir,select{ display:none;} .dataTables_wrapper .dataTables_length, .dataTables_wrapper .dataTables_filter, .dataTables_wrapper .dataTables_info, .dataTables_wrapper .dataTables_processing, .dataTables_wrapper .dataTables_paginate label{display: none;} .dataTables_wrapper .dataTables_paginate .paginate_button.disabled, .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:hover, .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:active{display: none;} .dataTables_wrapper .dataTables_paginate .paginate_button{display: none!important;}</style>');
-    //document.body.insertBefore($printSection, document.body.firstChild);
 
-    window.print();
+      window.print();
+    // Clean up print section for future use
+    var oldElem = document.getElementById("printSection");
+    if (oldElem != null ) { oldElem.parentNode.removeChild(oldElem);
+
+    }
+                          //oldElem.remove() not supported by IE
+
+    return true;
+}
+
+</script>
+
+<script>
+    function printlDiv(div) {
+    // Create and insert new print section
+    var elem = document.getElementById(div);
+    var domClone = elem.cloneNode(true);
+    var $html = document.createElement("html");
+    var $body = document.createElement("body");
+
+        var $head = document.createElement("head");
+$html.appendChild($head);
+$html.appendChild($body);
+
+
+var $link=document.createElement("link");
+$link.rel="stylesheet";
+$link.type="text/css";
+$link.href="/static/css/base.css";
+$link.media="all";
+$head.appendChild($link);
+$head.append('<style> #botones_director,#noImprimir,select{ display:none;} .dataTables_wrapper .dataTables_length, .dataTables_wrapper .dataTables_filter, .dataTables_wrapper .dataTables_info, .dataTables_wrapper .dataTables_processing, .dataTables_wrapper .dataTables_paginate label{display: none;} .dataTables_wrapper .dataTables_paginate .paginate_button.disabled, .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:hover, .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:active{display: none;} .dataTables_wrapper .dataTables_paginate .paginate_button{display: none!important;}</style>');
+    var $printSection = document.createElement("div");
+    $printSection.id = "printSection";
+    $printSection.appendChild(domClone);
+    $($html).append($body);
+    $($body).append($printSection);
+    console.log($html);
+   console.log(document.getElementsByTagName("head")[0]);
+   var e= window.open('', '_blank', 'width=350,height=150,location=no,left=200px');
+   e.document.open();
+   e.document.write($($html).text());
+         e.document.close();
+      e.print();
 
     // Clean up print section for future use
     var oldElem = document.getElementById("printSection");
-    if (oldElem != null) { oldElem.parentNode.removeChild(oldElem); }
+    var oldElem1=document.getElementById("estilo");
+    if (oldElem != null ) { oldElem.parentNode.removeChild(oldElem);
+    oldElem1.parentNode.removeChild(oldElem1);
+
+    }
+                          //oldElem.remove() not supported by IE
+
+    return true;
+}
+
+</script>
+<script>
+    function prinstDiv(div) {
+    // Create and insert new print section
+    var elem = document.getElementById(div);
+    var a=document.getElementById('z2').style.cssText
+alert(a);
+     var domClone = elem.cloneNode(true);
+    var $printSection = document.createElement("div");
+    $printSection.id = "printSection";
+    $printSection.appendChild(domClone);
+    var elem1=document.getElementById('headBase');
+    var head=elem1.cloneNode(true);
+    var $estilo=document.createElement("style");
+        $estilo.id="estilo";
+
+    $estilo.appendChild(head);
+        $('head').append($estilo);
+var s='<style>  #z2{'+a+'} .row{background-color:blue!important;} .leyenda{ color:blue;}#botones_director,#noImprimir,select{ display:none;} .dataTables_wrapper .dataTables_length, .dataTables_wrapper .dataTables_filter, .dataTables_wrapper .dataTables_info, .dataTables_wrapper .dataTables_processing, .dataTables_wrapper .dataTables_paginate label{display: none;} .dataTables_wrapper .dataTables_paginate .paginate_button.disabled, .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:hover, .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:active{display: none;} .dataTables_wrapper .dataTables_paginate .paginate_button{display: none!important;}</style>';
+    $('head').append(s);
+    console.log(s);
+   console.log(document.getElementsByTagName("head")[0]);
+      window.print();
+    // Clean up print section for future use
+    var oldElem = document.getElementById("printSection");
+    var oldElem1=document.getElementById("estilo");
+    if (oldElem != null ) { oldElem.parentNode.removeChild(oldElem);
+    oldElem1.parentNode.removeChild(oldElem1);
+
+    }
                           //oldElem.remove() not supported by IE
 
     return true;

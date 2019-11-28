@@ -31,6 +31,11 @@ from reportlab.lib.units import cm, inch
 from reportlab.lib.pagesizes import letter, A4, landscape
 from reportlab.lib.styles import getSampleStyleSheet, ParagraphStyle
 from reportlab.lib.enums import TA_CENTER, TA_JUSTIFY, TA_LEFT, TA_RIGHT
+from reportlab.lib.validators import Auto
+from reportlab.graphics.charts.legends import Legend
+from reportlab.graphics.charts.piecharts import Pie
+from reportlab.graphics.shapes import Drawing, String
+import base64;
 import time
 import collections
 from planilla_visado.models import ItemDeVisado
@@ -1950,28 +1955,65 @@ def ver_tipos_de_obras_mas_frecuentes(request):
     tipos_obras = TipoObra.objects.all()
     list = []
     list_obras = []
-    for o in tipos_obras:
-        l = [o,0]
+    # for o in tipos_obras:
+    #     l = [o,0]
+    #     list.append(l)
+    # for t in tramites:
+    #     for o in tipos_obras:
+    #         if t.tipo_obra.id == o.id:
+    #             list_obras.append(o)
+    datos=[]
+    nombres=[]
+    for t in tipos_obras:
+        cant = Tramite.objects.filter(tipo_obra_id=t.id).exclude(tipo_obra_id__isnull=True).count()
+        l = [t, cant]
         list.append(l)
-    for t in tramites:
-        for o in tipos_obras:
-            if t.tipo_obra.id == o.id:
-                list_obras.append(o)
-    for name,value in list:
-        aux = 0
-        for o in list_obras:
-            if name.id == o.id:
-                l = [name,aux]
-                i = list.index(l)
-                aux += 1
-                l = [name,aux]
-                list[i] = l
-    contexto = {"tipos_obras": list}
+        if cant!=0:
+            datos.append(cant)
+            nombres.append(t.nombre)
+        cant=None
+    # for name,value in list:
+    #     aux = 0
+    #     for o in list_obras:
+    #         if name.id == o.id:
+    #             l = [name,aux]
+    #             i = list.index(l)
+    #             aux += 1
+    #             l = [name,aux]
+    #             list[i] = l
+    titulo = "Tipos de obras mas frecuentes"
+    grafico = pie_chart_with_legend(datos, nombres, titulo)
+    imagen = base64.b64encode(grafico.asString("png"))
+    contexto = {"tipos_obras": list, "grafico":imagen}
     return render(request,'persona/director/tipos_de_obras_mas_frecuentes.html',contexto)
+
+def add_legend(draw_obj, chart, data):
+    legend = Legend()
+    legend.alignment = 'right'
+    legend.x = 10
+    legend.y = 50
+    legend.colorNamePairs = Auto(obj=chart)
+    draw_obj.add(legend)
+
+
+def pie_chart_with_legend(datos, nombres,titulo):
+    drawing = Drawing(width=500, height=200)
+    my_title = String(150, 180, titulo, fontSize=18)
+    pie = Pie()
+    pie.sideLabels = True
+    pie.x = 150
+    pie.y = 65
+    pie.data = datos
+    pie.labels = [cat for cat in nombres]
+    pie.slices.strokeWidth = 0.5
+    drawing.add(my_title)
+    drawing.add(pie)
+    add_legend(drawing, pie, datos)
+    return drawing
 
 def ver_categorias_mas_frecuentes(request):
     planillas = PlanillaDeInspeccion.objects.all()    
-    tramites_inspeccionados = Tramite.objects.en_estado(Inspeccionado)    
+    #tramites_inspeccionados = Tramite.objects.en_estado(Inspeccionado)
     tramites = Tramite.objects.all()    
     tipos_categorias = CategoriaInspeccion.objects.all()
     detalles = DetalleDeItemInspeccion.objects.all()
@@ -1982,7 +2024,10 @@ def ver_categorias_mas_frecuentes(request):
                 list.append(p)                
     a = 0
     b = 0
-    c = 0  
+    c = 0
+    nombres=[]
+    for cat in tipos_categorias:
+        nombres.append(cat.nombre)
     for l in list:
         list_categorias = l.detalles.values_list('categoria_inspeccion_id')
         for i in list_categorias:
@@ -1991,41 +2036,60 @@ def ver_categorias_mas_frecuentes(request):
             if 2 in i:
                 b+=1
             if 3 in i:
-                c+=1    
+                c+=1
+    datos=[a,b,c]
+    titulo="Categorias mas frecuentes"
+    grafico=pie_chart_with_legend(datos,nombres,titulo)
+    imagen=base64.b64encode(grafico.asString("png"))
     contexto = {
         "tipos_categorias":tipos_categorias,
         "detalles":detalles,
         "totala":a,
         "totalb":b,
         "totalc":c,
+        "grafico": imagen,
     }
     return render(request,'persona/director/categorias_mas_frecuentes.html',contexto)
 
 def ver_profesionales_mas_requeridos(request):
     planillas = PlanillaDeInspeccion.objects.all()
     tramites_inspeccionados = Tramite.objects.en_estado(ConInspeccion) #aca deberia ir estado Finalizado
-    tramites = Tramite.objects.all()                #puse con inspeccion solo para fines de mostrar algo
+   # tramites = Tramite.objects.all()                #puse con inspeccion solo para fines de mostrar algo
     profesionales = Profesional.objects.all()
     list = []
     list_profesionales = []
+    # for p in profesionales:
+    #     m = [p,0]
+    #     list.append(m)
+    #for t in tramites:
+    #     for p in profesionales:
+    #         if t.profesional.id == p.id:
+    #             list_profesionales.append(p)
+    datos=[]
+    nombres=[]
     for p in profesionales:
-        m = [p,0]
+        cant=Tramite.objects.filter(profesional_id=p.id).exclude(profesional_id__isnull=True).count()
+        m=[p,cant]
         list.append(m)
-    for t in tramites:
-        for p in profesionales:
-            if t.profesional.id == p.id:
-                list_profesionales.append(p)
-    for name,value in list:
-        aux = 0
-        for p in list_profesionales:       
-            if name.id == p.id:
-                m = [name,aux]         
-                i = list.index(m)
-                aux +=1
-                m = [name,aux]
-                list[i] = m
+        if cant!=0:
+            datos.append(cant)
+            nombres.append(str(p.id)+" "+p.persona.nombre+" "+p.persona.apellido)
+        cant=None
+    # for name,value in list:
+    #     aux = 0
+    #     for p in list_profesionales:
+    #         if name.id == p.id:
+    #             m = [name,aux]
+    #             i = list.index(m)
+    #             aux +=1
+    #             m = [name,aux]
+    #             list[i] = m
+    titulo = "Profesionales mas requeridos"
+    grafico = pie_chart_with_legend(datos, nombres, titulo)
+    imagen = base64.b64encode(grafico.asString("png"))
     contexto = {
-        "profesionales": list
+        "profesionales": list,
+        "grafico":imagen
     }
     return render(request, 'persona/director/profesionales_mas_requeridos.html',contexto)
 
