@@ -601,9 +601,16 @@ def ver_documentos_tramite_administrativo(request, pk_tramite):
     return render(request, 'persona/administrativo/vista_de_documentos_administrativo.html', {'tramite': tramite})
 
 def listado_profesionales(request):
-    personas = Profesional.objects.all()
-    profesionales = filter(lambda persona: (persona is not None), personas)
-    contexto = {'profesionales': personas}
+    tramites = Tramite.objects.all()  # puse con inspeccion solo para fines de mostrar algo
+    profesionales = Profesional.objects.all()
+    personas = []
+    for t in tramites:
+        for p in profesionales:
+            if t.profesional.id == p.id:
+                if p not in personas:
+                    personas.append(p)
+    contexto = {
+        "profesionales": personas}
     return contexto
 
 def lista_profesionales_imprimible(request):
@@ -901,7 +908,14 @@ class ReporteTramitesCorregidosPdf(View):
 
 class ReporteProfesionalesActivosExcel(TemplateView):
     def get(self, request, *args, **kwargs):
-        profesionales = Profesional.objects.all()
+        tramites = Tramite.objects.all()  # puse con inspeccion solo para fines de mostrar algo
+        personas = Profesional.objects.all()
+        profesionales = []
+        for t in tramites:
+            for p in personas:
+                if t.profesional.id == p.id:
+                    if p not in profesionales:
+                        profesionales.append(p)
         wb = Workbook()
         ws = wb.active
         ws['A1'] = 'REPORTE DE PROFESIONALES ACTIVOS'
@@ -970,6 +984,14 @@ class ReporteProfesionalesActivosPdf(View):
         Story.append(Spacer(0, cm * 0.5))
         encabezados = ('NOMBRE', 'APELLIDO', 'TELEFONO','PROFESION',
                        'MATRICULA','DOMICILIO','MAIL')
+        tramites = Tramite.objects.all()  # puse con inspeccion solo para fines de mostrar algo
+        personas = Profesional.objects.all()
+        profesionales = []
+        for t in tramites:
+            for p in personas:
+                if t.profesional.id == p.id:
+                    if p not in profesionales:
+                        profesionales.append(p)
         detalles = [(profesional.persona.nombre, profesional.persona.apellido,
                      profesional.persona.telefono,
                      profesional.profesion,
@@ -977,7 +999,7 @@ class ReporteProfesionalesActivosPdf(View):
                      profesional.persona.domicilio,
                      profesional.persona.mail) for
                     profesional in
-                    Profesional.objects.all()
+                    profesionales
                     ]
         detalle_orden = Table([encabezados] + detalles, colWidths=[2 * cm, 2 * cm, 2 * cm, 2 * cm, 2 * cm,
                                                                    4 * cm])
