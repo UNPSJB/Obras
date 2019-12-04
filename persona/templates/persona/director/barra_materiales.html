@@ -14,11 +14,12 @@
 {% endblock %}
 {% block contenido %}
 
-<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" >
+<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
     <div class="panel">
         <div class="panel-heading box" role="tab" id="headingFive">
             <h5 class="panel-title">
-                <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+                <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFive"
+                   aria-expanded="false" aria-controls="collapseFive">
                     <font color="#ffffff" size="2">Materiales mas utilizados segun item de inspeccion</font>
                 </a>
             </h5>
@@ -36,7 +37,8 @@
                                         Item
                                     </label>
                                     <div class="controls ">
-                                        <select name="item" placeholder="Ingresar el Item" class="select form-control input-sm" id="id_item" required>
+                                        <select name="item" placeholder="Ingresar el Item"
+                                                class="select form-control input-sm" id="id_item" required>
                                             <option value="" selected="#">---------</option>
                                             {% for i in items %}
                                             <option value="{{i}}">{{i}}</option>
@@ -44,29 +46,27 @@
                                         </select>
                                     </div>
                                 </div>
-                                <div>
+                                <div class="row">
                                     <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 text-center">
                                         <button class="btn btn-primary btn-md" type="submit" name="Guardar">
                                             Aceptar
                                         </button>
                                     </div>
-                                </div>
                                 <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 text-center">
-                                   <a href="javascript:history.back(-1);">
-                    <button class="btn btn-primary btn-md " type="submit" value="Atras">Volver</button>
-                </a>
+                                    <a href="{% url 'director' %}">
+                                        <button class="btn btn-primary btn-md " type="submit" value="Atras">Volver
+                                        </button>
+                                    </a>
                                 </div>
 
+                                </div>
 
-
-                        </form>
-                               </div>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
-</form>
 </div>
 {% endblock %}

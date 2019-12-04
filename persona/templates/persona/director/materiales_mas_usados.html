@@ -35,7 +35,8 @@
                     <hr style="border-width:">
                     <br>
                             <div class="row">
-                                <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4" style="float: right;">
+                                <img src="data:image/png;base64,{{grafico}}" width="800px" height="400px">
+                               <!-- <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4" style="float: right;">
                                     <form>
                                         <canvas style="height:230px;" id="canvas1"></canvas>
                                     </form>
@@ -45,7 +46,7 @@
                                         <h3>Referencias</h3>
                                         <div id="leyenda1" class="leyenda"> </div>
                                     </form>
-                                </div>
+                                </div>-->
                                 <br>
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                                     <div class="table-responsive">
@@ -59,7 +60,7 @@
                                                 </tr>
                                                 </thead>
                                                 <tbody>
-                                                {% for name,value in detalles %}
+                                                {% for name,value in datos.detalles %}
                                                     {% if value != 0 %}
                                                     <tr>
                                                         <td class="col-xs-1">{{ name }}</td>

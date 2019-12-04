@@ -2012,22 +2012,39 @@ def ver_tipos_de_obras_mas_frecuentes(request):
 def add_legend(draw_obj, chart, data):
     legend = Legend()
     legend.alignment = 'right'
-    legend.x = 10
-    legend.y = 50
+    legend.x = 20
+    legend.y = 60
     legend.colorNamePairs = Auto(obj=chart)
     draw_obj.add(legend)
 
-
+from reportlab.lib.colors import Color, PCMYKColor, white
 def pie_chart_with_legend(datos, nombres,titulo):
-    drawing = Drawing(width=500, height=200)
-    my_title = String(150, 180, titulo, fontSize=18)
+    drawing = Drawing(width=600, height=300)
+    my_title = String(280, 280, titulo, fontSize=18)
     pie = Pie()
     pie.sideLabels = True
-    pie.x = 150
-    pie.y = 65
+    pie.x = 300
+    pie.y = 120
     pie.data = datos
+    if  len(datos)>10:
+        colors = [
+            PCMYKColor(50, 80, 15, 20, alpha=100), PCMYKColor(21, 0, 34, 10, alpha=100), PCMYKColor(0, 88, 37, 15, alpha=100),
+            PCMYKColor(54, 10, 0, 70, alpha=100), PCMYKColor(0, 32, 0, 60, alpha=100), PCMYKColor(20, 40, 0, 25, alpha=100),
+            PCMYKColor(90, 30, 0, 10, alpha=100), PCMYKColor(0, 60, 20, 80, alpha=100), PCMYKColor(0, 16, 18, 10, alpha=100),
+            PCMYKColor(73, 32, 80, 10, alpha=100), PCMYKColor(0, 90, 20, 10, alpha=100), PCMYKColor(0, 40, 83, 10, alpha=100),
+            PCMYKColor(60, 0, 70, 10, alpha=100), PCMYKColor(0, 0, 50, 30, alpha=100), PCMYKColor(0, 0, 100, 10, alpha=100),
+            PCMYKColor(40, 20, 0, 10, alpha=100), PCMYKColor(30, 0, 0, 12, alpha=100), PCMYKColor(100, 67, 0, 23, alpha=100), PCMYKColor(70, 46, 0, 16, alpha=100),
+            PCMYKColor(50, 33, 0, 11, alpha=100), PCMYKColor(30, 20, 0, 7, alpha=100),
+            PCMYKColor(20, 13, 0, 4, alpha=100), PCMYKColor(10, 7, 0, 3, alpha=100),
+            PCMYKColor(0, 0, 0, 100, alpha=100), PCMYKColor(0, 0, 0, 70, alpha=100),
+            PCMYKColor(0, 0, 0, 50, alpha=100), PCMYKColor(0, 0, 0, 30, alpha=100),
+            PCMYKColor(0, 0, 0, 20, alpha=100), PCMYKColor(0, 0, 0, 10, alpha=100),
+            PCMYKColor(0, 21, 0, 15, alpha=100)]
+        for i in range(len(pie.data)): pie.slices[i].fillColor = colors[i]
+        pie.slices.popout = 8
     pie.labels = [cat for cat in nombres]
     pie.slices.strokeWidth = 0.5
+    pie.slices.popout = 5
     drawing.add(my_title)
     drawing.add(pie)
     add_legend(drawing, pie, datos)
@@ -2124,33 +2141,49 @@ def ver_barra_materiales(request):
     if "Guardar" in request.POST:              
         for name, value in request.POST.items():
             if name.startswith('item'):              
-                detalles = __busco_item__(value)                                                                           
-                return render(request, 'persona/director/materiales_mas_usados.html',{"detalles":detalles,"tipo_item":value})
+                contexto = __busco_item__(value)
+                titulo = "Materiales mas utilizados"
+                grafico = pie_chart_with_legend(contexto["datos"], contexto["nombres"],titulo)
+                imagen = base64.b64encode(grafico.asString("png"))
+                return render(request, 'persona/director/materiales_mas_usados.html',{"datos":contexto,"tipo_item":value,"grafico":imagen})
     if "Volver" in request.POST: 
         pass
     return render(request,'persona/director/barra_materiales.html',contexto)    
 
 def __busco_item__(item):    
-    detalles = DetalleDeItemInspeccion.objects.all()
-    planillas = PlanillaDeInspeccion.objects.all()                   
+    #detalles = DetalleDeItemInspeccion.objects.all()
+    #planillas = PlanillaDeInspeccion.objects.all()
     i = get_object_or_404(ItemInspeccion, nombre=item)
     list = []
-    for d in detalles:                    
-        if i == d.item_inspeccion:            
-            m = [d.nombre,0]
-            list.append(m)            
-    list_detalles = []
-    for p in planillas:
-        for d in p.detalles.all():
-            list_detalles.append(d.nombre)    
-    for l in list_detalles:
-        aux = 0
-        for name,value in list:
-            if l == name:
-                aux += value +1
-                i = list.index([name,value])
-                list[i] = [name,aux]
-    return list
+    nombres=[]
+    datos=[]
+#    p=PlanillaDeInspeccion.objects.all()
+    e=DetalleDeItemInspeccion.objects.filter(item_inspeccion_id=i.id)
+    f=PlanillaDeInspeccion.objects.filter(detalles__in=e).values_list('detalles__nombre',flat="True")
+    for i in range(0,len(e)):
+        nombres.append(e[i].nombre)
+    for n in range(0,len(nombres)):
+        cant=len(filter(lambda s:(s==nombres[n]),f))
+        m=[nombres[n],cant]
+        list.append(m)
+        datos.append(cant)
+    # for d in detalles:
+    #      if i == d.item_inspeccion:
+    #          m = [d.nombre,0]
+    #          list.append(m)
+    # list_detalles = []
+    # for p in planillas:
+    #     for d in p.detalles.all():
+    #         list_detalles.append(d.nombre)
+    # for l in list_detalles:
+    #     aux = 0
+    #     for name,value in list:
+    #         if l == name:
+    #             aux += value +1
+    #             i = list.index([name,value])
+    #             list[i] = [name,aux]
+    contexto={'datos':datos,'nombres':nombres,'detalles':list}
+    return contexto
 
 def detalle_de_tramite(request, pk_tramite):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
@@ -2206,31 +2239,81 @@ def ver_filtro_obra_fechas(request):
                  fechaInicial = value
              if name == 'fechaFinal':
                  fechaFinal = value
-        for t in tramites:
-            if (str(t.estado().timestamp) >= fechaInicial) and (str(t.estado().timestamp) <= fechaFinal):
-                list_estados_fechas.append(t)
-        for o in tipos:
-            l = [o, 0]
-            list.append(l)
-        for t in tramites:
-            for o in tipos:
-                if t.tipo_obra.id == o.id:
-                    list_obras.append(o)
-        for name, value in list:
-            aux = 0
-            for o in list_obras:
-                if name.id == o.id:
-                    l = [name, aux]
-                    i = list.index(l)
-                    aux += 1
-                    l = [name, aux]
-                    list[i] = l
-        contexto = {"tipos_obras": list}
+        datos = []
+        nombres = []
+        tipos = TipoObra.objects.all()
+        if fechaInicial and fechaFinal is not None:
+            rango = True
+            e=Estado.objects.filter(timestamp__range=(fechaInicial,fechaFinal))
+        else:
+            rango = False
+            e = Estado.objects.all()
+        for c in tipos:
+                estado = e.values_list('tramite', flat="True").distinct()  # filter(lambda r:(r.tramite.tipo_obra_id==3),e)
+                tramites = Tramite.objects.filter(id__in=estado, tipo_obra_id=c.id)
+                cant = len(tramites)
+                if cant == 0:
+                    l = [c.nombre, "-"]
+                else:
+                    datos.append(cant)
+                    l = [c.nombre, cant]
+                list.append(l)
+                estados_en_rango = None
+                tramites = None
+        nombres=tipos.values_list("nombre",flat=True).all()
+        print datos
+        #  for t in tramites_en_rango:
+        # for t in tramites:
+        #     if (str(t.estado().timestamp) >= fechaInicial) and (str(t.estado().timestamp) <= fechaFinal):
+        #         list_estados_fechas.append(t)
+        #
+        # for o in tipos:
+        #     l = [o, 0]
+        #     list.append(l)
+        # for t in tramites:
+        #     for o in tipos:
+        #         if t.tipo_obra.id == o.id:
+        #             list_obras.append(o)
+        # for name, value in list:
+        #     aux = 0
+        #     for o in list_obras:
+        #         if name.id == o.id:
+        #             l = [name, aux]
+        #             i = list.index(l)
+        #             aux += 1
+        #             l = [name, aux]
+        #             list[i] = l
+        titulo = "Tipos de obras en rango seleccionado"
+        grafico = pie_chart_with_legend(datos, nombres, titulo)
+        imagen = base64.b64encode(grafico.asString("png"))
+        contexto = {"tipos_obras":list,"grafico":imagen}#"tipos_obras": list}
         return render(request, 'persona/director/tipos_obras_periodo_fechas.html', contexto)
     else:
         pass
     return render(request,'persona/director/filtro_obra_fechas.html')
+from reportlab.graphics.charts.linecharts import HorizontalLineChart
 
+def grafico_de_barras(datos,nombres,titulo):
+    drawing = Drawing(width=400,height=200)
+    my_title = String(150, 180, titulo, fontSize=18)
+    lc = HorizontalLineChart()
+    lc.x = 50l
+    lc.y = 50l
+    lc.height = 125l
+    lc.width = 300l
+    lc.data = datos
+    lc.joinedLines = 1
+    catNames = nombres
+    lc.categoryAxis.categoryNames = catNames
+    lc.categoryAxis.labels.boxAnchor = 'n'
+    lc.valueAxis.valueMin = 0l
+    lc.valueAxis.valueMax = 60l
+    lc.valueAxis.valueStep = 15l
+    lc.lines[0].strokeWidth = 2l
+    lc.lines[1].strokeWidth = 1.5
+    drawing.add(lc)
+    drawing.add(my_title)
+    return drawing
 def ver_sectores_con_mas_obras(request):
     tramites = Tramite.objects.all()
     sectores = []
@@ -2238,9 +2321,11 @@ def ver_sectores_con_mas_obras(request):
     for t in tramites:
         if not t.sector in sectores:
             sectores.append(t.sector)
-
+    nombres=[]
+    datos=[]
     for s in sectores:
         list.append([s, 0])
+        nombres.append(s)
 
     sectores = list
     list_sectores = []
@@ -2251,9 +2336,17 @@ def ver_sectores_con_mas_obras(request):
             if t.sector == name:
                 v += 1
         list_sectores.append([name, v])
+    for name, value in list_sectores:
+        for t in nombres:
+            if t == name:
+                datos.append(value)
+    titulo = "sectores con mas obras"
+    grafico = pie_chart_with_legend(datos, nombres, titulo)
+    imagen = base64.b64encode(grafico.asString("png"))
     contexto = {
-        "sectores": list_sectores,
-        "nombres": list
+        'grafico':imagen,
+        #"sectores": list_sectores,
+        #"nombres": list
     }
     return render(request,'persona/director/ver_sectores_con_mas_obras.html',contexto)
 
