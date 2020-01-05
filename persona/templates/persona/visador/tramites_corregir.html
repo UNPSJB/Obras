@@ -1,0 +1,57 @@
+{% block contenido_tramites_aceptados %}
+
+    <div class="table-responsive">
+      <table id="tabla" class="table table-bordered table-striped table-hover table-condensed" style="background: white;">
+          <thead>
+              <tr>
+                  <th>Nro</th>
+                  <!--<th>Fecha inicio</th>-->
+                  <th>Medidas</th>
+                  <th>Tipo</th>
+                  <th>Profesional</th>
+                  <th>Propietario</th>
+                  <th>Domicilio</th>
+                  <th>Revisar</th>
+              </tr>
+          </thead>
+          <tbody>
+
+              {% for tramite in tramites %}
+                <tr>
+                    <td class="col-xs-1">{{ tramite.id}}</td>
+                    <td class="col-xs-1">{{ tramite.medidas}}</td>
+                    <!--<td class="col-xs-2">{{ tramite.estado.timestamp }}</td>-->
+                    <td class="col-xs-1">{{ tramite.tipo_obra }} </td>
+                    <td class="col-xs-4">{{ tramite.profesional}}</td>
+                    <td class="col-xs-3">{{ tramite.propietario}}</td>
+                    <td class="col-xs-1">{{ tramite.domicilio}} </td>
+                    <td align="center" class="col-xs-1">
+                        <!--<a href="{% url 'ver_documentos_visados' tramite.pk %}">-->
+                        <a href="{% url 'mostrar_visados_noaprobados' tramite.id %}">
+                            <button type="button" class="btn btn-primary btn-xs" name="Ver documentos">
+                                <span class="glyphicon glyphicon-search" aria-hidden="true"> Documentos</span>
+                            </button>
+                        </a>
+                    </td>
+                </tr>
+              {% endfor %}
+
+          </tbody>
+      </table>
+    <!--<div class=" col-xs-8 col-sm-8 col-md-8 col-lg-8" align="left">
+        <a id="crear_detalle" href="{% url 'reporte_tramites_visados_excel' %}" class="btn btn-info btn-collapsible btn-sm" title="Generar Archivo Excel" >
+            <i class="glyphicon glyphicon-list-alt"></i><span>Exportar a EXCEL</span>
+        </a>
+        <a href="{% url 'reporte_tramites_visados_pdf' %}" class="btn btn-info btn-collapsible btn-sm" title="Generar Archivo PDF" >
+            <i class="glyphicon glyphicon-file"></i><span>Exportar a PDF</span>
+        </a>
+    </div>-->
+    <div class=" col-xs-4 col-sm-4 col-md-4 col-lg-4" align="right">
+        <a href="javascript:history.back(-1);">
+            <button type="button" class="btn btn-primary" name="Volver">
+                Volver
+            </button>
+        </a>
+    </div>
+  </div>
+{% endblock %}

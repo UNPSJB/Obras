@@ -73,7 +73,7 @@
                   {% for item in items %}
                     {% if fila == item.fila_de_visado and columna == item.columna_de_visado %}
                         <label class="switch">
-                          <input name="item-{{item.pk}}" type="checkbox" disabled="disabled" checked="checked"><span class="slider round"></span>
+                          <input name="item-{{item.pk}}" type="checkbox" disabled="disabled"type="checkbox"  checked="checked"><span class="slider round"></span>
                         </label>
                     {% endif %}
                   {% endfor %}
@@ -96,24 +96,30 @@
                       <td class="col-xs-1">{{ elemento }}</td>
                       <td class="col-sm-4">
                           <label class="switch">
-                              <input name="elemento-{{elemento.id}}" type="checkbox" disabled="disabled" checked="checked"><span class="slider round"></span>
+                              <input name="elemento-{{elemento.id}}" type="checkbox" disabled="disabled" type="checkbox" checked="checked"><span class="slider round"></span>
                           </label>
                       </td>
                   </tr>
                   {% endfor %}
                   </tbody>
               </table>
-            <table class="table table-bordered table-striped table-hover table-condensed" style="text-align:center;">
-                  <thead>
-                  <tr>
-                      <th>OBSERVACION</th>
-                  </tr>
-                  </thead>
-                <tbody>
-                <td class="col-xs-1">{{ obs }}</td>
-                </tbody>
-            </table>
-        </table>
+              <div class="row">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <div class="table-responsive">
+                    <table class="table table-bordered table-striped table-hover table-condensed" style="text-align:center;">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>OBSERVACIONES</th>
+                            </tr>
+                        </thead>
+                        <tbody><td class="col-xs-1">{{ observacion }}</td>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
           </div>
       </div>
     </div>

@@ -49,13 +49,95 @@
                             </div>
                         {% endfor %}
                     </div>
+                             <div class="row">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+              <form action="" >
+                <div class="row" style="color:#fff;">
+                  <div class=" col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                    <ol>
+                      <label>PADRON:</h2></label>
+                      <li> {{tramite.parcela}}</li>
+                      <label>DATOS PROPIETARIO:</label>
+                      <li> {{tramite.propietario.persona}}</li>
+                      <label>DATOS PROFESIONAL:</label>
+                      <li> {{tramite.profesional}}</li>
+                        <label>MONTO A PAGAR:</label>
+                      <li> {{tramite.monto_a_pagar}}</li>
+                    </ol>
+                  </div>
+                </div>
+              </form>
+          </div>
+          </div>
+    <div class="table-responsive">
+        <table align="center" class="table table-bordered table-striped table-hover table-condensed table-responsive" style="text-align:center;">
+
+            <tr>
+                <th></th>
+              {% for columna in columnas %}
+                <th>{{columna}}</th>
+              {% endfor %}
+            </tr>
+          <tbody>
+            {% for fila in filas %}
+              <tr>
+                <td class="col-xs-1">{{ fila }}</td>
+                {% for columna in columnas %}
+                <td class="col-sm-1">&nbsp;
+                  {% for item in items %}
+                    {% if fila == item.fila_de_visado and columna == item.columna_de_visado %}
+                        <label class="switch">
+                          <input name="item-{{item.pk}}" type="checkbox"  checked="checked"><span class="slider round"></span>
+                        </label>
+                    {% endif %}
+                  {% endfor %}
+                </td>
+                {% endfor %}
+              </tr>
+            {% endfor %}
+            </tbody>
+    <br>
+              <table class="table table-bordered table-striped table-hover table-condensed" style="text-align:center;">
+                  <thead>
+                  <tr>
+                      <th></th>
+                      <th>BALANCE DE SUPERFICIE</th>
+                  </tr>
+                  </thead>
+                  <tbody>
+                  {% for elemento in elementos %}
+                  <tr>
+                      <td class="col-xs-1">{{ elemento }}</td>
+                      <td class="col-sm-4">
+                          <label class="switch">
+                              <input name="elemento-{{elemento.id}}" type="checkbox" checked="checked"><span class="slider round"></span>
+                          </label>
+                      </td>
+                  </tr>
+                  {% endfor %}
+                  </tbody>
+              </table>
+        </table>
+        <div class="form-group">
+              <br>
+                <label>Observaciones:</label>
+
+              </div>
+          </div>
+
 				    <div>
                         <a href="{% url 'planilla_visado' tramite.pk %}">
                             <button type="button" align="rigth" class="btn btn-primary" name="generar_visado">
                                 Generar Visado
                             </button>
                         </a>
-                    </div>                    
+                            <a href="javascript:history.back(-1);">
+                                <button class="btn btn-primary btn-md" type="submit" value="Atras">Volver</button>
+                              </a>
+                    </div>
+                </div>
+                    </div>
+
                 </div>
 			</div>
           </div>

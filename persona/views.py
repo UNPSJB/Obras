@@ -41,6 +41,7 @@ import collections
 from planilla_visado.models import ItemDeVisado
 from pago.models import Cuota, Cancelacion,Cancelada,Estado
 from datetime import datetime, date, time, timedelta
+from documento.models import Documento
 
 #-------------------------------------------------------------------------------------------------------------------
 #generales ---------------------------------------------------------------------------------------------------------
@@ -313,12 +314,67 @@ def profesional_solicita_final_obra(request, pk_tramite):
         return redirect('profesional')
 
 def ver_documentos_corregidos(request, pk_tramite):
-    tramite = get_object_or_404(Tramite, pk=pk_tramite)
     if request.method == "POST":
         print ("faltan guardar documentos")
-        enviar_correcciones(request, pk_tramite)
+        documentos = Documento.objects.filter(tramite_id=pk_tramite)
+        enviar_correccioness(request, pk_tramite)
     else:
-        return render(request, 'persona/profesional/ver_documentos_corregidos.html', {'tramite': tramite})
+        tramite = get_object_or_404(Tramite, pk=pk_tramite)
+        planillas = PlanillaDeVisado.objects.filter(
+            tramite_id=tramite.id)  # busca las planillas que tengan el id del tramite
+        if (len(planillas) > 1):
+            aux = planillas[0]
+            for p in planillas:
+                if (p.id > aux.id):  # obtiene el ultimo visado del tramite
+                    plan = p
+                else:
+                    plan = aux
+            planilla = get_object_or_404(PlanillaDeVisado,
+                                         id=plan.id)  # PlanillaDeVisado.objects.filter(tramite_id=tramite.id)# busca las planillas que tengan el id del tramite
+        else:
+            planilla = get_object_or_404(PlanillaDeVisado,
+                                         tramite_id=pk_tramite)  # PlanillaDeVisado.objects.filter(tramite_id=tramite.id)# busca las planillas que tengan el id del tramite
+        filas = FilaDeVisado.objects.all()
+        columnas = ColumnaDeVisado.objects.all()
+        obs = planilla.observacion
+        try:
+            elementos = planilla.elementos.all()
+            items = planilla.items.all()
+            contexto = {
+                'tramite': tramite,
+                'planilla': planilla,
+                'filas': filas,
+                'columnas': columnas,
+                'items': items,
+                'elementos': elementos,
+                'obs': obs,
+            }
+            return render(request, 'persona/profesional/ver_documentos_corregidos.html', contexto, {'tramite': tramite})
+        except:
+            contexto = {
+                'tramite': tramite,
+                'planilla': planilla,
+                'filas': filas,
+                'columnas': columnas,
+                'obs': obs,
+            }
+
+    return redirect('profesional')
+
+
+def enviar_correccioness(request, pk_tramite):
+    usuario = request.user
+    #archivos = request.GET['msg']
+    observacion = "Este tramitzzzzzzzzzzzzzzze ya tiene los archivos corregidos cargados"
+    tramite = get_object_or_404(Tramite, pk=pk_tramite)
+    documento = Documento(file=request.FILES['documento'])
+    tipo_documento = get_object_or_404(TipoDocumento, pk=3)
+    documento.tipo_documento = tipo_documento
+    documento.tramite = tramite
+    print documento
+    documento.save()
+    tramite.hacer(tramite.CORREGIR, request.user, observacion)
+    messages.add_message(request, messages.SUCCESS, 'Tramite con documentos corregidos y enviados')
     return redirect('profesional')
 
 def enviar_correcciones(request, pk_tramite):
@@ -326,20 +382,33 @@ def enviar_correcciones(request, pk_tramite):
     #archivos = request.GET['msg']
     observacion = "Este tramite ya tiene los archivos corregidos cargados"
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
+    documento = Documento(file=request.FILES['documento'])
+    documento.tramite = tramite
+    print documento
+    documento.save()
     tramite.hacer(tramite.CORREGIR, request.user, observacion)
     messages.add_message(request, messages.SUCCESS, 'Tramite con documentos corregidos y enviados')
     return redirect('profesional')
+
+def obtener_documentos_de_estado(request, pk_estado):
+    estado = get_object_or_404(Estado, pk=pk_estado)
+    documentos = estado.tramite.documentacion_para_estado(estado)
+    print documentos
+    return render(request, 'persona/profesional/documento_de_estado.html', documentos)
+    #return render(request, 'persona/profesional/documento_de_estado.html', { 'documentos': documentos } )
 
 def documento_de_estado(request, pk_estado):
     estado = get_object_or_404(Estado, pk=pk_estado)
     fecha = estado.timestamp
     fecha_str = date.strftime(fecha, '%d/%m/%Y %H:%M')
+    # documentos = estado.tramite.documentacion_para_estado(estado)
+    # documentos = estado.tramite.documentos.all()
     documentos = estado.tramite.documentos.all()
-    documentos_fecha = filter(lambda e:(date.strftime(e.fecha, '%d/%m/%Y %H:%M') == fecha_str), documentos)    
+    documentos_fecha = filter(lambda e: (date.strftime(e.fecha, '%d/%m/%Y %H:%M') == fecha_str), documentos)
     contexto = {'documentos_de_fecha': documentos_fecha}
     planillas = []
     inspecciones = []
-    if (estado.tipo >2 and estado.tipo <5):                        
+    if (estado.tipo > 2 and estado.tipo < 5):
         for p in PlanillaDeVisado.objects.all():
             if (p.tramite.pk == estado.tramite.pk):
                 planillas.append(p)
@@ -349,7 +418,7 @@ def documento_de_estado(request, pk_estado):
         #elementos = planilla.elementos.all()
         contexto = {
             'documentos_de_fecha': documentos_fecha,
-            'planillas':planillas,
+            'planillas': planillas,
             'filas': filas,
             'columnas': columnas,
             #'items': items,
@@ -388,12 +457,15 @@ def planilla_visado_impresa(request, pk_tramite):
     try:
         elementos = planilla.elementos.all()
         items = planilla.items.all()
+        obs = planilla.observacion
         contexto={'tramite': tramite,
                   'planilla': planilla,
                   'filas': filas,
                   'columnas': columnas,
                   'elementos': elementos,
-                  'items': items}
+                  'items': items,
+                  'obs': obs,
+                  }
         return render(request, 'persona/profesional/planilla_visado_impresa.html',contexto)
     except:
          contexto = {
@@ -401,6 +473,7 @@ def planilla_visado_impresa(request, pk_tramite):
              'planilla': planilla,
              'filas': filas,
              'columnas': columnas,
+             'obs': obs,
          }
          return render(request, 'persona/profesional/planilla_visado_impresa.html', contexto)
 
@@ -1112,6 +1185,8 @@ class ReporteSolicitudFinalObraPdf(View):
         return response
 #-------------------------------------------------------------------------------------------------------------------
 #visador -----------------------------------------------------------------------------------------------------------
+from planilla_visado import forms as pforms
+from planilla_visado import models as pmodels
 
 @login_required(login_url="login")
 @grupo_requerido('visador')
@@ -1120,6 +1195,7 @@ def mostrar_visador(request):
         "ctxtramaceptado": tramites_aceptados(request),
         "ctxtramvisados": tramites_visados(request),
         "ctxmis_visados": mis_visados(request),
+        "ctxtramvisadosnoaprobados": visados_noaproabados(request)
     }
     return render(request, 'persona/visador/visador.html', contexto)
 
@@ -1145,7 +1221,17 @@ def tramites_visados(request):
     tramites = Tramite.objects.en_estado(Visado)
     tramites_del_visador = filter(lambda t: t.estado().usuario == usuario, tramites)
     contexto = {"tramites_del_visador": tramites_del_visador}  
-    return contexto    
+    return contexto
+
+def visados_noaproabados(request):
+    usuario = request.user
+    estados = Estado.objects.all()
+    tipo = 4
+    argumentos = [Corregido]
+    tramites = Tramite.objects.en_estado(Corregido)
+    tramites_del_visador = filter(lambda t: t.estado().usuario == usuario, tramites)
+    contexto = {"tramites_del_visador": tramites_del_visador}
+    return contexto
 
 def ver_documentos_para_visado(request, pk_tramite):
     tipos_de_documentos_requeridos = TipoDocumento.get_tipos_documentos_para_momento(TipoDocumento.VISAR)
@@ -1180,7 +1266,53 @@ def ver_planilla_visado(request):
     elementos = Elemento_Balance_Superficie.objects.all()        
     return render(request, 'persona/visador/ver_planilla_visado.html', {'tramite': tramite, 'items':items, 'filas':filas, 'columnas':columnas, 'elementos':elementos})    
 
+
 def generar_planilla_impresa(request, pk_tramite):
+    tramite = get_object_or_404(Tramite, pk=pk_tramite)
+    planillas=PlanillaDeVisado.objects.filter(tramite_id=tramite.id)# busca las planillas que tengan el id del tramite
+
+    if (len(planillas) > 1):
+        aux = planillas[0]
+        for p in planillas:
+            if (p.id > aux.id):  #obtiene el ultimo visado del tramite
+                plan = p
+            else:
+                plan= aux
+        planilla = get_object_or_404(PlanillaDeVisado,id=plan.id)  # PlanillaDeVisado.objects.filter(tramite_id=tramite.id)# busca las planillas que tengan el id del tramite
+        obs = planilla.observacion
+    else:
+        planilla = get_object_or_404(PlanillaDeVisado,tramite_id=pk_tramite)  # PlanillaDeVisado.objects.filter(tramite_id=tramite.id)# busca las planillas que tengan el id del tramite
+        filas = FilaDeVisado.objects.all()
+        columnas = ColumnaDeVisado.objects.all()
+        obs = planilla.observacion
+    try:
+        filas = FilaDeVisado.objects.all()
+        columnas = ColumnaDeVisado.objects.all()
+        elementos = planilla.elementos.all()
+        items = planilla.items.all()
+        obs = planilla.observacion
+        contexto = {
+            'tramite': tramite,
+            'planilla': planilla,
+            'filas': filas,
+            'columnas': columnas,
+            'items': items,
+            'elementos': elementos,
+            'obs': obs,
+        }
+        return render(request, 'persona/visador/generar_planilla_impresa.html', contexto)
+    except:
+        contexto = {
+            'tramite': tramite,
+            'planilla': planilla,
+            'filas': filas,
+            'columnas': columnas,
+            'obs': obs,
+        }
+        return render(request, 'persona/visador/generar_planilla_impresa.html', contexto)
+
+
+def mostrar_visados_noaprobados(request, pk_tramite):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
     planillas=PlanillaDeVisado.objects.filter(tramite_id=tramite.id)# busca las planillas que tengan el id del tramite
     if (len(planillas) > 1):
@@ -1191,13 +1323,16 @@ def generar_planilla_impresa(request, pk_tramite):
             else:
                 plan= aux
         planilla = get_object_or_404(PlanillaDeVisado,id=plan.id)  # PlanillaDeVisado.objects.filter(tramite_id=tramite.id)# busca las planillas que tengan el id del tramite
+        obs = planilla.observacion
     else:
         planilla = get_object_or_404(PlanillaDeVisado,tramite_id=pk_tramite)  # PlanillaDeVisado.objects.filter(tramite_id=tramite.id)# busca las planillas que tengan el id del tramite
     filas = FilaDeVisado.objects.all()
     columnas = ColumnaDeVisado.objects.all()
+    obs = planilla.observacion
     try:
         elementos = planilla.elementos.all()
         items = planilla.items.all()
+        obs = planilla.observacion
         contexto = {
             'tramite': tramite,
             'planilla': planilla,
@@ -1205,16 +1340,19 @@ def generar_planilla_impresa(request, pk_tramite):
             'columnas': columnas,
             'items': items,
             'elementos': elementos,
+            'obs': obs,
         }
-        return render(request, 'persona/visador/generar_planilla_impresa.html', contexto)
+        return render(request, 'persona/visador/mostrar_visados_noaprobados.html', contexto)
     except:
         contexto = {
             'tramite': tramite,
             'planilla': planilla,
             'filas': filas,
             'columnas': columnas,
+            'obs': obs,
         }
-        return render(request, 'persona/visador/generar_planilla_impresa.html', contexto)
+        return render(request, 'persona/visador/mostrar_visador_noaprobados.html', contexto)
+
 
 def planilla_visado(request, pk_tramite):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
@@ -1230,8 +1368,7 @@ def planilla_visado(request, pk_tramite):
     else:
         filas = FilaDeVisado.objects.all()
         columnas = ColumnaDeVisado.objects.all()
-        elementos = Elemento_Balance_Superficie.objects.all()        
-        #raise Exception(elementos)
+        elementos = Elemento_Balance_Superficie.objects.all()
         return render(request, 'persona/visador/planilla_visado.html', {'tramite': tramite, 'items':items, 'filas':filas, 'columnas':columnas, 'elementos':elementos})
     return redirect('visador')
 
@@ -1240,6 +1377,7 @@ from planilla_visado.models import PlanillaDeVisado
 
 def aprobar_visado(request, pk_tramite, monto):
     list_items = []
+    list_elementos = []
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
     planilla = PlanillaDeVisado()
     planilla.tramite = tramite
@@ -1255,12 +1393,13 @@ def aprobar_visado(request, pk_tramite, monto):
                 planilla.agregar_item(item)                                                                                
     planilla.save()
     for name, value in request.POST.items():
+        print request.POST.items()
         if name.startswith('elemento'):
             ipk= name.split('-')[1]
-            list_items.append(ipk)            
+            list_elementos.append(ipk)
     elementos = Elemento_Balance_Superficie.objects.all()        
     for elemento in elementos:        
-        for i in list_items:            
+        for i in list_elementos:
             if (elemento.id == int(i)):                                                
                 planilla.agregar_elemento(elemento)
                 planilla.save()
@@ -1274,35 +1413,37 @@ def aprobar_visado(request, pk_tramite, monto):
 
 def no_aprobar_visado(request, pk_tramite, observacion):
     list_items = []
+    list_elementos = []
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
     planilla = PlanillaDeVisado()
     planilla.tramite = tramite
+    planilla.observacion = observacion
     planilla.save()
     for name, value in request.POST.items():
         if name.startswith('item'):
             ipk= name.split('-')[1]
-            list_items.append(ipk)            
+            list_items.append(ipk)
     items = ItemDeVisado.objects.all()        
     for item in items:        
         for i in list_items:            
             if (item.id == int(i)):                                
-                planilla.agregar_item(item)                                                                                
+                planilla.agregar_item(item)
     planilla.save()
     for name, value in request.POST.items():
         if name.startswith('elemento'):
             ipk= name.split('-')[1]
-            list_items.append(ipk)            
+            list_elementos.append(ipk)
     elementos = Elemento_Balance_Superficie.objects.all()        
     for elemento in elementos:        
-        for i in list_items:            
+        for i in list_elementos:
             if (elemento.id == int(i)):                                                
                 planilla.agregar_elemento(elemento)
                 planilla.save()
-    planilla.save()                
+    planilla.save()
     usuario = request.user            
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
-    obs = observacion
-    tramite.hacer(tramite.CORREGIR, usuario, obs)
+    planilla.save()
+    tramite.hacer(tramite.CORREGIR, usuario, observacion)
     messages.add_message(request, messages.SUCCESS, 'Tramite con visado no aprobado')
     return redirect('visador')
 

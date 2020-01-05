@@ -96,7 +96,8 @@ class DetalleDeItemInspeccion(models.Model):
 
 class PlanillaDeInspeccion(models.Model):
     tramite = models.ForeignKey(Tramite, related_name="inspecciones")
-    detalles = models.ManyToManyField(DetalleDeItemInspeccion, related_name="planillasInspeccion")   
+    detalles = models.ManyToManyField(DetalleDeItemInspeccion, related_name="planillasInspeccion")
+    fecha = models.DateTimeField(auto_now_add=True, null=True)
 
     def agregar_detalle(self, detalle):
         self.detalles.add(detalle)

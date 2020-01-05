@@ -56,7 +56,7 @@
                         {% for documento in tramite.documentos.all %}
                             <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
                                 <div class="thumbnail ">
-                                    <a id="single_image" href="/media/{{documento.file}}" data-fancybox="images" data-caption="{{documento.tipo_documento}}">
+                                    <a id="single_image" href="/media/{{documento.file}}" data-fancybox="images"  data-caption="{{documento.tipo_documento}}">
                                         <img src="/media/{{documento.file}}" width=300 height=300>
                                     </a>
                                     <br>

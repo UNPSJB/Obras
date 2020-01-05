@@ -105,6 +105,32 @@ class Tramite(models.Model):
         else:
             return False
 
+    def documentacion_para_estado(self, estado):
+        previo = estado.previo()
+        #visados = list(self.visados.all())
+        #inspecciones = list(self.inspecciones.all())
+        #documentos = list(self.documentos.all())
+        print estado
+        print previo
+        if previo:
+            print "sssssssssssssss"
+            print self.documentos
+
+            visados = list(self.visados.filter(fecha__lte=estado.timestamp, fecha__gte=previo.timestamp))
+            inspecciones = list(self.inspecciones.filter(fecha__lte=estado.timestamp, fecha__gte=previo.timestamp))
+            documentos = list(self.documentos.filter(fecha__lte=estado.timestamp))
+            tramites=get_object_or_404(Tramite, pk=self.pk)
+            print tramites.documentos
+        else:
+            visados = list(self.visados.filter(fecha=estado.timestamp))
+            inspecciones = list(self.inspecciones.filter(fecha=estado.timestamp))
+            print self.documentos
+            print"ghghghgh"
+            documentos = list(self.documentos.filter(fecha=estado.timestamp))
+        print(len(visados), len(inspecciones), len(documentos))
+       # return visados + inspecciones + documentos
+        return { 'planillas': visados, 'inspecciones': inspecciones, 'documentos': documentos}
+
     def estado(self):
         if self.estados.exists():
             return self.estados.latest().related()
@@ -114,7 +140,9 @@ class Tramite(models.Model):
         return ", ".join(["%s %s lo inspecciono" % (a.fecha_inspeccion, a.inspector) for a in agendados])
 
     def hacer(self, accion, usuario=None, *args, **kwargs):
+        print accion
         estado_actual = self.estado()
+        print estado_actual
         if estado_actual is not None and hasattr(estado_actual, accion):
             metodo = getattr(estado_actual, accion)
             estado_nuevo = metodo(self, *args, **kwargs)
@@ -139,7 +167,16 @@ class Tramite(models.Model):
 class Estado(models.Model):
     TIPO = 0
     TIPOS = [
-        (0, "Estado")
+        #(0, "Estado"),
+        (1, "Iniciado"),
+        (2, "Aceptado"),
+        (3, "Visado"),
+        (4, "Corregido"),
+        (5, "Agendado"),
+        (6, "Con Inspeccion"),
+        (7, "Inspeccionado"),
+        (8, "Final de obra solicitado"),
+        (9, "Finalizado"),
     ]
     tramite = models.ForeignKey(Tramite, related_name='estados')  # FK related_name=estados
     tipo = models.PositiveSmallIntegerField(choices=TIPOS)
@@ -149,6 +186,13 @@ class Estado(models.Model):
 
     class Meta:
         get_latest_by = 'timestamp'
+
+    def previo(self):
+        fecha=self.timestamp
+        return self.tramite.estados.filter(timestamp__lt=fecha).first()
+
+    def siguiente(self):
+        return self.tramite.estados.filter(timestamp__gt=self.timestamp).first()
 
     def save(self, *args, **kwargs):
         if self.pk is None:
@@ -171,7 +215,7 @@ class Estado(models.Model):
         return self.usuario
 
     def __str__(self):
-        return "{}" .format(self.__class__.__name__)
+        return "{}" .format(self.TIPOS[self.tipo - 1][1])
 
 class Iniciado(Estado):
     TIPO = 1
