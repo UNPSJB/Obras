@@ -6,52 +6,60 @@
 {% endblock %}
 
 {% block barra %}
-	<ul class="sidebar sidebar-1">
-		<font size="2">
-			<li><a href="{% url 'director'  %}" class="current"><font color="white">Director</font></a></li>
-		</font>
-	</ul>
+<ul class="sidebar sidebar-1">
+    <font size="2">
+        <li><a href="{% url 'director'  %}" class="current"><font color="white">Director</font></a></li>
+    </font>
+</ul>
 {% endblock %}
 {% block contenido %}
 
-<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" >
-	  <div class="panel">
-		<div class="panel-heading box" role="tab" id="headingFive">
-		  <h5 class="panel-title">
-			<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
-			  <font color="#ffffff" size="2">Tipo de obras segun periodo de fechas</font>
-			</a>
-		  </h5>
-		</div>
+<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+    <div class="panel">
+        <div class="panel-heading box" role="tab" id="headingFive">
+            <h5 class="panel-title">
+                <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFive"
+                   aria-expanded="false" aria-controls="collapseFive">
+                    <font color="#ffffff" size="2">Tipo de obras segun periodo de fechas</font>
+                </a>
+            </h5>
+        </div>
         <div id="collapseFive" class="panel-collapse" role="tabpanel" aria-labelledby="headingFive">
-		  <div class="panel-body">
-			<div class="container-fluid">
-				<div class="row">
-                    <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-                <label> Seleccione periodo de fechas</label>
-                        <form method="post" enctype="multipart/form-data"> {% csrf_token %}
-                            <label> Fecha inicial</label>
-                     <td>
-                         <input type="date" id="fechaInicial" name="fechaInicial" min="1980-03-25"
-                                  max="2019-05-25" step="1">
-                        <input type="date" id="fechaFinal" name="fechaFinal" min="1980-03-25"
-                                      max="2019-05-25" step="1">
-						  <button class="btn btn-primary btn-sm" type="submit" name="Guardar">
-                            Ver
-                        </button>
-                        <a href="javascript:history.back(-1);">
-                            <button type="button" class="btn btn-primary" name="Volver">
-                                Volver
-                            </button>
-                        </a>
-					</div>
-				</form>
+            <div class="panel-body">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                            <label> Seleccione periodo de fechas</label>
+                            <form method="post" enctype="multipart/form-data"> {% csrf_token %}
+                                <label> Fecha inicial</label><br>
+                                <input type="date" id="fechaInicial" name="fechaInicial" min="1980-03-25"
+                                       max="2019-05-25" step="1">
+                                <br>
+                                <label>Fecha Final </label> <br>
+                                <input type="date" id="fechaFinal" name="fechaFinal" min="1980-03-25"
+                                       max="2019-05-25" step="1">
+                                <br>
+                                <br>
+                                <div class="row">
+                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 text-center">
+                                        <button class="btn btn-primary btn-md" type="submit" name="Guardar">
+                                            Aceptar
+                                        </button>
+                                    </div>
+                                    <div class="col-lg-6 col-md-6 col-sm-6 col-xs-6 text-center">
+                                        <a href="{% url 'director' %}">
+                                            <button class="btn btn-primary btn-md " type="submit" value="Atras">Volver
+                                            </button>
+                                        </a>
+                                    </div>
+
+                                </div>
+                            </form>
+                        </div>
+                    </div>
                 </div>
             </div>
-          </div>
-      </div>
-        </div> 
-    </div>     
-</form>
-
+        </div>
+    </div>
+</div>
 {% endblock %}
