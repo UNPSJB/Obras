@@ -83,7 +83,7 @@
                   {% for item in items %}
                     {% if fila == item.fila_de_visado and columna == item.columna_de_visado %}
                         <label class="switch">
-                          <input name="item-{{item.pk}}" type="checkbox"  checked="checked"><span class="slider round"></span>
+                          <input name="item-{{item.pk}}" type="checkbox"  disabled="disabled" checked="checked"><span class="slider round"></span>
                         </label>
                     {% endif %}
                   {% endfor %}
@@ -106,7 +106,7 @@
                       <td class="col-xs-1">{{ elemento }}</td>
                       <td class="col-sm-4">
                           <label class="switch">
-                              <input name="elemento-{{elemento.id}}" type="checkbox" checked="checked"><span class="slider round"></span>
+                              <input name="elemento-{{elemento.id}}" type="checkbox" disabled="disabled" checked="checked"><span class="slider round"></span>
                           </label>
                       </td>
                   </tr>
@@ -146,6 +146,12 @@
                                             <button class="btn btn-primary btn-sm" type="submit" title="Envia Planilla de visado">
                                                 Enviar correcciones
                                             </button>
+                                        <a href="javascript:history.back(-1);">
+                                            <button type="button" class="btn btn-primary" name="Volver">
+                                                Volver
+                                            </button>
+                                        </a>
+                                    </div>
                                         <br>
                                         <br>
                                     </div>
