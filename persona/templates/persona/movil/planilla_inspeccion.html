@@ -8,138 +8,309 @@
 
 {% block barra %}
 <div id="noImprimir">
-	<ul class="sidebar sidebar-1">
-		<font size="2">
-			<li><a href="{% url 'inspector'  %}" class="current"><font color="white">Inspector</font></a></li>
-		</font>
-	</ul>
+    <ul class="sidebar sidebar-1">
+        <font size="2">
+            <li><a href="{% url 'inspector'  %}" class="current"><font color="white">Inspector</font></a></li>
+        </font>
+    </ul>
 </div>
 {% endblock %}
 
 {% block contenido %}
 <div class="container-fluid">
 
-        <div class="row">
+    <div class="row">
+        {% if planilla %}
+        {% if movil %}
+        {% for p in planilla %}
 
-            {% if movil %}
+        <div class="col-sm-1 col-xs-1 col-md-1"></div>
+        <div class="col-sm-10 col-xs-10 col-md-10 ">
+            <form action="{% url 'cargar_inspeccion' tramite.id%}" method="post">
+                {% for categoria in categorias %}
+                <h3>{{ categoria.nombre }}</h3>
 
-            <div class="col-sm-1 col-xs-1 col-md-1"></div>
-            <div class="col-sm-10 col-xs-10 col-md-10 ">
-                <form  action="{% url 'cargar_inspeccion' tramite.id%}" method="post" >
-                    {% for categoria in categorias %}
+                <table class="table-bordered table-striped table-hover table-condensed" style="text-align:center;">
+                    {% for item in items %}
+                    <thead>
+                    <tr>
 
+                        <th>{{item.nombre}}</th>
 
-                    <h3>{{ categoria.nombre }}</h3>
+                    </tr>
+                    </thead>
+                    <tbody>
 
+                    <tr>
+
+                        <td class="col-sm-6">&nbsp;
+                            {% for detalle in detalles %}
+                            {% if categoria.nombre == detalle.categoria_inspeccion.nombre and item.nombre == detalle.item_inspeccion.nombre %}
+                            <div>
+                                <div class="col-xs-8 col-sm-8 col-md-8">
+                                    {{ detalle.nombre }}
+                                </div>
+                                <div class="col-xs-4 col-sm-4 col-md-4">
+                                    {% if categoria.nombre == p.categoria_inspeccion.nombre and detalle.nombre == p.nombre %}
+                                    <label class="switch">
+                                        <input name="detalles-{{detalle.pk}}" type="checkbox" checked="checked"><span
+                                            class="slider round"></span>
+                                    </label>
+                                    {% else %}
+                                    <label class="switch">
+                                        <input name="detalles-{{detalle.pk}}" type="checkbox"><span
+                                            class="slider round"></span>
+                                    </label>
+
+                                    <br>
+                                    <hr>
+                                    {% endif %}
+                                </div>
+
+                            </div>
+                            {% endif %}
+                            {% endfor %}
+                        </td>
+
+                    </tr>
+                    </tbody>
+                    {% endfor %}
+                </table>
+
+                {% endfor %}
+                <br>
+                <div class="col-sm-6 col-xs-6 col-md-6">
+
+                    <input type="submit" class="btn btn-primary brn-xs" name="Agendar">
+                </div>
+                <div class="col-sm-6 col-xs-6 col-md-6">
+                    <a href="{% url 'inspector_movil' %}">
+                        <button class="btn btn-info btn-sm" name="Volver">
+                            Volver
+                        </button>
+                        <br>
+                    </a>
+                </div>
+            </form>
+        </div>
+        {% endfor %}
+        <div class="col-sm-1 col-xs-1 col-md-1">
+
+        </div>
+        {% else %}
+        <div class="col-sm-12 col-xs-12 col-md-12 ">
+            <form action="{% url 'cargar_inspeccion' tramite.id%}" method="post">
+                <div class="row">
                     <table class="table-bordered table-striped table-hover table-condensed" style="text-align:center;">
-                        {% for item in items %}
                         <thead>
+                        <br>
                         <tr>
+                            <th></th>
 
+                            {% for item in items %}
                             <th>{{item.nombre}}</th>
-
+                            {% endfor %}
                         </tr>
                         </thead>
                         <tbody>
 
+                        {% for categoria in categorias %}
                         <tr>
 
-                            <td class="col-sm-6">&nbsp;
+                            <td class="col-xs-1">{{ categoria.nombre }}</td>
+                            {% for item in items %}
+                            <td>&nbsp;
                                 {% for detalle in detalles %}
                                 {% if categoria.nombre == detalle.categoria_inspeccion.nombre and item.nombre == detalle.item_inspeccion.nombre %}
-                                <div>
-                                    <div class="col-xs-8 col-sm-8 col-md-8">
-                                        {{ detalle.nombre }}
-                                    </div>
+                                            <div class="container-fluid">
+                                                <div class="row">
+                                                    <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
+                                                        {{ detalle.nombre }}
+                                                    </div>
+                                       {% for name,value in planilla %}
 
-                                    <div class="col-xs-4 col-sm-4 col-md-4">
-                                        <label class="switch">
-                                            <input name="detalles-{{detalle.pk}}" type="checkbox"><span class="slider round"></span>
-                                        </label>
-                                    </div>
-                                    <br>
-                                    <hr>
-                                </div>
-                                {% endif %}
+                                                    <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                                                        {% if categoria.nombre == value.categoria_inspeccion.nombre and detalle.nombre == value.nombre and name == 1 %}
+                                                        <label class="switch">
+                                                            <input name="detalles-{{detalle.pk}}" type="checkbox" checked="checked"><span
+                                                                class="slider round"></span>
+                                                        </label>
+                                                        <br>
+                                                        <hr>
+                                                        {% elif categoria.nombre == value.categoria_inspeccion.nombre and detalle.nombre == value.nombre and name == 0 %}
+
+                                                        <label class="switch">
+                                                            <input name="detalles-{{detalle.pk}}" type="checkbox"><span
+                                                                class="slider round"></span>
+                                                        </label>
+                                                        <br>
+                                                        <hr>
+                                                        {% endif %}
+
+                                                    </div>
+                                       {% endfor %}
+                                                </div>
+                                            </div>
+                                            {% endif %}
+
                                 {% endfor %}
                             </td>
-
+                            {% endfor %}
                         </tr>
-                        </tbody>
                         {% endfor %}
+                        </tbody>
+
                     </table>
-
-                    {% endfor %}
-
-<br>
-                        <div class="col-sm-6 col-xs-6 col-md-6">
-
-                <input type="submit" class="btn btn-primary brn-xs" name="Agendar">
-                    </div>
+                </div>
+                <br>
                 <div class="col-sm-6 col-xs-6 col-md-6">
-        <a href="{% url 'inspector_movil' %}">
-            <button class="btn btn-info btn-sm" name="Volver">
-                Volver
-            </button><br>
-        </a>
-    </div>
-                </form>
-            </div>
-            <div class="col-sm-1 col-xs-1 col-md-1">
 
-            </div>
-            {%else%}
-            <form  action="{% url 'cargar_inspeccion' tramite.id%}" method="post" >
+                    <input type="submit" class="btn btn-primary brn-xs" name="Agendar">
+                </div>
+                <div class="col-sm-6 col-xs-6 col-md-6">
+                    <a href="{% url 'inspector_movil' %}">
+                        <button class="btn btn-info btn-sm" name="Volver">
+                            Volver
+                        </button>
+                        <br>
+                    </a>
+                </div>
+            </form>
+        </div>
+
+        {% endif %}
+
+        {% else %}
+        {%if movil%}
+        <div class="col-sm-1 col-xs-1 col-md-1"></div>
+        <div class="col-sm-10 col-xs-10 col-md-10 ">
+            <form action="{% url 'cargar_inspeccion' tramite.id%}" method="post">
+                {% for categoria in categorias %}
+
+                <h3>{{ categoria.nombre }}</h3>
+
                 <table class="table-bordered table-striped table-hover table-condensed" style="text-align:center;">
+                    {% for item in items %}
                     <thead>
                     <tr>
-                        <th></th>
-                        {% for item in items %}
+
                         <th>{{item.nombre}}</th>
-                        {% endfor %}
+
                     </tr>
                     </thead>
                     <tbody>
-                    {% for categoria in categorias %}
+
                     <tr>
-                        <td class="col-xs-1">{{ categoria.nombre }}</td>
-                        {% for item in items %}
-                        <td class="col-sm-4">&nbsp;
+
+                        <td class="col-sm-6">&nbsp;
                             {% for detalle in detalles %}
                             {% if categoria.nombre == detalle.categoria_inspeccion.nombre and item.nombre == detalle.item_inspeccion.nombre %}
-                            {{ detalle.nombre }}
-                            <label class="switch">
-                                <input name="detalles-{{detalle.pk}}" type="checkbox"><span class="slider round"></span>
-                            </label>
-                            <br><hr>
+                            <div>
+                                <div class="col-xs-8 col-sm-8 col-md-8">
+                                    {{ detalle.nombre }}
+                                </div>
+                                <div class="col-xs-4 col-sm-4 col-md-4">
+                                    <label class="switch">
+                                        <input name="detalles-{{detalle.pk}}" type="checkbox"><span
+                                            class="slider round"></span>
+                                    </label>
+                                </div>
+                                <br>
+                                <hr>
+                            </div>
                             {% endif %}
                             {% endfor %}
                         </td>
-                        {% endfor %}
+
                     </tr>
-                    {% endfor %}
                     </tbody>
+                    {% endfor %}
                 </table>
+
+                {% endfor %}
                 <br>
-                    <div class="col-sm-6 col-xs-6 col-md-6">
+                <div class="col-sm-6 col-xs-6 col-md-6">
+
+                    <input type="submit" class="btn btn-primary brn-xs" name="Agendar">
+                </div>
+                <div class="col-sm-6 col-xs-6 col-md-6">
+                    <a href="{% url 'inspector_movil' %}">
+                        <button class="btn btn-info btn-sm" name="Volver">
+                            Volver
+                        </button>
+                        <br>
+                    </a>
+                </div>
+            </form>
+        </div>
+        <div class="col-sm-1 col-xs-1 col-md-1">
+
+        </div>
+        {%else%}
+        <form action="{% url 'cargar_inspeccion' tramite.id%}" method="post">
+                            <div class="row">
+            <table class="table-bordered table-striped table-hover table-condensed" style="text-align:center;">
+                <thead>
+                <tr>
+                    <th></th>
+                    {% for item in items %}
+                    <th>{{item.nombre}}</th>
+                    {% endfor %}
+                </tr>
+                </thead>
+                <tbody>
+                {% for categoria in categorias %}
+                <tr>
+                    <td class="col-xs-1">{{ categoria.nombre }}</td>
+                    {% for item in items %}
+                    <td>&nbsp;
+                        {% for detalle in detalles %}
+                        {% if categoria.nombre == detalle.categoria_inspeccion.nombre and item.nombre == detalle.item_inspeccion.nombre %}
+                          <div class="container-fluid">
+                              <div class="row">
+                                  <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
+                                     {{ detalle.nombre }}
+                                  </div>
+                                  <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                                    <label class="switch">
+                                        <input name="detalles-{{detalle.pk}}" type="checkbox"><span class="slider round"></span>
+                                    </label>
+                                    <br>
+                                    <hr>
+                                  </div>
+                              </div>
+                          </div>
+                        {% endif %}
+                        {% endfor %}
+                    </td>
+                    {% endfor %}
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+                            </div>
+            <br>
+            <div class="col-sm-6 col-xs-6 col-md-6">
 
                 <input type="submit" class="btn btn-primary brn-xs" name="Agendar">
-                    </div>
-                <div class="col-sm-6 col-xs-6 col-md-6">
-        <a href="{% url 'inspector_movil' %}">
-            <button class="btn btn-info btn-sm" name="Volver">
-                Volver
-            </button><br>
-        </a>
-    </div>
-            </form>
-            {%endif%}
-        </div>
-    </div>
+            </div>
+            <div class="col-sm-6 col-xs-6 col-md-6">
+                <a href="{% url 'inspector_movil' %}">
+                    <button class="btn btn-info btn-sm" name="Volver">
+                        Volver
+                    </button>
+                    <br>
+                </a>
+            </div>
+        </form>
 
+        {% endif %}
+        {% endif %}
+
+    </div>
 </div>
 </div>
-
+</div>
 <style>
 .btn-info {
     color: #fff;
@@ -313,14 +484,6 @@ ul#menu-horizontal li:hover ul{
         border-radius: 80%;
     }
 
-    html {
-  height: 1000%;
-}
-body {
-  height: 1000vh;
-  display: flex;
-  flex-direction: column;
-}
 div.container {
   max-width: 1000px;
   background-color: #aaa;
@@ -340,9 +503,12 @@ div.footer {
   background-color: black;
   color: #fff;
 }
-</style>
-{% endblock %}
 
+
+
+</style>
+
+{% endblock %}
 
 {% block scripts %}
 {% endblock %}

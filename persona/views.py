@@ -2655,11 +2655,28 @@ def listado_inspector_movil(request):
 def planilla_inspeccion_movil(request,pk_tramite):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
     movil=es_movil(request)
-    contexto = {'tramite': tramite}
-    detalles = DetalleDeItemInspeccion.objects.all()        
+    planilla=PlanillaDeInspeccion.objects.select_related().filter(tramite_id=tramite).last() #last una sola planilla que se pueda modificar y perder el historial??
+    p=[]
+    detalles = DetalleDeItemInspeccion.objects.all()
+    if planilla is not None:
+        detallesPlanilla = planilla.detalles.all()
+        if detallesPlanilla is not None:
+            aux=0
+            for d in detalles:
+                for i in detallesPlanilla:
+                    if i.categoria_inspeccion.nombre==d.categoria_inspeccion.nombre and i.nombre==d.nombre:
+                        b=[1,d]
+                        p.append(b)
+                        aux=1
+                        break;
+                if aux==0:
+                    b = [0, d]
+                    p.append(b)
+                else:
+                    aux=0
     items = ItemInspeccion.objects.all()
     categorias = CategoriaInspeccion.objects.all()
-    contexto = {"tramite":tramite, "items":items,"detalles":detalles,"categorias":categorias,"movil":movil}
+    contexto = {"tramite":tramite, "items":items,"detalles":detalles,"categorias":categorias,"movil":movil,"planilla":p}
     return render(request, 'persona/movil/planilla_inspeccion.html', contexto)
 
 def es_movil(request):
