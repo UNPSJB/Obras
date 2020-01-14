@@ -113,13 +113,19 @@ class ItemDeVisado(models.Model):
     def __str__(self):
         return "{fila}, {columna}".format(fila=self.fila_de_visado.nombre, columna=self.columna_de_visado.nombre)
 
+
 class PlanillaDeVisado(models.Model):
     tramite = models.ForeignKey(Tramite, related_name="visados")
+    observacion = models.CharField(max_length=500, null=True, blank=True)
     items = models.ManyToManyField(ItemDeVisado, related_name="planillas")   
-    elementos = models.ManyToManyField(Elemento_Balance_Superficie, related_name="elementos_balance")   
+    elementos = models.ManyToManyField(Elemento_Balance_Superficie, related_name="elementos_balance")
+    fecha = models.DateTimeField(auto_now_add=True, null=True)
 
     def agregar_elemento(self, elemento):
         self.elementos.add(elemento)
+
+    def agregar_observacion(self, observacion):
+        self.observacion.add(observacion)
 
     def agregar_item(self, item):
         self.items.add(item)
@@ -159,5 +165,10 @@ class PlanillaDeVisado(models.Model):
             cadena += e.nombre+" "
         cadena += "  Items: "
         for item in self.items.all():
-            cadena += "{fila}, {columna}".format(fila=item.fila_de_visado.nombre, columna=item.columna_de_visado.nombre)                    
-        return cadena                        
+            cadena += "{fila}, {columna}".format(fila=item.fila_de_visado.nombre, columna=item.columna_de_visado.nombre)
+        return cadena
+
+
+
+
+

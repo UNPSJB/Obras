@@ -44,5 +44,21 @@
     </form>
   </div>
 </div>
+<div class="row">
+  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+    <form action="" >
+      <div class="row" style="color:#fff;">
+        <div class=" col-xs-12 col-sm-12 col-md-12 col-lg-12">
+          <ol>
+            <label>Observaciones:</h2></label>
+            {% for observacion in observaciones %}
+            <li> {{observacion.descripcion}}</li>
+            {% endfor %}
+          </ol>
+        </div>
+      </div>
+    </form>
+  </div>
+</div>
 
 {% endblock %}

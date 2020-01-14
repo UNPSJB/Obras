@@ -61,6 +61,7 @@
                                           <th>Usuario</th>
                                           <th>Fecha</th>
                                           <th>Progreso</th>
+                                          <th>Estado actual</th>
                                           <th>Ver</th>
                                       </tr>
                                   </thead>
@@ -74,12 +75,13 @@
                                             <td class="col-xs-6" >
                                                <div class="progress" style="position: relative; top: 0.7em;">
                                                    <div id="{{estado.tipo}} - {{estado.timestamp}}" class="progress-bar progress-bar-success"  role="progressbar" style="width:0%;">
+                                                        <td class="col-xs-2">{{estado}}</td>
                                                        <span>%</span>
                                                    </div>
                                                </div>
                                             </td>
                                             <td align="center" class="col-xs-1">
-                                                <a href="{% url 'documento_de_estado' estado.id%}">
+                                                <a href="{% url 'obtener_documentos_de_estado' estado.id%}">
                                                     <button type="button" class="btn btn-primary btn-xs" name="detalle">
                                                         <span class="glyphicon glyphicon-search" aria-hidden="true"> Documentos</span>
                                                     </button>
