@@ -125,11 +125,15 @@ urlpatterns = [
     url(r'^tipos_de_obras_mas_frecuentes', views.ver_tipos_de_obras_mas_frecuentes, name="tipos_de_obras_mas_frecuentes"),
     url(r'^profesionales_mas_requeridos', views.ver_profesionales_mas_requeridos, name="profesionales_mas_requeridos"),
     url(r'^ver_barra_materiales', views.ver_barra_materiales, name="ver_barra_materiales"),
+    url(r'^reporte_inspeccionesDirector_excel/', ReporteInspeccionesDirectorExcel.as_view(), name="reporte_inspeccionesDirector_excel"),
 
     url(r'^ver_filtro_obra_fechas', views.ver_filtro_obra_fechas, name="ver_filtro_obra_fechas"),
     url(r'^ver_sectores_con_mas_obras', views.ver_sectores_con_mas_obras, name="ver_sectores_con_mas_obras"),
 #    url(r'^tipos_obras_periodo_fechas', views.ver_filtro_obra_fechas, name="tipos_obras_periodo_fechas"),
-    url(r'^director/inspecciones_realizadas_durante_el_anio', views.inspecciones_realizadas_durante_el_anio, name="inspecciones_realizadas_durante_el_anio"),
+    #url(r'^director/inspecciones_realizadas_durante_el_anio', views.inspecciones_realizadas_durante_el_anio, name="inspecciones_realizadas_durante_el_anio"),
+    url(r'^vista_de_todos_tramites$', views.ver_todos_tramites, name="vista_de_todos_tramites"),
+
+
 
     #cajero -------------------------------------------------------------------------------------------------------
     url(r'^cajero$', views.mostrar_cajero, name="cajero"),

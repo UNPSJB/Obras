@@ -2113,6 +2113,20 @@ def ver_listado_todos_usuarios(request):
     datos_grupos = total_usuarios_grupos.values()
     return render(request, 'persona/director/vista_de_usuarios.html', {"label_grupos":label_grupos, "datos_grupos":datos_grupos})
 
+def ver_todos_tramites(request):
+    argumentos = [Iniciado, Aceptado, Visado, Corregido, Agendado, ConInspeccion, Inspeccionado, FinalObraSolicitado]
+    tramites = Tramite.objects.en_estado(argumentos)
+    estados = []
+    for t in tramites:
+        estados.append(t.estado().tipo);
+    estados_cant = dict(collections.Counter(estados))
+    for n in range(1, 9):
+        if (not estados_cant.has_key(n)):
+            estados_cant.setdefault(n, 0);
+    estados_datos = estados_cant.values()
+    contexto = {'todos_los_tramites': tramites, "datos_estados":estados_datos, "label_estados":argumentos}
+    return render(request, 'persona/director/vista_de_todos_tramites.html', contexto)
+
 def ver_tipos_de_obras_mas_frecuentes(request):
     tramites = Tramite.objects.all()
     tipos_obras = TipoObra.objects.all()
@@ -2501,19 +2515,21 @@ class ReporteTramitesDirectorExcel(TemplateView):
         ws.merge_cells('B1:G1')
         #ws['B2'] = 'FECHA_INICIO'
         ws['B2'] = 'NRO'
-        ws['C2'] = 'TIPO_DE_OBRA'
+        ws['C2'] = 'PROPIETARIO'
         ws['D2'] = 'PROFESIONAL'
-        ws['E2'] = 'PROPIETARIO'
+        ws['E2'] = 'ESTADO'
         ws['F2'] = 'MEDIDAS'
+        ws['G2'] = 'TIPO DE OBRA'
         cont = 3
         for tramite in tramites:
             #ws.cell(row=cont, column=2).value = convertidor_de_fechas(tramite.estado.timestamp)
             #ws.cell(row=cont, column=2).value = tramite.estado.timestamp
             ws.cell(row=cont, column=2).value = tramite.id
-            ws.cell(row=cont, column=3).value = str(tramite.tipo_obra)
+            ws.cell(row=cont, column=3).value = str(tramite.propietario)
             ws.cell(row=cont, column=4).value = str(tramite.profesional)
-            ws.cell(row=cont, column=5).value = str(tramite.propietario)
+            ws.cell(row=cont, column=5).value = str(tramite.estado())
             ws.cell(row=cont, column=6).value = tramite.medidas
+            ws.cell(row=cont, column=7).value = str(tramite.tipo_obra)
             cont = cont + 1
         nombre_archivo = "ReporteTramites.xlsx"
         response = HttpResponse(content_type="application/ms-excel")
@@ -2555,9 +2571,9 @@ class ReporteTramitesDirectorPdf(View):
         Story.append(Spacer(0, cm * 0.15))
         Story.append(im0)
         Story.append(Spacer(0, cm * 0.5))
-        encabezados = ('NRO', 'TIPO_DE_OBRA', 'PROFESIONAL', 'PROPIETARIO', 'MEDIDAS', 'ESTADO')
+        encabezados = ('NRO', 'PROPIETARIO', 'PROFESIONAL', 'ESTADO', 'MEDIDAS', 'TIPO DE OBRA')
         detalles = [
-            (tramite.id, tramite.tipo_obra, tramite.profesional, tramite.propietario, tramite.medidas, tramite.estado())
+            (tramite.id, tramite.propietario, tramite.profesional, tramite.estado(), tramite.medidas, tramite.tipo_obra)
             for tramite in
             Tramite.objects.all()]
         detalle_orden = Table([encabezados] + detalles, colWidths=[1 * cm, 3 * cm, 4 * cm, 4 * cm, 2 * cm, 3 * cm])
@@ -2574,6 +2590,34 @@ class ReporteTramitesDirectorPdf(View):
         detalle_orden.hAlign = 'CENTER'
         Story.append(detalle_orden)
         doc.build(Story)
+        return response
+
+class ReporteInspeccionesDirectorExcel(TemplateView):
+    def get(self, request, *args, **kwargs):
+        tramites = Tramite.objects.all()
+        wb = Workbook()
+        ws = wb.active
+        ws['A1'] = 'REPORTE DE INSPECCIONES ANUALES'
+        ws.merge_cells('B1:G1')
+        # ws['B2'] = 'FECHA_INICIO'
+        ws['B2'] = 'TRAMITE'
+        ws['C2'] = 'PROPIETARIO'
+        ws['D2'] = 'PROFESIONAL'
+        ws['E2'] = 'FECHA'
+        cont = 3
+        for tramite in tramites:
+            # ws.cell(row=cont, column=2).value = convertidor_de_fechas(tramite.estado.timestamp)
+            # ws.cell(row=cont, column=2).value = tramite.estado.timestamp
+            ws.cell(row=cont, column=2).value = tramite.id
+            ws.cell(row=cont, column=3).value = str(tramite.propietario)
+            ws.cell(row=cont, column=4).value = str(tramite.profesional)
+            ws.cell(row=cont, column=5).value = str(tramite.fecha())
+            cont = cont + 1
+        nombre_archivo = "ReporteInspecciones.xlsx"
+        response = HttpResponse(content_type="application/ms-excel")
+        contenido = "attachment; filename={0}".format(nombre_archivo)
+        response["Content-Disposition"] = contenido
+        wb.save(response)
         return response
 
 #-------------------------------------------------------------------------------------------------------------------
