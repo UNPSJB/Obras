@@ -132,7 +132,7 @@ urlpatterns = [
 #    url(r'^tipos_obras_periodo_fechas', views.ver_filtro_obra_fechas, name="tipos_obras_periodo_fechas"),
     #url(r'^director/inspecciones_realizadas_durante_el_anio', views.inspecciones_realizadas_durante_el_anio, name="inspecciones_realizadas_durante_el_anio"),
     url(r'^vista_de_todos_tramites$', views.ver_todos_tramites, name="vista_de_todos_tramites"),
-    url(r'^vista_todos_los_usuarios', views.ver_listado_usuarios, name="vista_todos_los_usuarios"),
+    url(r'^listado_de_usuarios_segun_grupo', views.ver_listado_usuarios, name="listado_de_usuarios_segun_grupo"),
 
 
     #cajero -------------------------------------------------------------------------------------------------------
