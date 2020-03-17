@@ -25,8 +25,9 @@
                     <th>Generar Comprobante</th>
                 </tr>
             </thead>
+                {% for cuota in cuota%}
             <tbody>
-                {% if cuota %}
+
                     <tr>
                         <td class="col-xs-1">{{ cuota.id }}</td>
                         <td class="col-xs-3">{{ cuota.fechaVencimiento }}</td>
@@ -41,8 +42,8 @@
                             </a>
                         </td>
                     </tr>
-            {% endif %}
             </tbody>
+{%endfor%}
         </table>
     <div class="col-xs-4 col-sm-4 col-md-12 col-lg-12" style="float: right; width: 20%; margin-top: -20px; ">
         <br><form action='/persona/cajero'>

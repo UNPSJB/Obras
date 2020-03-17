@@ -3,14 +3,172 @@
 {% load crispy_forms_tags%}
 {% block barra %}
 <div id="noImprimir">
-    <ul class="sidebar sidebar-1">
-        <font size="2">
-            <li><a href="{% url 'director'  %}" class="current"><font color="white">Director</font></a></li>
-        </font>
-    </ul>
+	<ul class="sidebar sidebar-1">
+		<font size="2">
+			<li><a href="{% url 'director'  %}" class="current"><font color="white">Director</font></a></li>
+		</font>
+	</ul>
 </div>
 {% endblock %}
 {%block contenido%}
+<div class="container-fluid">
+<div id="printReady">
+    <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" >
+		<div class="row" style="background:white;">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <div style="background-color:#2c3e50;">
+                        <img src="/media/imagenes/Escudobanner.png"
+                            class="img-responsive" alt="Imagen responsive" width="100" height="100"/>
+                </div>
+                <div align="justify" style="font-size:9px; text-align:left;">
+                    <br>  &nbsp; MUNICIPALIDAD DE TRELEW
+                    <br>
+                    &nbsp; Rivadavia 390 <br>
+                    &nbsp; 9100 TRELEW- Provincia del Chubut
+                </div>
+
+                <h3 align="center">
+                    SECTORES CON MAS OBRAS &nbsp;  &nbsp;
+                </h3>
+
+                <hr style="border-width:">
+                <br>
+                <br>
+            </div>
+            <canvas id="myChart"></canvas>
+        </div>
+    </div>
+    <div class="container-fluid " id="botones_director">
+        <div class="row">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12 text-center">
+                <button type="button" class="btn btn-primary btn-md" onclick="printDiv('printReady')">Imprimir</button>
+                <a href="javascript:history.back(-1);">
+                    <button class="btn btn-primary btn-md " type="submit" value="Atras">Volver</button>
+                </a>
+            </div>
+        </div>
+   </div>
+</div>
+</div>
+
+
+	<style>
+
+	.leyendaH {text-align:center;}
+
+	.leyenda  ul {list-style-type:none;padding:0 10px;}
+
+	.leyendaH ul {display:inline-block;}
+
+	.leyenda  ul>li {font-size:14px;}
+
+	.leyendaH ul>li {float:left;margin-right:10px;}
+
+	.leyenda  ul>li>span {width:12px;height:12px;display:inline-block;margin-right:3px;}
+
+    body{
+            background:radial-gradient(circle at 1.98% 14.97%,#6699CC, transparent 100%),
+            radial-gradient(circle at 98.02% 52.96%, #66CCFF, transparent 100%),
+            radial-gradient(circle at 50% 50%, #66CCFF,#66CCFF 100%);
+        }
+    th{
+            background-color:#2c3e50;
+            color:white;
+        }
+    </style>
+
+<script>
+    function printDiv(div) {
+    // Create and insert new print section
+
+    var elem = document.getElementById(div);
+    var domClone = elem.cloneNode(true);
+    var $printSection = document.createElement("div");
+    $printSection.id = "printSection";
+    $printSection.appendChild(domClone);
+    $('head').append('<style> #botones_director,#noImprimir,select{ display:none;} .dataTables_wrapper .dataTables_length, .dataTables_wrapper .dataTables_filter, .dataTables_wrapper .dataTables_info, .dataTables_wrapper .dataTables_processing, .dataTables_wrapper .dataTables_paginate label{display: none;} .dataTables_wrapper .dataTables_paginate .paginate_button.disabled, .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:hover, .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:active{display: none;} .dataTables_wrapper .dataTables_paginate .paginate_button{display: none!important;}</style>');
+    //document.body.insertBefore($printSection, document.body.firstChild);
+
+    window.print();
+
+    // Clean up print section for future use
+    var oldElem = document.getElementById("printSection");
+    if (oldElem != null) { oldElem.parentNode.removeChild(oldElem); }
+                          //oldElem.remove() not supported by IE
+
+    return true;
+}
+
+</script>
+
+
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script>
+
+var ctx = document.getElementById('myChart').getContext('2d');
+var valores = [{% for name,value in sectores %}{{value}},{% endfor%}]
+
+    function getRandomColor() {
+        var letters = '0123456789ABCDEF';
+        var color = '#';
+        for (var i = 0; i < 3; i++) {
+            color += letters[Math.floor(Math.random() * 6)];
+        }
+  	    return color;
+    }
+var chart = new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: [
+            {% for name,value in sectores %}
+                '{{name}}',
+            {% endfor%}],
+        datasets: [
+            {
+                {% for name,value in sectores %}
+                    label: '{{name}}',
+                    backgroundColor: getRandomColor(),
+                    borderColor: 'blue',
+                {% endfor%}
+                data: valores,
+            }]
+        },
+
+    options: {
+        scales: {
+            yAxes: [{
+                ticks: {
+                    max: 20,
+                    min: 0,
+                    stepSize: 1
+                }
+            }]
+        }
+    }
+
+});
+</script>
+
+{% endblock %}
+{% block script %}
+{% endblock %}
+
+
+
+<!--
+{ % extends 'base.html' % }
+{ % load staticfiles % }
+{% load crispy_forms_tags% }
+{% block barra % }
+<div id="noImprimir">
+    <ul class="sidebar sidebar-1">
+        <font size="2">
+            <li><a href="{ % url 'director'  % }" class="current"><font color="white">Director</font></a></li>
+        </font>
+    </ul>
+</div>
+{ % endblock % }
+{ %block contenido% }
 <div class="container-fluid">
     <div id="printReady">
         <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
@@ -63,7 +221,7 @@
 <script>
 
 var ctx = document.getElementById('myChart').getContext('2d');
-var valores = [{% for name,value in sectores %}{{value}},{% endfor%}]
+var valores = [{ % for name,value in sectores % }{{value}},{ % endfor% }]
 
     function getRandomColor() {
         var letters = '0123456789ABCDEF';
@@ -77,16 +235,16 @@ var chart = new Chart(ctx, {
     type: 'bar',
     data: {
         labels: [
-            {% for name,value in sectores %}
+            { % for name,value in sectores % }
                 '{{name}}',
-            {% endfor%}],
+            { % endfor% }],
         datasets: [
             {
-                {% for name,value in sectores %}
+                { % for name,value in sectores % }
                     label: '{{name}}',
                     backgroundColor: getRandomColor(),
                     borderColor: 'blue',
-                {% endfor%}
+                { % endfor% }
                 data: valores,
             }]
         },
@@ -115,7 +273,7 @@ var chart = new Chart(ctx, {
             <button type="button" class="btn btn-primary btn-md" onclick="printDiv('printReady')">
                 Imprimir
             </button>
-            <a href="{% url 'director' %}">
+            <a href="{ % url 'director' % }">
                 <button class="btn btn-primary btn-md" type="submit" value="Atras">Volver</button>
             </a>
         </div>
@@ -213,4 +371,5 @@ var chart = new Chart(ctx, {
 }
 
 </script>
-{%endblock%}
+{ % endblock % }
+-->

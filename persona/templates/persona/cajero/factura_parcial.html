@@ -2,14 +2,14 @@
 {% load staticfiles %}
 {% load crispy_forms_tags%}
 {%block comprobante %}
-<div class="container-fluid" >
-    <div id="printReady" >
+<div class="container-fluid">
+    <div id="printReady">
         <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" >
-            <div class="row" style="background:white;" >
+            <div class="row" style="background:white;">
                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                     <div style="background-color:#2c3e50;">
                           <img src="/media/imagenes/Escudobanner.png"
-                               class="img-responsive" alt="escudo municipalidad" width="100" height="100"/>
+                               class="img-responsive" alt="Imagen responsive" width="100" height="100"/>
                     </div>
                        <div align="justify" style="font-size:9px; text-align:left;">
                       <br>  &nbsp; MUNICIPALIDAD DE TRELEW
@@ -18,47 +18,79 @@
                       &nbsp; 9100 TRELEW- Provincia del Chubut
                        </div>
                       <h3 align="center">
-                          FACTURA DE PAGO &nbsp;  &nbsp;
+                          RESUMEN DE PAGO &nbsp;  &nbsp;
                       </h3>
                       <hr>
-                           &nbsp;<label style="color:black;"> PAGO EFECTUADO </label>
-                            <h5 align="right"> Fecha de Vencimiento {{ cuota.fechaVencimiento }} &nbsp; &nbsp;</h5>
-                            <h5 align="right"> Fecha de Pago {{ cuota.fechaPago }} &nbsp; &nbsp; </h5>
-                      <hr>
-                            <label style="color:black;">  Titular: &nbsp; Apellido - Nombre : {{ tramite.propietario.persona.apellido}}  -  {{ tramite.propietario.persona.nombre }}</label>
+                    <div class="row" style="color:black;">
+                        <label style="color:black;">Tramite:{{tramite.id}}</label>
+                        <label style="color:black;">Cantidad de cuotas:{{pago.cantidadCuotas}}</label>
+                                    <hr>
+                                   <div class="row">
+                                       <div class="col-sm-6 col-md-6 col-lg-6 col-xs-6">
+                            <label style="color:black;" > &nbsp; Titular: &nbsp; Apellido - Nombre : {{ tramite.propietario.persona.apellido}}  -  {{ tramite.propietario.persona.nombre }}</label>
                             <label style="color:black;">  &nbsp;  &nbsp;DNI : {{tramite.propietario.persona.dni}}</label>
-                <hr>
-                <label style="color:black;">  Sector: </label> {{tramite.sector}}
-                <label style="color:black;">Parcela: </label> {{tramite.parcela}}
-                <label style="color:black;">Circunscripción: </label> {{tramite.circunscripcion}}
-                <label style="color:black;">Manzana: </label> {{tramite.manzana}}
-                <hr>
+                                       </div>
+                                                                              <div class="col-sm-6 col-md-6 col-lg-6 col-xs-6">
+
+                                       <label style="color:black;">Profesional : </label>
+                                        <label style="color:black;"> {{tramite.profesion}} {{tramite.profesional}}</label>
+                                        <label style="color:black;">M.P: {{tramite.profesional.matricula}}</label><br>
+                                                                              </div>
+                                        <br>
+                                </div>
+                                    <hr>
+                                    <!--<label>Obra:</label><br>-->
+                                       <div class="col-sm-6 col-md-6 col-lg-6 col-xs-6">
+
+                                    <label style="color:black;"> Domicilio : {{tramite.domicilio}}</label><br>
+
+                                                    <label style="color:black;">Tipo de Obra : {{ tramite.tipo_obra }}</label><br>
+
+                                       </div>
+                                                                           <div class="col-sm-6 col-md-6 col-lg-6 col-xs-6">
+
+                <label style="color:black;">  Sector:  {{tramite.sector}}</label><br>
+                <label style="color:black;">Parcela: {{tramite.parcela}}</label> <br>
+                <label style="color:black;">Circunscripción: {{tramite.circunscripcion}}</label> <br>
+                <label style="color:black;">Manzana: {{tramite.manzana}}</label> <br>
+                                                                           </div>
+                    </div>
+                                    <hr>
+<br>
                 <div class="table-responsive">
-                    <table  align="center" class="table table-bordered table-striped table-hover" style="width:1100px;">
+                    <table align="center" class="table table-bordered table-striped table-hover" style="width:1100px;">
                         <thead>
                             <tr>
-                                        <th p style="color:#FFFFFF"bgcolor="#2c3e50">Numero de tramite</th>
-                                        <th p style="color:#FFFFFF"bgcolor="#2c3e50">Tipo de Obra  </th>
+                                        <th p style="color:#FFFFFF"bgcolor="#2c3e50">Fecha de vencimiento</th>
                                         <th p style="color:#FFFFFF"bgcolor="#2c3e50">Numero de Cuota</th>
                                         <th p style="color:#FFFFFF"bgcolor="#2c3e50">Importe</th>
+                                        <th p style="color:#FFFFFF"bgcolor="#2c3e50">Fecha de pago</th>
+
                                         <th p style="color:#FFFFFF"bgcolor="#2c3e50">Tipo de Pago</th>
 
                             </tr>
                         </thead>
+                                 {%for c in cuotas %}
+
                         <tbody style="text-align:center">
                             <tr>
-                                <td>{{ tramite.id }}</td>
-                                        <td>{{ tramite.tipo_obra.nombre }}</td>
-                                        <td>{{ cuota.numeroCuota }}</td>
-                                        <td>{{ cuota.monto }} </td>
+                                <td>{{ c.fechaVencimiento }}</td>
+                                        <td>{{ c.numeroCuota }}</td>
+                                       <td>{{ c.monto }} </td>
+                                       <td>{{ c.fechaPago }} </td>
+
                                         <td>{{ pago.tipoPago.nombre }} </td>
                             </tr>
                         </tbody>
+                                                           {%endfor%}
+
                     </table>
-                    <h5 align="right"  style="color:black;" >Total: {{cuota.monto}} / {{tramite.monto_pagado}}</h5>
+
 
                 </div>
                 <hr>
+                    <h4 align="right">Total pagado: {{tramite.monto_pagado}}</h4>
+                    <h4 align="right">Total a pagar: {{tramite.monto_a_pagar}}</h4>
                     <label style="color:black;" align="center">&nbsp; ESTE RECIBO ES CONSTANCIA DE PAGO </label>
 
             </div>
@@ -67,7 +99,8 @@
 
     <div class="container-fluid " id="botones_cajero">
         <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6" align="right">
-             <button type="button" class="btn btn-primary btn-md" onclick="printDiv('printReady')">Imprimir</button>
+           <button type="button" class="btn btn-primary btn-md" onclick="printDiv('printReady')">Imprimir</button>
+
         </div>
         <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
             <form action='/persona/cajero'>
@@ -117,6 +150,5 @@
 }
 
 </script>
-
 
 {%endblock%}
