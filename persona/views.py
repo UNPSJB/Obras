@@ -365,7 +365,7 @@ def ver_documentos_corregidos(request, pk_tramite):
 def enviar_correccioness(request, pk_tramite):
     usuario = request.user
     #archivos = request.GET['msg']
-    observacion = "Este tramitzzzzzzzzzzzzzzze ya tiene los archivos corregidos cargados"
+    observacion = "Este tramite ya tiene los archivos corregidos cargados"
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
     documento = Documento(file=request.FILES['documento'])
     tipo_documento = get_object_or_404(TipoDocumento, pk=3)
@@ -424,10 +424,10 @@ def documento_de_estado(request, pk_estado):
             #'items': items,
             #'elementos': elementos,
         }
-    if (estado.tipo >5 and estado.tipo <8):                        
+    if (estado.tipo >5 and estado.tipo <8):
         for p in PlanillaDeInspeccion.objects.all():
             if (p.tramite.pk == estado.tramite.pk):
-                inspecciones.append(p)              
+                inspecciones.append(p)
         items = ItemInspeccion.objects.all()
         categorias = CategoriaInspeccion.objects.all()
         #detalles = inspeccion.detalles.all()
@@ -435,8 +435,8 @@ def documento_de_estado(request, pk_estado):
             'inspecciones': inspecciones,
             'items': items,
             'categorias': categorias,
-            #'detalles': detalles,                        
-        }    
+            #'detalles': detalles,
+        }
     return render(request, 'persona/profesional/documento_de_estado.html', contexto)
 
 # def visados_profesional(request):
@@ -1202,10 +1202,10 @@ def mostrar_visador(request):
 def mis_visados(request):
     usuario = request.user
     estados = Estado.objects.all()
-    tipo = 3 #visado    
+    tipo = 3 #visado
     tramites = Tramite.objects.en_estado(Visado)
     tramites_del_visador = filter(lambda t: t.estado().usuario == usuario, tramites)
-    contexto = {"tramites_del_visador": tramites_del_visador}    
+    contexto = {"tramites_del_visador": tramites_del_visador}
     return tramites_del_visador
 
 def tramites_aceptados(request):
@@ -1216,11 +1216,11 @@ def tramites_aceptados(request):
 def tramites_visados(request):
     usuario = request.user
     estados = Estado.objects.all()
-    tipo = 3 #visado    
+    tipo = 3 #visado
     argumentos = [Visado]
     tramites = Tramite.objects.en_estado(Visado)
     tramites_del_visador = filter(lambda t: t.estado().usuario == usuario, tramites)
-    contexto = {"tramites_del_visador": tramites_del_visador}  
+    contexto = {"tramites_del_visador": tramites_del_visador}
     return contexto
 
 def visados_noaproabados(request):
@@ -1259,12 +1259,12 @@ def ver_documentos_visados(request, pk_tramite):
 
 from planilla_visado.models import FilaDeVisado, ColumnaDeVisado
 
-def ver_planilla_visado(request):    
-    items = ItemDeVisado.objects.all()    
+def ver_planilla_visado(request):
+    items = ItemDeVisado.objects.all()
     filas = FilaDeVisado.objects.all()
     columnas = ColumnaDeVisado.objects.all()
-    elementos = Elemento_Balance_Superficie.objects.all()        
-    return render(request, 'persona/visador/ver_planilla_visado.html', {'tramite': tramite, 'items':items, 'filas':filas, 'columnas':columnas, 'elementos':elementos})    
+    elementos = Elemento_Balance_Superficie.objects.all()
+    return render(request, 'persona/visador/ver_planilla_visado.html', {'tramite': tramite, 'items':items, 'filas':filas, 'columnas':columnas, 'elementos':elementos})
 
 
 def generar_planilla_impresa(request, pk_tramite):
@@ -1385,30 +1385,30 @@ def aprobar_visado(request, pk_tramite, monto):
     for name, value in request.POST.items():
         if name.startswith('item'):
             ipk= name.split('-')[1]
-            list_items.append(ipk)            
-    items = ItemDeVisado.objects.all()        
-    for item in items:        
-        for i in list_items:            
-            if (item.id == int(i)):                                
-                planilla.agregar_item(item)                                                                                
+            list_items.append(ipk)
+    items = ItemDeVisado.objects.all()
+    for item in items:
+        for i in list_items:
+            if (item.id == int(i)):
+                planilla.agregar_item(item)
     planilla.save()
     for name, value in request.POST.items():
         print request.POST.items()
         if name.startswith('elemento'):
             ipk= name.split('-')[1]
             list_elementos.append(ipk)
-    elementos = Elemento_Balance_Superficie.objects.all()        
-    for elemento in elementos:        
+    elementos = Elemento_Balance_Superficie.objects.all()
+    for elemento in elementos:
         for i in list_elementos:
-            if (elemento.id == int(i)):                                                
+            if (elemento.id == int(i)):
                 planilla.agregar_elemento(elemento)
                 planilla.save()
-    planilla.save()                
-    usuario = request.user    
+    planilla.save()
+    usuario = request.user
     tramite.hacer(tramite.VISAR, usuario)
-    tramite.monto_a_pagar= monto        
-    tramite.save()    
-    messages.add_message(request, messages.SUCCESS, 'Tramite visado aprobado')        
+    tramite.monto_a_pagar= monto
+    tramite.save()
+    messages.add_message(request, messages.SUCCESS, 'Tramite visado aprobado')
     return redirect('visador')
 
 def no_aprobar_visado(request, pk_tramite, observacion):
@@ -1423,24 +1423,24 @@ def no_aprobar_visado(request, pk_tramite, observacion):
         if name.startswith('item'):
             ipk= name.split('-')[1]
             list_items.append(ipk)
-    items = ItemDeVisado.objects.all()        
-    for item in items:        
-        for i in list_items:            
-            if (item.id == int(i)):                                
+    items = ItemDeVisado.objects.all()
+    for item in items:
+        for i in list_items:
+            if (item.id == int(i)):
                 planilla.agregar_item(item)
     planilla.save()
     for name, value in request.POST.items():
         if name.startswith('elemento'):
             ipk= name.split('-')[1]
             list_elementos.append(ipk)
-    elementos = Elemento_Balance_Superficie.objects.all()        
-    for elemento in elementos:        
+    elementos = Elemento_Balance_Superficie.objects.all()
+    for elemento in elementos:
         for i in list_elementos:
-            if (elemento.id == int(i)):                                                
+            if (elemento.id == int(i)):
                 planilla.agregar_elemento(elemento)
                 planilla.save()
     planilla.save()
-    usuario = request.user            
+    usuario = request.user
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
     planilla.save()
     tramite.hacer(tramite.CORREGIR, usuario, observacion)
@@ -1635,7 +1635,7 @@ from planilla_inspeccion.models import *
 
 @login_required(login_url="login")
 @grupo_requerido('inspector')
-def mostrar_inspector(request):    
+def mostrar_inspector(request):
     if (request.user_agent.is_mobile): # returns True
         return redirect('movil_')
     contexto = {
@@ -1650,7 +1650,7 @@ def mostrar_inspector(request):
 def mis_inspecciones(request):
     usuario = request.user
     estados = Estado.objects.all()
-    tipo = 6 #visado    
+    tipo = 6 #visado
     argumentos = [ConInspeccion]
     tramites = Tramite.objects.en_estado(ConInspeccion)
     return tramites
@@ -1660,13 +1660,13 @@ def tramites_visados_y_con_inspeccion(request):
     tramites = Tramite.objects.en_estado(argumentos)
     return tramites
 
-def tramites_inspeccionados_por_inspector(request):   
+def tramites_inspeccionados_por_inspector(request):
     usuario = request.user
     estados = Estado.objects.all()
     tipo = 7 #7
     tramites = Tramite.objects.en_estado(ConInspeccion)
     tramites_del_inspector = filter(lambda t: t.estado().usuario == usuario, tramites)
-    estados_inspeccionados = filter(lambda estado: (estado.usuario is not None and estado.usuario == usuario and estado.tipo == tipo), estados)    
+    estados_inspeccionados = filter(lambda estado: (estado.usuario is not None and estado.usuario == usuario and estado.tipo == tipo), estados)
     contexto = {"tramites_del_inspector": tramites_del_inspector}
     return estados_inspeccionados
 
@@ -1682,23 +1682,24 @@ def tramites_agendados_por_inspector(request):
     return tramites_del_inspector
 
 def agendar_tramite(request, pk_tramite):
-    tramite = get_object_or_404(Tramite, pk=pk_tramite)    
-    usuario = request.user    
-    fecha = convertidor_de_fechas(request.GET["msg"])        
-    tramite.hacer(Tramite.AGENDAR, request.user, fecha) #tramite, fecha_inspeccion, inspector=None
+    tramite = get_object_or_404(Tramite, pk=pk_tramite)
+    usuario = request.user
+    fecha = convertidor_de_fechas(request.GET["msg"])
+    rol = request.GET["rol"]
+    tramite.hacer(Tramite.AGENDAR, usuario=usuario, fecha_inspeccion=fecha,inspector=usuario,rol=2) #tramite, fecha_inspeccion, inspector=None rol=2 para inspector
     messages.add_message(request, messages.SUCCESS, "Inspeccion agendada")
     return redirect('inspector')
 
-def cargar_inspeccion(request, pk_tramite):        
+def cargar_inspeccion(request, pk_tramite):
     if request.method == "POST":
-        if "Agendar" in request.POST: 
+        if "Agendar" in request.POST:
             tramite = get_object_or_404(Tramite, pk=pk_tramite)
             id_tramite = int(pk_tramite)
             planilla = PlanillaDeInspeccion()
             planilla.tramite = tramite
             planilla.save()
-            list_detalles=[] 
-            for name,value in request.POST.items():        
+            list_detalles=[]
+            for name,value in request.POST.items():
                 if name.startswith('detalle'):
                     ipk=name.split('-')[1]
                     detalle = DetalleDeItemInspeccion.objects.get(id=ipk)
@@ -1706,11 +1707,11 @@ def cargar_inspeccion(request, pk_tramite):
             for detalle in list_detalles:
                 planilla.agregar_detalle(detalle)
             planilla.save()
-            usuario = request.user        
+            usuario = request.user
             tramite.hacer(tramite.INSPECCIONAR, usuario)
             tramite.save()
-            messages.add_message(request,messages.SUCCESS,"Inspeccion cargada")        
-        else:        
+            messages.add_message(request,messages.SUCCESS,"Inspeccion cargada")
+        else:
             messages.add_message(request,messages.ERROR,"No se cargo la inspeccion")
     return redirect('inspector')
 
@@ -1782,7 +1783,7 @@ def documentos_inspector_estado(request, pk_estado):
         planilla = None
         for p in PlanillaDeInspeccion.objects.all():
             if (p.tramite.pk == estado.tramite.pk):
-                planilla = p        
+                planilla = p
         items = ItemInspeccion.objects.all()
         categorias = CategoriaInspeccion.objects.all()
         detalles = planilla.detalles.all()
@@ -1931,47 +1932,73 @@ def mostrar_jefe_inspector(request):
 
 def tramite_con_inspecciones_list(request):
     tramites = Tramite.objects.en_estado(ConInspeccion)
-    contexto = {'tramites': tramites}
+    tram=[]
+    for t in tramites:
+        planillas = PlanillaDeInspeccion.objects.filter(tramite_id=t.id).count()
+        if planillas>=3:
+            tram.append(t)
+    contexto = {'tramites': tram}
     return contexto
 
 def agendar_inspeccion_final(request,pk_tramite):
     tramite = get_object_or_404(Tramite,pk=pk_tramite)
     fecha = convertidor_de_fechas(request.GET["msg"])
-    tramite.hacer(Tramite.AGENDAR, usuario=request.user, fecha_inspeccion=fecha, inspector=request.user)
+    tramite.hacer(Tramite.AGENDAR, usuario=request.user, fecha_inspeccion=fecha, inspector=request.user,rol=1) #para agendar jefe inspector rol=1
     return redirect('jefe_inspector')
 
 def inspeccion_final(request,pk_tramite):
-    tramite = get_object_or_404(Tramite, pk=pk_tramite)
-    detalles = DetalleDeItemInspeccion.objects.all()        
-    items = ItemInspeccion.objects.all()
-    categorias = CategoriaInspeccion.objects.all()
-    contexto = {"tramite":tramite, "items":items,"detalles":detalles,"categorias":categorias}
-    return render(request, 'persona/jefe_inspector/cargar_inspeccion_final.html', contexto)
+   # tramite = get_object_or_404(Tramite, pk=pk_tramite)
+    #items = ItemInspeccion.objects.all()
+    #categorias = CategoriaInspeccion.objects.all()
+   tramite = get_object_or_404(Tramite, pk=pk_tramite)
+   planilla = PlanillaDeInspeccion.objects.select_related().filter(tramite_id=tramite).last()  # last una sola planilla que se pueda modificar y perder el historial??
+   p = []
+   detalles = DetalleDeItemInspeccion.objects.all()
+   if planilla is not None:
+       detallesPlanilla = planilla.detalles.all()
+       if detallesPlanilla is not None:
+           aux = 0
+           for d in detalles:
+               for i in detallesPlanilla:
+                   if i.categoria_inspeccion.nombre == d.categoria_inspeccion.nombre and i.nombre == d.nombre:
+                       b = [1, d]
+                       p.append(b)
+                       aux = 1
+                       break;
+               if aux == 0:
+                   b = [0, d]
+                   p.append(b)
+               else:
+                   aux = 0
+   items = ItemInspeccion.objects.all()
+   categorias = CategoriaInspeccion.objects.all()
+   contexto = {"tramite": tramite, "items": items, "detalles": detalles, "categorias": categorias, "planilla": p}
+   return render(request, 'persona/jefe_inspector/cargar_inspeccion_final.html', contexto)
 
 def completar_inspeccion_final(request,pk_tramite):
-    tramite = get_object_or_404(Tramite, pk=pk_tramite)
-   # id_tramite = int(pk_tramite)
-    planilla = PlanillaDeInspeccion()
-    planilla.tramite = tramite
-    planilla.save()
-    list_detalles=[]                    
-    for name,value in request.POST.items():        
-        if name.startswith('detalle'):
-            ipk=name.split('-')[1]
-            list_detalles.append(ipk)
-    detalles = DetalleDeItemInspeccion.objects.all()
-    for detalle in detalles:
-        for i in list_detalles:
-            if (detalle.id == int(i)):
-                planilla.agregar_detalle(detalle)
-    planilla.save()
-    u = request.user        
-    try:        
-        tramite.hacer(Tramite.INSPECCIONAR, usuario=u)#ConInspeccion->Inspeccionado    
-        tramite.save()
-        messages.add_message(request, messages.SUCCESS, 'Inspeccion Finalizada') 
-    except:   
-        messages.add_message(request, messages.WARNING, "La inspeccion ya fue cargada")
+    if "Guardar" in request.POST:
+        tramite = get_object_or_404(Tramite, pk=pk_tramite)
+        planilla = PlanillaDeInspeccion()
+        planilla.tramite = tramite
+        planilla.save()
+        list_detalles=[]
+        for name,value in request.POST.items():
+            if name.startswith('detalle'):
+                ipk=name.split('-')[1]
+                list_detalles.append(ipk)
+        detalles = DetalleDeItemInspeccion.objects.all()
+        for detalle in detalles:
+            for i in list_detalles:
+                if (detalle.id == int(i)):
+                    planilla.agregar_detalle(detalle)
+        planilla.save()
+        u = request.user
+        try:
+            tramite.hacer(Tramite.INSPECCIONAR, usuario=u)#ConInspeccion->Inspeccionado
+            tramite.save()
+            messages.add_message(request, messages.SUCCESS, 'Inspeccion Finalizada')
+        except:
+            messages.add_message(request, messages.WARNING, "La inspeccion ya fue cargada")
     return redirect('jefe_inspector')
     #return render(request, 'persona/jefe_inspector/cargar_inspeccion_final.html', {'tramite': tramite})
 
@@ -1993,7 +2020,6 @@ def ver_inspecciones(request, pk_tramite):
     categorias = CategoriaInspeccion.objects.all()
     contexto = {
         'tramite': tramite,
-        'inspecciones':inspecciones,
         'inspecciones': inspecciones,
         'items': items,
         'categorias': categorias
@@ -2001,8 +2027,12 @@ def ver_inspecciones(request, pk_tramite):
     return render(request, 'persona/jefe_inspector/vista_de_inspecciones.html',contexto)
 
 def listado_inspecciones(request):
-    tramites=Tramite.objects.en_estado(ConInspeccion)
-    contexto={'tramites':tramites}
+    tramites=Tramite.objects.en_estado(Agendado)
+    tram=[]
+    for t in tramites:
+        if t.estado().rol==2:
+          tram.append(t)
+    contexto={'tramites':tram}
     return contexto
 #------------------------------------------------------------------------------------------------------------------
 #director ---------------------------------------------------------------------------------------------------------
@@ -2206,16 +2236,16 @@ def pie_chart_with_legend(datos, nombres,titulo):
     return drawing
 
 def ver_categorias_mas_frecuentes(request):
-    planillas = PlanillaDeInspeccion.objects.all()    
+    planillas = PlanillaDeInspeccion.objects.all()
     #tramites_inspeccionados = Tramite.objects.en_estado(Inspeccionado)
-    tramites = Tramite.objects.all()    
+    tramites = Tramite.objects.all()
     tipos_categorias = CategoriaInspeccion.objects.all()
     detalles = DetalleDeItemInspeccion.objects.all()
     list = []
     for p in planillas:
-        for t in tramites:            
+        for t in tramites:
             if t.id == p.tramite.id:
-                list.append(p)                
+                list.append(p)
     a = 0
     b = 0
     c = 0
@@ -2288,24 +2318,24 @@ def ver_profesionales_mas_requeridos(request):
     return render(request, 'persona/director/profesionales_mas_requeridos.html',contexto)
 
 def ver_barra_materiales(request):
-    items = ItemInspeccion.objects.all()    
+    items = ItemInspeccion.objects.all()
     planillas = PlanillaDeInspeccion.objects.all()
     contexto = {
         "items":items,
-    }             
-    if "Guardar" in request.POST:              
+    }
+    if "Guardar" in request.POST:
         for name, value in request.POST.items():
-            if name.startswith('item'):              
+            if name.startswith('item'):
                 contexto = __busco_item__(value)
                 titulo = "Materiales mas utilizados"
                 grafico = pie_chart_with_legend(contexto["datos"], contexto["nombres"],titulo)
                 imagen = base64.b64encode(grafico.asString("png"))
                 return render(request, 'persona/director/materiales_mas_usados.html',{"datos":contexto,"tipo_item":value,"grafico":imagen})
-    if "Volver" in request.POST: 
+    if "Volver" in request.POST:
         pass
-    return render(request,'persona/director/barra_materiales.html',contexto)    
+    return render(request,'persona/director/barra_materiales.html',contexto)
 
-def __busco_item__(item):    
+def __busco_item__(item):
     #detalles = DetalleDeItemInspeccion.objects.all()
     #planillas = PlanillaDeInspeccion.objects.all()
     i = get_object_or_404(ItemInspeccion, nombre=item)
@@ -2368,13 +2398,13 @@ def generar_planilla_visado(request):
     contexto_columnas = {'columnas': columnas}
     balancesSuperficies = Elemento_Balance_Superficie.objects.all()
     itemsVisados = ItemDeVisado.objects.all()
-    contexto = {'filas': filas, 'columnas':columnas, 'itemsVisados':itemsVisados,'balancesSuperficies':balancesSuperficies}    
+    contexto = {'filas': filas, 'columnas':columnas, 'itemsVisados':itemsVisados,'balancesSuperficies':balancesSuperficies}
     return render(request, 'persona/director/item_visado.html', contexto)
 
 def ver_planilla_inspeccion(request):
      items = ItemInspeccion.objects.all()
      detalles = DetalleDeItemInspeccion.objects.all()
-     categorias = CategoriaInspeccion.objects.all()     
+     categorias = CategoriaInspeccion.objects.all()
      contexto = {'items': items}
      #return render(request, 'persona/director/ver_planilla_inspeccion.html', {"items":items, "detalles": detalles, "categorias":categorias})
      return render(request, 'persona/director/ver_planilla_inspeccion.html', contexto)
@@ -2413,7 +2443,7 @@ def ver_filtro_obra_fechas(request):
                     datos.append(cant)
                     l = [c.nombre, cant]
                 list.append(l)
-                estados_en_rango = None
+                estados = None
                 tramites = None
         nombres=tipos.values_list("nombre",flat=True).all()
         print datos
@@ -2469,6 +2499,41 @@ def grafico_de_barras(datos,nombres,titulo):
     drawing.add(lc)
     drawing.add(my_title)
     return drawing
+# def ver_sectores_con_mas_obras(request):
+#     tramites = Tramite.objects.all()
+#     sectores = []
+#     list = []
+#     for t in tramites:
+#         if not t.sector in sectores:
+#             sectores.append(t.sector)
+#     nombres=[]
+#     datos=[]
+#     for s in sectores:
+#         list.append([s, 0])
+#         nombres.append(s)
+#
+#     sectores = list
+#     list_sectores = []
+#
+#     for name, value in sectores:
+#         v = 0
+#         for t in tramites:
+#             if t.sector == name:
+#                 v += 1
+#         list_sectores.append([name, v])
+#     for name, value in list_sectores:
+#         for t in nombres:
+#             if t == name:
+#                 datos.append(value)
+#     titulo = "sectores con mas obras"
+#     grafico = pie_chart_with_legend(datos, nombres, titulo)
+#     imagen = base64.b64encode(grafico.asString("png"))
+#     contexto = {
+#         'grafico':imagen,
+#         #"sectores": list_sectores,
+#         #"nombres": list
+#     }
+#     return render(request,'persona/director/ver_sectores_con_mas_obras.html',contexto)
 def ver_sectores_con_mas_obras(request):
     tramites = Tramite.objects.all()
     sectores = []
@@ -2476,11 +2541,9 @@ def ver_sectores_con_mas_obras(request):
     for t in tramites:
         if not t.sector in sectores:
             sectores.append(t.sector)
-    nombres=[]
-    datos=[]
+
     for s in sectores:
         list.append([s, 0])
-        nombres.append(s)
 
     sectores = list
     list_sectores = []
@@ -2491,17 +2554,9 @@ def ver_sectores_con_mas_obras(request):
             if t.sector == name:
                 v += 1
         list_sectores.append([name, v])
-    for name, value in list_sectores:
-        for t in nombres:
-            if t == name:
-                datos.append(value)
-    titulo = "sectores con mas obras"
-    grafico = pie_chart_with_legend(datos, nombres, titulo)
-    imagen = base64.b64encode(grafico.asString("png"))
     contexto = {
-        'grafico':imagen,
-        #"sectores": list_sectores,
-        #"nombres": list
+        "sectores": list_sectores,
+        "nombres": list
     }
     return render(request,'persona/director/ver_sectores_con_mas_obras.html',contexto)
 
@@ -2653,6 +2708,19 @@ def mostrar_cajero(request):
     }
     return render(request, 'persona/cajero/cajero.html', contexto)
 
+def listado_de_comprobantes(request, pk_tramite):
+        tramite = get_object_or_404(Tramite, pk=pk_tramite)
+        pago = tramite.pago
+        canceladas = []
+        cuotas = Cuota.objects.en_estado(Cancelada)
+        for cuota in cuotas:
+            if cuota.pago == pago:
+                canceladas.append(cuota)
+        if canceladas is None:
+            messages.add_message(request, messages.WARNING, 'No hay pagos registrados para el tramite seleccionado.')
+        return render(request, 'persona/cajero/listado_de_comprobantes.html', {'cuotas': canceladas,'tramite':tramite})
+
+
 def listado_tramites_para_financiar(request):
     tramite = Tramite.objects.en_estado(Visado)
     listado=[]
@@ -2662,20 +2730,20 @@ def listado_tramites_para_financiar(request):
     contexto = {'tramites':listado}
     return contexto
 
-def elegir_financiacion(request,pk_tramite):        
-    tramite = get_object_or_404(Tramite, pk=pk_tramite)        
+def elegir_financiacion(request,pk_tramite):
+    tramite = get_object_or_404(Tramite, pk=pk_tramite)
     if request.method == "POST":
-        if "Guardar" in request.POST: 
-            pago = Pago()  
+        if "Guardar" in request.POST:
+            pago = Pago()
             contador = 31
-            fms = "%A"              
+            fms = "%A"
             for name, value in request.POST.items():
-                if name.startswith('cantidadCuotas'):                                        
-                    pago.cantidadCuotas=value                         
+                if name.startswith('cantidadCuotas'):
+                    pago.cantidadCuotas=value
             total = tramite.monto_a_pagar/int(pago.cantidadCuotas)
             pago.save()
             for i in range(1, int(pago.cantidadCuotas)+1):
-                cuota = Cuota(monto=total, numeroCuota=i, pago=pago)                
+                cuota = Cuota(monto=total, numeroCuota=i, pago=pago)
                 cuota.fechaVencimiento=date.today() + timedelta(days=contador)
                 dia=cuota.fechaVencimiento.strftime(fms)
                 if dia=="Sunday":
@@ -2686,10 +2754,10 @@ def elegir_financiacion(request,pk_tramite):
                 contador=contador+31
                 cuota.save()
                 cuota.hacer("Cancelacion")
-            messages.add_message(request, messages.SUCCESS, 'Todo bien =)')                    
+            messages.add_message(request, messages.SUCCESS, 'Todo bien =)')
             tramite.pago = pago
             tramite.save()
-        return redirect('cajero')                          
+        return redirect('cajero')
     return render(request, 'persona/cajero/elegir_financiacion.html',{'tramite': tramite})
 
 def registrar_pago(request,pk_tramite):
@@ -2747,6 +2815,34 @@ def elegir_tramite(request, pk_tramite):
             cuotas.append(cuota)
     return render(request, 'persona/cajero/registrar_cuota.html', {'cuotas':cuotas})
 
+def pagarCuota(cuota):
+    cuota.guardar_fecha()
+    cuota.save()
+    cuota.hacer("cancelacion")
+    pago = cuota.pago
+    tramite = get_object_or_404(Tramite, pago=pago)
+    tramite.calcular_monto_pagado(cuota.monto)
+    tramite.save()
+    return tramite
+
+def pagar(request):
+    c = []
+    for name, value in request.POST.items():
+        if name.startswith('cuota'):
+            pk = name.split('-')[1]
+            c.append(pk)
+    p = []
+    cuotas = []
+    for cs in c:
+        cuota = get_object_or_404(Cuota, pk=cs)
+        cuotas.append(cuota)
+        tramite=pagarCuota(cuota)
+    pago=cuota.pago
+    messages.add_message(request, messages.SUCCESS, 'Pago Registrado.')
+    contexto = {'tramite': tramite, 'pago': pago, 'cuota': cuotas}
+    return render ( request,'persona/cajero/registrar_pago_tramite.html', contexto)
+    #return render(request, 'persona/cajero/actualizar_cuota.html',{'cuota':cuotas})
+
 def elegir_cuota(request,pk_cuota):
     cuota=get_object_or_404(Cuota,pk=pk_cuota)
     cuota.guardar_fecha()
@@ -2760,16 +2856,39 @@ def elegir_cuota(request,pk_cuota):
     return render(request, 'persona/cajero/actualizar_cuota.html',{'cuota':cuota})
 
 def comprobante_pago_cuota(request,pk_cuota):
-    cuota=get_object_or_404(Cuota,pk=pk_cuota)
+    cuota = get_object_or_404(Cuota, pk=pk_cuota)
+
+    # c=[]
+    # for name, value in request.POST.items():
+    #    if name.startswith('cuota'):
+    #        pk= name.split('-')[1]
+    #        c.append(pk)
+    # p=[]
+    # cuotas=[]
+    # for cs in c:
+    #    cuota = get_object_or_404(Cuota,pk=cs)
+    #    cuotas.append(cuota)
     pago = cuota.pago
     tramite = get_object_or_404(Tramite, pago=pago)
     return render(request, 'persona/cajero/comprobante.html',{'cuota': cuota, 'pago':pago,'tramite':tramite})
 
-def registrar_el_pago_tramite(request, pk_cuota):
-    cuota = get_object_or_404(Cuota, pk=pk_cuota)
-    pago=cuota.pago
+def registrar_el_pago_tramite(request):
+    c = []
+    for name, value in request.POST.items():
+        if name.startswith('cuota'):
+            pk = name.split('-')[1]
+            c.append(pk)
+    p = []
+    cuotas = []
+    for cs in c:
+        cuota = get_object_or_404(Cuota, pk=cs)
+        cuotas.append(cuota)
+    pago = cuota.pago
     tramite = get_object_or_404(Tramite, pago=pago)
-    contexto = {'tramite': tramite,'pago':pago, 'cuota': cuota}
+    #cuota = get_object_or_404(Cuota, pk=pk_cuota)
+    #pago=cuota.pago
+    #tramite = get_object_or_404(Tramite, pago=pago)
+    contexto = {'tramite': tramite,'pago':pago, 'cuota': cuotas}
     return render ( request,'persona/cajero/registrar_pago_tramite.html', contexto)
 
 def listado_tramites(request):
@@ -2781,6 +2900,8 @@ def listado_tramites(request):
     contexto={'tramites':tramites}
     return contexto
 
+
+
 def listado_comprobantes(request,pk_tramite):
     tramite=get_object_or_404(Tramite,pk=pk_tramite)
     pago=tramite.pago
@@ -2791,7 +2912,8 @@ def listado_comprobantes(request,pk_tramite):
                 canceladas.append(cuota)
     if canceladas is None:
         messages.add_message(request, messages.WARNING, 'No hay pagos registrados para el tramite seleccionado.')
-    return render (request, 'persona/cajero/listado_comprobantes.html', {'cuotas':canceladas})
+    return render (request, 'persona/cajero/factura_parcial.html', {'cuotas':canceladas,'tramite':tramite,'pago':pago})
+
 
 #------------------------------------------------------------------------------------------------------------------
 #movil ---------------------------------------------------------------------------------------------------------

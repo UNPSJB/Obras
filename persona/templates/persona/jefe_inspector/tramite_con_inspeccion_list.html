@@ -36,11 +36,13 @@
                 <script type="text/javascript">
                                 function agendarInspeccion{{tramite.id}}(){
                                     var id_tramite = $("#idjefe{{tramite.id}}").val();
+                                    var rol=1
                                     var date = $("#datetimejefe{{tramite.id}}").val();
                                     var hora= $("#timejefe{{tramite.id}}").val();
                                     if (date  && hora) {
                                         var fecha = date+' '+hora;
-                                        url = '/persona/agendar_tramite/'+id_tramite+'/?msg='+fecha;
+                                        <!--url = '/persona/agendar_tramite/'+id_tramite+'/?msg='+fecha+'&rol='+rol;-->
+                                        url = '/persona/agendar_inspeccion_final/'+id_tramite+'/?msg='+fecha+'&rol='+rol;
                                         location.href = url;
                                     }
                                     else if (hora ==''){
@@ -61,7 +63,7 @@
             </td>
             <td>
                 <a onclick="javascript:agendarInspeccion{{tramite.id}}();">
-                    <button type="button" class="btn btn-primary btn-sm" name="Agendar">Agendar
+                    <button type="button" class="btn btn-primary btn-sm" name="AgendarJefe">Agendar
                     </button>
                 </a>
             </td>
@@ -75,7 +77,7 @@
             <!--<span class="glyphicon glyphicon-list-alt" aria-hidden="true"> Agendar</span>-->
             <!--</button>-->
             <!--</a>-->
-            </td> -->
+           <!-- </td> -->
             <!--<script>-->
             <!--function prueba(){-->
             <!--obs = $("#id_fechadeinspeccion_{{tramite.pk}}").val();-->

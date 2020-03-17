@@ -140,13 +140,20 @@ urlpatterns = [
     url(r'^cajero/tramites_para_financiar$', views.listado_tramites_para_financiar, name="tramites_para_financiar"),
     url(r'^cajero/elegir_financiacion/(?P<pk_tramite>\d+)/$', views.elegir_financiacion, name="financiar"),
     url(r'^cajero/listado_tramites_a_pagar', views.listado_tramites_a_pagar, name="listado_tramites_a_pagar"),
+    url(r'^cajero/registrar_pago$', views.pagar, name="pagar"),
     url(r'^cajero/actualizar_cuota/(?P<pk_cuota>\d+)$', views.elegir_cuota, name="elegir_cuota"),
     url(r'^cajero/elegir_tramite/(?P<pk_tramite>\d+)$', views.elegir_tramite, name="elegir_tramite"),
-    url(r'^cajero/registrar_pago_tramite.html(?P<pk_cuota>\d+)$', views.registrar_el_pago_tramite,    name="registrar_pago_tramite"),
-    url(r'^cajero/registrar_pago.html/(?P<pk_cuota>\d+)/$', views.comprobante_pago_cuota, name="comprobante_pago_cuota"),
+    url(r'^cajero/registrar_pago_tramite$', views.registrar_el_pago_tramite, name="registrar_pago_tramite"),
+    url(r'^cajero/registrar_pago_tramite.html(?P<pk_cuota>\d+)$', views.registrar_el_pago_tramite,
+        name="registrar_pago_tramite"),
+    # url(r'^cajero/registrar_pago.html/$', views.comprobante_pago_cuota, name="comprobante_pago_cuota"),
+    url(r'^cajero/listado_de_comprobantes/(?P<pk_tramite>\d+)$', views.listado_de_comprobantes,
+        name="listado_de_comprobantes"),
+    url(r'^cajero/registrar_pago.html/(?P<pk_cuota>\d+)/$', views.comprobante_pago_cuota,
+        name="comprobante_pago_cuota"),
     url(r'^cajero/listado_tramites$', views.listado_tramites, name="listado_tramites"),
+    url(r'^cajero/listado_tramites_comprobantes$', views.listado_tramites, name="listado_tramites"),
     url(r'^cajero/listado_comprobantes/(?P<pk_tramite>\d+)$', views.listado_comprobantes, name="listado_comprobantes"),
-
 
     #movil -------------------------------------------------------------------------------------------------------
     url(r'^movil$', views.mostrar_inspector_movil, name="movil_"),

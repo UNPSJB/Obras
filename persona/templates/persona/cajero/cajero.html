@@ -8,7 +8,8 @@
 		<li><a class="current"><font color="white">Cajero</font> </a></li>
 		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseSeven" aria-expanded="false"aria-controls="collapseSeven" onclick='mostrarSubmenu("sin_submenu")'>Elegir financiacion</a></li>
 		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseNine" aria-expanded="false"aria-controls="collapseNine" onclick='mostrarSubmenu("sin_submenu")'>Seleccionar tramite</a></li>
-		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseTen" aria-expanded="false"aria-controls="collapseTen" onclick='mostrarSubmenu("sin_submenu")'>Listado Comprobantes de Pago</a></li>
+		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseTen" aria-expanded="false"aria-controls="collapseTen" onclick='mostrarSubmenu("sin_submenu")'>Listado resumen de pago</a></li>
+		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseEleven" aria-expanded="false"aria-controls="collapseEleven" onclick='mostrarSubmenu("sin_submenu")'>Listado Comprobantes de Pago</a></li>
 
 	</font>
   </ul>
@@ -72,7 +73,7 @@
 			<div class="panel-heading panel-heading-custom box" role="tab" id="headingTen">
 				<h5 class="panel-title">
 					<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTen" aria-expanded="false" aria-controls="collapseTen">
-						<font color="#ffffff" size="2">Listado Comprobantes de Pago</font>
+						<font color="#ffffff" size="2">Listado resumen de pago</font>
 					</a>
 				</h5>
 			</div>
@@ -85,6 +86,33 @@
 							<br>
 								{% block listado_tramites %}
 									{% include "persona/cajero/listado_tramites.html" with tramites=ctxlistado.tramites %}
+								{% endblock %}
+
+						</div>
+						</div>
+					</div>
+			  	</div>
+			  </div>
+			</div>
+		</div>
+
+		 <div class="panel panel-custom">
+			<div class="panel-heading panel-heading-custom box" role="tab" id="headingEleven">
+				<h5 class="panel-title">
+					<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseEleven" aria-expanded="false" aria-controls="collapseEleven">
+						<font color="#ffffff" size="2">Listado Comprobantes de Pago</font>
+					</a>
+				</h5>
+			</div>
+			<div id="collapseEleven" class="panel-collapse collapse " role="tabpanel" aria-labelledby="headingEleven">
+			  <div class="panel-body">
+				<div class="container-fluid">
+					<div class="row">
+						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+							<div class="container-fluid">
+							<br>
+								{% block comprobantes_tramites %}
+									{% include "persona/cajero/listado_tramites_comprobantes.html" with tramites=ctxlistado.tramites %}
 								{% endblock %}
 
 						</div>

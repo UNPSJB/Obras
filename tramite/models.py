@@ -10,6 +10,7 @@ from django import template
 register = template.Library()
 
 from openpyxl import load_workbook
+
 """from django_excel import *
 import pyexcel as pe"""
 from os.path import basename
@@ -20,13 +21,15 @@ from decimal import Decimal
 class TramiteBaseManager(models.Manager):
     pass
 
+
 class TramiteQuerySet(models.QuerySet):
     def en_estado(self, estados):
         if type(estados) != list:
             estados = [estados]
         return self.annotate(max_id=models.Max('estados__id')).filter(
             estados__id=models.F('max_id'),
-            estados__tipo__in=[ e.TIPO for e in estados])
+            estados__tipo__in=[e.TIPO for e in estados])
+
 
 TramiteManager = TramiteBaseManager.from_queryset(TramiteQuerySet)
 
@@ -45,41 +48,43 @@ class Tramite(models.Model):
     # Finalizar la obra esto es cuando se pide un final de obra por el ...
     FINALIZAR = "finalizar"
     SOLICITAR_FINAL_OBRA = "solicitar_final_obra"
-    propietario = models.ForeignKey(Propietario,blank=True, null=True,unique=False)
-    profesional= models.ForeignKey(Profesional,unique=False)
+    propietario = models.ForeignKey(Propietario, blank=True, null=True, unique=False)
+    profesional = models.ForeignKey(Profesional, unique=False)
     medidas = models.IntegerField()
     tipo_obra = models.ForeignKey(TipoObra)
-    domicilio = models.CharField(max_length=50,blank=True)    
+    domicilio = models.CharField(max_length=50, blank=True)
     pago = models.OneToOneField(Pago, default=True, blank=True, null=True)
-    #-------------------------------------------------------------------------------------
+    # -------------------------------------------------------------------------------------
     # DATOS CATASTRALES
-    parcela = models.CharField(max_length = 20)
-    circunscripcion = models.CharField(max_length = 20)
-    manzana = models.CharField(max_length = 20)
-    sector = models.CharField(max_length = 20)
-    #-------------------------------------------------------------------------------------    
-    monto_a_pagar = models.DecimalField(max_digits=10, decimal_places=2, null=True,blank=True)
-    monto_pagado = models.DecimalField(max_digits=10, decimal_places=2, null=True,blank=True)
+    parcela = models.CharField(max_length=20)
+    circunscripcion = models.CharField(max_length=20)
+    manzana = models.CharField(max_length=20)
+    sector = models.CharField(max_length=20)
+    # -------------------------------------------------------------------------------------
+    monto_a_pagar = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    monto_pagado = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
     objects = TramiteManager()
-    
 
     def __str__(self):
-        return "Numero de tramite: {} - Profesional: {} - Propietario: {} - Pago {} " .format(self.pk, self.profesional, self.propietario, self.pago)
+        return "Numero de tramite: {} - Profesional: {} - Propietario: {} - Pago {} ".format(self.pk, self.profesional,
+                                                                                             self.propietario,
+                                                                                             self.pago)
 
     @classmethod
-    def new(cls, usuario, propietario, profesional, tipo_obra, medidas, domicilio, parcela, circunscripcion, sector, manzana, documentos):        
-        
+    def new(cls, usuario, propietario, profesional, tipo_obra, medidas, domicilio, parcela, circunscripcion, sector,
+            manzana, documentos):
+
         if any(map(lambda d: d.tipo_documento.requerido != TipoDocumento.INICIAR, documentos)):
             raise Exception("Un documento no es de tipo iniciar")
         t = cls(
-            domicilio=domicilio, 
-            propietario=propietario, 
-            profesional=profesional, 
-            medidas=medidas, 
-            parcela=parcela, 
-            circunscripcion=circunscripcion, 
-            sector=sector, 
-            manzana=manzana, 
+            domicilio=domicilio,
+            propietario=propietario,
+            profesional=profesional,
+            medidas=medidas,
+            parcela=parcela,
+            circunscripcion=circunscripcion,
+            sector=sector,
+            manzana=manzana,
             tipo_obra=TipoObra.objects.get(pk=tipo_obra),
             pago=None,
             monto_pagado=0
@@ -99,37 +104,28 @@ class Tramite(models.Model):
 
     def esta_pagado(self):
         if (self.monto_pagado is None):
-            self.monto_pagado=0
-        if ((self.monto_pagado+20) >= self.monto_a_pagar):
+            self.monto_pagado = 0
+        if ((self.monto_pagado + 20) >= self.monto_a_pagar):
             return True
         else:
             return False
 
     def documentacion_para_estado(self, estado):
         previo = estado.previo()
-        #visados = list(self.visados.all())
-        #inspecciones = list(self.inspecciones.all())
-        #documentos = list(self.documentos.all())
-        print estado
-        print previo
+        # visados = list(self.visados.all())
+        # inspecciones = list(self.inspecciones.all())
+        # documentos = list(self.documentos.all())
         if previo:
-            print "sssssssssssssss"
-            print self.documentos
-
             visados = list(self.visados.filter(fecha__lte=estado.timestamp, fecha__gte=previo.timestamp))
             inspecciones = list(self.inspecciones.filter(fecha__lte=estado.timestamp, fecha__gte=previo.timestamp))
             documentos = list(self.documentos.filter(fecha__lte=estado.timestamp))
-            tramites=get_object_or_404(Tramite, pk=self.pk)
-            print tramites.documentos
+            tramites = get_object_or_404(Tramite, pk=self.pk)
         else:
             visados = list(self.visados.filter(fecha=estado.timestamp))
             inspecciones = list(self.inspecciones.filter(fecha=estado.timestamp))
-            print self.documentos
-            print"ghghghgh"
             documentos = list(self.documentos.filter(fecha=estado.timestamp))
-        print(len(visados), len(inspecciones), len(documentos))
-       # return visados + inspecciones + documentos
-        return { 'planillas': visados, 'inspecciones': inspecciones, 'documentos': documentos}
+            # return visados + inspecciones + documentos
+        return {'planillas': visados, 'inspecciones': inspecciones, 'documentos': documentos}
 
     def estado(self):
         if self.estados.exists():
@@ -140,9 +136,7 @@ class Tramite(models.Model):
         return ", ".join(["%s %s lo inspecciono" % (a.fecha_inspeccion, a.inspector) for a in agendados])
 
     def hacer(self, accion, usuario=None, *args, **kwargs):
-        print accion
         estado_actual = self.estado()
-        print estado_actual
         if estado_actual is not None and hasattr(estado_actual, accion):
             metodo = getattr(estado_actual, accion)
             estado_nuevo = metodo(self, *args, **kwargs)
@@ -154,9 +148,8 @@ class Tramite(models.Model):
         else:
             raise Exception("Tramite: La accion solicitada no se pudo realizar")
 
-
     def calcular_monto_pagado(self, monto):
-        if (self.monto_pagado<=0):
+        if (self.monto_pagado <= 0):
             self.monto_pagado = monto
         else:
             self.monto_pagado = self.monto_pagado + monto
@@ -167,7 +160,7 @@ class Tramite(models.Model):
 class Estado(models.Model):
     TIPO = 0
     TIPOS = [
-        #(0, "Estado"),
+        # (0, "Estado"),
         (1, "Iniciado"),
         (2, "Aceptado"),
         (3, "Visado"),
@@ -183,12 +176,11 @@ class Estado(models.Model):
     usuario = models.ForeignKey(Usuario)
     timestamp = models.DateTimeField(auto_now_add=True)
 
-
     class Meta:
         get_latest_by = 'timestamp'
 
     def previo(self):
-        fecha=self.timestamp
+        fecha = self.timestamp
         return self.tramite.estados.filter(timestamp__lt=fecha).first()
 
     def siguiente(self):
@@ -199,9 +191,8 @@ class Estado(models.Model):
             self.tipo = self.__class__.TIPO
         super(Estado, self).save(*args, **kwargs)
 
-    def agregar_documentacion(self,documentos_requeridos):
+    def agregar_documentacion(self, documentos_requeridos):
         self.tramite.documentos.add(documento)
-
 
     def related(self):
         return self.__class__ != Estado and self or getattr(self, self.get_tipo_display())
@@ -210,17 +201,17 @@ class Estado(models.Model):
     def register(cls, klass):
         cls.TIPOS.append((klass.TIPO, klass.__name__.lower()))
 
-
     def get_usuario(self):
         return self.usuario
 
     def __str__(self):
-        return "{}" .format(self.TIPOS[self.tipo - 1][1])
+        return "{}".format(self.TIPOS[self.tipo - 1][1])
+
 
 class Iniciado(Estado):
     TIPO = 1
     CADENA_DEFAULT = "En este momento no se poseen observaciones sobre el tramite"
-    observacion = models.CharField(max_length=100, default=CADENA_DEFAULT,blank=True)
+    observacion = models.CharField(max_length=100, default=CADENA_DEFAULT, blank=True)
 
     def aceptar(self, tramite):
         return Aceptado(tramite=tramite)
@@ -232,6 +223,7 @@ class Iniciado(Estado):
     def __str__(self):
         return "Iniciado"
 
+
 class Aceptado(Estado):
     TIPO = 2
 
@@ -241,24 +233,26 @@ class Aceptado(Estado):
     def corregir(self, tramite, observacion):
         return Corregido(tramite=tramite, observacion=observacion)
 
-    def __str__(self):        
+    def __str__(self):
         return "Aceptado"
+
 
 class Visado(Estado):
     TIPO = 3
-    
-    def agendar(self, tramite, fecha_inspeccion, inspector=None):
-        return Agendado(tramite=tramite, fecha=fecha_inspeccion, inspector=None)
+
+    def agendar(self, tramite, fecha_inspeccion, inspector, rol):
+        return Agendado(tramite=tramite, fecha=fecha_inspeccion, inspector=None, rol=rol)
 
 
 class Corregido(Estado):
     TIPO = 4
     CADENA_DEFAULT = "En este momento no se poseen observaciones sobre el tramite"
     observacion = models.CharField(max_length=100, default=CADENA_DEFAULT, blank=True, null=True)
+
     def corregir(self, tramite, observacion=None):
-        #e = Iniciado(tramite=tramite, observacion=observacion)
-        #e.agregar_documentacion(documentos_requeridos=documentos)
-        #return e
+        # e = Iniciado(tramite=tramite, observacion=observacion)
+        # e.agregar_documentacion(documentos_requeridos=documentos)
+        # return e
         return Iniciado(tramite=tramite, observacion=observacion)
 
 
@@ -266,6 +260,7 @@ class Agendado(Estado):
     TIPO = 5
     inspector = models.ForeignKey(Usuario, null=True, blank=True)
     fecha = models.DateTimeField(blank=False)
+    rol = models.IntegerField(blank=True, null=True)
 
     def inspeccionar(self, tramite, inspector=None):
         return ConInspeccion(tramite=tramite, inspector=inspector)
@@ -275,12 +270,11 @@ class ConInspeccion(Estado):
     TIPO = 6
     inspector = models.ForeignKey(Usuario, null=True, blank=True)
 
-
     def solicitar_final_obra(self, tramite):
         return FinalObraSolicitado(tramite=tramite, final_obra_total=False)
 
-    def agendar(self, tramite, fecha_inspeccion, inspector=None):
-        return Agendado(tramite=tramite, fecha=fecha_inspeccion, inspector=None)
+    def agendar(self, tramite, fecha_inspeccion, inspector, rol):
+        return Agendado(tramite=tramite, fecha=fecha_inspeccion, inspector=None, rol=rol)
 
     def inspeccionar(self, tramite):
         return Inspeccionado(tramite=tramite)
@@ -295,8 +289,7 @@ class ConInspeccion(Estado):
 class Inspeccionado(Estado):
     TIPO = 7
 
-
-    def solicitar_final_obra(self, tramite):#solicitar final de obra
+    def solicitar_final_obra(self, tramite):  # solicitar final de obra
         if self.tramite.esta_pagado():  # Tramite.objects.get(pk=tramite.pk).pago_completo
             return FinalObraSolicitado(tramite=tramite, final_obra_total=True)
         else:
@@ -314,12 +307,15 @@ class FinalObraSolicitado(Estado):
         else:
             raise Exception("Todavia no se puede otorgar el final de obra")
 
+
 class Finalizado(Estado):
     TIPO = 9
 
 
-for klass in [Iniciado, Aceptado, Visado, Corregido, Agendado, Inspeccionado, Finalizado, ConInspeccion, FinalObraSolicitado]:
+for klass in [Iniciado, Aceptado, Visado, Corregido, Agendado, Inspeccionado, Finalizado, ConInspeccion,
+              FinalObraSolicitado]:
     Estado.register(klass)
+
 
 # class Pago(models.Model):
 #     tramite = models.ForeignKey(Tramite)

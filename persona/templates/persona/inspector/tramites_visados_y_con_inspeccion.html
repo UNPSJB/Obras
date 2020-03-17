@@ -35,10 +35,11 @@
                         function agregarHoraInspeccion{{tramite.id}}(){
                             var id_tramite = $("#id{{tramite.id}}").val();
                             var date = $("#datetime{{tramite.id}}").val();
+                            var rol=2
                             var hora= $("#time{{tramite.id}}").val();
                             if (date  && hora) {
                                 var fecha = date+' '+hora;
-                                url = '/persona/agendar_tramite/'+id_tramite+'/?msg='+fecha;
+                                url = '/persona/agendar_tramite/'+id_tramite+'/?msg='+fecha+'&rol='+rol;
                                 location.href = url;
                             }
                             else if (hora ==''){
@@ -80,7 +81,7 @@
                     Volver
                 </button>
             </a>
-        </div>-->
+        </div>
         </tbody>
 </div>
 {% endblock %}
