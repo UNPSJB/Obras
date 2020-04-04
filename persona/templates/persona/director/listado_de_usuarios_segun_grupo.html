@@ -1,0 +1,218 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load crispy_forms_tags%}
+
+{% block estilos %}
+
+{% endblock %}
+
+{% block barra %}
+	<ul class="sidebar sidebar-1">
+		<font size="2">
+			<li><a href="javascript:history.back(-1);" class="current"><font color="white">Director</font></a></li>
+		</font>
+	</ul>
+{% endblock %}
+
+{% block contenido %}
+
+	<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" >
+	  <div class="panel">
+		<div class="panel-heading box" role="tab" id="headingFive">
+		  <h5 class="panel-title">
+			<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+			  <font color="#ffffff" size="2">Listado de todos los tramites del sistema</font>
+			</a>
+		  </h5>
+		</div>
+		<div id="collapseFive" class="panel-collapse" role="tabpanel" aria-labelledby="headingFive">
+		  <div class="panel-body">
+			<div class="container-fluid">
+				<div class="row">
+                    <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                        <canvas id="pieDirectorUsuarios" height="200"></canvas>
+                    </div>
+					<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                          <div class="table-responsive">
+                              <table  class="table table-bordered table-striped table-hover table-condensed" style="background: white;">
+                                  <thead>
+                                      <tr>
+                                          <th>Nombre</th>
+                                          <th>Apellido</th>
+                                          <th>Dni</th>
+                                          <th>Mail</th>
+                                          <th>Cuil</th>
+                                          <th>Domicilio</th>
+                                          <th>Telefono</th>
+                                          <th>Grupo</th>
+                                      </tr>
+                                  </thead>
+                                  <tbody>
+                                  {% for a in listados %}
+                                        <tr>
+                                              <td class="col-xs-1" align="center">{{a.nombre}}</td>
+                                              <td class="col-xs-3">{{a.apellido}}</td>
+                                              <td class="col-xs-3">{{a.dni}}</td>
+                                              <td class="col-xs-2">{{a.mail}}</td>
+                                              <td class="col-xs-1">{{a.cuil}}</td>
+                                              <td class="col-xs-1">{{a.domicilio}}</td>
+                                            <td class="col-xs-1">{{a.telefono}}</td>
+                                            <td class="col-xs-1" align="center">{{a.usuario_id}}</td>
+                                        </tr>
+                                      {% endfor %}
+                                  </tbody>
+                              </table>
+                          </div>
+                        <hr>
+                    </div>
+
+					<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+
+                              <table>
+                                  <thead>
+                                      <tr>
+                                          <th>Id Grupo</th>
+                                          <th>Nombre</th>
+                                      </tr>
+                                  </thead>
+                                  {% for g in grupossistema %}
+                                        <tr>
+                                              <td class="col-xs-1" align="center">{{g.id}}</td>
+                                            <td class="col-xs-3">{{g.name}}</td>
+                                        </tr>
+                                  {% endfor %}
+                              </table>
+
+                        
+                    <div class=" col-xs-8 col-sm-8 col-md-8 col-lg-8" align="left">
+                        <a id="crear_detalle" href="{% url 'reporte_tramites_director_excel' %}" class="btn btn-info btn-collapsible btn-sm" title="Generar Archivo Excel" >
+                           <i class="glyphicon glyphicon-list-alt"></i><span>Exportar a EXCEL</span>
+                        </a>
+                        <a href="{% url 'reporte_tramites_director_pdf' %}" class="btn btn-info btn-collapsible btn-sm" title="Generar Archivo PDF" >
+                            <i class="glyphicon glyphicon-file"></i><span>Exportar a PDF</span>
+                        </a>
+                    </div>
+                    <div class=" col-xs-4 col-sm-4 col-md-4 col-lg-4" align="right">
+                        <a href="javascript:history.back(-1);">
+                            <button type="button" class="btn btn-primary" name="Volver">
+                                Volver
+                            </button>
+                        </a>
+                    </div>
+				</div>
+			</div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+
+{% endblock %}
+
+{% block scripts %}
+
+
+    <script>
+
+        color = [];
+        labelsGrupos = [];
+        dataGrupos = [];
+
+        {% for da in datos_grupos %}
+            dataGrupos.push({{da}});
+        {% endfor %}
+
+        {% for la in label_grupos %}
+            labelsGrupos.push("{{la}}");
+            color.push(generarcolor());
+        {% endfor %}
+
+        Chart.defaults.global.defaultFontColor = 'white';
+        var ctx = document.getElementById("pieDirectorUsuarios");
+        var pieDirectorUsuarios = new Chart( ctx, {
+            type: 'pie',
+            data: {
+              labels: labelsGrupos,
+              datasets: [{
+                label: "Cantidad de usuarios por grupo",
+                backgroundColor: color,
+                borderColor: "#ffffff",
+                borderWidth: 1,
+                data: dataGrupos
+              }]
+            },
+            options: {
+                responsive: true,
+                legend: {
+                    position: 'left',
+                },
+                title: {
+                    display: true,
+                    text: 'Cantidad de usuarios por grupo',
+                    fontSize: 14,
+                    padding: 14,
+                    fontColor:"#ffffff",
+                  },
+                rotation: -Math.PI,
+                cutoutPercentage: 30,
+                circumference: Math.PI,
+            }
+        });
+
+    </script>
+
+{% endblock %}
+                                    <!--            {% for a in listado_administrativos %}
+                                                    <tr>
+                                                        <td class="col-xs-1">{{ a.nombre }}</td>
+                                                        <td class="col-xs-1">{{ a.apellido }}</td>
+                                                    </tr>
+                                                {% endfor %}
+                                                {% for a in listado_visadores %}
+                                                    <tr>
+                                                        <td class="col-xs-1">{{ a.nombre }}</td>
+                                                        <td class="col-xs-1">{{ a.apellido }}</td>
+                                                    </tr>
+                                                {% endfor %}
+                                                {% for a in listado_inspectores %}
+                                                    <tr>
+                                                        <td class="col-xs-1">{{ a.nombre }}</td>
+                                                        <td class="col-xs-1">{{ a.apellido }}</td>
+                                                    </tr>
+                                                {% endfor %}
+                                                {% for a in listado_cajeros %}
+                                                    <tr>
+                                                        <td class="col-xs-1">{{ a.nombre }}</td>
+                                                        <td class="col-xs-1">{{ a.apellido }}</td>
+                                                    </tr>
+                                                {% endfor %}
+                                                </tbody>
+                                            </table>
+                                        </div>
+                                        <br>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+     <div class="container-fluid " id="botones_director">
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-center">
+                <button type="button" class="btn btn-primary btn-md" onclick="printDiv('printReady')">Imprimir</button>
+                <a href="javascript:history.back(-1);">
+                    <button class="btn btn-primary btn-md" type="submit" value="Atras">Volver</button>
+                </a>
+            </div>
+        </div>
+    </div>
+     <br>
+
+</div>
+
+
+
+-->

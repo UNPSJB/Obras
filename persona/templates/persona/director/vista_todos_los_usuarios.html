@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block estilos %}
+
+{% endblock %}
+
+{% block barra %}
+<ul class="sidebar sidebar-1">
+    <font size="2">
+        <li><a href="{% url 'director'  %}" class="current"><font color="white">Director</font></a></li>
+    </font>
+</ul>
+{% endblock %}
+{% block contenido %}
+
+<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+    <div class="panel">
+        <div class="panel-heading box" role="tab" id="headingFive">
+            <h5 class="panel-title">
+                <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFive"
+                   aria-expanded="false" aria-controls="collapseFive">
+                    <font color="#ffffff" size="2">Usuarios segun grupo</font>
+                </a>
+            </h5>
+        </div>
+        <div id="collapseFive" class="panel-collapse" role="tabpanel" aria-labelledby="headingFive">
+            <div class="panel-body">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                            <label> Seleccione el grupo de usuarios</label>
+                            <form action="" method="post" enctype="multipart/form-data">
+                                <input name="guardar_grupo" type="hidden">
+                                <div id="div_id_grupo" class="form-group">
+                                    <div class="controls ">
+                                        <select name="grupos" placeholder="Ingresar el Item"
+                                                class="select form-control input-sm" id="id_item" required>
+                                            <option value="" selected="#">---------</option>
+                                            {% for g in grupos %}
+                                            <option value="{{g}}">{{g}}</option>
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="left">
+                                        <button class="btn btn-primary btn-md" type="submit" name="Guardar">
+                                            Aceptar
+                                        </button>
+                                        <a href="javascript:history.back(-1);">
+                                            <button type="button" class="btn btn-primary" name="Volver">
+                                                Volver
+                                            </button>
+                                        </a>
+                            </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

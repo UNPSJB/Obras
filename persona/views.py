@@ -2563,6 +2563,25 @@ def ver_sectores_con_mas_obras(request):
     }
     return render(request,'persona/director/ver_sectores_con_mas_obras.html',contexto)
 
+
+def ver_listado_usuarios(request):
+    grupossistema = Group.objects.all()
+    personas = Persona.objects.all()
+    profesionales = Profesional.objects.all()
+    propietarios = Propietario.objects.all()
+    listados = []
+    for g in grupossistema:
+        for p in personas:
+            for pr in propietarios:
+                for pf in profesionales:
+                    if p.usuario_id == g.id or pr.id == g.id or pf.id == g.id:
+                        if p not in listados:
+                            listados.append(p)
+
+    contexto = {'listados':listados, 'grupossistema':grupossistema}
+    return render(request, 'persona/director/listado_de_usuarios_segun_grupo.html', contexto)
+
+
 class ReporteTramitesDirectorExcel(TemplateView):
 
     def get(self, request, *args, **kwargs):
