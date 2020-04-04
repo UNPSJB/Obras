@@ -2469,9 +2469,12 @@ def ver_filtro_obra_fechas(request):
         #             l = [name, aux]
         #             list[i] = l
         titulo = "Tipos de obras en rango seleccionado"
-        grafico = pie_chart_with_legend(datos, nombres, titulo)
-        imagen = base64.b64encode(grafico.asString("png"))
-        contexto = {"tipos_obras":list,"grafico":imagen}#"tipos_obras": list}
+        if len(datos)>0:
+         grafico = pie_chart_with_legend(datos, nombres, titulo)
+         imagen = base64.b64encode(grafico.asString("png"))
+         contexto = {"tipos_obras":list,"grafico":imagen}#"tipos_obras": list}
+        else:
+         contexto = {"tipos_obras":list}#"tipos_obras": list}
         return render(request, 'persona/director/tipos_obras_periodo_fechas.html', contexto)
     else:
         pass

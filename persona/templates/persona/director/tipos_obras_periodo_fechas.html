@@ -32,7 +32,11 @@
                     <hr style="border-width:">
                     <br>
                     <div class="row">
-                        <img src="data:image/png;base64,{{grafico}}" width="800px" height="400px">
+{%if grafico %}
+<img src="data:image/png;base64,{{grafico}}" width="800px" height="400px">
+{%else%}
+<h4>No hay datos para mostrar</h4>
+{%endif%}
 
                         <style>
 
