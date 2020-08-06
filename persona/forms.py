@@ -38,9 +38,11 @@ class FormularioPersona(forms.ModelForm):
         self.fields['nombre'].widget.attrs['pattern'] = "^[A-Za-z]{0,50}[A-Za-z ]{0,50}"
         self.fields['apellido'].widget.attrs['title'] = "Ingresar Apellido"
         self.fields['apellido'].widget.attrs['pattern'] = "^[A-Za-z]{0,50}[A-Za-z ]{0,50}"
-        self.fields['telefono'].widget.attrs['title'] = "Ingresar Nro de Telefono"
+        self.fields['telefono'].widget.attrs['title'] = "Ingresar Nro de Telefono con codigo de area ej 280154565788"
+        self.fields['telefono'].widget.attrs['placeholder'] = "Ingresar Nro de Telefono con codigo de area ej 280154565788"
         self.fields['telefono'].widget.attrs['pattern'] = "^[0-9]{0,15}"
-        self.fields['domicilio'].widget.attrs['title'] = "Ingresar Domicilio"
+        self.fields['domicilio'].widget.attrs['title'] = "Ingresar Domicilio ej calle 11111"
+        self.fields['domicilio'].widget.attrs['placeholder'] = "Ingresar Domicilio ej calle 11111"
         self.fields['domicilio'].widget.attrs['pattern'] = "^[A-Za-z]{0,50}[A-Za-z ]{0,50} [0-9]{0,5}$"
         self.fields['mail'].widget.attrs['title'] = "Ingresar Mail"
         self.fields['mail'].widget.attrs['placeholder'] = "Ingresar Mail - Formato: xxxxxxx@xxx.xxx"
@@ -60,17 +62,19 @@ class FormularioPersona(forms.ModelForm):
 class FormularioProfesional(FormularioPersona):
     NAME = 'profesional_form'
     SUBMIT = 'profesional_submit'
-    matricula = forms.CharField()
-    profesion = forms.CharField()
+    matricula = forms.IntegerField()
+    profesion = forms.ChoiceField(choices=Profesional.PROFESIONES)
     categorias = forms.ChoiceField(choices=Profesional.CATEGORIAS)
     certificado = forms.ImageField()
 
     def __init__(self, *args, **kwargs):
         super(FormularioProfesional, self).__init__(*args, **kwargs)
         self.fields['matricula'].widget.attrs['placeholder'] = "Ingresar Matricula"
-        self.fields['profesion'].widget.attrs['placeholder'] = "Ingresar Profesion"
-        self.fields['matricula'].widget.attrs['title'] = "Ingresar Nro de Matricula"
-        self.fields['profesion'].widget.attrs['title'] = "Ingresar Profesion"
+        self.fields['matricula'].widget.attrs['max'] = "100000"
+        self.fields['matricula'].widget.attrs['min'] = "1"
+        #self.fields['profesion'].widget.attrs['placeholder'] = "Ingresar Profesion"
+        #self.fields['matricula'].widget.attrs['title'] = "Ingresar Nro de Matricula"
+        #self.fields['profesion'].widget.attrs['title'] = "Ingresar Profesion"
 
     def save(self, commit=False):
         persona = super(FormularioProfesional, self).save(commit=commit)
