@@ -15,8 +15,14 @@ class Profesional(Rol):
         (2, 'Categoria 2'),
         (3, 'Categoria 3'),
     ]
-    matricula = models.CharField(max_length=10)
-    profesion = models.CharField(max_length=10)  # ["Maestro Mayor de Obra", "Ingeniero Civil", "Arquitecto"]
+    PROFESIONES = [
+        ('Ingeniero Civil', 'Ingeniero Civil'),
+        ('Arquitecto', 'Arquitecto'),
+        ('Maestro Mayor de Obra', 'Maestro Mayor de Obra'),
+    ]
+
+    matricula = models.IntegerField()
+    profesion = models.CharField(max_length=21, choices=PROFESIONES)  # ["Maestro Mayor de Obra", "Ingeniero Civil", "Arquitecto"]
     categoria = models.IntegerField(choices=CATEGORIAS)
     certificado = models.ImageField(upload_to='certificado/', null=True)
 

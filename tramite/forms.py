@@ -7,7 +7,7 @@ from .models import *
 class FormularioIniciarTramite(forms.ModelForm):
     NAME = 'tramite_form'
     SUBMIT = 'tramite_submit'
-    propietario = forms.CharField()
+    propietario = forms.IntegerField()
 
     class Meta:
         model = Tramite
@@ -32,12 +32,27 @@ class FormularioIniciarTramite(forms.ModelForm):
         self.helper.form_tag = False
         self.fields['tipo_obra'].widget.attrs['placeholder'] = "Ingresar Tipo de Obra"
         self.fields['medidas'].widget.attrs['placeholder'] = "Ingresar Medidas en m2"
+        self.fields['medidas'].widget.attrs['max'] = "100000"
+        self.fields['medidas'].widget.attrs['min'] = "1"
         self.fields['profesional'].widget.attrs['placeholder'] = "Ingresar DNI del Profesional"
-        #-------------------------------------------------------------------------------------        
-        self.fields['parcela'].widget.attrs['placeholder'] = "Parcela"
-        self.fields['circunscripcion'].widget.attrs['placeholder'] = "Datos catastrales"
-        self.fields['manzana'].widget.attrs['placeholder'] = "Datos catastrales"
-        self.fields['sector'].widget.attrs['placeholder'] = "Datos catastrales"
+        self.fields['parcela'].widget.attrs['placeholder'] = "Ingresar numero de Parcela"
+        self.fields['parcela'].widget.attrs['max'] = "500000"
+        self.fields['parcela'].widget.attrs['min'] = "1"
+        self.fields['circunscripcion'].widget.attrs['placeholder'] = "Ingresar numero de Circunscripcion"
+        self.fields['circunscripcion'].widget.attrs['max'] = "500000"
+        self.fields['circunscripcion'].widget.attrs['min'] = "1"
+        self.fields['manzana'].widget.attrs['placeholder'] = "Ingresar numero de Manzana"
+        self.fields['manzana'].widget.attrs['max'] = "500000"
+        self.fields['manzana'].widget.attrs['min'] = "1"
+        self.fields['sector'].widget.attrs['placeholder'] = "Ingresar numero de Sector"
+        self.fields['sector'].widget.attrs['max'] = "500000"
+        self.fields['sector'].widget.attrs['min'] = "1"
+
+        self.fields['domicilio'].widget.attrs['placeholder'] = "Ingresar Domicilio ej calle 1111"
+        self.fields['domicilio'].widget.attrs['pattern'] = "^[A-Za-z]{0,50}[A-Za-z ]{0,50} [0-9]{0,5}$"
+        self.fields['propietario'].widget.attrs['placeholder'] = "Ingresar Dni de propietario"
+        self.fields['propietario'].widget.attrs['max'] = "99999999"
+        self.fields['propietario'].widget.attrs['min'] = "9999999"
         #-------------------------------------------------------------------------------------
 
 

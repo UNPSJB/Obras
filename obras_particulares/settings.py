@@ -160,5 +160,5 @@ EMAIL_PORT = 25
 
 # Optional SMTP authentication information for EMAIL_HOST.
 EMAIL_HOST_USER = 'desarrolloobrasfacu@gmail.com'#os.environ["EMAILUSER"]
-EMAIL_HOST_PASSWORD ='obras1234' #os.environ["EMAILPASSWORD"]
+EMAIL_HOST_PASSWORD ='Obras123456' #os.environ["EMAILPASSWORD"]
 EMAIL_USE_TLS = True

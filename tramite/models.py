@@ -52,14 +52,14 @@ class Tramite(models.Model):
     profesional = models.ForeignKey(Profesional, unique=False)
     medidas = models.IntegerField()
     tipo_obra = models.ForeignKey(TipoObra)
-    domicilio = models.CharField(max_length=50, blank=True)
+    domicilio = models.CharField(max_length=50)
     pago = models.OneToOneField(Pago, default=True, blank=True, null=True)
     # -------------------------------------------------------------------------------------
     # DATOS CATASTRALES
-    parcela = models.CharField(max_length=20)
-    circunscripcion = models.CharField(max_length=20)
-    manzana = models.CharField(max_length=20)
-    sector = models.CharField(max_length=20)
+    parcela = models.IntegerField() #models.CharField(max_length=20)
+    circunscripcion = models.IntegerField()#models.CharField(max_length=20)
+    manzana = models.IntegerField()#models.CharField(max_length=20)
+    sector = models.IntegerField()#models.CharField(max_length=20)
     # -------------------------------------------------------------------------------------
     monto_a_pagar = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
     monto_pagado = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
