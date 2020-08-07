@@ -670,13 +670,6 @@ def habilitar_final_obra(request, pk_tramite):
     finally:
         return redirect('administrativo')
 
-
-# def aceptar_tramite_corregido(request, pk_tramite):
-#     tramite = get_object_or_404(Tramite, pk=pk_tramite)
-#     tramite.hacer(tramite.CORREGIR, request.user)
-#     messages.add_message(request, messages.SUCCESS, "Tramite aceptado")
-#     return redirect('administrativo')
-
 def aceptar_tramite(request, pk_tramite):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
     tramite.hacer(tramite.ACEPTAR, request.user)
@@ -2784,6 +2777,9 @@ def elegir_financiacion(request,pk_tramite):
             for name, value in request.POST.items():
                 if name.startswith('cantidadCuotas'):
                     pago.cantidadCuotas=value
+                if name.startswith('tipoPago'):
+                    tipoPago=Tipo_Pago.objects.get(id=value)
+                    pago.tipoPago=tipoPago
             total = tramite.monto_a_pagar/int(pago.cantidadCuotas)
             pago.save()
             for i in range(1, int(pago.cantidadCuotas)+1):
