@@ -46,83 +46,74 @@
 											{% crispy propietario_form %}
 											{% endif %}
 										</div>
-										<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="right">
-											<input type="submit" name="tramite_submit" value="Guardar Tramite" class="btn btn-primary" id="submit-id-tramite_submit">
-											<button class="btn btn-danger btn-sm" type="reset" title="Borrar datos del formulario">
-												Limpiar
-											</button>
+										<div class="container-fluid">
+											<div class="row">
+												<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="center">
+													<input type="submit" name="tramite_submit" value="Guardar Tramite" class="btn btn-primary" id="submit-id-tramite_submit">
+													<button class="btn btn-danger btn-sm" type="reset" title="Borrar datos del formulario">
+														Limpiar
+													</button>
+												</div>
+											</div>
 										</div>
 									</div>
 								</form>
 							</div>
+						</div>
+						<br>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="panel panel-custom">
+		<div class="panel-heading panel-heading-custom box" role="tab" id="headingTwo">
+			<h5 class="panel-title">
+				<a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+					<font color="#ffffff" size="2">Cargar correcciones a un Trámite</font>
+				</a>
+			</h5>
+		</div>
+		<div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+			<div class="panel-body">
+				<div class="container-fluid">
+					<div class="row">
+						<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 							<div class="container-fluid">
 								<div class="row">
-									<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="right">
-<<<<<<< HEAD
-=======
-										<button class="btn btn-danger btn-sm" type="reset" title="Borrar datos del formulario">
-											Limpiar
-										</button>
-										<input type="submit" name="tramite_submit" value="Guardar Tramite" class="btn btn-primary" id="submit-id-tramite_submit">
-
->>>>>>> e6beb54b5a8376a9764387c3b27d21169a5e7109
-									</div>
+									{% block contenido_tramites_corregidos%}
+									{% include "persona/profesional/tramites_corregidos.html" with tramites=ctxtramcorregidos.tramites%}
+									{% endblock %}
 								</div>
+								<br>
 							</div>
-							<br>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-		<div class="panel panel-custom">
-			<div class="panel-heading panel-heading-custom box" role="tab" id="headingTwo">
-				<h5 class="panel-title">
-					<a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-						<font color="#ffffff" size="2">Cargar correcciones a un Trámite</font>
-					</a>
-				</h5>
-			</div>
-			<div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
-				<div class="panel-body">
-					<div class="container-fluid">
-						<div class="row">
-							<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-								<div class="container-fluid">
-									<div class="row">
-										{% block contenido_tramites_corregidos%}
-										{% include "persona/profesional/tramites_corregidos.html" with tramites=ctxtramcorregidos.tramites%}
-										{% endblock %}
-									</div>
-									<br>
-								</div>
-							</div>
-						</div>
-					</div>
-				</div>
-			</div>
-		</div>
-		<div class="panel panel-custom">
-			<div class="panel-heading panel-heading-custom box" role="tab" id="headingFour">
-				<h5 class="panel-title">
-					<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
-						<font color="#ffffff" size="2">Consultar estado de mis Trámites</font>
-					</a>
-				</h5>
-			</div>
-			<div id="collapseFour" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFour">
-				<div class="panel-body">
-					<div class="container-fluid">
-						<div class="row">
-							{% block contenido_tramite_estado %}
-							{% include "persona/profesional/consultar_estado_tramite.html" with tramites_de_profesional=ctxtramitesprofesional.tramites_de_profesional %}
-							{% endblock %}
 						</div>
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
+	<div class="panel panel-custom">
+		<div class="panel-heading panel-heading-custom box" role="tab" id="headingFour">
+			<h5 class="panel-title">
+				<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+					<font color="#ffffff" size="2">Consultar estado de mis Trámites</font>
+				</a>
+			</h5>
+		</div>
+		<div id="collapseFour" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFour">
+			<div class="panel-body">
+				<div class="container-fluid">
+					<div class="row">
+						{% block contenido_tramite_estado %}
+						{% include "persona/profesional/consultar_estado_tramite.html" with tramites_de_profesional=ctxtramitesprofesional.tramites_de_profesional %}
+						{% endblock %}
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
 </div>
 
 {% endblock %}
