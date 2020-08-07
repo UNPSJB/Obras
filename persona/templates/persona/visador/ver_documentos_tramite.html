@@ -7,149 +7,147 @@
 {% endblock %}
 
 {% block barra %}
-	<ul class="sidebar sidebar-1">
-		<font size="2">
-			<li><a href="javascript:history.back(-1);" class="current"><font color="white">Visador</font></a></li>
-		</font>
-	</ul>
+<ul class="sidebar sidebar-1">
+    <font size="2">
+        <li><a href="javascript:history.back(-1);" class="current"><font color="white">Visador</font></a></li>
+    </font>
+</ul>
 {% endblock %}
 
 
 {% block contenido %}
 
 
-	<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" >
-	  <div class="panel">
-		<div class="panel-heading box" role="tab" id="headingFive">
-		  <h5 class="panel-title">
-			<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
-			  <font color="#ffffff" size="2">Documentos del tramite</font>
-			</a>
-		  </h5>
-		</div>
-		<div id="collapseFive" class="panel-collapse" role="tabpanel" aria-labelledby="headingFive">
-		  <div class="panel-body">
-			<div class="container-fluid">
-				<div class="row">
-					<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="color: white;">
-                        {% for documento in tramite.documentos.all %}
+<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" >
+    <div class="panel">
+        <div class="panel-heading box" role="tab" id="headingFive">
+            <h5 class="panel-title">
+                <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+                    <font color="#ffffff" size="2">Documentos del tramite</font>
+                </a>
+            </h5>
+        </div>
+        <div id="collapseFive" class="panel-collapse" role="tabpanel" aria-labelledby="headingFive">
+            <div class="panel-body">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="color: white;">
+                            <div class="container-fluid">
+
+                                <div class=" col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                                    <ol>
+                                        <label>PADRON:</h2></label>
+                                        <li> {{tramite.parcela}}</li>
+                                        <label>DATOS PROPIETARIO:</label>
+                                        <li> {{tramite.propietario.persona}}</li>
+                                        <label>DATOS PROFESIONAL:</label>
+                                        <li> {{tramite.profesional}}</li>
+                                        <label>MONTO A PAGAR:</label>
+                                        <li> {{tramite.monto_a_pagar}}</li>
+                                    </ol>
+                                </div>
+                            </div>
+                            {% for documento in tramite.documentos.all %}
                             <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
                                 <div class="thumbnail ">
                                     <a id="single_image" href="/media/{{documento.file}}" data-fancybox="images" data-caption="{{documento.tipo_documento}}">
-                                            <img src="/media/{{documento.file}}" width=300 height=300>
+                                        <img src="/media/{{documento.file}}" width=300 height=300>
                                     </a>
                                     <br>
                                     <p style="color: #17202a; font-style: oblique; text-align: center;"> {{documento.tipo_documento}} - {{documento.fecha}} </p>
-                                    <form action="">
+                                    <form method="post">
                                         <p align="right" >
-                                        <a href="#" class="btn btn-primary btn-collapsible"><i class="glyphicon glyphicon-save"></i><span>  Descargar</span></a>
+                                            <a href="#" class="btn btn-primary btn-collapsible"><i class="glyphicon glyphicon-save"></i><span>  Descargar</span></a>
                                         </p>
                                     </form>
                                 </div>
                             </div>
-                        {% endfor %}
-                    </div>
-                             <div class="row">
-            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-              <form action="" >
-                <div class="row" style="color:#fff;">
-                  <div class=" col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                    <ol>
-                      <label>PADRON:</h2></label>
-                      <li> {{tramite.parcela}}</li>
-                      <label>DATOS PROPIETARIO:</label>
-                      <li> {{tramite.propietario.persona}}</li>
-                      <label>DATOS PROFESIONAL:</label>
-                      <li> {{tramite.profesional}}</li>
-                        <label>MONTO A PAGAR:</label>
-                      <li> {{tramite.monto_a_pagar}}</li>
-                    </ol>
-                  </div>
-                </div>
-              </form>
-          </div>
-          </div>
-    <div class="table-responsive">
-        <table align="center" class="table table-bordered table-striped table-hover table-condensed table-responsive" style="text-align:center;">
+                            {% endfor %}
 
-            <tr>
-                <th></th>
-              {% for columna in columnas %}
-                <th>{{columna}}</th>
-              {% endfor %}
-            </tr>
-          <tbody>
-            {% for fila in filas %}
-              <tr>
-                <td class="col-xs-1">{{ fila }}</td>
-                {% for columna in columnas %}
-                <td class="col-sm-1">&nbsp;
-                  {% for item in items %}
-                    {% if fila == item.fila_de_visado and columna == item.columna_de_visado %}
-                        <label class="switch">
-                          <input name="item-{{item.pk}}" type="checkbox"  checked="checked"><span class="slider round"></span>
-                        </label>
-                    {% endif %}
-                  {% endfor %}
-                </td>
-                {% endfor %}
-              </tr>
-            {% endfor %}
-            </tbody>
-    <br>
-              <table class="table table-bordered table-striped table-hover table-condensed" style="text-align:center;">
-                  <thead>
-                  <tr>
-                      <th></th>
-                      <th>BALANCE DE SUPERFICIE</th>
-                  </tr>
-                  </thead>
-                  <tbody>
-                  {% for elemento in elementos %}
-                  <tr>
-                      <td class="col-xs-1">{{ elemento }}</td>
-                      <td class="col-sm-4">
-                          <label class="switch">
-                              <input name="elemento-{{elemento.id}}" type="checkbox" checked="checked"><span class="slider round"></span>
-                          </label>
-                      </td>
-                  </tr>
-                  {% endfor %}
-                  </tbody>
-              </table>
-        </table>
-        <div class="form-group">
-              <br>
-                <label>Observaciones:</label>
-
-              </div>
-          </div>
-
-				    <div>
-                        <a href="{% url 'planilla_visado' tramite.pk %}">
-                            <button type="button" align="rigth" class="btn btn-primary" name="generar_visado">
-                                Generar Visado
-                            </button>
-                        </a>
-                            <a href="javascript:history.back(-1);">
-                                <button class="btn btn-primary btn-md" type="submit" value="Atras">Volver</button>
-                              </a>
+                        </div>
                     </div>
                 </div>
-                    </div>
 
+                <!--<div class="table-responsive">-->
+                <!--<table align="center" class="table table-bordered table-striped table-hover table-condensed table-responsive" style="text-align:center;">-->
+
+                <!--<tr>-->
+                <!--<th></th>-->
+                <!--{% for columna in columnas %}-->
+                <!--<th>{{columna}}</th>-->
+                <!--{% endfor %}-->
+                <!--</tr>-->
+                <!--<tbody>-->
+                <!--{% for fila in filas %}-->
+                <!--<tr>-->
+                <!--<td class="col-xs-1">{{ fila }}</td>-->
+                <!--{% for columna in columnas %}-->
+                <!--<td class="col-sm-1">&nbsp;-->
+                <!--{% for item in items %}-->
+                <!--{% if fila == item.fila_de_visado and columna == item.columna_de_visado %}-->
+                <!--<label class="switch">-->
+                <!--<input name="item-{{item.pk}}" type="checkbox"  checked="checked"><span class="slider round"></span>-->
+                <!--</label>-->
+                <!--{% endif %}-->
+                <!--{% endfor %}-->
+                <!--</td>-->
+                <!--{% endfor %}-->
+                <!--</tr>-->
+                <!--{% endfor %}-->
+                <!--</tbody>-->
+
+                <!--<br>-->
+                <!--<table class="table table-bordered table-striped table-hover table-condensed" style="text-align:center;">-->
+                <!--<thead>-->
+                <!--<tr>-->
+                <!--<th></th>-->
+                <!--<th>BALANCE DE SUPERFICIE</th>-->
+                <!--</tr>-->
+                <!--</thead>-->
+                <!--<tbody>-->
+                <!--{% for elemento in elementos %}-->
+                <!--<tr>-->
+                <!--<td class="col-xs-1">{{ elemento }}</td>-->
+                <!--<td class="col-sm-4">-->
+                <!--<label class="switch">-->
+                <!--<input name="elemento-{{elemento.id}}" type="checkbox" checked="checked"><span class="slider round"></span>-->
+                <!--</label>-->
+                <!--</td>-->
+                <!--</tr>-->
+                <!--{% endfor %}-->
+                <!--</tbody>-->
+                <!--</table>-->
+                <!--</table>-->
+                <!--<div class="form-group">-->
+                <!--<br>-->
+                <!--<label>Observaciones:</label>-->
+
+                <!--</div>-->
+                <!--</div>-->
+
+                <div>
+                    <a href="{% url 'planilla_visado' tramite.pk %}">
+                        <button type="button" align="rigth" class="btn btn-primary" name="generar_visado">
+                            Generar Visado
+                        </button>
+                    </a>
+                    <a href="javascript:history.back(-1);">
+                        <button class="btn btn-primary btn-md" type="submit" value="Atras">Volver</button>
+                    </a>
                 </div>
-			</div>
-          </div>
+            </div>
         </div>
-      </div>
+
     </div>
+</div>
+
+
 
 {% endblock %}
 
 {% block scripts %}
 
-    <script>
+<script>
 		$(function () {
 			var cant_doc_requeridos = {{documentos_requeridos|length}};
   			for(var n = 0; n < cant_doc_requeridos; n++) {
@@ -171,7 +169,7 @@
 		});
 	</script>
 
-    <script>
+<script>
         var cant_doc_requeridos = {{documentos_requeridos|length}};
         for(var n = 0; n < cant_doc_requeridos; n++) {
             $("input[id='id_form-"+n+"-file']").addClass('file')

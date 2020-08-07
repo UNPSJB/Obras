@@ -21,22 +21,22 @@
   <div id="accesibilidad" class="collapse">
 
             <div class="col-sm-2 ">
-				<input type=image src="/media/imagenes/zoom_in.ico" onclick="zoomIn()" style="width:35px; height:35px;"></input>
+				<input alt="acercar" type=image src="/media/imagenes/zoom_in.ico" onclick="zoomIn()" style="width:35px; height:35px;"></input>
 			</div>
 			<div class=" col-sm-2 ">
-				<input type=image src="/media/imagenes/zoom_out.ico" style="width:35px; height:35px;" onclick="zoomOut()">
+				<input alt="alejar" type=image src="/media/imagenes/zoom_out.ico" style="width:35px; height:35px;" onclick="zoomOut()">
 			</div>
             <div class=" col-sm-6">
             <br>
             <form action="propietario" method="post" enctype="multipart/form-data">
                 <input type="hidden" name="Aceptar" value="Aceptar">
                <div class="controls ">
-                   <select  placeholder="seleccione estilo" class="select form-control input-sm " id="estilo" name="estilo"  onchange="this.form.submit();" required>
-                       <option value="" selected="">Selector de tema</option>
-                       <option value="estilo3">Negro</option>
-                       <option value="estilo4">Violeta</option>
-                       <option value="estilo5">Azul</option>
-                       <option value="base">Por defecto</option>
+                   <select alt="seleccione un estilo de pagina" placeholder="seleccione estilo" class="select form-control input-sm " id="estilo" name="estilo"  onchange="this.form.submit();" required>
+                       <option alt="selector de tema de alto contraste" value="" selected="">Selector de tema</option>
+                       <option alt="blanco y negro" value="estilo3">Negro</option>
+                       <option alt="violeta y blano " value="estilo4">Violeta</option>
+                       <option alt="azul y blanco" value="estilo5">Azul</option>
+                       <option alt="por defecto" value="base">Por defecto</option>
                    </select>
                </div>
             </form>

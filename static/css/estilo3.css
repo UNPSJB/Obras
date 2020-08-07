@@ -409,7 +409,17 @@ ul, menu, dir {
 
 .dataTables_wrapper .dataTables_length, .dataTables_wrapper .dataTables_filter, .dataTables_wrapper .dataTables_info, .dataTables_wrapper .dataTables_processing, .dataTables_wrapper .dataTables_paginate label {
     color: black;
-
+}
+.dataTables_wrapper .dataTables_paginate .paginate_button.disabled, .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:hover, .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:active {
+    background:#cfc9d2 !important;
+}
+.dataTables_wrapper .dataTables_paginate .paginate_button {
+    color: #f2eeee!important;
+    background: #cbe3db;
+}
+.dataTables_wrapper .dataTables_paginate .paginate_button.current, .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover, .dataTables_wrapper .dataTables_paginate .paginate_button:active {
+    background: white !important;
+    border: 2px solid #6bbfb0;
 }
 
  .sidebar-1 li a {

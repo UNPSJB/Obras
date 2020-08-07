@@ -291,6 +291,20 @@ def tramites_corregidos(request):
     contexto = {'tramites': tram_corregidos}
     return contexto
 
+def tramites_corregidos_administrativo(request):
+    tipo = 1
+    anterior=4
+    estado=Estado.objects.select_related().all()
+    tram_corregidos=[]
+    for e in estado:
+        estadoPrevio = e.previo()
+        estadoSiguiente = e.siguiente()
+        if (e and estadoPrevio):
+            if (e.tipo == tipo and estadoPrevio.tipo == anterior and estadoSiguiente is None):
+                tram_corregidos.append(e.tramite)
+    contexto = {'tramites': tram_corregidos}
+    return contexto
+
 def ver_documentos_tramite_profesional(request, pk_tramite):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
     contexto0 = {'tramite': tramite}
@@ -315,9 +329,10 @@ def profesional_solicita_final_obra(request, pk_tramite):
 
 def ver_documentos_corregidos(request, pk_tramite):
     if request.method == "POST":
-        print ("faltan guardar documentos")
+        print ("faltan documentos")
+        tipo= "correccion visado" #deberia venir por post en un input hidden
         documentos = Documento.objects.filter(tramite_id=pk_tramite)
-        enviar_correccioness(request, pk_tramite)
+        enviar_correccioness(request, pk_tramite,tipo)
     else:
         tramite = get_object_or_404(Tramite, pk=pk_tramite)
         planillas = PlanillaDeVisado.objects.filter(
@@ -362,19 +377,21 @@ def ver_documentos_corregidos(request, pk_tramite):
     return redirect('profesional')
 
 
-def enviar_correccioness(request, pk_tramite):
+def enviar_correccioness(request, pk_tramite, tipo):
     usuario = request.user
     #archivos = request.GET['msg']
     observacion = "Este tramite ya tiene los archivos corregidos cargados"
-    tramite = get_object_or_404(Tramite, pk=pk_tramite)
-    documento = Documento(file=request.FILES['documento'])
-    tipo_documento = get_object_or_404(TipoDocumento, pk=3)
-    documento.tipo_documento = tipo_documento
-    documento.tramite = tramite
-    print documento
-    documento.save()
-    tramite.hacer(tramite.CORREGIR, request.user, observacion)
-    messages.add_message(request, messages.SUCCESS, 'Tramite con documentos corregidos y enviados')
+    try:
+        tramite = get_object_or_404(Tramite, pk=pk_tramite)
+        documento = Documento(file=request.FILES['documento'])
+        tipo_documento = TipoDocumento.objects.get(nombre=tipo)
+        documento.tipo_documento = tipo_documento
+        documento.tramite = tramite
+        documento.save()
+        tramite.hacer(tramite.CORREGIR, request.user, observacion)
+        messages.add_message(request, messages.SUCCESS, 'Tramite con documentos corregidos y enviados')
+    except:
+        messages.add_message(request, messages.ERROR, 'No se pudo enviar la correccion del tramite')
     return redirect('profesional')
 
 def enviar_correcciones(request, pk_tramite):
@@ -578,7 +595,9 @@ def mostrar_administrativo(request):
         "ctxtramitescorregidos": tramite_corregidos_list(request),
         "ctxsolicitudesfinalobra": solicitud_final_obra_list(request),
         "ctxpago": registrar_pago_tramite(request),
-        "ctxlistprofesional": listado_profesionales(request)
+        "ctxlistprofesional": listado_profesionales(request),
+        'ctxtramcorregidosadministrativo': tramites_corregidos_administrativo(request)
+
     }
     return render(request, 'persona/administrativo/administrativo.html', contexto)
 
@@ -650,6 +669,13 @@ def habilitar_final_obra(request, pk_tramite):
         messages.add_message(request, messages.ERROR, 'No puede otorgar final de obra total para ese tramite.')
     finally:
         return redirect('administrativo')
+
+
+# def aceptar_tramite_corregido(request, pk_tramite):
+#     tramite = get_object_or_404(Tramite, pk=pk_tramite)
+#     tramite.hacer(tramite.CORREGIR, request.user)
+#     messages.add_message(request, messages.SUCCESS, "Tramite aceptado")
+#     return redirect('administrativo')
 
 def aceptar_tramite(request, pk_tramite):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
@@ -1266,29 +1292,25 @@ def ver_planilla_visado(request):
     elementos = Elemento_Balance_Superficie.objects.all()
     return render(request, 'persona/visador/ver_planilla_visado.html', {'tramite': tramite, 'items':items, 'filas':filas, 'columnas':columnas, 'elementos':elementos})
 
-
 def generar_planilla_impresa(request, pk_tramite):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
-    planillas=PlanillaDeVisado.objects.filter(tramite_id=tramite.id)# busca las planillas que tengan el id del tramite
-
-    if (len(planillas) > 1):
-        aux = planillas[0]
-        for p in planillas:
-            if (p.id > aux.id):  #obtiene el ultimo visado del tramite
-                plan = p
-            else:
-                plan= aux
-        planilla = get_object_or_404(PlanillaDeVisado,id=plan.id)  # PlanillaDeVisado.objects.filter(tramite_id=tramite.id)# busca las planillas que tengan el id del tramite
-        obs = planilla.observacion
-    else:
-        planilla = get_object_or_404(PlanillaDeVisado,tramite_id=pk_tramite)  # PlanillaDeVisado.objects.filter(tramite_id=tramite.id)# busca las planillas que tengan el id del tramite
-        filas = FilaDeVisado.objects.all()
-        columnas = ColumnaDeVisado.objects.all()
-        obs = planilla.observacion
+    planillas = PlanillaDeVisado.objects.filter(tramite_id=tramite.id)  # busca las planillas que tengan el id del tramite
+    filas = FilaDeVisado.objects.all()
+    columnas = ColumnaDeVisado.objects.all()
+    elementos = Elemento_Balance_Superficie.objects.all()
     try:
-        filas = FilaDeVisado.objects.all()
-        columnas = ColumnaDeVisado.objects.all()
-        elementos = planilla.elementos.all()
+        if (len(planillas) > 1):
+            aux = planillas[0]
+            for p in planillas:
+                if (p.id > aux.id):  # obtiene el ultimo visado del tramite
+                    plan = p
+                    aux=p
+                else:
+                    plan = aux
+            planilla = PlanillaDeVisado.objects.get(id=plan.id)  # PlanillaDeVisado.objects.filter(tramite_id=tramite.id)# busca las planillas que tengan el id del tramite
+        else:
+            planilla = PlanillaDeVisado.objects.get(tramite_id=tramite.id)  # PlanillaDeVisado.objects.filter(tramite_id=tramite.id)# busca las planillas que tengan el id del tramite
+        balance = planilla.elementos.all()
         items = planilla.items.all()
         obs = planilla.observacion
         contexto = {
@@ -1297,18 +1319,18 @@ def generar_planilla_impresa(request, pk_tramite):
             'filas': filas,
             'columnas': columnas,
             'items': items,
+            'balance': balance,
             'elementos': elementos,
             'obs': obs,
         }
-        return render(request, 'persona/visador/generar_planilla_impresa.html', contexto)
     except:
         contexto = {
             'tramite': tramite,
-            'planilla': planilla,
             'filas': filas,
             'columnas': columnas,
-            'obs': obs,
+            'elementos': elementos
         }
+    finally:
         return render(request, 'persona/visador/generar_planilla_impresa.html', contexto)
 
 
@@ -1320,16 +1342,17 @@ def mostrar_visados_noaprobados(request, pk_tramite):
         for p in planillas:
             if (p.id > aux.id):  #obtiene el ultimo visado del tramite
                 plan = p
+                aux = p
             else:
                 plan= aux
-        planilla = get_object_or_404(PlanillaDeVisado,id=plan.id)  # PlanillaDeVisado.objects.filter(tramite_id=tramite.id)# busca las planillas que tengan el id del tramite
+        planilla = PlanillaDeVisado.objects.get(id=plan.id)  # PlanillaDeVisado.objects.filter(tramite_id=tramite.id)# busca las planillas que tengan el id del tramite
         obs = planilla.observacion
     else:
-        planilla = get_object_or_404(PlanillaDeVisado,tramite_id=pk_tramite)  # PlanillaDeVisado.objects.filter(tramite_id=tramite.id)# busca las planillas que tengan el id del tramite
-    filas = FilaDeVisado.objects.all()
-    columnas = ColumnaDeVisado.objects.all()
-    obs = planilla.observacion
+        planilla = PlanillaDeVisado.objects.get(tramite_id=pk_tramite)  # PlanillaDeVisado.objects.filter(tramite_id=tramite.id)# busca las planillas que tengan el id del tramite
     try:
+        filas = FilaDeVisado.objects.all()
+        columnas = ColumnaDeVisado.objects.all()
+        obs = planilla.observacion
         elementos = planilla.elementos.all()
         items = planilla.items.all()
         obs = planilla.observacion
@@ -1342,15 +1365,14 @@ def mostrar_visados_noaprobados(request, pk_tramite):
             'elementos': elementos,
             'obs': obs,
         }
-        return render(request, 'persona/visador/mostrar_visados_noaprobados.html', contexto)
     except:
         contexto = {
             'tramite': tramite,
             'planilla': planilla,
             'filas': filas,
-            'columnas': columnas,
-            'obs': obs,
+            'columnas': columnas
         }
+    finally:
         return render(request, 'persona/visador/mostrar_visador_noaprobados.html', contexto)
 
 

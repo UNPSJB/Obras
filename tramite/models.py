@@ -181,7 +181,7 @@ class Estado(models.Model):
 
     def previo(self):
         fecha = self.timestamp
-        return self.tramite.estados.filter(timestamp__lt=fecha).first()
+        return self.tramite.estados.filter(timestamp__lt=fecha).last()
 
     def siguiente(self):
         return self.tramite.estados.filter(timestamp__gt=self.timestamp).first()
@@ -226,7 +226,6 @@ class Iniciado(Estado):
 
 class Aceptado(Estado):
     TIPO = 2
-
     def visar(self, tramite):
         return Visado(tramite=tramite)
 
