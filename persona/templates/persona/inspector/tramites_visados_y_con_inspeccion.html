@@ -26,7 +26,7 @@
                         <td>{{ tramite.estado }}</td>
                         <td>
                             <input type="hidden" id="id{{tramite.id}}" value="{{tramite.id}}">
-                            <input id="datetime{{tramite.id}}" type="date" value="" >
+                            <input id="datetime{{tramite.id}}" type="date" value="" onClick="javascript:calendario{{tramite.id}}();" >
                             <input id="time{{tramite.id}}" type="time" value="">
                         </td>
                         <td>
@@ -54,7 +54,36 @@
                              }
                             return false;
                         }
-                        </script>
+
+   function calendario{{tramite.id}}(){
+        var hoy= new Date();
+        var dia=hoy.getDate();
+        var mes=hoy.getMonth()+1;
+        var a=hoy.getFullYear();
+        if (dia<10 && mes<10){
+          d="0"+dia;
+          m="0"+mes;
+          fecha=a+"-"+m+"-"+d;
+        }
+        else{
+            if (dia<10){
+              d="0"+dia;
+              fecha=a+"-"+mes+"-"+d;
+            }
+            else{
+                if (mes<10){
+                    m="0"+mes;
+                    fecha=a+"-"+m+"-"+dia;
+                }
+                else{
+                    fecha=a+"-"+mes+"-"+dia;
+                }
+            }
+        }
+        $("#datetime{{tramite.id}}").attr('min',fecha);
+
+    }
+</script>
                             <a onclick="javascript:agregarHoraInspeccion{{tramite.id}}();">
                               <button type="button" class="btn btn-primary btn-sm" name="Agendar">Agendar
                               </button>
@@ -84,6 +113,8 @@
         </div>
         </tbody>
 </div>-->
+
+
 </div>
 {% endblock %}
 

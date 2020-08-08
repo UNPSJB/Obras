@@ -24,17 +24,18 @@ def registrarse (request):
 
 def login_view(request):
     if request.method == 'POST':
-        user = authenticate(username=request.POST['username'], password=request.POST['password'])
-        movil=es_movil(request)
-        if user is not None and user.is_active :
-            if not movil or (movil and user.groups.filter(name='inspector' or 'jefeinspector').exists()):
-                login(request, user)
-                return redirect(user.get_view_name())
+        if (request.POST["username"] is not None and request.POST['password'] is not None):
+            user = authenticate(username=request.POST['username'], password=request.POST['password'])
+            movil=es_movil(request)
+            if user is not None and user.is_active :
+                if not movil or (movil and user.groups.filter(name='inspector' or 'jefeinspector').exists()):
+                    login(request, user)
+                    return redirect(user.get_view_name())
+                else:
+                    logout_view(request)
+                    messages.add_message(request, messages.WARNING, 'Acceso no autorizado')
             else:
-                logout_view(request)
-                messages.add_message(request, messages.WARNING, 'Acceso no autorizado')
-        else:
-            messages.add_message(request, messages.WARNING, 'Clave o usuario incorrecto.')
+                messages.add_message(request, messages.WARNING, 'Clave o usuario incorrecto.')
     return redirect("home")
 
 
@@ -43,14 +44,21 @@ def logout_view(request):
     return redirect("home")
 
 def home1(request):
-    form = FormularioProfesional()
-    return render(request, 'homeMovil.html',{'login_usuario_form': forms.FormularioLogin(),'form':form})
-
+    usuario = request.user
+    if usuario is not None:
+        return redirect('inspector_movil')
+    else:
+        form = FormularioProfesional()
+        return render(request, 'homeMovil.html',{'login_usuario_form': forms.FormularioLogin(),'form':form})
 
 def home(request):
     movil= es_movil(request)
     if movil:
-        return redirect('home1')
+        usuario= request.user
+        if usuario is not None:
+            return redirect('inspector_movil')
+        else:
+            return redirect('home1')
     else :
         if request.method == "POST":
             form = FormularioProfesional(request.POST, request.FILES)

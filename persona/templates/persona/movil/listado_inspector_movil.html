@@ -8,6 +8,8 @@
                 <tr>
                     <th>Nro</th>
                     <th>Fecha Inicio</th>
+                    <th>Fecha Inspeccion</th>
+                    <th>Domicilio</th>
                     <th>Propietario</th>
                     <th>Revisar</th>
                 </tr>
@@ -18,7 +20,9 @@
                     {% for tramite in tramites_del_inspector %}
                         <tr>
                             <td class="col-sm-1">{{ tramite.id}}</td>
-                            <td class="col-sm-1">{{ tramite.estado.timestamp}}</td>                            
+                            <td class="col-sm-1">{{ tramite.estado.timestamp}}</td>
+                            <td class="col-sm-1">{{ tramite.estado.agendado.fecha}}</td>
+                            <td class="col-sm-1">{{ tramite.domicilio}}</td>
                             <td class="col-sm-4">{{ tramite.propietario}}</td>
                             <td align="center" class="col-sm-1">
                                 <a href="{% url 'planilla_inspeccion_movil' tramite.id%}">

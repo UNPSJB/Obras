@@ -1673,7 +1673,12 @@ def mis_inspecciones(request):
 def tramites_visados_y_con_inspeccion(request):
     argumentos = [Visado, ConInspeccion]
     tramites = Tramite.objects.en_estado(argumentos)
-    return tramites
+    tram = []
+    for t in tramites:
+        planillas = PlanillaDeInspeccion.objects.filter(tramite_id=t.id).count()
+        if planillas <3:
+            tram.append(t)
+    return tram
 
 def tramites_inspeccionados_por_inspector(request):
     usuario = request.user
@@ -2045,7 +2050,7 @@ def listado_inspecciones(request):
     tramites=Tramite.objects.en_estado(Agendado)
     tram=[]
     for t in tramites:
-        if t.estado().rol==2:
+        if t.estado().rol==1:
           tram.append(t)
     contexto={'tramites':tram}
     return contexto
