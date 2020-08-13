@@ -2402,14 +2402,22 @@ def detalle_de_tramite(request, pk_tramite):
         fechas_del_estado.append(est.timestamp.strftime("%d/%m/%Y"));
     return render(request, 'persona/director/detalle_de_tramite.html', {"tramite": contexto0, "estados": contexto1, "fecha": fechas_del_estado})
 
+#def documentos_del_estado(request, pk_estado):
+ #   estado = get_object_or_404(Estado, pk=pk_estado)
+  #  fecha = estado.timestamp
+   # fecha_str = date.strftime(fecha, '%d/%m/%Y %H:%M')
+    #documentos = estado.tramite.documentos.all()
+   # documentos_fecha = filter(lambda e:(date.strftime(e.fecha, '%d/%m/%Y %H:%M') == fecha_str), documentos)
+   # contexto= {'documentos_de_fecha': documentos_fecha}
+    #return render(request, 'persona/director/documentos_del_estado.html', contexto)
+
+
 def documentos_del_estado(request, pk_estado):
     estado = get_object_or_404(Estado, pk=pk_estado)
-    fecha = estado.timestamp
-    fecha_str = date.strftime(fecha, '%d/%m/%Y %H:%M')
-    documentos = estado.tramite.documentos.all()
-    documentos_fecha = filter(lambda e:(date.strftime(e.fecha, '%d/%m/%Y %H:%M') == fecha_str), documentos)
-    contexto= {'documentos_de_fecha': documentos_fecha}
-    return render(request, 'persona/director/documentos_del_estado.html', contexto)
+    documentos = estado.tramite.documentacion_para_estado(estado)
+    #print documentos
+    return render(request, 'persona/director/documentos_del_estado.html', documentos)
+
 
 def generar_planilla_visado(request):
     filas = FilaDeVisado.objects.all()
