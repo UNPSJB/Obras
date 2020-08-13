@@ -28,6 +28,15 @@
             {% endfor %}
             </tbody>
         </table>
+         <div class=" col-xs-8 col-sm-8 col-md-8 col-lg-8" align="left">
+                        <a id="crear_detalle" href="{% url 'reporte_inspeccionesDirector_excel' %}" class="btn btn-info btn-collapsible btn-sm" title="Generar Archivo Excel" >
+                           <i class="glyphicon glyphicon-list-alt"></i><span>Exportar a EXCEL</span>
+                        </a>
+                        <a href="{% url 'reporte_inspeccionesDirector_pdf' %}" class="btn btn-info btn-collapsible btn-sm" title="Generar Archivo PDF" >
+                            <i class="glyphicon glyphicon-file"></i><span>Exportar a PDF</span>
+                        </a>
+                    </div>
+
     </div>
     <!--
                         <div class="container-fluid " id="botones_director">

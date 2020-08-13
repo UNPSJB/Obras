@@ -1368,10 +1368,31 @@ def mostrar_visados_noaprobados(request, pk_tramite):
     finally:
         return render(request, 'persona/visador/mostrar_visador_noaprobados.html', contexto)
 
-
-def planilla_visado(request, pk_tramite):
+def planilla_visado(request, pk_tramite): #esto equivale a cargar_inspeccion en inspector
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
     items = ItemDeVisado.objects.all()
+    planilla=PlanillaDeInspeccion.objects.select_related().filter(tramite_id=tramite).last() #last una sola planilla que se pueda modificar y perder el historial??
+    p=[]
+    detalles = DetalleDeItemInspeccion.objects.all()
+    if planilla is not None:
+        detallesPlanilla = planilla.detalles.all()
+        if detallesPlanilla is not None:
+            aux=0
+            for d in detalles:
+                for i in detallesPlanilla:
+                    if i.categoria_inspeccion.nombre==d.categoria_inspeccion.nombre and i.nombre==d.nombre:
+                        b=[1,d]
+                        p.append(b)
+                        aux=1
+                        break;
+                if aux==0:
+                    b = [0, d]
+                    p.append(b)
+                else:
+                    aux=0
+    items = ItemInspeccion.objects.all()
+    categorias = CategoriaInspeccion.objects.all()
+    contexto = {"tramite":tramite, "items":items,"detalles":detalles,"categorias":categorias,"movil":movil,"planilla":p}
     if request.method == "POST":
         observacion = request.POST["observaciones"]
         tram = request.POST['tram']
@@ -1388,6 +1409,7 @@ def planilla_visado(request, pk_tramite):
     return redirect('visador')
 
 
+#######################################################
 from planilla_visado.models import PlanillaDeVisado
 
 def aprobar_visado(request, pk_tramite, monto):
@@ -2696,10 +2718,22 @@ class ReporteTramitesDirectorPdf(View):
         Story.append(detalle_orden)
         doc.build(Story)
         return response
+    ##############
+       # def inspecciones_realizadas_durante_el_anio(request):
+           # year = date.today()
+            #tramites1 = Tramite.objects.all()
+            #tramitesEstado = Estado.objects.filter(
+            #    timestamp__range=(datetime.date(year.year, 01, 01), datetime.date(year.year, 12, 12)), tipo=(6))
+           # tramites = []
+           # for i in range(0, len(tramitesEstado)):
+            #    aux = tramites1.filter(id=tramitesEstado[i].tramite_id).exclude(id__isnull=True)
+             #   tramites.append({"tramite": aux, "fecha": tramitesEstado[i].timestamp})
+            #return {"tramites": tramites}
+    ##############
 
 class ReporteInspeccionesDirectorExcel(TemplateView):
     def get(self, request, *args, **kwargs):
-        tramites = Tramite.objects.all()
+        #tramites = Tramite.objects.all()
         wb = Workbook()
         ws = wb.active
         ws['A1'] = 'REPORTE DE INSPECCIONES ANUALES'
@@ -2710,13 +2744,22 @@ class ReporteInspeccionesDirectorExcel(TemplateView):
         ws['D2'] = 'PROFESIONAL'
         ws['E2'] = 'FECHA'
         cont = 3
-        for tramite in tramites:
-            # ws.cell(row=cont, column=2).value = convertidor_de_fechas(tramite.estado.timestamp)
-            # ws.cell(row=cont, column=2).value = tramite.estado.timestamp
-            ws.cell(row=cont, column=2).value = tramite.id
-            ws.cell(row=cont, column=3).value = str(tramite.propietario)
-            ws.cell(row=cont, column=4).value = str(tramite.profesional)
-            ws.cell(row=cont, column=5).value = str(tramite.fecha())
+        year = date.today()
+        tramites1 = Tramite.objects.all()
+        tramitesEstado = Estado.objects.filter(
+            timestamp__range=(datetime.date(year.year, 01, 01), datetime.date(year.year, 12, 12)), tipo=(6))
+        tramites = []
+        for i in range(0, len(tramitesEstado)):
+            aux = tramites1.filter(id=tramitesEstado[i].tramite_id).exclude(id__isnull=True)
+            tramites.append({"tramite": aux, "fecha": tramitesEstado[i].timestamp})
+        for obj in tramites:
+            for tramite in obj.tramite:
+                # ws.cell(row=cont, column=2).value = convertidor_de_fechas(tramite.estado.timestamp)
+                # ws.cell(row=cont, column=2).value = tramite.estado.timestamp
+                ws.cell(row=cont, column=2).value = obj.tramite.id
+                ws.cell(row=cont, column=3).value = str(tramite.propietario)
+                ws.cell(row=cont, column=4).value = str(tramite.profesional)
+            ws.cell(row=cont, column=5).value = str(obj.fecha())
             cont = cont + 1
         nombre_archivo = "ReporteInspecciones.xlsx"
         response = HttpResponse(content_type="application/ms-excel")
@@ -2725,6 +2768,59 @@ class ReporteInspeccionesDirectorExcel(TemplateView):
         wb.save(response)
         return response
 
+class ReporteInspeccionesDirectorPdf(View):
+    def get(self, request, *args, **kwargs):
+        filename = "Informe de tramites " + datetime.datetime.now().strftime("%d/%m/%Y") + ".pdf"
+        response = HttpResponse(content_type='application/pdf')
+        response['Content-Disposition'] = 'attachment; filename="%s"' % filename
+        doc = SimpleDocTemplate(
+            response,
+            pagesize=letter,
+            rightMargin=72,
+            leftMargin=72,
+            topMargin=15,
+            bottomMargin=28,
+        )
+        Story = []
+        styles = getSampleStyleSheet()
+        styles.add(ParagraphStyle(name='Usuario', alignment=TA_RIGHT, fontName='Helvetica', fontSize=8))
+        styles.add(ParagraphStyle(name='Titulo', alignment=TA_RIGHT, fontName='Helvetica', fontSize=18))
+        styles.add(ParagraphStyle(name='Subtitulo', alignment=TA_RIGHT, fontName='Helvetica', fontSize=12))
+        usuario = 'Usuario: ' + request.user.username + ' -  Fecha:' + ' ... aca va la fecha'
+        Story.append(Paragraph(usuario, styles["Usuario"]))
+        Story.append(Spacer(0, cm * 0.15))
+        im0 = Image(settings.MEDIA_ROOT + '/imagenes/espacioPDF.png', width=490, height=3)
+        im0.hAlign = 'CENTER'
+        Story.append(im0)
+        titulo = 'SISTEMA OBRAS PARTICULARES'
+        Story.append(Paragraph(titulo, styles["Titulo"]))
+        Story.append(Spacer(0, cm * 0.20))
+        subtitulo = 'Reporte de tramites'
+        Story.append(Paragraph(subtitulo, styles["Subtitulo"]))
+        Story.append(Spacer(0, cm * 0.15))
+        Story.append(im0)
+        Story.append(Spacer(0, cm * 0.5))
+        encabezados = ('NRO', 'PROPIETARIO', 'PROFESIONAL', 'ESTADO', 'MEDIDAS', 'TIPO DE OBRA')
+        detalles = [
+            (tramite.id, tramite.propietario, tramite.profesional, tramite.estado(), tramite.medidas,
+                tramite.tipo_obra)
+            for tramite in
+                Tramite.objects.all()]
+        detalle_orden = Table([encabezados] + detalles, colWidths=[1 * cm, 3 * cm, 4 * cm, 4 * cm, 2 * cm, 3 * cm])
+        detalle_orden.setStyle(TableStyle(
+            [
+                ('ALIGN', (0, 0), (0, 0), 'CENTER'),
+                ('GRID', (0, 0), (-1, -1), 1, colors.gray),
+                ('FONTSIZE', (0, 0), (-1, -1), 8),
+                ('LINEBELOW', (0, 0), (-1, 0), 2, colors.darkblue),
+                ('BACKGROUND', (0, 0), (-1, 0), colors.dodgerblue),
+                ('TEXTCOLOR', (0, 0), (-1, 0), colors.white),
+            ]
+        ))
+        detalle_orden.hAlign = 'CENTER'
+        Story.append(detalle_orden)
+        doc.build(Story)
+        return response
 #-------------------------------------------------------------------------------------------------------------------
 #No se de donde son estos------------------------------------------------------------------
 
