@@ -31,7 +31,7 @@
             <td class="col-xs-1">{{ tramite.domicilio }}</td>
             <td class="col-sm-3" align="center">
                 <input type="hidden" id="idjefe{{tramite.id}}" value="{{tramite.id}}">
-                <input id="datetimejefe{{tramite.id}}" type="date" value="">
+                <input id="datetimejefe{{tramite.id}}" type="date" value=""onClick="javascript:calendario{{tramite.id}}();">
                 <input id="timejefe{{tramite.id}}" type="time" value="">
                 <script type="text/javascript">
                                 function agendarInspeccion{{tramite.id}}(){
@@ -58,6 +58,34 @@
                                     return false;
                                 }
 
+function calendario{{tramite.id}}(){
+        var hoy= new Date();
+        var dia=hoy.getDate();
+        var mes=hoy.getMonth()+1;
+        var a=hoy.getFullYear();
+        if (dia<10 && mes<10){
+          d="0"+dia;
+          m="0"+mes;
+          fecha=a+"-"+m+"-"+d;
+        }
+        else{
+            if (dia<10){
+              d="0"+dia;
+              fecha=a+"-"+mes+"-"+d;
+            }
+            else{
+                if (mes<10){
+                    m="0"+mes;
+                    fecha=a+"-"+m+"-"+dia;
+                }
+                else{
+                    fecha=a+"-"+mes+"-"+dia;
+                }
+            }
+        }
+        $("#datetimejefe{{tramite.id}}").attr('min',fecha);
+
+    }
                 </script>
 
             </td>

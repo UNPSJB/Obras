@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block estilos %}
+
+{% endblock %}
+
+{% block barra %}
+<ul class="sidebar sidebar-1">
+    <font size="2">
+        <li><a href="{% url 'director'  %}" class="current"><font color="white">Director</font></a></li>
+    </font>
+</ul>
+{% endblock %}
+{% block contenido %}
+
+<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+    <div class="panel">
+        <div class="panel-heading box" role="tab" id="headingFive">
+            <h5 class="panel-title">
+                <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFive"
+                   aria-expanded="false" aria-controls="collapseFive">
+                    <font color="#ffffff" size="2">Tipo de obras segun periodo de fechas</font>
+                </a>
+            </h5>
+        </div>
+        <div id="collapseFive" class="panel-collapse" role="tabpanel" aria-labelledby="headingFive">
+            <div class="panel-body">
+                <div class="container-fluid">
+                    <div class="row">
+                            <label> Seleccione periodo de fechas</label>
+                            <form method="post" enctype="multipart/form-data"> {% csrf_token %}
+                                                        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+
+                                <div class="controls ">
+                                    <select name="fecha" placeholder="Ingresar el Item"
+                                            class="select form-control input-sm" id="fecha" required>
+                                        <option value="" selected="#">---------</option>
+                                        <option value="2017">2017</option>
+                                        <option value="2018">2018</option>
+                                        <option value="2019">2019</option>
+                                        <option value="2020">2020</option>
+                                    </select>
+                                </div>
+
+                                <br>
+                                <label> Seleccione el item de inspeccion</label>
+                                <input name="guardar_financiacion" type="hidden">
+                                <div id="div_id_item" class="form-group">
+                                    <div class="controls ">
+                                        <select name="item"  placeholder="Ingresar el Item"
+                                                class="form-control multiple input-sm" id="id_item" required multiple>
+                                            <option value="" selected="#">--------</option>
+                                            {%for c in categorias%}
+                                            <optgroup label="{{c.categoria_inspeccion__nombre}} - {{c.item_inspeccion__nombre}}">
+                                                {% for i in items %}
+
+                                                {%if c.categoria_inspeccion_id == i.categoria_inspeccion_id and c.item_inspeccion_id == i.item_inspeccion_id%}
+                                                <option   value="{{i.nombre}}">{{i.nombre}}</option>
+
+                                                {%endif%}
+                                                {% endfor %}
+
+                                            </optgroup>
+                                            {%endfor%}
+
+                                        </select>
+
+                                    </div>
+                                </div>
+                                                        </div>
+                                <div class="row">
+                                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="center">
+                                        <button class="btn btn-primary btn-md" type="submit" name="Guardar">
+                                            Aceptar
+                                        </button>
+                                        <a href="javascript:history.back(-1);">
+                                            <button type="button" class="btn btn-primary" name="Volver">
+                                                Volver
+                                            </button>
+                                        </a>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

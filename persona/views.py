@@ -42,7 +42,10 @@ from planilla_visado.models import ItemDeVisado
 from pago.models import Cuota, Cancelacion,Cancelada,Estado
 from datetime import datetime, date, time, timedelta
 from documento.models import Documento
-
+from reportlab.graphics.charts.linecharts import HorizontalLineChart
+from reportlab.lib.colors import Color, PCMYKColor, white
+from reportlab.graphics.charts.barcharts import VerticalBarChart
+from calendar import monthrange
 #-------------------------------------------------------------------------------------------------------------------
 #generales ---------------------------------------------------------------------------------------------------------
 
@@ -2222,7 +2225,6 @@ def add_legend(draw_obj, chart, data):
     legend.colorNamePairs = Auto(obj=chart)
     draw_obj.add(legend)
 
-from reportlab.lib.colors import Color, PCMYKColor, white
 def pie_chart_with_legend(datos, nombres,titulo):
     drawing = Drawing(width=600, height=300)
     my_title = String(280, 280, titulo, fontSize=18)
@@ -2231,22 +2233,11 @@ def pie_chart_with_legend(datos, nombres,titulo):
     pie.x = 300
     pie.y = 120
     pie.data = datos
-    if  len(datos)>10:
-        colors = [
-            PCMYKColor(50, 80, 15, 20, alpha=100), PCMYKColor(21, 0, 34, 10, alpha=100), PCMYKColor(0, 88, 37, 15, alpha=100),
-            PCMYKColor(54, 10, 0, 70, alpha=100), PCMYKColor(0, 32, 0, 60, alpha=100), PCMYKColor(20, 40, 0, 25, alpha=100),
-            PCMYKColor(90, 30, 0, 10, alpha=100), PCMYKColor(0, 60, 20, 80, alpha=100), PCMYKColor(0, 16, 18, 10, alpha=100),
-            PCMYKColor(73, 32, 80, 10, alpha=100), PCMYKColor(0, 90, 20, 10, alpha=100), PCMYKColor(0, 40, 83, 10, alpha=100),
-            PCMYKColor(60, 0, 70, 10, alpha=100), PCMYKColor(0, 0, 50, 30, alpha=100), PCMYKColor(0, 0, 100, 10, alpha=100),
-            PCMYKColor(40, 20, 0, 10, alpha=100), PCMYKColor(30, 0, 0, 12, alpha=100), PCMYKColor(100, 67, 0, 23, alpha=100), PCMYKColor(70, 46, 0, 16, alpha=100),
-            PCMYKColor(50, 33, 0, 11, alpha=100), PCMYKColor(30, 20, 0, 7, alpha=100),
-            PCMYKColor(20, 13, 0, 4, alpha=100), PCMYKColor(10, 7, 0, 3, alpha=100),
-            PCMYKColor(0, 0, 0, 100, alpha=100), PCMYKColor(0, 0, 0, 70, alpha=100),
-            PCMYKColor(0, 0, 0, 50, alpha=100), PCMYKColor(0, 0, 0, 30, alpha=100),
-            PCMYKColor(0, 0, 0, 20, alpha=100), PCMYKColor(0, 0, 0, 10, alpha=100),
-            PCMYKColor(0, 21, 0, 15, alpha=100)]
-        for i in range(len(pie.data)): pie.slices[i].fillColor = colors[i]
-        pie.slices.popout = 8
+    longitud=len(datos)
+    col=colores(longitud,10)
+    if (col is not None):
+        for i in range(longitud): pie.slices[i].fillColor = colors[i]
+    pie.slices.popout = 8
     pie.labels = [cat for cat in nombres]
     pie.slices.strokeWidth = 0.5
     pie.slices.popout = 5
@@ -2466,7 +2457,6 @@ def ver_filtro_obra_fechas(request):
                 estados = None
                 tramites = None
         nombres=tipos.values_list("nombre",flat=True).all()
-        print datos
         #  for t in tramites_en_rango:
         # for t in tramites:
         #     if (str(t.estado().timestamp) >= fechaInicial) and (str(t.estado().timestamp) <= fechaFinal):
@@ -2499,64 +2489,182 @@ def ver_filtro_obra_fechas(request):
     else:
         pass
     return render(request,'persona/director/filtro_obra_fechas.html')
-from reportlab.graphics.charts.linecharts import HorizontalLineChart
+def colores(longitud,tope):
+    if longitud > tope:
+        colores = [
+            PCMYKColor(50, 80, 15, 20, alpha=100), PCMYKColor(21, 0, 34, 10, alpha=100),
+            PCMYKColor(0, 88, 37, 15, alpha=100),
+            PCMYKColor(54, 10, 0, 70, alpha=100), PCMYKColor(0, 32, 0, 60, alpha=100),
+            PCMYKColor(20, 40, 0, 25, alpha=100),
+            PCMYKColor(90, 30, 0, 10, alpha=100), PCMYKColor(0, 60, 20, 80, alpha=100),
+            PCMYKColor(0, 16, 18, 10, alpha=100),
+            PCMYKColor(73, 32, 80, 10, alpha=100), PCMYKColor(0, 90, 20, 10, alpha=100),
+            PCMYKColor(0, 40, 83, 10, alpha=100),
+            PCMYKColor(60, 0, 70, 10, alpha=100), PCMYKColor(0, 0, 50, 30, alpha=100),
+            PCMYKColor(0, 0, 100, 10, alpha=100),
+            PCMYKColor(40, 20, 0, 10, alpha=100), PCMYKColor(30, 0, 0, 12, alpha=100),
+            PCMYKColor(100, 67, 0, 23, alpha=100), PCMYKColor(70, 46, 0, 16, alpha=100),
+            PCMYKColor(50, 33, 0, 11, alpha=100), PCMYKColor(30, 20, 0, 7, alpha=100),
+            PCMYKColor(20, 13, 0, 4, alpha=100), PCMYKColor(10, 7, 0, 3, alpha=100),
+            PCMYKColor(0, 0, 0, 100, alpha=100), PCMYKColor(0, 0, 0, 70, alpha=100),
+            PCMYKColor(0, 0, 0, 50, alpha=100), PCMYKColor(0, 0, 0, 30, alpha=100),
+            PCMYKColor(0, 0, 0, 20, alpha=100), PCMYKColor(0, 0, 0, 10, alpha=100),
+            PCMYKColor(0, 21, 0, 15, alpha=100)]
+        return colores
+
+def grafico_de_barras_v(datos,nombres, titulo,series):
+    drawing = Drawing(width=500, height=200)
+    my_title = String(280, 280, titulo, fontSize=18)
+    bc = VerticalBarChart()
+    longitud=len(series)
+    col=colores(longitud,3)
+    bc.data=datos
+    bc.x = 50
+    bc.y = 90
+    bc.width=400
+    bc.height=100
+    bc.valueAxis.valueMin = 0
+    bc.valueAxis.valueMax = 50
+    bc.groupSpacing = 10
+    bc.barSpacing = 1.5
+    bc.categoryAxis.labels.boxAnchor = 'ne'
+   # bc.categoryAxis.labels.dx = 8
+    bc.categoryAxis.labels.dy = -2
+    bc.categoryAxis.labels.angle = 30
+    #bc.valueAxis.valueStep = 10
+    if (col is not None):
+        for i in range(longitud): bc.bars[i].fillColor = col[i]
+    for i in range(len(series)): bc.bars[i].name = series[i]
+    bc.categoryAxis.categoryNames=[n for n in nombres]
+    drawing.add(bc)
+    drawing.add(my_title)
+    add_legend(drawing, bc, datos)
+
+    return drawing
 
 def grafico_de_barras(datos,nombres,titulo):
-    drawing = Drawing(width=400,height=200)
+    lc = HorizontalLineChart()
+    drawing = Drawing(width=400, height=200)
     my_title = String(150, 180, titulo, fontSize=18)
     lc = HorizontalLineChart()
-    lc.x = 50l
-    lc.y = 50l
-    lc.height = 125l
-    lc.width = 300l
-    lc.data = datos
-    lc.joinedLines = 1
-    catNames = nombres
-    lc.categoryAxis.categoryNames = catNames
+    lc.data=datos
+    lc.categoryAxis.categoryNames=[n for n in nombres]
     lc.categoryAxis.labels.boxAnchor = 'n'
-    lc.valueAxis.valueMin = 0l
-    lc.valueAxis.valueMax = 60l
-    lc.valueAxis.valueStep = 15l
-    lc.lines[0].strokeWidth = 2l
-    lc.lines[1].strokeWidth = 1.5
+    lc.valueAxis.valueMin = 0
+    lc.valueAxis.valueMax = 50
+    lc.valueAxis.valueStep = 10
+  #  lc.lines[0].strokeWidth = 1.5
     drawing.add(lc)
     drawing.add(my_title)
+
     return drawing
-# def ver_sectores_con_mas_obras(request):
-#     tramites = Tramite.objects.all()
-#     sectores = []
-#     list = []
-#     for t in tramites:
-#         if not t.sector in sectores:
-#             sectores.append(t.sector)
-#     nombres=[]
-#     datos=[]
-#     for s in sectores:
-#         list.append([s, 0])
-#         nombres.append(s)
-#
-#     sectores = list
-#     list_sectores = []
-#
-#     for name, value in sectores:
-#         v = 0
-#         for t in tramites:
-#             if t.sector == name:
-#                 v += 1
-#         list_sectores.append([name, v])
-#     for name, value in list_sectores:
-#         for t in nombres:
-#             if t == name:
-#                 datos.append(value)
-#     titulo = "sectores con mas obras"
-#     grafico = pie_chart_with_legend(datos, nombres, titulo)
-#     imagen = base64.b64encode(grafico.asString("png"))
-#     contexto = {
-#         'grafico':imagen,
-#         #"sectores": list_sectores,
-#         #"nombres": list
-#     }
-#     return render(request,'persona/director/ver_sectores_con_mas_obras.html',contexto)
+
+def seleccionar_fecha_item_inspeccion(request):
+    datos = []
+    series = []
+    nombres = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre",
+               "Noviembre", "Diciembre"]
+    item = []
+    year=date.today().year
+    cant=[]
+    lista=[]
+    if "Guardar" in request.POST:
+        listaItems=request.POST.getlist('item')
+        total=DetalleDeItemInspeccion.objects.all().count()
+        # promedioA = 0
+        subTotal=0
+        totalI=0
+        # promedioTotal=0
+        for l in listaItems:
+            i=DetalleDeItemInspeccion.objects.get(nombre=l)
+            item.append(i)
+        for name, value in request.POST.items():
+            if (name == 'fecha'):
+                 year = int(value)
+        for i in item:
+          #  promedioA=0
+            totalI=0
+            for mes in range(12):
+           #     promedio=0
+                m = mes + 1
+                diaFinal = monthrange(year, m)
+                subtotal=PlanillaDeInspeccion.objects.filter(fecha__range=(datetime.date(year, m, 01), datetime.date(year, m, diaFinal[1])),detalles__nombre=i.nombre).count()
+                totalI+=subtotal
+           #     if (subtotal != 0):
+            #        promedio=subtotal/total
+             #   promedioA+=promedio
+              #  cant.append(promedio)
+                cant.append(subtotal)
+            datos.append(tuple(cant))
+            nombre=str(i.nombre)
+             # if (promedioA is not None):
+            #     promedioTotal=promedioA/12
+            #
+
+            # if promedioTotal==0:
+            #     aux = [nombre, 0]
+            # else:
+            #     aux = [nombre, PromedioTotal
+            series.append(nombre)
+            aux = [nombre, totalI]
+            lista.append(aux)
+            cant = []
+    #    titulo = "Promedio mensual item/s de inspeccion"
+        titulo = "Cantidad mensual item/s de inspeccion"
+        if len(datos) > 0:
+            grafico = grafico_de_barras_v(datos, nombres, titulo,series)
+            imagen = base64.b64encode(grafico.asString("png"))
+            contexto = {"grafico": imagen,"items":item,"lista":lista}
+            return render(request, 'persona/director/listado_item_inspeccion.html', contexto)
+
+        else:
+            return render(request, 'persona/director/listado_item_inspeccion.html')
+    else:
+        categorias=DetalleDeItemInspeccion.objects.select_related().values('categoria_inspeccion_id','categoria_inspeccion__nombre','item_inspeccion_id','item_inspeccion__nombre').order_by('categoria_inspeccion_id','item_inspeccion_id').distinct()
+        items=DetalleDeItemInspeccion.objects.select_related().values('id','nombre','categoria_inspeccion_id','item_inspeccion_id','item_inspeccion__nombre').order_by('categoria_inspeccion_id','item_inspeccion_id').all()
+        return render(request, 'persona/director/seleccionar_item_fecha.html',{"items":items,"categorias":categorias})
+
+def tramites_iniciados_finalizados(request):
+    datos=[]
+    iniciados=[]
+    finalizados=[]
+    series=[]
+    lista=[]
+    nombres=["Enero", "Febrero", "Marzo", "Abril", "Mayo","Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"]
+    if "Guardar" in request.POST:
+        for name, value in request.POST.items():
+            if name.startswith('item'):
+                year=int(value)
+        for mes in range(12):
+            m=mes+1
+            diaFinal=monthrange(year,m)
+            totalI=Estado.objects.filter(timestamp__range=(datetime.date(year, m, 01), datetime.date(year, m, diaFinal[1])), tipo=(1)).count()
+            totalF=Estado.objects.filter(timestamp__range=(datetime.date(year, m, 01), datetime.date(year, m, diaFinal[1])), tipo=(9)).count()
+            # if (totalI==0):
+            #     iniciados.append(0)
+            # if (totalF==0):
+            #     finalizados.append(0)
+            iniciados.append(totalI)
+            finalizados.append(totalF)
+        i=tuple(iniciados)
+        f=tuple(finalizados)
+        datos.append(i)
+        datos.append(f)
+        iniciales= Estado.objects.filter(tipo=1).count()
+        finales=Estado.objects.filter(tipo=9).count()
+        totales=[iniciales,finales]
+        lista.append(["iniciados",iniciales])
+        lista.append(["finalizados",finales])
+        series=("iniciados","finalizados")
+        titulo = "Tramites iniciados y finalidos por mes"
+        if len(datos) > 0:
+            grafico = grafico_de_barras_v(datos, nombres, titulo,series)
+            imagen = base64.b64encode(grafico.asString("png"))
+            contexto = {"grafico": imagen,"lista":lista}  # "tipos_obras": list}
+        return render(request, 'persona/director/listado_tramites_iniciados_finalizados.html', contexto)
+    else:
+        return render(request, 'persona/director/seleccionar_fecha.html')
+
 def ver_sectores_con_mas_obras(request):
     tramites = Tramite.objects.all()
     sectores = []
@@ -3040,7 +3148,7 @@ def es_movil(request):
 def inspecciones_realizadas_durante_el_anio(request):
     year=date.today()
     tramites1=Tramite.objects.all()
-    tramitesEstado=Estado.objects.filter(timestamp__range=(datetime.date(year.year,01,01), datetime.date(year.year,12,12)), tipo=(6))
+    tramitesEstado=Estado.objects.filter(timestamp__range=(datetime.date(year.year,01,01), datetime.date(year.year,12,31)), tipo=(6))
     tramites=[]
     for i in range(0, len(tramitesEstado)):
         aux=tramites1.filter(id=tramitesEstado[i].tramite_id).exclude(id__isnull=True)

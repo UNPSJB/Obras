@@ -1,0 +1,133 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load crispy_forms_tags%}
+{% block barra %}
+<div id="noImprimir">
+    <ul class="sidebar sidebar-1">
+        <font size="2">
+            <li><a href="{% url 'director'  %}" class="current"><font color="white">Director</font></a></li>
+        </font>
+    </ul>
+</div>
+{% endblock %}
+{%block contenido%}
+<div class="container-fluid">
+    <div id="printReady">
+        <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" >
+            <div class="row" style="background:white;">
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                    <div style="background-color:#2c3e50;">
+                        <img src="/media/imagenes/Escudobanner.png"
+                             class="img-responsive" alt="Imagen responsive" width="100" height="100"/>
+                    </div>
+                    <div align="justify" style="font-size:9px; text-align:left;">
+                        <br>  &nbsp; MUNICIPALIDAD DE TRELEW
+                        <br>
+                        &nbsp; Rivadavia 390 <br>
+                        &nbsp; 9100 TRELEW- Provincia del Chubut
+                    </div>
+                    <h3 align="center">
+                        CANTIDAD MENSUAL DE ITEM/S DE INSPECCION &nbsp;  &nbsp;
+                    </h3>
+                    <hr style="border-width:">
+                    <br>
+                    <div class="row">
+                        <img src="data:image/png;base64,{{grafico}}" width="800px" height="400px">
+                        <br>
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                            <div class="table-responsive">
+                                <div align="justify" style="font-size:12px; text-align:left;">
+                                    <br>
+                                    <table align="center" class="table table-bordered table-striped table-hover">
+                                        <thead>
+                                        <tr>
+                                            <th p style="color:#FFFFFF"bgcolor="#2c3e50">Categoria</th>
+                                            <th p style="color:#FFFFFF"bgcolor="#2c3e50">Item de inspeccion </th>
+                                            <th p style="color:#FFFFFF"bgcolor="#2c3e50">Nombre </th>
+                                            <th p style="color:#FFFFFF"bgcolor="#2c3e50">Cantidad </th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+
+                                        {% for i in items %}
+                                        {%for name,value in lista%}
+                                         {%if  name == i.nombre %}
+                                        <tr>
+                                            <td class="col-xs-1">{{ i.categoria_inspeccion.nombre }}</td>
+                                            <td class="col-xs-1">{{ i.item_inspeccion.nombre }}</td>
+                                            <td class="col-xs-1">{{ i.nombre }}</td>
+                                            <td class="col-xs-1">{{ value }}</td>
+                                        </tr>
+   {%endif%}
+                                        {% endfor %}
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                </div>
+                                <br>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="container-fluid " id="botones_director">
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-center">
+            <button type="button" class="btn btn-primary btn-md" onclick="printDiv('printReady')">Imprimir</button>
+            <a href="javascript:history.back(-1);">
+                <button class="btn btn-primary btn-md" type="submit" value="Atras">Volver</button>
+            </a>
+        </div>
+    </div>
+</div>
+<br>
+
+
+<style>
+       .dataTables_length, .dataTables_filter, .dataTables_info,.dataTables_wrapper .dataTables_paginate .paginate_button.disabled, .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:hover, .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:active {
+          display: none !important;
+       }
+       th{
+          background-color:#2c3e50;
+          color:white;
+       }
+        .dataTables_wrapper .dataTables_paginate .paginate_button.current, .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
+            display: none;
+        }
+        #tabla_length{
+        display:none;
+        }
+        #tabla_filter{
+        display:none;
+        }
+    </style>
+<script>
+    function printDiv(div) {
+    // Create and insert new print section
+
+    var elem = document.getElementById(div);
+    var domClone = elem.cloneNode(true);
+    var $printSection = document.createElement("div");
+    $printSection.id = "printSection";
+    $printSection.appendChild(domClone);
+    $('head').append('<style> #botones_director,#noImprimir,select{ display:none;} .dataTables_wrapper .dataTables_length, .dataTables_wrapper .dataTables_filter, .dataTables_wrapper .dataTables_info, .dataTables_wrapper .dataTables_processing, .dataTables_wrapper .dataTables_paginate label{display: none;} .dataTables_wrapper .dataTables_paginate .paginate_button.disabled, .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:hover, .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:active{display: none;} .dataTables_wrapper .dataTables_paginate .paginate_button{display: none!important;}</style>');
+    //document.body.insertBefore($printSection, document.body.firstChild);
+
+    window.print();
+
+    // Clean up print section for future use
+    var oldElem = document.getElementById("printSection");
+    if (oldElem != null) { oldElem.parentNode.removeChild(oldElem); }
+                          //oldElem.remove() not supported by IE
+
+    return true;
+}
+
+</script>
+
+
+{%endblock%}

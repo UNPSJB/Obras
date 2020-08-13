@@ -112,7 +112,9 @@ urlpatterns = [
 
     #director -------------------------------------------------------------------------------------------------------
     url(r'^director$', views.mostrar_director, name="director"),
-    url(r'^cambiar_usuario_de_grupo/(?P<pk_persona>\d+)/$', views.cambiar_usuario_de_grupo, name="cambiar_usuario_de_grupo"),
+    url(r'^seleccionar_fecha_item_inspeccion$', views.seleccionar_fecha_item_inspeccion, name="selecionar_fecha_item_inspeccion"),
+    url(r'^seleccionar_fecha$', views.tramites_iniciados_finalizados, name="tramites_iniciados_finalizados"),
+    url(r'^cambiar_usuario_de_grupo/(?P<pk_persona>\d+)/c', views.cambiar_usuario_de_grupo, name="cambiar_usuario_de_grupo"),
     url(r'^vista_de_tramites$', views.ver_listado_todos_tramites, name="vista_de_tramites"),
     url(r'^detalle_de_tramite/(?P<pk_tramite>\d+)/$', views.detalle_de_tramite, name="detalle_de_tramite"),
     url(r'^documentos_del_estado/(?P<pk_estado>\d+)/$', views.documentos_del_estado, name="documentos_del_estado"),
