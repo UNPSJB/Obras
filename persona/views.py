@@ -1371,31 +1371,9 @@ def mostrar_visados_noaprobados(request, pk_tramite):
     finally:
         return render(request, 'persona/visador/mostrar_visador_noaprobados.html', contexto)
 
-def planilla_visado(request, pk_tramite): #esto equivale a cargar_inspeccion en inspector
+def planilla_visado(request, pk_tramite):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
     items = ItemDeVisado.objects.all()
-    planilla=PlanillaDeInspeccion.objects.select_related().filter(tramite_id=tramite).last() #last una sola planilla que se pueda modificar y perder el historial??
-    p=[]
-    detalles = DetalleDeItemInspeccion.objects.all()
-    if planilla is not None:
-        detallesPlanilla = planilla.detalles.all()
-        if detallesPlanilla is not None:
-            aux=0
-            for d in detalles:
-                for i in detallesPlanilla:
-                    if i.categoria_inspeccion.nombre==d.categoria_inspeccion.nombre and i.nombre==d.nombre:
-                        b=[1,d]
-                        p.append(b)
-                        aux=1
-                        break;
-                if aux==0:
-                    b = [0, d]
-                    p.append(b)
-                else:
-                    aux=0
-    items = ItemInspeccion.objects.all()
-    categorias = CategoriaInspeccion.objects.all()
-    contexto = {"tramite":tramite, "items":items,"detalles":detalles,"categorias":categorias,"movil":movil,"planilla":p}
     if request.method == "POST":
         observacion = request.POST["observaciones"]
         tram = request.POST['tram']
@@ -1412,7 +1390,6 @@ def planilla_visado(request, pk_tramite): #esto equivale a cargar_inspeccion en 
     return redirect('visador')
 
 
-#######################################################
 from planilla_visado.models import PlanillaDeVisado
 
 def aprobar_visado(request, pk_tramite, monto):
