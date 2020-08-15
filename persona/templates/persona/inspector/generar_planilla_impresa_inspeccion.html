@@ -31,9 +31,38 @@
                       <h3 align="center">
                           PLANILLA DE INSPECCION &nbsp;  &nbsp;
                       </h3>
+                  <br>
+                  <h5 align="left">
+                          PROPIETARIO:  {{tramite.propietario.persona}} &nbsp;  &nbsp;
+                  </h5>
+                    <br>
+                  <h4 align="left">
+                          NOMENCLATURA CATASTRAL&nbsp;  &nbsp;
+                      </h4>
                       <hr style="border-width:">
-                      <br>
-                  <div class="row">
+                   <div class="table-responsive">
+                      <table align="center" class="table table-bordered table-striped table-hover table-condensed" style="text-align:center;">
+                          <thead>
+                                <th>Medidas</th>
+                                <th>Domicilio</th>
+                                <th>Parcela</th>
+                                <th>Circunscripcion</th>
+                                <th>Manzana</th>
+                                <th>Sector</th>
+                                </thead>
+                          <tbody>
+                          <tr>
+                              <td class="col-xs-1" align="center">{{tramite.medidas}}</td>
+                              <td class="col-xs-2" align="center">{{tramite.domicilio}}</td>
+                              <td class="col-xs-3" align="center">{{tramite.parcela}}</td>
+                              <td class="col-xs-4" align="center">{{tramite.cincunscripcion}}</td>
+                              <td class="col-xs-5" align="center">{{tramite.manzana}}</td>
+                              <td class="col-xs-6" align="center">{{tramite.sector}}</td>
+                          </tr>
+                          </tbody>
+                      </table>
+                   </div>
+                  <!--<div class="row">
                       <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                           <form action="" >
                               <div class="row" style="color:#fff;">
@@ -50,7 +79,7 @@
                               </div>
                           </form>
                       </div>
-                  </div>
+                  </div>-->
                   <div class="table-responsive">
                       <table align="center" class="table table-bordered table-striped table-hover table-condensed" style="text-align:center;">
                           <thead>
