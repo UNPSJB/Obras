@@ -3,11 +3,12 @@
 {% load crispy_forms_tags%}
 {% block listado_inspector_movil %}
     <div class="table-responsive">
+                         {% if tramites_del_inspector %}
+
         <table class="table-bordered table-striped table-hover table-condensed" style="background: white;">
             <thead>
                 <tr>
                     <th>Nro</th>
-                    <th>Fecha Inicio</th>
                     <th>Fecha Inspeccion</th>
                     <th>Domicilio</th>
                     <th>Propietario</th>
@@ -16,11 +17,9 @@
             </thead>
 
             <tbody>
-                 {% if tramites_del_inspector %}
                     {% for tramite in tramites_del_inspector %}
                         <tr>
                             <td class="col-sm-1">{{ tramite.id}}</td>
-                            <td class="col-sm-1">{{ tramite.estado.timestamp}}</td>
                             <td class="col-sm-1">{{ tramite.estado.agendado.fecha}}</td>
                             <td class="col-sm-1">{{ tramite.domicilio}}</td>
                             <td class="col-sm-4">{{ tramite.propietario}}</td>
@@ -33,9 +32,11 @@
                             </td>
                         </tr>
                     {% endfor %}
-                 {% endif%}
             </tbody>
         </table>
+        {%else%}
+        <label>No hay datos para mostrar</label>
+        {%endif%}
     </div>
 
 {% endblock %}

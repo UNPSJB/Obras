@@ -1371,22 +1371,60 @@ def mostrar_visados_noaprobados(request, pk_tramite):
     finally:
         return render(request, 'persona/visador/mostrar_visador_noaprobados.html', contexto)
 
-def planilla_visado(request, pk_tramite):
+def cargar_planilla_visado(request,pk_tramite):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
     items = ItemDeVisado.objects.all()
+    planilla=PlanillaDeVisado.objects.filter(tramite_id=tramite).last() #ultima planilla de visado
+    p=[]
+    el=[]
+    aux=0
+    elementos = Elemento_Balance_Superficie.objects.all()
+    if planilla is not None:
+        itemsPlanilla=planilla.items.all().distinct()
+        elementosPlanilla=planilla.elementos.all()
+        if itemsPlanilla is not None:
+            for i in items:
+                aux=filter(lambda iP: iP.columna_de_visado.nombre == i.columna_de_visado.nombre  and i.fila_de_visado.nombre == iP.fila_de_visado.nombre,itemsPlanilla)
+                if len(aux)>=1:
+                    b = [i,1]
+                    p.append(b)
+                else:
+                    if len(aux)==0:
+                        b = [i,0]
+                        p.append(b)
+
+        if elementosPlanilla is not None:
+            for e in elementos:
+                aux = filter(lambda eP: eP.nombre == e.nombre, elementosPlanilla)
+                if len(aux) >= 1:
+                    b = [e, 1]
+                    el.append(b)
+                else:
+                    if len(aux) == 0:
+                        b = [e, 0]
+                        el.append(b)
+    filas = FilaDeVisado.objects.all()
+    columnas = ColumnaDeVisado.objects.all()
+    return render(request, 'persona/visador/planilla_visado.html', {'tramite': tramite, 'items':items, 'filas':filas, 'columnas':columnas, 'elementos':elementos,'planilla':p, 'elementosPlanilla':el})
+    #raise Exception("excepcion")#
+
+def planilla_visado(request, pk_tramite):
+    print("no aprobar ")
+
     if request.method == "POST":
         observacion = request.POST["observaciones"]
         tram = request.POST['tram']
         monto_permiso = request.POST['monto']
         if "Envia Planilla de visado" in request.POST:
-            no_aprobar_visado(request, tram, observacion)
+            no_aprobar_visado(request, tram, observacion,monto_permiso)
+            print("no aprobar visao")
         else:
             aprobar_visado(request, tram, monto_permiso)
-    else:
-        filas = FilaDeVisado.objects.all()
-        columnas = ColumnaDeVisado.objects.all()
-        elementos = Elemento_Balance_Superficie.objects.all()
-        return render(request, 'persona/visador/planilla_visado.html', {'tramite': tramite, 'items':items, 'filas':filas, 'columnas':columnas, 'elementos':elementos})
+    # else:
+    #     filas = FilaDeVisado.objects.all()
+    #     columnas = ColumnaDeVisado.objects.all()
+    #     elementos = Elemento_Balance_Superficie.objects.all()
+    #     return render(request, 'persona/visador/planilla_visado.html', {'tramite': tramite, 'items':items, 'filas':filas, 'columnas':columnas, 'elementos':elementos})
     return redirect('visador')
 
 
@@ -1428,7 +1466,7 @@ def aprobar_visado(request, pk_tramite, monto):
     messages.add_message(request, messages.SUCCESS, 'Tramite visado aprobado')
     return redirect('visador')
 
-def no_aprobar_visado(request, pk_tramite, observacion):
+def no_aprobar_visado(request, pk_tramite, observacion,monto):
     list_items = []
     list_elementos = []
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
@@ -1459,8 +1497,10 @@ def no_aprobar_visado(request, pk_tramite, observacion):
     planilla.save()
     usuario = request.user
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
+    tramite.monto_a_pagar= monto
     planilla.save()
     tramite.hacer(tramite.CORREGIR, usuario, observacion)
+    tramite.save()
     messages.add_message(request, messages.SUCCESS, 'Tramite con visado no aprobado')
     return redirect('visador')
 
@@ -1660,6 +1700,7 @@ def mostrar_inspector(request):
         "ctxtramitesinspeccionados": tramites_inspeccionados_por_inspector(request),
         "ctxtramitesagendados": tramites_agendados_por_inspector(request),
         "ctxtramis_inspecciones": mis_inspecciones(request),
+        "ctxlistadomensual_inspector": listado_inspecciones_mensuales(request),
         "ctxlistado_inspector": listado_inspector_movil(request),
     }
     return render(request, 'persona/inspector/inspector.html', contexto)
@@ -2818,33 +2859,36 @@ class ReporteTramitesDirectorPdf(View):
 
 class ReporteInspeccionesDirectorExcel(TemplateView):
     def get(self, request, *args, **kwargs):
-        #tramites = Tramite.objects.all()
         wb = Workbook()
         ws = wb.active
         ws['A1'] = 'REPORTE DE INSPECCIONES ANUALES'
         ws.merge_cells('B1:G1')
-        # ws['B2'] = 'FECHA_INICIO'
-        ws['B2'] = 'TRAMITE'
-        ws['C2'] = 'PROPIETARIO'
-        ws['D2'] = 'PROFESIONAL'
-        ws['E2'] = 'FECHA'
+        ws['C2'] = 'TRAMITE'
+        ws['B3'] = 'NRO'
+        ws['C3'] = 'DOMICILIO'
+        ws['D3'] = 'FECHA'
+        ws['F2'] = 'PROPIETARIO'
+        ws['E3'] = 'DNI'
+        ws['F3'] = 'NOMBRE'
+        ws['G3'] = 'APELLIDO'
+        ws['I2'] = 'PROFESIONAL'
+        ws['H3'] = 'MATRICULA'
+        ws['I3'] = 'NOMBRE'
+        ws['J3'] = 'APELLIDO'
         cont = 3
         year = date.today()
-        tramites1 = Tramite.objects.all()
-        tramitesEstado = Estado.objects.filter(
-            timestamp__range=(datetime.date(year.year, 01, 01), datetime.date(year.year, 12, 12)), tipo=(6))
-        tramites = []
-        for i in range(0, len(tramitesEstado)):
-            aux = tramites1.filter(id=tramitesEstado[i].tramite_id).exclude(id__isnull=True)
-            tramites.append({"tramite": aux, "fecha": tramitesEstado[i].timestamp})
-        for obj in tramites:
-            for tramite in obj.tramite:
-                # ws.cell(row=cont, column=2).value = convertidor_de_fechas(tramite.estado.timestamp)
-                # ws.cell(row=cont, column=2).value = tramite.estado.timestamp
-                ws.cell(row=cont, column=2).value = obj.tramite.id
-                ws.cell(row=cont, column=3).value = str(tramite.propietario)
-                ws.cell(row=cont, column=4).value = str(tramite.profesional)
-            ws.cell(row=cont, column=5).value = str(obj.fecha())
+        tramitesEstado = Estado.objects.select_related().values('timestamp', 'tramite__id','tramite__domicilio','tramite__propietario__persona__dni','tramite__propietario__persona__nombre','tramite__propietario__persona__apellido','tramite__profesional__matricula','tramite__profesional__persona__nombre','tramite__profesional__persona__apellido').filter(
+            timestamp__range=(datetime.date(year.year, 01, 01), datetime.date(year.year, 12, 12)), tipo=(6)).exclude(id__isnull=True)
+        for t in tramitesEstado:
+            ws.cell(row=cont, column=2).value = t['tramite__id']
+            ws.cell(row=cont, column=3).value = t['tramite__domicilio']
+            ws.cell(row=cont, column=4).value = str(t['timestamp'])
+            ws.cell(row=cont, column=5).value = t['tramite__propietario__persona__dni']
+            ws.cell(row=cont, column=6).value = t['tramite__propietario__persona__nombre']
+            ws.cell(row=cont, column=7).value = t['tramite__propietario__persona__apellido']
+            ws.cell(row=cont, column=8).value = t['tramite__profesional__matricula']
+            ws.cell(row=cont, column=9).value = t['tramite__profesional__persona__nombre']
+            ws.cell(row=cont, column=10).value = t['tramite__profesional__persona__apellido']
             cont = cont + 1
         nombre_archivo = "ReporteInspecciones.xlsx"
         response = HttpResponse(content_type="application/ms-excel")
@@ -2871,7 +2915,7 @@ class ReporteInspeccionesDirectorPdf(View):
         styles.add(ParagraphStyle(name='Usuario', alignment=TA_RIGHT, fontName='Helvetica', fontSize=8))
         styles.add(ParagraphStyle(name='Titulo', alignment=TA_RIGHT, fontName='Helvetica', fontSize=18))
         styles.add(ParagraphStyle(name='Subtitulo', alignment=TA_RIGHT, fontName='Helvetica', fontSize=12))
-        usuario = 'Usuario: ' + request.user.username + ' -  Fecha:' + ' ... aca va la fecha'
+        usuario = 'Usuario: ' + request.user.username + ' -  Fecha:' + str(datetime.date.today())
         Story.append(Paragraph(usuario, styles["Usuario"]))
         Story.append(Spacer(0, cm * 0.15))
         im0 = Image(settings.MEDIA_ROOT + '/imagenes/espacioPDF.png', width=490, height=3)
@@ -2885,13 +2929,34 @@ class ReporteInspeccionesDirectorPdf(View):
         Story.append(Spacer(0, cm * 0.15))
         Story.append(im0)
         Story.append(Spacer(0, cm * 0.5))
-        encabezados = ('NRO', 'PROPIETARIO', 'PROFESIONAL', 'ESTADO', 'MEDIDAS', 'TIPO DE OBRA')
+        encabezados = ('NRO', 'DOMICILIO', 'FECHA', 'DNI', 'NOMBRE', 'APELLIDO','MP','NOMBRE','APELLIDO')
+        e_titulos = ('TRAMITE',  'PROPIETARIO','PROFESIONAL')
+        year = date.today()
+        tramitesEstado = Estado.objects.select_related().values('timestamp', 'tramite__id', 'tramite__domicilio',
+                                                                'tramite__propietario__persona__dni',
+                                                                'tramite__propietario__persona__nombre',
+                                                                'tramite__propietario__persona__apellido',
+                                                                'tramite__profesional__matricula',
+                                                                'tramite__profesional__persona__nombre',
+                                                                'tramite__profesional__persona__apellido').filter(
+            timestamp__range=(datetime.date(year.year, 01, 01), datetime.date(year.year, 12, 12)), tipo=(6)).exclude(id__isnull=True)
         detalles = [
-            (tramite.id, tramite.propietario, tramite.profesional, tramite.estado(), tramite.medidas,
-                tramite.tipo_obra)
-            for tramite in
-                Tramite.objects.all()]
-        detalle_orden = Table([encabezados] + detalles, colWidths=[1 * cm, 3 * cm, 4 * cm, 4 * cm, 2 * cm, 3 * cm])
+            (tramite['tramite__id'], tramite['tramite__domicilio'], str(tramite['timestamp']),tramite['tramite__propietario__persona__dni'],
+            tramite['tramite__propietario__persona__nombre'], tramite['tramite__propietario__persona__apellido'], tramite['tramite__profesional__matricula'],
+            tramite['tramite__profesional__persona__nombre'],tramite['tramite__profesional__persona__apellido'])
+            for tramite in tramitesEstado ]
+        detalle=Table([e_titulos], colWidths=[8.5* cm,6.6*cm,6.1*cm] )
+        detalle.setStyle(TableStyle(
+            [
+                ('ALIGN', (0, 0), (0, 0), 'LEFT'),
+                ('GRID', (0, 0), (-1, -1), 1, colors.gray),
+                ('FONTSIZE', (0, 0), (-1, -1), 8),
+                ('LINEBELOW', (0, 0), (-1, 0), 2, colors.darkblue),
+                ('BACKGROUND', (0, 0), (-1, 0), colors.dodgerblue),
+                ('TEXTCOLOR', (0, 0), (-1, 0), colors.white),
+            ]
+        ))
+        detalle_orden = Table([encabezados]+ detalles, colWidths=[1 * cm, 2.5 * cm, 5 * cm, 1.6 * cm, 2.5 * cm, 2.5 * cm,1.5*cm,2.3*cm,2.3*cm])
         detalle_orden.setStyle(TableStyle(
             [
                 ('ALIGN', (0, 0), (0, 0), 'CENTER'),
@@ -2903,6 +2968,7 @@ class ReporteInspeccionesDirectorPdf(View):
             ]
         ))
         detalle_orden.hAlign = 'CENTER'
+        Story.append(detalle)
         Story.append(detalle_orden)
         doc.build(Story)
         return response
@@ -3190,6 +3256,20 @@ def listado_inspector_movil(request):
     argumentos = [Visado, ConInspeccion]
     tramites_del_inspector = Tramite.objects.en_estado(Agendado)
     tramites = filter(lambda t: t.estado().usuario == usuario, tramites_del_inspector)
+    contexto={'tramites':tramites}
+    return contexto
+
+def listado_inspecciones_mensuales(request):
+    year=datetime.date.today().year
+    mes=datetime.date.today().month
+    dia=datetime.date.today().day
+    diaFinal=monthrange(year, mes)
+    usuario = request.user
+    estados = Estado.objects.all()
+    tipo = 5 #Agendados
+    argumentos = [Visado, ConInspeccion]
+    tramites_del_inspector = Tramite.objects.en_estado(Agendado)
+    tramites = filter(lambda t: t.estado().usuario == usuario and t.estado().fecha.date()<=datetime.date(year,mes,diaFinal[1]) and t.estado().fecha.date()>=datetime.date(year,mes,dia), tramites_del_inspector)
     contexto={'tramites':tramites}
     return contexto
 

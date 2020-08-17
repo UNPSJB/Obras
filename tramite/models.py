@@ -71,8 +71,8 @@ class Tramite(models.Model):
                                                                                              self.pago)
 
     @classmethod
-    def new(cls, usuario, propietario, profesional, tipo_obra, medidas, domicilio, parcela, circunscripcion, sector,
-            manzana, documentos):
+    def new(cls, usuario, propietario, profesional, tipo_obra, medidas, domicilio, parcela, circunscripcion, manzana,
+            sector, documentos):
 
         if any(map(lambda d: d.tipo_documento.requerido != TipoDocumento.INICIAR, documentos)):
             raise Exception("Un documento no es de tipo iniciar")

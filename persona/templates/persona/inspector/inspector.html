@@ -9,6 +9,7 @@
 		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo" onclick='mostrarSubmenu("sin_submenu")'>Agendar inspeccion</a></li>
 		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree" onclick='mostrarSubmenu("sin_submenu")'>Consultar ultima Inspeccion</a></li>
 		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour" onclick='mostrarSubmenu("sin_submenu")'>Cargar inspeccion</a></li>
+		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="false" aria-controls="collapseFive" onclick='mostrarSubmenu("sin_submenu")'>Cargar inspecciones mensuales</a></li>
 	</font>
   </ul>
 {% endblock %}
@@ -76,7 +77,7 @@
 		</div>
 	  </div>
 
-	<div class="panel">
+    	<div class="panel">
 	    <div class="panel-heading box" role="tab" id="headingFour">
 			<h5 class="panel-title">
                 <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="true" aria-controls="collapseFour" onclick='mostrarSubmenu("sin_submenu")'>
@@ -104,7 +105,37 @@
             </div>
         </div>
     </div>
+
+	<div class="panel">
+	    <div class="panel-heading box" role="tab" id="headingFive">
+			<h5 class="panel-title">
+                <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="true" aria-controls="collapseFive" onclick='mostrarSubmenu("sin_submenu")'>
+                    <font color="#ffffff" size="2">Cargar inspecciones mensuales</font>
+                </a>
+			</h5>
+		</div>
+        <div id="collapseFive" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFive">
+            <div class="panel-body">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                            <div class="container-fluid">
+                                <div class="row">
+                                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                        {% block listado_inspecciones_mensuales  %}
+                                            {% include "persona/movil/listado_inspector_movil.html" with tramites_del_inspector=ctxlistadomensual_inspector.tramites %}
+                                        {% endblock %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
+
+	</div>
 
 {% endblock %}
 
