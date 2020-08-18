@@ -22,6 +22,9 @@
                           </h3>
                           <hr style="border-width:">
                           <br>
+                          <h5 align="left">
+                          PROPIETARIO:  {{tramite.propietario.persona}} &nbsp;  &nbsp;
+                  </h5>
                        </div>
                          <div class="row">
                             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" >
@@ -29,12 +32,29 @@
                                 <div class="row">
                                   <div class=" col-xs-12 col-sm-12 col-md-12 col-lg-12" >
                                     <ol>
-                                      <label style="color:black!important;">PADRON:</label>
-                                      <li style="color:black!important;"> {{tramite.parcela}}</li>
-                                      <label style="color:black!important;">DATOS PROPIETARIO:</label>
-                                      <li style="color:black!important;"> {{tramite.propietario.persona}}</li>
-                                      <label style="color:black!important;">DATOS PROFESIONAL:</label>
-                                      <li style="color:black!important;"> {{tramite.profesional}}</li>
+                                      <hr style="border-width:">
+                   <div class="table-responsive">
+                      <table align="center" style="text-align:center;">
+                          <thead>
+                                <th>Medidas</th>
+                                <th>Domicilio</th>
+                                <th>Parcela</th>
+                                <th>Circunscripcion</th>
+                                <th>Manzana</th>
+                                <th>Sector</th>
+                                </thead>
+                          <tbody>
+                          <tr>
+                              <td class="col-xs-1" align="center">{{tramite.medidas}}</td>
+                              <td class="col-xs-2" align="center">{{tramite.domicilio}}</td>
+                              <td class="col-xs-3" align="center">{{tramite.parcela}}</td>
+                              <td class="col-xs-4" align="center">{{tramite.circunscripcion}}</td>
+                              <td class="col-xs-5" align="center">{{tramite.manzana}}</td>
+                              <td class="col-xs-6" align="center">{{tramite.sector}}</td>
+                          </tr>
+                          </tbody>
+                      </table>
+                   </div>
                                     </ol>
                                   </div>
                                 </div>

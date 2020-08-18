@@ -29,13 +29,28 @@
                     <form action="" >
                         <div class="row" style="color:#fff;">
                             <div class=" col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                                <ol>
-                                    <label>PADRON:</label>
-                                    <li> {{tramite.parcela}}</li>
-                                    <label>DATOS PROPIETARIO:</label>
-                                    <li> {{tramite.propietario.persona}}</li>
-                                    <label>DATOS PROFESIONAL:</label>
-                                    <li> {{tramite.profesional}}</li>
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                            <form action="" >
+                                <div class="row" style="color:#fff;">
+                                    <div class=" col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                        <ol>
+                                            <label>NRO TRAMITE:</label>
+                                            <li> {{tramite.id}}</li>
+                                            <label>PROPIETARIO:</label>
+                                            <li> {{tramite.propietario.persona}}</li>
+                                            <label>PROFESIONAL:</label>
+                                            <li> {{tramite.profesional}}</li>
+                                            <label>TIPO DE OBRA:</label>
+                                            <li> {{tramite.tipo_obra}}</li>
+
+                                        </ol>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
                                 </ol>
                             </div>
                         </div>
@@ -265,7 +280,7 @@
         {%endif%}
 
         <div class="row">
-            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="center">
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="left">
                 <a href="javascript:history.back(-1);">
                     <button type="button" class="btn btn-primary" name="Volver">
                         Volver

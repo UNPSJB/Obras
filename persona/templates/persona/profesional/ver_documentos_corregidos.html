@@ -48,7 +48,7 @@
                             </div>
                         {% endfor %}
                         <div class="row">
-            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+           <!-- <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
               <form action="" >
                 <div class="row" style="color:#fff;">
                   <div class=" col-xs-12 col-sm-12 col-md-12 col-lg-12">
@@ -63,11 +63,65 @@
                   </div>
                 </div>
               </form>
-          </div>
+          </div>-->
+                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                    <form action="" >
+                        <div class="row" style="color:#fff;">
+                            <div class=" col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                               <ol>
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                            <form action="" >
+                                <div class="row" style="color:#fff;">
+                                    <div class=" col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                        <ol>
+                                            <label>NRO TRAMITE:</label>
+                                            <li> {{tramite.id}}</li>
+                                            <label>PROPIETARIO:</label>
+                                            <li> {{tramite.propietario.persona}}</li>
+                                            <label>PROFESIONAL:</label>
+                                            <li> {{tramite.profesional}}</li>
+                                            <label>TIPO DE OBRA:</label>
+                                            <li> {{tramite.tipo_obra}}</li>
+                                            <label>DATOS CATASTRALES:</label>
+                                            <li>
+                                                <table align="center" >
+                                                  <thead>
+                                                        <th>Parcela</th>
+                                                        <th>Circunscripcion</th>
+                                                        <th>Manzana</th>
+                                                        <th>Sector</th>
+                                                        </thead>
+                                                  <tbody>
+                                                  <tr>
+                                                      <td class="col-xs-3" align="center">{{tramite.parcela}}</td>
+                                                      <td class="col-xs-4" align="center">{{tramite.circunscripcion}}</td>
+                                                      <td class="col-xs-5" align="center">{{tramite.manzana}}</td>
+                                                      <td class="col-xs-6" align="center">{{tramite.sector}}</td>
+                                                  </tr>
+                                                  </tbody>
+                                              </table>
+                                            </li>
+                                        </ol>
+                                    </div>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+
+
+                   </div>
+                                </ol>
+                            </div>
+                        </div>
           </div>
     <div class="table-responsive">
         <table align="center" class="table table-bordered table-striped table-hover table-condensed table-responsive" style="text-align:center;">
-
+        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <div class="form-group">
+                <label for="">PLANILLA VISADO</label>
+            </div>
+        </div>
             <tr>
                 <th></th>
               {% for columna in columnas %}
