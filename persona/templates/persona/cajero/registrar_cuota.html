@@ -27,7 +27,7 @@
                         <table class="table table-bordered table-striped table-hover table-condensed" style="background: white;">
                             <thead>
                             <tr>
-                                <th>FechaVencimiento</th>
+                                <th>Fecha Vencimiento</th>
                                 <th>Monto</th>
                                 <th>Numero de Cuota</th>
                                 <th>Registrar Pago</th>
@@ -36,9 +36,9 @@
                             <tbody>
                             {% for cuota in cuotas %}
                             <tr>
+                                <td class="col-xs-3">{{ cuota.fechaVencimiento  }}</td>
+                                <td class="col-xs-3">{{ cuota.monto}}</td>
                                 <td class="col-xs-3">{{ cuota.numeroCuota }}</td>
-                                <td class="col-xs-3">{{ cuota.fechaVencimiento }}</td>
-                                <td class="col-xs-3">{{ cuota.monto }}</td>
                                 <td>
                                     <label class="switch">
                                         <input name="cuotas-{{cuota.id}}" type="checkbox"><span class="slider round"></span>

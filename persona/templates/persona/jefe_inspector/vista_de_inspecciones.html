@@ -2,44 +2,86 @@
 {% load staticfiles %}
 {% load crispy_forms_tags%}
 
-{% block estilos %}
-
-{% endblock %}
-
 {% block barra %}
+<div id="noImprimir">
 	<ul class="sidebar sidebar-1">
 		<font size="2">
 			<li><a href="javascript:history.back(-1);" class="current"><font color="white">Inspeccion</font></a></li>
 		</font>
 	</ul>
+</div>
 {% endblock %}
 
-
 {% block contenido %}
-
-
-    <div class="container-fluid">
-        <div class="panel panel-custom ">
-            <div class="container-fluid">
-                <div class="row">
-                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                        <h4 style="color: white;">Inspecciones:</h4>
-                        <hr>
-                        {% if tramite %}
+<div class="container-fluid">
+    <div id="printReady">
+        <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" >
+		  <div class="row" style="background:white;">
+              <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                  <div style="background-color:#2c3e50;">
+                          <img src="/media/imagenes/Escudobanner.png"
+                               class="img-responsive" alt="Imagen responsive" width="100" height="100"/>
+                  </div>
+                  <div align="justify" style="font-size:9px; text-align:left;">
+                      <br>  &nbsp; MUNICIPALIDAD DE TRELEW
+                      <br>
+                      &nbsp; Rivadavia 390 <br>
+                      &nbsp; 9100 TRELEW- Provincia del Chubut
+                  </div>
+                      <h3 align="center">
+                          INSPECCIONES &nbsp;  &nbsp;
+                      </h3>
+                  <br>
+                  {% if tramite %}
                         {% if tramite.estado.id > 4 and tramite.id == tramite.id%}
-                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                                <h4 style="color: white;">Datos del tramite:</h4>
-                                <div class="row">
-                                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">                                                                                
-                                        <hr>
-                                            <h3  style="color: white;">Id del Tramite: {{tramite.pk}}</h3>
-                                            <h3  style="color: white;">Domicilio del tramite: {{tramite.domicilio}}</h3>
-                                            <h3  style="color: white;">Estadp actual: {{tramite.estado}}</h3>                                        
-                                            <h3  style="color: white;">Prueba tipo: {{tramite.estado.TIPO}}</h3>
-                                            <hr><hr>
-                                    </div>
-                                </div>
-                                {% for inspeccion in inspecciones %}
+                  <h5 align="left">
+                          PROPIETARIO:  {{tramite.propietario.persona}} &nbsp;  &nbsp;
+                  </h5>
+                    <h5 align="left">
+                          NRO TRAMITE:  {{tramite.pk}} &nbsp;
+                      </h5>
+                   <h5 align="left">
+                          DOMICILIO DEL TRAMITE:  {{tramite.domicilio}} &nbsp;
+                      </h5>
+                   <h5 align="left">
+                          ESTADO ACTUAL:  {{tramite.estado}} &nbsp;
+                      </h5>
+
+                   <h5 align="left">
+                          PRUEBA TIPO:  {{tramite.estado.TIPO}} &nbsp;
+                  </h5>
+                    <br>
+                  <h5 align="left">
+                          DATOS CATASTRALES&nbsp;  &nbsp;
+                      </h5>
+                      <hr style="border-width:">
+                        <div class="table-responsive">
+                      <table align="center" style="text-align:center;">
+                          <thead>
+                                <th>Medidas</th>
+                                <th>Domicilio</th>
+                                <th>Parcela</th>
+                                <th>Circunscripcion</th>
+                                <th>Manzana</th>
+                                <th>Sector</th>
+                                </thead>
+                          <tbody>
+                          <tr>
+                              <td class="col-xs-1" align="center">{{tramite.medidas}}</td>
+                              <td class="col-xs-2" align="center">{{tramite.domicilio}}</td>
+                              <td class="col-xs-3" align="center">{{tramite.parcela}}</td>
+                              <td class="col-xs-4" align="center">{{tramite.circunscripcion}}</td>
+                              <td class="col-xs-5" align="center">{{tramite.manzana}}</td>
+                              <td class="col-xs-6" align="center">{{tramite.sector}}</td>
+                          </tr>
+                          </tbody>
+                      </table>
+                   </div>
+                  <br>
+
+
+                  <br>
+                  {% for inspeccion in inspecciones %}
                                 {% if inspeccion %}
                                    <table class="table table-bordered table-striped table-hover table-condensed" style="text-align:center;">
                                        <thead>
@@ -68,9 +110,9 @@
                                            {% endfor %}
                                        </tbody>
                                    </table>
-                                   
-                                   
-                                                       <div class="row">
+
+
+                          <div class="row">
                                                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                                                            <form action="" >
                                                            <div class="row" style="color:#fff;">
@@ -103,37 +145,70 @@
                                                            </form>
                                                        </div>
                                                        </div>
-                                           {% endif %}                                    
-                                       {% endfor %}                                                                                          
+                                           {% endif %}
+                                       {% endfor %}
 
                             {% endif %}
                             <hr><br>
                         {% endif %}
-                            <a href="javascript:history.back(-1);">
-                                <button type="button" class="btn btn-primary" name="Volver">
-                                    Volver
-                                </button>
-                            </a>
-                    </div>
-                </div>
+
+                  </div>
+              </div>
+          </div>
+        </div>
+    </div>
+    <div class="container-fluid " id="botones_inspeccion">
+        <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-center">
+                <button type="button" class="btn btn-primary btn-md" onclick="printDiv('printReady')">Imprimir</button>
+                <a href="javascript:history.back(-1);">
+                    <button class="btn btn-primary btn-md" type="submit" value="Atras">Volver</button>
+                </a>
             </div>
         </div>
     </div>
-    </div>
+     <br>
+</div>
+<style>
+       .dataTables_length, .dataTables_filter, .dataTables_info,.dataTables_wrapper .dataTables_paginate .paginate_button.disabled, .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:hover, .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:active {
+          display: none !important;
+       }
+       th{
+          background-color:#2c3e50;
+          color:white;
+       }
+        .dataTables_wrapper .dataTables_paginate .paginate_button.current, .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
+            display: none;
+        }
+        #tabla_length{
+        display:none;
+        }
+        #tabla_filter{
+        display:none;
+        }
+    </style>
+<script>
+    function printDiv(div) {
+    // Create and insert new print section
 
+    var elem = document.getElementById(div);
+    var domClone = elem.cloneNode(true);
+    var $printSection = document.createElement("div");
+    $printSection.id = "printSection";
+    $printSection.appendChild(domClone);
+    $('head').append('<style> select{ display:none;} #botones_inspeccion,#botones_visado,#noImprimir{display:none;} .dataTables_wrapper .dataTables_length, .dataTables_wrapper .dataTables_filter, .dataTables_wrapper .dataTables_info, .dataTables_wrapper .dataTables_processing, .dataTables_wrapper .dataTables_paginate label{display: none;} .dataTables_wrapper .dataTables_paginate .paginate_button.disabled, .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:hover, .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:active{display: none;} .dataTables_wrapper .dataTables_paginate .paginate_button{display: none!important;}</style>');
+    //document.body.insertBefore($printSection, document.body.firstChild);
 
-{% endblock %}
+    window.print();
 
-{% block scripts %}
-    <script>
-		$("#id_correcciones").fileinput({
-			showCaption: false,
-			browseClass: "btn btn-primary btn-sm",
-			fileType: "any",
-			maxFileCount: 1,
-			browseLabel: 'Cargar Planilla de Visado',
-			showUpload: false,
-			showRemove: false
-		});
-	</script>
+    // Clean up print section for future use
+    var oldElem = document.getElementById("printSection");
+    if (oldElem != null) { oldElem.parentNode.removeChild(oldElem); }
+                          //oldElem.remove() not supported by IE
+
+    return true;
+}
+
+</script>
+
 {% endblock %}
