@@ -29,9 +29,9 @@
 		  <div class="panel-body">
 			<div class="container-fluid">
 				<div class="row">
-                    <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-                        <canvas id="pieDirectorUsuarios" height="200"></canvas>
-                    </div>
+                    <el class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                        <canvas id="pieDirectorUsuarios" width="400" height="200"></canvas>
+                    </el>
 					<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                           <div class="table-responsive">
                               <table  class="table table-bordered table-striped table-hover table-condensed" style="background: white;">
@@ -73,7 +73,6 @@
                           </div>
                         <hr>
                     </div>
-
                     <div class=" col-xs-8 col-sm-8 col-md-8 col-lg-8" align="left">
                         <a id="crear_detalle" href="{% url 'reporte_tramites_director_excel' %}" class="btn btn-info btn-collapsible btn-sm" title="Generar Archivo Excel" >
                            <i class="glyphicon glyphicon-list-alt"></i><span>Exportar a EXCEL</span>
@@ -108,44 +107,29 @@
         labelsGrupos = [];
         dataGrupos = [];
 
-        {% for da in datos_grupos %}
+        {% for da in datos_estados %}
             dataGrupos.push({{da}});
         {% endfor %}
 
-        {% for la in label_grupos %}
+        {% for la in label_estados %}
             labelsGrupos.push("{{la}}");
             color.push(generarcolor());
         {% endfor %}
 
-        Chart.defaults.global.defaultFontColor = 'white';
-        var ctx = document.getElementById("pieDirectorUsuarios");
+        var ctx = document.getElementById("pieDirectorUsuarios").getContext('2d');
         var pieDirectorUsuarios = new Chart( ctx, {
             type: 'pie',
             data: {
-              labels: labelsGrupos,
+              labels:labelsGrupos,
               datasets: [{
                 label: "Cantidad de usuarios por grupo",
-                backgroundColor: color,
-                borderColor: "#ffffff",
-                borderWidth: 1,
-                data: dataGrupos
+                backgroundColor:  ["red","yellow","pink","orange","blue","green","cyan","magenta","purple"],
+
+                data:dataGrupos
               }]
             },
             options: {
-                responsive: true,
-                legend: {
-                    position: 'left',
-                },
-                title: {
-                    display: true,
-                    text: 'Cantidad de usuarios por grupo',
-                    fontSize: 14,
-                    padding: 14,
-                    fontColor:"#ffffff",
-                  },
-                rotation: -Math.PI,
-                cutoutPercentage: 30,
-                circumference: Math.PI,
+                responsive: true
             }
         });
 

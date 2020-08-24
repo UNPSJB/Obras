@@ -6,121 +6,123 @@
 {% endblock %}
 
 {% block barra %}
-	<ul class="sidebar sidebar-1">
-		<font size="2">
-			<li><a href="{% url 'propietario'  %}" class="current"><font color="white">Propietario</font></a></li>
-		</font>
-	</ul>
+<ul class="sidebar sidebar-1">
+    <font size="2">
+        <li><a href="{% url 'propietario'  %}" class="current"><font color="white">Propietario</font></a></li>
+    </font>
+</ul>
 {% endblock %}
 
 {% block contenido %}
 <div class="container-fluid" id="a">
-	<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" >
-	  <div class="panel" id="panelprop">
-		<div class="panel-heading box" role="tab" id="headingFive">
-		  <h5 class="panel-title">
-			<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
-			  <label id="s">Historial del tramite</label>
-			</a>
-		  </h5>
-		</div>
-		<div id="collapseFive" class="panel-collapse" role="tabpanel" aria-labelledby="headingFive">
-		  <div class="panel-body">
-			<div class="container-fluid">
-				<div class="row" id="fila1">
-                        <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-                            {% if tramite.tramite %}
-                                    <ol id="tablaOl">
-                                        <label>NRO TRAMITE:</label>
-                                            <li> {{tramite.tramite.id}}</li>
-                                            <label>PROPIETARIO:</label>
-                                            <li> {{tramite.tramite.propietario.persona}}</li>
-                                            <label>PROFESIONAL:</label>
-                                            <li> {{tramite.tramite.profesional.persona}}</li>
-                                            <label>TIPO DE OBRA:</label>
-                                            <li> {{tramite.tramite.tipo_obra}}</li>
-                                            <label>MEDIDAS:</label>
-                                            <li> {{tramite.tramite.medidas}}</li>
-                                            <label>ESTADO ACTUAL:</label>
-                                            <li> {{tramite.tramite.estado}}</li>
-                                            <label>DATOS CATASTRALES:</label>
-                                            <li>
-                                                <table align="center" >
-                                                  <thead>
-                                                        <th>Parcela</th>
-                                                        <th>Circunscripcion</th>
-                                                        <th>Manzana</th>
-                                                        <th>Sector</th>
-                                                        </thead>
-                                                  <tbody>
-                                                  <tr>
-                                                      <td class="col-xs-3" align="center">{{tramite.tramite.parcela}}</td>
-                                                      <td class="col-xs-4" align="center">{{tramite.tramite.circunscripcion}}</td>
-                                                      <td class="col-xs-5" align="center">{{tramite.tramite.manzana}}</td>
-                                                      <td class="col-xs-6" align="center">{{tramite.tramite.sector}}</td>
-                                                  </tr>
-                                                  </tbody>
-                                              </table>
-                            </ol>
-                                    </ol>
-                            {% endif%}
-                        </div>
-                        <el class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
-                            <canvas id="myChart" height=143></canvas>
-                        </el>
-                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                            <div class="table-responsive">
-                                  <table  class="table-bordered table-striped table-hover">
-                                      <thead>
-                                          <tr>
-                                              <th>Estado</th>
-                                              <th>Usuario</th>
-                                              <th>Fecha</th>
-                                              <th>Progreso</th>
-                                              <th>Ver</th>
-                                          </tr>
-                                      </thead>
-                                      <tbody>
-                                      {% if estadosp %}
-                                          {% for estado in estadosp.estados_del_tramite %}
+    <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" >
+        <div class="panel" id="panelprop">
+            <div class="panel-heading box" role="tab" id="headingFive">
+                <h5 class="panel-title">
+                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+                        <label id="s">Historial del tramite</label>
+                    </a>
+                </h5>
+            </div>
+            <div id="collapseFive" class="panel-collapse" role="tabpanel" aria-labelledby="headingFive">
+                <div class="panel-body">
+                    <div class="container-fluid">
+                        <div class="row" id="fila1">
+                            <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                                {% if tramite.tramite %}
+                                <ol id="tablaOl">
+                                    <label>NRO TRAMITE:</label>
+                                    <li> {{tramite.tramite.id}}</li>
+                                    <label>PROPIETARIO:</label>
+                                    <li> {{tramite.tramite.propietario.persona}}</li>
+                                    <label>PROFESIONAL:</label>
+                                    <li> {{tramite.tramite.profesional.persona}}</li>
+                                    <label>TIPO DE OBRA:</label>
+                                    <li> {{tramite.tramite.tipo_obra}}</li>
+                                    <label>MEDIDAS:</label>
+                                    <li> {{tramite.tramite.medidas}}</li>
+                                    <label>ESTADO ACTUAL:</label>
+                                    <li> {{tramite.tramite.estado}}</li>
+                                    <label>DATOS CATASTRALES:</label>
+                                    <li>
+                                        <table align="center" >
+                                            <thead>
+                                            <th>Parcela</th>
+                                            <th>Circunscripcion</th>
+                                            <th>Manzana</th>
+                                            <th>Sector</th>
+                                            </thead>
+                                            <tbody>
                                             <tr>
-                                                <td class="col-xs-1" align="center">{{estado.tipo}}</td>
-                                                <td class="col-xs-2">{{estado.usuario}}</td>
-                                                <td class="col-xs-2">{{estado.timestamp}}</td>
-                                                <td class="col-xs-6" >
-                                                   <div class="progress">
-                                                       <div id="{{estado.tipo}} - {{estado.timestamp}}" class="progress-bar progress-bar-success"  role="progressbar" style="width:0%;">
-                                                           <span>%</span>
-                                                       </div>
-                                                   </div>
-                                                </td>
-                                                <td align="center" class="col-xs-1">
-                                                    <a href="{% url 'documentos_de_estado' estado.id%}">
-                                                        <button type="button" class="btn btn-primary btn-xs" name="detalle">
-                                                            <span class="glyphicon glyphicon-search" aria-hidden="true"> Documentos</span>
-                                                        </button>
-                                                    </a>
-                                                </td>
+                                                <td class="col-xs-3" align="center">{{tramite.tramite.parcela}}</td>
+                                                <td class="col-xs-4" align="center">{{tramite.tramite.circunscripcion}}</td>
+                                                <td class="col-xs-5" align="center">{{tramite.tramite.manzana}}</td>
+                                                <td class="col-xs-6" align="center">{{tramite.tramite.sector}}</td>
                                             </tr>
-                                          {% endfor %}
-                                      {% endif%}
-                                      </tbody>
-                                  </table>
-                                <br>
+                                            </tbody>
+                                        </table>
+                                </ol>
+                                </ol>
+                                {% endif%}
+                            </div>
+
+                            <el class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
+                                <canvas id="myChart" height=200 width="400"></canvas>
+
+                            </el>
+                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                <div class="table-responsive">
+                                    <table  class="table-bordered table-striped table-hover">
+                                        <thead>
+                                        <tr>
+                                            <th>Estado</th>
+                                            <th>Usuario</th>
+                                            <th>Fecha</th>
+                                            <th>Progreso</th>
+                                            <th>Ver</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% if estadosp %}
+                                        {% for estado in estadosp.estados_del_tramite %}
+                                        <tr>
+                                            <td class="col-xs-1" align="center">{{estado.tipo}}</td>
+                                            <td class="col-xs-2">{{estado.usuario}}</td>
+                                            <td class="col-xs-2">{{estado.timestamp}}</td>
+                                            <td class="col-xs-6" >
+                                                <div class="progress">
+                                                    <div id="{{estado.tipo}} - {{estado.timestamp}}" class="progress-bar progress-bar-success"  role="progressbar" style="width:0%;">
+                                                        <span>%</span>
+                                                    </div>
+                                                </div>
+                                            </td>
+                                            <td align="center" class="col-xs-1">
+                                                <a href="{% url 'documentos_de_estado' estado.id%}">
+                                                    <button type="button" class="btn btn-primary btn-xs" name="detalle">
+                                                        <span class="glyphicon glyphicon-search" aria-hidden="true"> Documentos</span>
+                                                    </button>
+                                                </a>
+                                            </td>
+                                        </tr>
+                                        {% endfor %}
+                                        {% endif%}
+                                        </tbody>
+                                    </table>
+                                    <br>
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="right">
+                                <a href="javascript:history.back(-1);">
+                                    <button type="button" class="btn btn-primary" name="Volver">
+                                        Volver
+                                    </button>
+                                </a>
                             </div>
                         </div>
-                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="right">
-                            <a href="javascript:history.back(-1);">
-                                <button type="button" class="btn btn-primary" name="Volver">
-                                    Volver
-                                </button>
-                            </a>
-                        </div>
-			    </div>
-			</div>
-          </div>
+                    </div>
+                </div>
+            </div>
         </div>
-      </div>
     </div>
 </div>
 
@@ -140,7 +142,7 @@
 });
 </script>-->
 
-    <script>
+<script>
         $("[id^='1 -']").css('width', 12 + '%');
         $("[id^='2 -']").css('width', 25 + '%');
         $("[id^='3 -']").css('width', 37 + '%');
@@ -154,8 +156,7 @@
         $("[id^='8 -']").css('width', 100 + '%');
     </script>
 
-    <script>
-
+<script>
         var timeFormat = 'DD/MM/YYYY';
         var datos = [];
         var label_fechas = [];
@@ -167,84 +168,34 @@
         {% for fe in fecha %}
             label_fechas.push("{{fe}}");
         {% endfor %}
-
-        var ctx = document.getElementById("myChart");
+        var ctx = document.getElementById("myChart").getContext('2d');
         var myChart = new Chart(ctx, {
             type: 'line',
             data: {
-                labels: label_fechas,
+            labels: label_fechas,
                 datasets: [{
                 label: 'Estado',
                 data: datos,
                 borderColor: "#273746",
                 borderWidth: 3,
                 lineTension: 0.3,
-                pointBorderColor: 'red',
-                pointBackgroundColor: 'red',
-                fill:false,
+                pointBorderColor: '#2c3e50',
+                pointBackgroundColor: '#2c3e50',
             }]
             },
             options: {
-                responsive: true,
-                legend: {
-                    display: false
-                },
-                title:{
+            responsive:true,
+            title:{
                     display:true,
                     text:'Historial de estados del tramite n° {{tramite.tramite.id}}',
                     fontSize: 14,
                     padding: 14,
                     fontColor:"#273746",
                 },
-                tooltips: {
-                    mode: 'index',
-                    intersect: false,
-                },
-                hover: {
-                    mode: 'nearest',
-                    intersect: true
-                },
-                scales: {
-                    xAxes: [{
-                        type: "time",
-                        time: {
-                            format: timeFormat,
-                            unit: 'week',
-                        },
-                        scaleLabel: {
-                            display: false,
-                            labelString: 'Fecha',
-                        },
-                         ticks: {
-                            fontColor:"#273746",
-                        },
-                        gridLines:{
-                            color:"#eaecee",
-                            zeroLineColor: "#273746",
-                            zeroLineWidth: 2,
-                        }
-                    }],
-                    yAxes: [{
-                        scaleLabel: {
-                            display: true,
-                        },
-                        ticks: {
-                            min: 0,
-                            max: 10,
-                            stepSize: 1,
-                            fontColor:"#273746",
-                        },
-                        gridLines:{
-                            color:"#eaecee",
-                            zeroLineColor: "#273746",
-                            zeroLineWidth: 1,
-                        }
-                    }]
-                }
             }
         });
 
-    </script>
+</script>
 <script>
 	$(document).ready(function() {
 	var font=0;

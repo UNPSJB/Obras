@@ -2207,7 +2207,7 @@ def ver_listado_todos_usuarios(request):
     return render(request, 'persona/director/vista_de_usuarios.html', {"label_grupos":label_grupos, "datos_grupos":datos_grupos})
 
 def ver_todos_tramites(request):
-    argumentos = [Iniciado, Aceptado, Visado, Corregido, Agendado, ConInspeccion, Inspeccionado, FinalObraSolicitado]
+    argumentos = [Iniciado, Aceptado, Visado, Corregido, Agendado, ConInspeccion, Inspeccionado, FinalObraSolicitado, Finalizado]
     tramites = Tramite.objects.en_estado(argumentos)
     estados = []
     for t in tramites:
@@ -2217,7 +2217,7 @@ def ver_todos_tramites(request):
         if (not estados_cant.has_key(n)):
             estados_cant.setdefault(n, 0);
     estados_datos = estados_cant.values()
-    contexto = {'todos_los_tramites': tramites, "datos_estados":estados_datos, "label_estados":argumentos}
+    contexto = {'todos_los_tramites': tramites, "datos_estados":estados_datos, "label_estados":["Iniciado", "Aceptado","Visado", "Corregido", "Agendado", "Con Inspeccion", "Inspeccionado", "Final Obra Solicitado","Finalizado"]}
     return render(request, 'persona/director/vista_de_todos_tramites.html', contexto)
 
 def ver_tipos_de_obras_mas_frecuentes(request):
@@ -3019,7 +3019,7 @@ def listado_de_comprobantes(request, pk_tramite):
 
 
 def listado_tramites_para_financiar(request):
-    tramite = Tramite.objects.en_estado(Visado)
+    tramite = Tramite.objects.en_estado([Visado,Agendado,ConInspeccion,Inspeccionado,FinalObraSolicitado])
     listado=[]
     for tramites in tramite:
         if tramites.pago is None:
