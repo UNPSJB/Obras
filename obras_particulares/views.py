@@ -43,6 +43,9 @@ def logout_view(request):
     logout(request)
     return redirect("home")
 
+def ayuda(request):
+    return render(request, "documentacion/_build/html/ayudaUsuario.html", {})
+
 def home1(request):
     usuario = request.user
     if usuario is not None:
