@@ -150,16 +150,12 @@
                 borderColor: "#273746",
                 borderWidth: 3,
                 lineTension: 0.3,
-                pointBorderColor: 'red',
-                pointBackgroundColor: 'red',
-                fill:false,
+                pointBorderColor: '#2c3e50',
+                pointBackgroundColor: '#2c3e50',
             }]
             },
             options: {
                 responsive: true,
-                legend: {
-                    display: false
-                },
                 title:{
                     display:true,
                     text:'Historial de estados del tramite n° {{tramite.tramite.id}}',
@@ -167,51 +163,6 @@
                     padding: 14,
                     fontColor:"#273746",
                 },
-                tooltips: {
-                    mode: 'index',
-                    intersect: false,
-                },
-                hover: {
-                    mode: 'nearest',
-                    intersect: true
-                },
-                scales: {
-                    xAxes: [{
-                        type: "time",
-                        time: {
-                            format: timeFormat,
-                            unit: 'week',
-                        },
-                        scaleLabel: {
-                            display: false,
-                            labelString: 'Fecha',
-                        },
-                         ticks: {
-                            fontColor:"#273746",
-                        },
-                        gridLines:{
-                            color:"#eaecee",
-                            zeroLineColor: "#273746",
-                            zeroLineWidth: 2,
-                        }
-                    }],
-                    yAxes: [{
-                        scaleLabel: {
-                            display: true,
-                        },
-                        ticks: {
-                            min: 0,
-                            max: 10,
-                            stepSize: 1,
-                            fontColor:"#273746",
-                        },
-                        gridLines:{
-                            color:"#eaecee",
-                            zeroLineColor: "#273746",
-                            zeroLineWidth: 1,
-                        }
-                    }]
-                }
             }
         });
 
