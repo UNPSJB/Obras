@@ -15,7 +15,7 @@
     <div class="panel">
         <div class="panel-heading box" role="tab" id="headingOne">
             <h5 class="panel-title">
-                <font color="#ffffff" size="2">Registrar cuota</font>
+                <font color="#ffffff" size="2">Registrar el Pago de la/ Cuota/s </font>
             </h5>
         </div>
         <div class="container-fluid">
@@ -27,18 +27,18 @@
                         <table class="table table-bordered table-striped table-hover table-condensed" style="background: white;">
                             <thead>
                             <tr>
+                                <th>Numero de Cuota</th>
                                 <th>Fecha Vencimiento</th>
                                 <th>Monto</th>
-                                <th>Numero de Cuota</th>
                                 <th>Registrar Pago</th>
                             </tr>
                             </thead>
                             <tbody>
                             {% for cuota in cuotas %}
                             <tr>
+                                <td class="col-xs-3">{{ cuota.numeroCuota }}</td>
                                 <td class="col-xs-3">{{ cuota.fechaVencimiento  }}</td>
                                 <td class="col-xs-3">{{ cuota.monto}}</td>
-                                <td class="col-xs-3">{{ cuota.numeroCuota }}</td>
                                 <td>
                                     <label class="switch">
                                         <input name="cuotas-{{cuota.id}}" type="checkbox"><span class="slider round"></span>
@@ -138,8 +138,8 @@
   .switch {
       position: relative;
       display: inline-block;
-      width: 60px;
-      height: 34px;
+      width: 30px;
+      height: 17px;
   }
 
   /* Hide default HTML checkbox */
@@ -161,10 +161,10 @@
   .slider:before {
       position: absolute;
       content: "";
-      height: 26px;
-      width: 26px;
-      left: 4px;
-      bottom: 4px;
+      height: 13px;
+      width: 13px;
+      left: 2px;
+      bottom: 2px;
       background-color: white;
       -webkit-transition: .4s;
       transition: .4s;
@@ -179,14 +179,14 @@
   }
 
   input:checked + .slider:before {
-      -webkit-transform: translateX(26px);
-      -ms-transform: translateX(26px);
-      transform: translateX(26px);
+      -webkit-transform: translateX(13px);
+      -ms-transform: translateX(13px);
+      transform: translateX(13px);
   }
 
   /* Rounded sliders */
   .slider.round {
-      border-radius: 34px;
+      border-radius: 17px;
   }
 
   .slider.round:before {

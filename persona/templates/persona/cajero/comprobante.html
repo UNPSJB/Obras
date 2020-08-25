@@ -25,16 +25,16 @@
                             <h5 align="right"> Fecha de Vencimiento {{ cuota.fechaVencimiento }} &nbsp; &nbsp;</h5>
                             <h5 align="right"> Fecha de Pago {{ cuota.fechaPago }} &nbsp; &nbsp; </h5>
                       <hr>
-                            <label style="color:black;">  Titular: &nbsp; Apellido - Nombre : {{ tramite.propietario.persona.apellido}}  -  {{ tramite.propietario.persona.nombre }}</label>
+                            <label style="color:black;">  Titular : <br> &nbsp; Apellido - Nombre : {{ tramite.propietario.persona.apellido}}  -  {{ tramite.propietario.persona.nombre }}</label>
                             <label style="color:black;">  &nbsp;  &nbsp;DNI : {{tramite.propietario.persona.dni}}</label>
                 <hr>
-                <label style="color:black;">  Sector: </label> {{tramite.sector}}
-                <label style="color:black;">Parcela: </label> {{tramite.parcela}}
-                <label style="color:black;">Circunscripción: </label> {{tramite.circunscripcion}}
-                <label style="color:black;">Manzana: </label> {{tramite.manzana}}
+                <label style="color:black;">  Sector : {{tramite.sector}}  </label> &nbsp;
+                <label style="color:black;">Parcela : &nbsp; {{tramite.parcela}}  </label> &nbsp;
+                <label style="color:black;">Circunscripción : &nbsp; {{tramite.circunscripcion}}  </label> &nbsp;
+                <label style="color:black;">Manzana : &nbsp; {{tramite.manzana}}  </label>
                 <hr>
                 <div class="table-responsive">
-                    <table  align="center" class="table table-bordered table-striped table-hover" style="width:1100px;">
+                    <table  align="center" class="table table-bordered table-striped table-hover">
                         <thead>
                             <tr>
                                         <th p style="color:#FFFFFF"bgcolor="#2c3e50">Numero de tramite</th>
@@ -47,7 +47,7 @@
                         </thead>
                         <tbody style="text-align:center">
                             <tr>
-                                <td>{{ tramite.id }}</td>
+                                        <td>{{ tramite.id }}</td>
                                         <td>{{ tramite.tipo_obra.nombre }}</td>
                                         <td>{{ cuota.numeroCuota }}</td>
                                         <td>{{ cuota.monto }} </td>
@@ -55,7 +55,7 @@
                             </tr>
                         </tbody>
                     </table>
-                    <h5 align="right"  style="color:black;" >Total: {{cuota.monto}} / {{tramite.monto_pagado}}</h5>
+                    <h5 align="right"  style="color:black;" >Total : <a style="color:black;" id="total"></a> / {{tramite.monto_a_pagar}}</h5>
 
                 </div>
                 <hr>
@@ -95,6 +95,14 @@
     }
 </style>
 <script>
+$( document ).ready(function() {
+{% load l10n %}
+
+{% localize off %}
+var t= {{cuota.monto}}
+{% endlocalize %}
+    $("#total").text(t *{{cuota.numeroCuota}})
+});
     function printDiv(div) {
     // Create and insert new print section
 

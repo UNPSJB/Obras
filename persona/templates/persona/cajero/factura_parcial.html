@@ -22,17 +22,17 @@
                       </h3>
                       <hr>
                     <div class="row" style="color:black;">
-                        <label style="color:black;">Tramite:{{tramite.id}}</label>
+                        <label style="color:black;">&nbsp;Tramite:{{tramite.id}}</label>&nbsp;&nbsp;
                         <label style="color:black;">Cantidad de cuotas:{{pago.cantidadCuotas}}</label>
                                     <hr>
                                    <div class="row">
                                        <div class="col-sm-6 col-md-6 col-lg-6 col-xs-6">
-                            <label style="color:black;" > &nbsp; Titular: &nbsp; Apellido - Nombre : {{ tramite.propietario.persona.apellido}}  -  {{ tramite.propietario.persona.nombre }}</label>
+                            <label style="color:black;" > &nbsp; Titular: <br> &nbsp; Apellido - Nombre : {{ tramite.propietario.persona.apellido}}  -  {{ tramite.propietario.persona.nombre }}</label>
                             <label style="color:black;">  &nbsp;  &nbsp;DNI : {{tramite.propietario.persona.dni}}</label>
                                        </div>
                                                                               <div class="col-sm-6 col-md-6 col-lg-6 col-xs-6">
 
-                                       <label style="color:black;">Profesional : </label>
+                                       <label style="color:black;">Profesional : </label><br>
                                         <label style="color:black;"> {{tramite.profesion}} {{tramite.profesional}}</label>
                                         <label style="color:black;">M.P: {{tramite.profesional.matricula}}</label><br>
                                                                               </div>
@@ -58,7 +58,7 @@
                                     <hr>
 <br>
                 <div class="table-responsive">
-                    <table align="center" class="table table-bordered table-striped table-hover" style="width:1100px;">
+                    <table align="center" class="table table-bordered table-striped table-hover">
                         <thead>
                             <tr>
                                         <th p style="color:#FFFFFF"bgcolor="#2c3e50">Fecha de vencimiento</th>

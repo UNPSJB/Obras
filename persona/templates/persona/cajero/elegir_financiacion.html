@@ -5,7 +5,7 @@
 {% block barra %}
     <ul class="sidebar sidebar-1">
         <font size="2">
-            <li><a class="current"><font color="white">Financiacion</font> </a></li>
+            <li><a href="{%url 'cajero'%}" class="current"><font color="white">Cajero</font> </a></li>
         </font>
       </ul>
 {% endblock %}
@@ -32,7 +32,7 @@
                                         <label>  Tramite : </label><br>
                                         <label> Numero de Tramite : {{ tramite.id }} </label>
                                         <br>
-                                        <label>  Propietario : </label><br>
+                                        <label>  Propietario  </label><br>
                                         <label> Apellido, Nombre : {{ tramite.propietario }}</label><br>
                                         <label>Dni : {{ tramite.propietario.persona.dni}}</label> <br>
                                         <br>
@@ -88,7 +88,7 @@
                                         </form>
                                     </div>
                                     <div class="col-sm-6 col-md-6" >
-                                        <label> Obra : </label> <br>
+                                        <label> Datos de la Obra : </label> <br>
                                         <label> Direccion : {{tramite.domicilio}}</label><br>
                                         <label> Sector : {{tramite.sector}} </label><br>
                                         <label>Tipo de Obra : {{ tramite.tipo_obra }}</label><br>

@@ -3195,7 +3195,7 @@ def listado_tramites(request):
     objetos=Tramite.objects.all()
     tramites=[]
     for tramite in objetos:
-        if (tramite.pago is not None):
+        if (tramite.pago is not None and tramite.monto_pagado>0):
             tramites.append(tramite)
     contexto={'tramites':tramites}
     return contexto
