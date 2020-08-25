@@ -105,7 +105,7 @@ class Tramite(models.Model):
     def esta_pagado(self):
         if (self.monto_pagado is None):
             self.monto_pagado = 0
-        if ((self.monto_pagado + 20) >= self.monto_a_pagar):
+        if ((self.monto_pagado) == self.monto_a_pagar):
             return True
         else:
             return False
