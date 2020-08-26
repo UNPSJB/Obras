@@ -6,9 +6,11 @@
   <ul class="sidebar sidebar-1">
       <font size="2">
         <li><a href="#" class="current"><font color="white">Inspector en Jefe</font></a></li>
-          <li><a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo" onclick='mostrarSubmenu("sin_submenu")'>Agendar inspeccion</a></li>
+          <li><a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo" onclick='mostrarSubmenu("sin_submenu")'>Agendar Inspeccion</a></li>
           <li><a data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="false" aria-controls="collapseFour" onclick='mostrarSubmenu("sin_submenu")'>Consultar Inspecciones</a></li>
           <li><a data-toggle="collapse" data-parent="#accordion" href="#collapsethree" aria-expanded="false" aria-controls="collapsethree" onclick='mostrarSubmenu("sin_submenu")'>Cargar Inspeccion</a></li>
+          <li><a data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour" onclick='mostrarSubmenu("sin_submenu")'>Cargar Inspecciones Mensuales</a></li>
+
           <!--<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour" onclick='mostrarSubmenu("sin_submenu")'>Consultar mis Inspecciones</a></li>-->
 
       </font>
@@ -22,7 +24,7 @@
       <div class="panel-heading box" role="tab" id="headingTwo">
         <h5 class="panel-title">
           <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="true" aria-controls="collapseTwo" onclick='mostrarSubmenu("sin_submenu")'>
-            <font color="#ffffff" size="2">Agendar inspeccion</font>
+            <font color="#ffffff" size="2">Agendar Inspeccion</font>
           </a>
         </h5>
       </div>
@@ -85,6 +87,35 @@
           </div>
         </div>
       </div>
+    </div>
+
+	<div class="panel">
+	    <div class="panel-heading box" role="tab" id="headingFour">
+			<h5 class="panel-title">
+                <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="true" aria-controls="collapseFour" onclick='mostrarSubmenu("sin_submenu")'>
+                    <font color="#ffffff" size="2">Cargar Inspecciones Mensuales</font>
+                </a>
+			</h5>
+		</div>
+        <div id="collapseFour" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFour">
+            <div class="panel-body">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                            <div class="container-fluid">
+                                <div class="row">
+                                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                        {% block listado_inspecciones_mensuales  %}
+                                           {% include "persona/jefe_inspector/tramites_agendados_jefe_inspector.html" with tramites=ctxlistadosinspecciones_mensuales_ji.tramites %}
+                                        {% endblock %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
 <!--

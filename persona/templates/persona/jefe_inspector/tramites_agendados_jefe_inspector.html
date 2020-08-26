@@ -1,32 +1,32 @@
 {% block contenido_tramites_agendados_jefe_inspector %}
   <div class="table-responsive">
+          {% if tramites %}
       <table id="tabla" class="table table-bordered table-striped table-hover table-condensed" style="background: white;">
           <!-- Cabecera -->
           <thead>
               <tr>
                   <th>Nro de tramite</th>
-                  <th>Fecha Inicio</th>
+                  <th>Fecha Inspeccion</th>
+                  <th>Domicilio</th>
+                  <th>Medidas en m2</th>
                   <th>Tipo de obra</th>
                   <th>Profesional</th>
                   <th>Propietario</th>
-                  <th>Medidas en m2</th>
-                  <th>Estado</th>
                   <th>Revisar</th>
               </tr>
           </thead>
 
           <tbody>
 
-          {% if tramites %}
               {% for tramite in tramites %}
                 <tr>
                     <td class="col-xs-1">{{ tramite.id}}</td>
+                    <td class="col-sm-1">{{ tramite.estado.agendado.fecha}}</td>
+                    <td class="col-sm-1">{{ tramite.domicilio}}</td>
                     <td class="col-xs-1">{{ tramite.medidas}}</td>
                     <td class="col-xs-1">{{ tramite.tipo_obra }} </td>
                     <td class="col-xs-3">{{ tramite.profesional}}</td>
                     <td class="col-xs-3">{{ tramite.propietario}}</td>
-                    <td class="col-xs-1">{{ tramite.medidas }} </td>
-                    <td class="col-xs-1">{{tramite.estado}}</td>
                     <td class="col-xs-1" align="center" >
                         <a href="{% url 'inspeccion_final' pk_tramite=tramite.id %}">
                             <button type="button" class="btn btn-primary btn-xs" name="Agendar">
@@ -36,8 +36,11 @@
                     </td>
                 </tr>
               {% endfor %}
-          {% endif%}
           </tbody>
       </table>
+      {% else %}
+          <label>No hay datos para mostrar</label>
+      {% endif%}
+
   </div>
 {% endblock %}

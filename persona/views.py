@@ -1990,6 +1990,7 @@ def mostrar_jefe_inspector(request):
         "ctxtramitesconinspeccion": tramite_con_inspecciones_list(request),
         "ctxtramitesagendados": tramites_agendados_por_inspector(request),
         "ctxlistadosinspecciones":listado_inspecciones(request),
+        "ctxlistadosinspecciones_mensuales_ji":listado_inspecciones_mensuales_jefe_inspector(request),
     }
     return render(request, 'persona/jefe_inspector/jefe_inspector.html', contexto)
 
@@ -2058,6 +2059,7 @@ def completar_inspeccion_final(request,pk_tramite):
         u = request.user
         try:
             tramite.hacer(Tramite.INSPECCIONAR, usuario=u)#ConInspeccion->Inspeccionado
+            tramite.hacer(Tramite.INSPECCIONAR, usuario=u)  # ConInspeccion->Inspeccionado
             tramite.save()
             messages.add_message(request, messages.SUCCESS, 'Inspeccion Finalizada')
         except:
@@ -2096,6 +2098,21 @@ def listado_inspecciones(request):
         if t.estado().rol==1:
           tram.append(t)
     contexto={'tramites':tram}
+    return contexto
+
+def listado_inspecciones_mensuales_jefe_inspector(request):
+    year=datetime.date.today().year
+    mes=datetime.date.today().month
+    dia=datetime.date.today().day
+    diaFinal=monthrange(year, mes)
+    usuario = request.user
+    tramites_del_inspector = Tramite.objects.en_estado(Agendado)
+    tramites = filter(lambda t: t.estado().usuario == usuario and t.estado().fecha.date()<=datetime.date(year,mes,diaFinal[1]) and t.estado().fecha.date()>=datetime.date(year,mes,dia), tramites_del_inspector)
+    tram=[]
+    for t in tramites:
+        if t.estado().rol == 1:
+            tram.append(t)
+    contexto = {'tramites':tram}
     return contexto
 #------------------------------------------------------------------------------------------------------------------
 #director ---------------------------------------------------------------------------------------------------------
