@@ -41,15 +41,15 @@
                                     <table align="center" class="table table-bordered table-striped table-hover">
                                         <thead>
                                         <tr>
-                                            <th p style="color:#FFFFFF"bgcolor="#2c3e50">Material</th>
-                                            <th p style="color:#FFFFFF"bgcolor="#2c3e50">Cantidad de obras que lo utilizan</th>
+                                            <th p style="color:#FFFFFF"bgcolor="#2c3e50">Tramite</th>
+                                            <th p style="color:#FFFFFF"bgcolor="#2c3e50">Promedio</th>
                                         </tr>
                                         </thead>
                                         <tbody>
                                         {% for name,value in lista %}
                                         <tr>
-                                            <td class="col-xs-1">{{ name }}</td>
-                                            <td class="col-xs-1">{{ value }}</td>
+                                            <td class="col-xs-1">{{ name }} </td>
+                                            <td class="col-xs-1">{{ value }} %</td>
                                         </tr>
                                         {% endfor %}
                                         </tbody>

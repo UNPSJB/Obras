@@ -2585,18 +2585,16 @@ def grafico_de_barras_v(datos,nombres, titulo,series):
     col=colores(longitud,3)
     bc.data=datos
     bc.x = 50
-    bc.y = 90
-    bc.width=400
-    bc.height=100
+    bc.y = 100
+    bc.width=410
+    bc.height=90
     bc.valueAxis.valueMin = 0
     bc.valueAxis.valueMax = 50
     bc.groupSpacing = 10
     bc.barSpacing = 1.5
     bc.categoryAxis.labels.boxAnchor = 'ne'
-   # bc.categoryAxis.labels.dx = 8
     bc.categoryAxis.labels.dy = -2
     bc.categoryAxis.labels.angle = 30
-    #bc.valueAxis.valueStep = 10
     if (col is not None):
         for i in range(longitud): bc.bars[i].fillColor = col[i]
     for i in range(len(series)): bc.bars[i].name = series[i]
@@ -2695,37 +2693,76 @@ def tramites_iniciados_finalizados(request):
     finalizados=[]
     series=[]
     lista=[]
-    nombres=["Enero", "Febrero", "Marzo", "Abril", "Mayo","Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"]
+    years=[]
+    rango=12
+    nombres=[]
+    listaItems=[]
+    listaItem=[]
+    meses=["Enero", "Febrero", "Marzo", "Abril", "Mayo","Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"]
     if "Guardar" in request.POST:
-        for name, value in request.POST.items():
-            if name.startswith('item'):
-                year=int(value)
-        for mes in range(12):
-            m=mes+1
-            diaFinal=monthrange(year,m)
-            totalI=Estado.objects.filter(timestamp__range=(datetime.date(year, m, 01), datetime.date(year, m, diaFinal[1])), tipo=(1)).count()
-            totalF=Estado.objects.filter(timestamp__range=(datetime.date(year, m, 01), datetime.date(year, m, diaFinal[1])), tipo=(9)).count()
-            # if (totalI==0):
-            #     iniciados.append(0)
-            # if (totalF==0):
-            #     finalizados.append(0)
-            iniciados.append(totalI)
-            finalizados.append(totalF)
+        listaItems = request.POST.getlist('item1')
+        listaItem = request.POST.getlist('item')
+        if listaItem[0] != "":
+            for l in listaItem:
+                years.append(int(l))
+        else:
+            year=Datime.Date.today().year
+        if listaItems[0]!="":
+            mes =int(listaItems[0])
+            for i in range(len(years)):
+                for l in listaItems:
+                    n=meses[int(l)]
+                    nombres.append(n+"-"+str(years[i]))
+            rango = len(listaItems) +1
+        else:
+            rango = 12
+            mes=0
+            nombres = meses
+        iniciales = Estado.objects.filter(tipo=1)
+        inicial=0
+        for i in iniciales:
+            if i.previo() is None:
+                inicial =inicial+1
+        finales = Estado.objects.filter(tipo=9).count()
+        totalIA=0
+        totalFA=0
+        for year in years:
+            mes=int(listaItems[0])
+            m=0
+            for mes in range(mes,rango):
+                m=mes+1
+                diaFinal=monthrange(year,m)
+                tEstado=Estado.objects.filter(timestamp__range=(datetime.date(year, m, 01), datetime.date(year, m, diaFinal[1])), tipo=(1))
+                totalI=0
+                for t in tEstado:
+                    if t.previo() is None:
+                        totalI=totalI+1
+                totalIA=totalI+totalIA
+                tEstado=0
+                totalF=Estado.objects.filter(timestamp__range=(datetime.date(year, m, 01), datetime.date(year, m, diaFinal[1])), tipo=(9)).count()
+                totalFA=totalF+totalFA
+                iniciados.append(totalI)
+                finalizados.append(totalF)
         i=tuple(iniciados)
         f=tuple(finalizados)
         datos.append(i)
         datos.append(f)
-        iniciales= Estado.objects.filter(tipo=1).count()
-        finales=Estado.objects.filter(tipo=9).count()
-        totales=[iniciales,finales]
-        lista.append(["iniciados",iniciales])
-        lista.append(["finalizados",finales])
+        if inicial == 0:
+            promedioI=0
+        else:
+            promedioI = totalIA/float(inicial)
+        if finales == 0:
+            promedioF=0
+        else:
+            promedioF = totalFA/float(finales)
+        lista.append(["iniciados",promedioI])
+        lista.append(["finalizados",promedioF])
         series=("iniciados","finalizados")
         titulo = "Tramites iniciados y finalidos por mes"
         if len(datos) > 0:
             grafico = grafico_de_barras_v(datos, nombres, titulo,series)
             imagen = base64.b64encode(grafico.asString("png"))
-            contexto = {"grafico": imagen,"lista":lista}  # "tipos_obras": list}
+            contexto = {"grafico": imagen,"lista":lista}
         return render(request, 'persona/director/listado_tramites_iniciados_finalizados.html', contexto)
     else:
         return render(request, 'persona/director/seleccionar_fecha.html')
