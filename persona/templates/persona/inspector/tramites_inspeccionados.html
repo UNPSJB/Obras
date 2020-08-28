@@ -33,7 +33,7 @@
                     <td class="col-xs-1">{{ tramite.medidas }} </td>
                     <td class="col-xs-1">{{tramite.estado}}</td>
                     <td class="col-xs-1" align="center">
-                        <a href="{% url 'generar_planilla_impresa_inspeccion' tramite.id %}">
+                        <a target="_blank" href="{% url 'generar_planilla_impresa_inspeccion' tramite.id %}">
                             <button type="button" class="btn btn-primary btn-xs" name="Ver documentos">
                                 <span class="glyphicon glyphicon-search" aria-hidden="true"> Ver</span>
                             </button>
