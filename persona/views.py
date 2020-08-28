@@ -428,6 +428,9 @@ def documento_de_estado(request, pk_estado):
     contexto = {'documentos_de_fecha': documentos_fecha}
     planillas = []
     inspecciones = []
+    documento = estado.tramite.documentacion_para_estado(estado)
+    if (estado.tipo==1 or estado.tipo==2):
+        contexto={'documentos':documento}
     if (estado.tipo > 2 and estado.tipo < 5):
         for p in PlanillaDeVisado.objects.all():
             if (p.tramite.pk == estado.tramite.pk):
