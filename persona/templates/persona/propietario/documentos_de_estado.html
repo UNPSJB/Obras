@@ -2,32 +2,32 @@
 {% load staticfiles %}
 
 {% block barra %}
-	<ul class="sidebar sidebar-1">
-		<font size="2">
-			<li><a href="{% url 'propietario'  %}" class="current"><font color="white">Propietario</font></a></li>
-		</font>
-	</ul>
+<ul class="sidebar sidebar-1">
+    <font size="2">
+        <li><a href="{% url 'propietario'  %}" class="current"><font color="white">Propietario</font></a></li>
+    </font>
+</ul>
 {% endblock %}
 
 
 {% block contenido %}
 <div class="container-fluid" id="a">
-	<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" >
-	  <div class="panel">
-		<div class="panel-heading box" role="tab" id="headingFive">
-		  <h5 class="panel-title">
-			<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
-			  <label id="documentos">Documentos del estado del tramite</label>
-			</a>
-		  </h5>
-		</div>
-		<div id="collapseFive" class="panel-collapse" role="tabpanel" aria-labelledby="headingFive">
-		  <div class="panel-body">
-			<div class="container-fluid">
-				<div class="row">
-                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="color: white;">
+    <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" >
+        <div class="panel">
+            <div class="panel-heading box" role="tab" id="headingFive">
+                <h5 class="panel-title">
+                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+                        <label id="documentos">Documentos del estado del tramite</label>
+                    </a>
+                </h5>
+            </div>
+            <div id="collapseFive" class="panel-collapse" role="tabpanel" aria-labelledby="headingFive">
+                <div class="panel-body">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="color: white;">
 
-                        {% for documento in documentos_de_fecha%}
+                                {% for documento in documentos_de_fecha%}
                                 <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
                                     <div class="thumbnail ">
                                         <a id="single_image" href="/media/{{documento.file}}" data-fancybox="images" data-caption="{{documento.tipo_documento}}">
@@ -37,172 +37,101 @@
                                         <p style="color: #17202a; font-style: oblique; text-align: center;">{{documento.tipo_documento}} - {{documento.fecha}} </p>
                                         <form action="">
                                             <p align="right" >
-                                            <a href="#" class="btn btn-primary btn-collapsible"><i class="glyphicon glyphicon-open"></i><span>  Ampliar</span></a>
+                                                <a href="#" class="btn btn-primary btn-collapsible"><i class="glyphicon glyphicon-open"></i><span>  Ampliar</span></a>
                                             </p>
                                         </form>
                                     </div>
                                 </div>
-                        {% endfor %}
-                     </div>
-                    {% if planillas %}
-                        <table class="table-bordered table-striped table-hover table-condensed">
-                            <thead>
+                                {% endfor %}
+                            </div>
+                            {% if planillas %}
+                            <table class="table-bordered table-striped table-hover table-condensed">
+                                <thead>
                                 <tr>
                                     <th> Numero de Visado</th>
                                     <th> Numero de tramite</th>
                                     <th> </th>
                                 </tr>
-                            </thead>
-                            <tbody>
+                                </thead>
+                                <tbody>
                                 {% for planilla in planillas %}
-                                    <tr>
+                                <tr>
                                     {% if planilla %}
-                                          <td  class="col-xs-1" align="center">{{planilla.id}}</td>
-                                          <td  class="col-xs-1" align="center">{{planilla.tramite_id}}</td>
-                                          <td>
-                                                <div>
-                                                <div class="col-md-4 col-sm-5 col-xs-4 text-center">
-                                                     <a  href="{% url 'planilla_visado_impresa' planilla.id %}">
+                                    <td  class="col-xs-1" align="center">{{planilla.id}}</td>
+                                    <td  class="col-xs-1" align="center">{{planilla.tramite_id}}</td>
+                                    <td>
+                                        <div>
+                                            <div class="col-md-4 col-sm-5 col-xs-4 text-center">
+                                                <a  target="_blank" href="{% url 'planilla_visado_impresa' planilla.id %}">
 
                                                     <button type="button" class="btn btn-primary btn-md">
                                                         <span class="glyphicon glyphicon-search" aria-hidden="true"> Ver</span>
 
                                                     </button>
 
-                            </a>
-                                                       <!--<a href="javascript:history.back(-1);">-->
-                                                       <!--<button  class="btn btn-primary" type="submit" value="Atras">Volver</button>-->
-                                                        <!--</a>-->
-                                                </div>
-                                                <!--<div class="col-md-4 col-sm-5 col-xs-4 text-center">
-                                                    <button type="button" class="btn btn-primary btn-md" data-toggle="modal" data-target="#{{planilla.id}}">
-                                                        <span class="glyphicon glyphicon-search" aria-hidden="true"> Ver</span>
-                                                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="right">
+                                                </a>
 
-                                                    </div>
-                                                    </button>
-                                                </div>-->
-<!--
-                                                <div class="modal" id="{{planilla.id}}" role="document">
-                                                    <div class="modal-dialog">
-                                                        <div class="modal-content">
-                                                            <div class="modal-header">
-                                                              <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                                              <h4 class="modal-title">Planilla de Visado</h4>
-                                                            </div>
-                                                            <div class="modal-body">
-                                                                <div id="modalContainer1" class="container-fluid">
-                                                                    <div id="container-visado">
-                                                                   block contenido_tramites_visados
-                                                                       include "persona/profesional/planilla_visado_impresa.html" with tramites=ctxvisadosprofesional.visados_del_profesional
-                                                                  endblock
-                                                                    </div>
-                                                                    <br>
+                                            </div>
 
-                                                                </div>
-                                                            </div>
-                                                        </div>
-											            <br>
-                                                    </div>
-										        </div>
--->
-                                          </div>
-                                          </td>
+                                        </div>
+                                    </td>
                                     {% endif %}
-                                     </tr>
+                                </tr>
                                 {% endfor %}
-                            </tbody>
-                        </table>
-                    {%endif%}
-                    {%if inspecciones %}
-                        <table class="table-bordered table-striped table-hover table-condensed">
-                            <thead>
+                                </tbody>
+                            </table>
+                            {%endif%}
+                            {%if inspecciones %}
+                            <table class="table-bordered table-striped table-hover table-condensed">
+                                <thead>
                                 <tr>
                                     <th> Numero de inspeccion</th>
                                     <th> Numero de tramite</th>
                                     <th> </th>
                                 </tr>
-                            </thead>
-                            <tbody>
+                                </thead>
+                                <tbody>
                                 {% for inspeccion in inspecciones %}
-                                    <tr>
+                                <tr>
                                     {% if inspeccion %}
-                                          <td  class="col-xs-1" align="center">{{inspeccion.id}}</td>
-                                          <td  class="col-xs-1" align="center">{{inspeccion.tramite_id}}</td>
-                                          <td>
-                                                <div >
-                                                <div class="col-md-4 col-sm-5 col-xs-4 text-center">
-                                                     <a  href="{% url 'planilla_inspeccion_impresa' inspeccion.id %}">
+                                    <td  class="col-xs-1" align="center">{{inspeccion.id}}</td>
+                                    <td  class="col-xs-1" align="center">{{inspeccion.tramite_id}}</td>
+                                    <td>
+                                        <div >
+                                            <div class="col-md-4 col-sm-5 col-xs-4 text-center">
+                                                <a target="_blank"  href="{% url 'planilla_inspeccion_impresa' inspeccion.id %}">
 
                                                     <button type="button" class="btn btn-primary btn-md">
                                                         <span class="glyphicon glyphicon-search" aria-hidden="true"> Ver</span>
 
                                                     </button>
 
-                            </a>
-                                                       <!--<a href="javascript:history.back(-1);">-->
-                                                       <!--<button  class="btn btn-primary" type="submit" value="Atras">Volver</button>-->
-                                                        <!--</a>-->
-                                                </div>
-                                                </div>
-<!--
-                                                <div class="modal" id="{{inspeccion.id}}" role="document">
-                                                    <div class="modal-dialog">
-                                                        <div class="modal-content">
-                                                            <div class="modal-header">
-                                                                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                                                <h4 class="modal-title">Planilla de Inspeccion</h4>
-                                                            </div>
-                                                            <div class="modal-body">
-                                                                <div id="modalContainer" class="container-fluid">
-                                                                    <div id="container-inspeccion">
-                                                                       block contenido_tramites_inspeccionados
-                                                                          include 'persona/profesional/planilla_inspeccion_impresa.html'
-                                                                       endblock
-                                                                    </div>
-                                                                    <br>
+                                                </a>
 
-                                                                </div>
-                                                            </div>
-                                                            <br>
-                                                        </div>
-                                                    </div>
-                                                </div>
--->
-                                          </td>
+                                            </div>
+                                        </div>
+
+                                    </td>
                                     {% endif %}
-                                    </tr>
+                                </tr>
                                 {% endfor %}
-                            </tbody>
-                        </table>
-                    {%endif%}
-                     <!--<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="right">-->
-                        <!--<a href="javascript:history.back(-1);">-->
-                            <!--<button type="button" class="btn btn-primary" name="Volver">-->
-                                <!--Volver-->
-                            <!--</button>-->
-                        <!--</a>-->
-                        <!--{% if planilla or inspeccion %}-->
-                        <!--<a href="javascript:history.back(-1);">-->
-                            <!--<button type="button" class="btn btn-primary" name="Imprimir">-->
-                                <!--Imprimir-->
-                            <!--</button>-->
-                        <!--</a>-->
-                        <!--{% endif %}    -->
-                     <!--</div>-->
-                    <br>
-<div class="row">
-                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-center">
-                        <a href="javascript:history.back(-1);">
-                              <button class="btn btn-primary " type="submit" value="Atras">Volver</button>
-                          </a>
+                                </tbody>
+                            </table>
+                            {%endif%}
+
+                            <br>
+                            <div class="row">
+                                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-center">
+                                    <a href="javascript:history.back(-1);">
+                                        <button class="btn btn-primary " type="submit" value="Atras">Volver</button>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
                     </div>
-            </div>
                 </div>
             </div>
-          </div>
         </div>
-      </div>
     </div>
 </div>
 <style>

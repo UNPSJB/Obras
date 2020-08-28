@@ -4,170 +4,79 @@
 
 {% block barra %}
 <div id="noImprimir">
-	<ul class="sidebar sidebar-1">
-		<font size="2">
-			<li><a href="javascript:history.back(-1);" class="current"><font color="white">Inspeccion</font></a></li>
-		</font>
-	</ul>
+    <ul class="sidebar sidebar-1">
+        <font size="2">
+            <li><a href="{%url 'jefe_inspector' %}" class="current"><font color="white">Jefe Inspector</font></a></li>
+        </font>
+    </ul>
 </div>
 {% endblock %}
 
 {% block contenido %}
-<div class="container-fluid">
-    <div id="printReady">
-        <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" >
-		  <div class="row" style="background:white;">
-              <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                  <div style="background-color:#2c3e50;">
-                          <img src="/media/imagenes/Escudobanner.png"
-                               class="img-responsive" alt="Imagen responsive" width="100" height="100"/>
-                  </div>
-                  <div align="justify" style="font-size:9px; text-align:left;">
-                      <br>  &nbsp; MUNICIPALIDAD DE TRELEW
-                      <br>
-                      &nbsp; Rivadavia 390 <br>
-                      &nbsp; 9100 TRELEW- Provincia del Chubut
-                  </div>
-                      <h3 align="center">
-                          INSPECCIONES &nbsp;  &nbsp;
-                      </h3>
-                  <br>
-                  {% if tramite %}
-                        {% if tramite.estado.id > 4 and tramite.id == tramite.id%}
-                  <h5 align="left">
-                          PROPIETARIO:  {{tramite.propietario.persona}} &nbsp;  &nbsp;
-                  </h5>
-                    <h5 align="left">
-                          NRO TRAMITE:  {{tramite.pk}} &nbsp;
-                      </h5>
-                   <h5 align="left">
-                          DOMICILIO DEL TRAMITE:  {{tramite.domicilio}} &nbsp;
-                      </h5>
-                   <h5 align="left">
-                          ESTADO ACTUAL:  {{tramite.estado}} &nbsp;
-                      </h5>
-
-                   <h5 align="left">
-                          PRUEBA TIPO:  {{tramite.estado.TIPO}} &nbsp;
-                  </h5>
-                    <br>
-                  <h5 align="left">
-                          DATOS CATASTRALES&nbsp;  &nbsp;
-                      </h5>
-                      <hr style="border-width:">
-                        <div class="table-responsive">
-                      <table align="center" style="text-align:center;">
-                          <thead>
-                                <th>Medidas</th>
-                                <th>Domicilio</th>
-                                <th>Parcela</th>
-                                <th>Circunscripcion</th>
-                                <th>Manzana</th>
-                                <th>Sector</th>
-                                </thead>
-                          <tbody>
-                          <tr>
-                              <td class="col-xs-1" align="center">{{tramite.medidas}}</td>
-                              <td class="col-xs-2" align="center">{{tramite.domicilio}}</td>
-                              <td class="col-xs-3" align="center">{{tramite.parcela}}</td>
-                              <td class="col-xs-4" align="center">{{tramite.circunscripcion}}</td>
-                              <td class="col-xs-5" align="center">{{tramite.manzana}}</td>
-                              <td class="col-xs-6" align="center">{{tramite.sector}}</td>
-                          </tr>
-                          </tbody>
-                      </table>
-                   </div>
-                  <br>
-
-
-                  <br>
-                  {% for inspeccion in inspecciones %}
-                                {% if inspeccion %}
-                                   <table class="table table-bordered table-striped table-hover table-condensed" style="text-align:center;">
-                                       <thead>
-                                           <tr>
-                                               <th></th>
-                                               {% for item in items %}
-                                                   <th>{{item.nombre}}</th>
-                                               {% endfor %}
-                                           </tr>
-                                       </thead>
-                                       <tbody>
-                                           {% for categoria in categorias %}
-                                               <tr>
-                                                   <td class="col-xs-1">{{ categoria.nombre }}</td>
-                                                   {% for item in items %}
-                                                       <td class="col-sm-4">&nbsp;
-                                                           {% for detalle in inspeccion.detalles.all %}
-                                                               {% if categoria.nombre == detalle.categoria_inspeccion.nombre and item.nombre == detalle.item_inspeccion.nombre %}
-                                                                   {{ detalle.nombre }}
-                                                           <br>
-                                                               {% endif %}
-                                                           {% endfor %}
-                                                       </td>
-                                                   {% endfor %}
-                                               </tr>
-                                           {% endfor %}
-                                       </tbody>
-                                   </table>
-
-
-                          <div class="row">
-                                                       <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                                                           <form action="" >
-                                                           <div class="row" style="color:#fff;">
-                                                               <div class=" col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                                                               <ol>
-                                                                   <label>Descripcion de categorias:</h2></label>
-                                                                   <!--{% for categoria in categorias %}-->
-                                                                   <!--<li> {{categoria.tipo}}</li>-->
-                                                                   <!--<li> {{categoria.descripcion}}</li>-->
-                                                                   <!--{% endfor %}-->
-                                                                   <table  class="table-bordered table-striped table-hover">
-                                                                   <thead>
-                                                                       <tr>
-                                                                           <th>categoria</th>
-                                                                           <th>tipo</th>
-                                                                           <th>descripcion</th>
-                                                                       </tr>
-                                                                   </thead>
-                                                                   {% for categoria in categorias %}
-                                                                   <tr>
-                                                                       <td id="nombre{{categoria.id}}" class="col-xs-1" align="center">{{categoria.nombre}}</td>
-                                                                       <td id="tipo{{categoria.id}}" class="col-xs-1" align="center">{{categoria.tipo}}</td>
-                                                                       <td id="descripcion{{categoria.id}}" class="col-xs-2">{{categoria.descripcion}}</td>
-                                                                   </tr>
-                                                                   {% endfor %}
-                                                                   </table>
-                                                               </ol>
-                                                               </div>
-                                                           </div>
-                                                           </form>
-                                                       </div>
-                                                       </div>
-                                           {% endif %}
-                                       {% endfor %}
-
-                            {% endif %}
-                            <hr><br>
-                        {% endif %}
-
-                  </div>
-              </div>
-          </div>
-        </div>
-    </div>
-    <div class="container-fluid " id="botones_inspeccion">
-        <div class="row">
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-center">
-                <button type="button" class="btn btn-primary btn-md" onclick="printDiv('printReady')">Imprimir</button>
-                <a href="javascript:history.back(-1);">
-                    <button class="btn btn-primary btn-md" type="submit" value="Atras">Volver</button>
+<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" >
+    <div class="panel" >
+        <div class="panel-heading box" role="tab" id="headingOne">
+            <h5 class="panel-title">
+                <a class="collapsed"  data-parent="#accordion" aria-expanded="true" aria-controls="collapseOne" onclick='mostrarSubmenu("sin_submenu")'>
+                    <font color="#ffffff" size="2">Inspecciones</font>
                 </a>
+            </h5>
+        </div>
+        <div id="collapseOne" class="panel-collapse" role="tabpanel" aria-labelledby="headingOne">
+            <div class="panel-body">
+                <div class="container-fluid">
+                    <div id="printReady">
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                {%if inspecciones %}
+                                <table class="table-bordered table-striped table-hover table-condensed">
+                                    <thead>
+                                    <tr>
+                                        <th> Numero de inspeccion</th>
+                                        <th> Numero de tramite</th>
+                                        <th> </th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for inspeccion in inspecciones %}
+                                    <tr>
+                                        {% if inspeccion %}
+                                        <td  class="col-xs-1" align="center">{{inspeccion.id}}</td>
+                                        <td  class="col-xs-1" align="center">{{inspeccion.tramite_id}}</td>
+                                        <td>
+                                            <div>
+                                                <div class="col-md-4 col-sm-5 col-xs-4 text-center">
+                                                    <a target="_blank" href="{% url 'planilla_inspeccion_impresa' inspeccion.id %}">
+                                                        <button type="button" class="btn btn-primary btn-md">
+                                                            <span class="glyphicon glyphicon-search" aria-hidden="true"> Ver</span>
+                                                        </button>
+                                                    </a>
+                                                </div>
+                                            </div>
+                                        </td>
+                                        {% endif %}
+                                    </tr>
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                                {%endif%}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="container-fluid " id="botones_inspeccion">
+                <div class="row">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-center">
+                        <button type="button" class="btn btn-primary btn-md" onclick="printDiv('printReady')">Imprimir</button>
+                        <a href="{%url 'jefe_inspector'%}">
+                            <button class="btn btn-primary btn-md" type="submit" value="Atras">Volver</button>
+                        </a>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
-     <br>
 </div>
 <style>
        .dataTables_length, .dataTables_filter, .dataTables_info,.dataTables_wrapper .dataTables_paginate .paginate_button.disabled, .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:hover, .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:active {

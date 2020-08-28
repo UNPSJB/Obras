@@ -36,30 +36,28 @@
                         PLANILLA DE VISADO &nbsp;  &nbsp;
                     </h3>
                     <hr style="border-width:">
-                    <br>
+
                     <div class="row">
                         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                            <form action="" >
-                                <div class="row" style="color:#fff;">
-                                    <div class=" col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                            <div class="row">
 
-                                        <ol>
+                                <h5 class=" col-xs-12 col-sm-12 col-md-12 col-lg-12">
 
-                                            <h5 align="left">
-                                                NRO TRAMITE: {{tramite.id}} &nbsp;  &nbsp;
-                                            </h5>
-                                            <h5 align="left">
-                                                PROPIETARIO: {{tramite.propietario.persona}} &nbsp;  &nbsp;
-                                            <h5 align="left">
-                                                PROFESIONAL: {{tramite.profesional.persona}} &nbsp;  &nbsp;
-                                            </h5>
-                                            <h5 align="left">
-                                                TIPO DE OBRA: {{tramite.tipo_obra}} &nbsp;  &nbsp;
-                                            </h5>
+                                    <h5 align="left">
+                                     &nbsp;   NRO TRAMITE: {{tramite.id}} &nbsp;  &nbsp;
+                                    </h5>
+                                    <h5 align="left">
+                                      &nbsp;  PROPIETARIO: {{tramite.propietario.persona}} &nbsp;  &nbsp;
+                                    </h5>
+                                    <h5 align="left">
+                                      &nbsp;  PROFESIONAL: {{tramite.profesional.persona}} &nbsp;  &nbsp;
+                                    </h5>
+                                    <h5 align="left">
+                                     &nbsp;   TIPO DE OBRA: {{tramite.tipo_obra}} &nbsp;  &nbsp;
+                                    </h5>
 
-                                    </div>
-                                </div>
-                            </form>
+                                </h5>
+                            </div>
                         </div>
                     </div>
                     <div class="table-responsive">
@@ -102,13 +100,13 @@
                                 <tr>
                                     <td class="col-xs-1">{{ elemento }}</td>
                                     <td class="col-sm-4">
-                                       {%for b in balance%}
+                                        {%for b in balance%}
                                         {%if elemento.id == b.id %}
                                         <label class="switch">
                                             <input name="elemento-{{elemento.id}}" type="checkbox" disabled="disabled" checked="checked"><span class="slider round"></span>
                                         </label>
                                         {%endif%}
-                                       {%endfor%}
+                                        {%endfor%}
 
                                     </td>
                                 </tr>
@@ -124,7 +122,7 @@
                                 </thead>
                                 <tbody>
                                 <tr>
-                                <td class="col-xs-1">{{ obs }}</td>
+                                    <td class="col-xs-1">{{ obs }}</td>
                                 </tr>
                                 </tbody>
                             </table>
@@ -137,7 +135,6 @@
         </div>
     </div>
     <div class="container-fluid" id="botones_visado" >
-
         <div class="row">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-center">
                 <button type="button" class="btn btn-primary btn-md" onclick="printDiv('printReady')">Imprimir</button>
@@ -150,7 +147,7 @@
 
     <br>
 </div>
-    <style>
+<style>
        .dataTables_length, .dataTables_filter, .dataTables_info,.dataTables_wrapper .dataTables_paginate .paginate_button.disabled, .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:hover, .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:active {
           display: none !important;
        }
@@ -169,7 +166,7 @@
        }
     </style>
 
-    <script>
+<script>
     function printDiv(div) {
     // Create and insert new print section
 
@@ -178,7 +175,7 @@
     var $printSection = document.createElement("div");
     $printSection.id = "printSection";
     $printSection.appendChild(domClone);
-    $('head').append('<style> select{ display:none;} #botones_visado,#noImprimir{display:none;} .dataTables_wrapper .dataTables_length, .dataTables_wrapper .dataTables_filter, .dataTables_wrapper .dataTables_info, .dataTables_wrapper .dataTables_processing, .dataTables_wrapper .dataTables_paginate label{display: none;} .dataTables_wrapper .dataTables_paginate .paginate_button.disabled, .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:hover, .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:active{display: none;} .dataTables_wrapper .dataTables_paginate .paginate_button{display: none!important;}</style>');
+    $('head').append('<style> select{ display:none;} #boton_ayuda,#botones_visado,#noImprimir{display:none;} .dataTables_wrapper .dataTables_length, .dataTables_wrapper .dataTables_filter, .dataTables_wrapper .dataTables_info, .dataTables_wrapper .dataTables_processing, .dataTables_wrapper .dataTables_paginate label{display: none;} .dataTables_wrapper .dataTables_paginate .paginate_button.disabled, .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:hover, .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:active{display: none;} .dataTables_wrapper .dataTables_paginate .paginate_button{display: none!important;}</style>');
     //document.body.insertBefore($printSection, document.body.firstChild);
 
     window.print();
@@ -193,65 +190,65 @@
 
 </script>
 
-    <!--<style>-->
-    <!--.switch {-->
-    <!--position: relative;-->
-    <!--display: inline-block;-->
-    <!--width: 60px;-->
-    <!--height: 34px;-->
-    <!--}-->
+<!--<style>-->
+<!--.switch {-->
+<!--position: relative;-->
+<!--display: inline-block;-->
+<!--width: 60px;-->
+<!--height: 34px;-->
+<!--}-->
 
-    <!--/* Hide default HTML checkbox */-->
-    <!--.switch input {display:none;}-->
+<!--/* Hide default HTML checkbox */-->
+<!--.switch input {display:none;}-->
 
-    <!--/* The slider */-->
-    <!--.slider {-->
-    <!--position: absolute;-->
-    <!--cursor: pointer;-->
-    <!--top: 0;-->
-    <!--left: 0;-->
-    <!--right: 0;-->
-    <!--bottom: 0;-->
-    <!--background-color: #ccc;-->
-    <!-- -webkit-transition: .4s;-->
-    <!--transition: .4s;-->
-    <!--}-->
+<!--/* The slider */-->
+<!--.slider {-->
+<!--position: absolute;-->
+<!--cursor: pointer;-->
+<!--top: 0;-->
+<!--left: 0;-->
+<!--right: 0;-->
+<!--bottom: 0;-->
+<!--background-color: #ccc;-->
+<!-- -webkit-transition: .4s;-->
+<!--transition: .4s;-->
+<!--}-->
 
-    <!--.slider:before {-->
-    <!--position: absolute;-->
-    <!--content: "";-->
-    <!--height: 26px;-->
-    <!--width: 26px;-->
-    <!--left: 4px;-->
-    <!--bottom: 4px;-->
-    <!--background-color: white;-->
-    <!-- -webkit-transition: .4s;-->
-    <!--transition: .4s;-->
-    <!--}-->
+<!--.slider:before {-->
+<!--position: absolute;-->
+<!--content: "";-->
+<!--height: 26px;-->
+<!--width: 26px;-->
+<!--left: 4px;-->
+<!--bottom: 4px;-->
+<!--background-color: white;-->
+<!-- -webkit-transition: .4s;-->
+<!--transition: .4s;-->
+<!--}-->
 
-    <!--input:checked + .slider {-->
-    <!--background-color: #2196F3;-->
-    <!--}-->
+<!--input:checked + .slider {-->
+<!--background-color: #2196F3;-->
+<!--}-->
 
-    <!--input:focus + .slider {-->
-    <!--box-shadow: 0 0 1px #2196F3;-->
-    <!--}-->
+<!--input:focus + .slider {-->
+<!--box-shadow: 0 0 1px #2196F3;-->
+<!--}-->
 
-    <!--input:checked + .slider:before {-->
-    <!-- -webkit-transform: translateX(26px);-->
-    <!-- -ms-transform: translateX(26px);-->
-    <!--transform: translateX(26px);-->
-    <!--}-->
+<!--input:checked + .slider:before {-->
+<!-- -webkit-transform: translateX(26px);-->
+<!-- -ms-transform: translateX(26px);-->
+<!--transform: translateX(26px);-->
+<!--}-->
 
-    <!--/* Rounded sliders */-->
-    <!--.slider.round {-->
-    <!--border-radius: 34px;-->
-    <!--}-->
+<!--/* Rounded sliders */-->
+<!--.slider.round {-->
+<!--border-radius: 34px;-->
+<!--}-->
 
-    <!--.slider.round:before {-->
-    <!--border-radius: 50%;-->
-    <!--}-->
-    <!--</style>-->
+<!--.slider.round:before {-->
+<!--border-radius: 50%;-->
+<!--}-->
+<!--</style>-->
 
 
-    {% endblock %}
+{% endblock %}

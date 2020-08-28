@@ -3,130 +3,148 @@
 
 
 {%block contenido %}
-    <div id="printReady">
-        <div class="container-fluid" id="planillaInspeccionContainer" style="background-color:white;">
-            <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" >
-              <div class="row" >
-                  <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                      <div style="background-color:#2c3e50;">
-                           <img src="/media/imagenes/Escudobanner.png" class="img-responsive" alt="Escudo" width="100" height="100">
-                      </div>
-                      <div id="municipalidadInspeccion" align="justify" style="font-size:9px; text-align:left;">
-                          <br>  &nbsp; MUNICIPALIDAD DE TRELEW
-                          <br>
-                          &nbsp; Rivadavia 390 <br>
-                          &nbsp; 9100 TRELEW- Provincia del Chubut
+<div id="printReady">
+    <div class="container-fluid" id="planillaInspeccionContainer" style="background-color:white;">
+        <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" >
+            <div class="row" >
+                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                    <div style="background-color:#2c3e50;">
+                        <img src="/media/imagenes/Escudobanner.png" class="img-responsive" alt="Escudo" width="100" height="100">
+                    </div>
+                    <div id="municipalidadInspeccion" align="justify" style="font-size:9px; text-align:left;">
+                        <br>  &nbsp; MUNICIPALIDAD DE TRELEW
+                        <br>
+                        &nbsp; Rivadavia 390 <br>
+                        &nbsp; 9100 TRELEW- Provincia del Chubut
 
-                          <h3 id="planillaInspeccion" align="center">
-                              PLANILLA DE INSPECCION &nbsp;  &nbsp;
-                          </h3>
-                          <hr style="border-width:">
-                          <br>
-                          <h5 align="left">
-                          PROPIETARIO:  {{tramite.propietario.persona}} &nbsp;  &nbsp;
-                  </h5>
-                       </div>
-                         <div class="row">
-                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" >
-                              <form action="" >
+                        <h3 id="planillaInspeccion" align="center">
+                            PLANILLA DE INSPECCION &nbsp;  &nbsp;
+                        </h3>
+                        <hr style="border-width:">
+                        <br>
+                        <div class="row">
+                            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6" >
+
+                                <h5 align="left">
+                                    &nbsp; PROPIETARIO:  {{tramite.propietario.persona}} &nbsp;  &nbsp;
+                                </h5>
+                                <h5 align="left">
+                                    &nbsp; NRO TRAMITE:  {{tramite.pk}} &nbsp;
+                                </h5>
+                                <h5 align="left">
+                                    &nbsp; DOMICILIO:  {{tramite.domicilio}} &nbsp;  &nbsp;
+                                </h5>
+                            </div>
+                            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6" >
+
+                                <h5 align="right">
+                                    FECHA DE INSPECCION:  {{tramite.estado.timestamp}} &nbsp;  &nbsp;
+                                </h5>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" >
                                 <div class="row">
-                                  <div class=" col-xs-12 col-sm-12 col-md-12 col-lg-12" >
-                                    <ol>
-                                      <hr style="border-width:">
-                   <div class="table-responsive">
-                      <table align="center" style="text-align:center;">
-                          <thead>
-                                <th>Medidas</th>
-                                <th>Domicilio</th>
-                                <th>Parcela</th>
-                                <th>Circunscripcion</th>
-                                <th>Manzana</th>
-                                <th>Sector</th>
-                                </thead>
-                          <tbody>
-                          <tr>
-                              <td class="col-xs-1" align="center">{{tramite.medidas}}</td>
-                              <td class="col-xs-2" align="center">{{tramite.domicilio}}</td>
-                              <td class="col-xs-3" align="center">{{tramite.parcela}}</td>
-                              <td class="col-xs-4" align="center">{{tramite.circunscripcion}}</td>
-                              <td class="col-xs-5" align="center">{{tramite.manzana}}</td>
-                              <td class="col-xs-6" align="center">{{tramite.sector}}</td>
-                          </tr>
-                          </tbody>
-                      </table>
-                   </div>
-                                    </ol>
-                                  </div>
+                                    <div class=" col-xs-12 col-sm-12 col-md-12 col-lg-12" >
+                                            <hr style="border-width:">
+                                            <h5 align="left">
+                                                DATOS CATASTRALES&nbsp;  &nbsp;
+                                            </h5>
+                                            <div class="table-responsive">
+                                                <table align="center" style="text-align:center;">
+                                                    <thead>
+                                                    <tr>
+                                                        <th>Medidas</th>
+                                                        <th>Domicilio</th>
+                                                        <th>Parcela</th>
+                                                        <th>Circunscripcion</th>
+                                                        <th>Manzana</th>
+                                                        <th>Sector</th>
+                                                    </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                    <tr>
+                                                        <td class="col-xs-1" align="center">{{tramite.medidas}}</td>
+                                                        <td class="col-xs-2" align="center">{{tramite.domicilio}}</td>
+                                                        <td class="col-xs-3" align="center">{{tramite.parcela}}</td>
+                                                        <td class="col-xs-4" align="center">{{tramite.circunscripcion}}</td>
+                                                        <td class="col-xs-5" align="center">{{tramite.manzana}}</td>
+                                                        <td class="col-xs-6" align="center">{{tramite.sector}}</td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                    </div>
                                 </div>
-                              </form>
-                             </div>
-                         </div>
-                         <table class="table table-bordered table-striped table-hover table-condensed " id="tabla">
-                             <thead>
-                             <tr  style="text-align:center;">
-                                 <th></th>
-                                 {% for item in items %}
-                                 <th>{{item.nombre}}</th>
-                                 {% endfor %}
-                             </tr>
-                             </thead>
-                             <tbody>
-                             {% for categoria in categorias %}
-                             <tr>
-                                 <td class="col-xs-1">{{ categoria.nombre }}</td>
-                                 {% for item in items %}
-                                 <td class="col-sm-4">&nbsp;
-                                     {% for detalle in detalles %}
-                                     {% if categoria.nombre == detalle.categoria_inspeccion.nombre and item.nombre == detalle.item_inspeccion.nombre %}
-                                     {{ detalle.nombre }}
-                                     <br>
-                                     {% endif %}
-                                     {% endfor %}
-                                 </td>
-                                 {% endfor %}
-                             </tr>
-                             {% endfor %}
-                             </tbody>
-                         </table>
-                         <table  class="table-bordered table-striped table-hover">
-                            <thead>
-                                <tr>
-                                    <th>categoria</th>
-                                    <th>tipo</th>
-                                    <th>descripcion</th>
-                                </tr>
-                            </thead>
-                            {% for categoria in categorias %}
-                                <tr>
-                                    <td id="nombre{{categoria.id}}" class="col-xs-1" align="center">{{categoria.nombre}}</td>
-                                    <td id="tipo{{categoria.id}}" class="col-xs-1" align="center">{{categoria.tipo}}</td>
-                                    <td id="descripcion{{categoria.id}}" class="col-xs-2">{{categoria.descripcion}}</td>
-                                </tr>
+                        </div>
+                    </div>
+                    <table class="table table-bordered table-striped table-hover table-condensed " id="tabla">
+                        <thead>
+                        <tr  style="text-align:center;">
+                            <th></th>
+                            {% for item in items %}
+                            <th>{{item.nombre}}</th>
                             {% endfor %}
-                         </table>
-                  </div>
-              </div>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for categoria in categorias %}
+                        <tr>
+                            <td class="col-xs-1">{{ categoria.nombre }}</td>
+                            {% for item in items %}
+                            <td class="col-sm-4">&nbsp;
+                                {% for detalle in detalles %}
+                                {% if categoria.nombre == detalle.categoria_inspeccion.nombre and item.nombre == detalle.item_inspeccion.nombre %}
+                                {{ detalle.nombre }}
+                                <br>
+                                {% endif %}
+                                {% endfor %}
+                            </td>
+                            {% endfor %}
+                        </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                    <table  class="table-bordered table-striped table-hover">
+                        <thead>
+                        <tr>
+                            <th>categoria</th>
+                            <th>tipo</th>
+                            <th>descripcion</th>
+                        </tr>
+                        </thead>
+                        {% for categoria in categorias %}
+                        <tr>
+                            <td id="nombre{{categoria.id}}" class="col-xs-1" align="center">{{categoria.nombre}}</td>
+                            <td id="tipo{{categoria.id}}" class="col-xs-1" align="center">{{categoria.tipo}}</td>
+                            <td id="descripcion{{categoria.id}}" class="col-xs-2">{{categoria.descripcion}}</td>
+                        </tr>
+                        {% endfor %}
+                    </table>
+                </div>
             </div>
         </div>
     </div>
-</p>
+</div>
 <div class="container-fluid " id="botones_inspeccion">
 
-            <div class="row">
-                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-center">
-                        <button type="button" class="btn btn-primary btn-md" onclick="printDiv('printReady')">Imprimir</button>
-                        <a href="javascript:history.back(-1);">
-                              <button class="btn btn-primary btn-md" type="submit" value="Atras">Volver</button>
-                          </a>
-                    </div>
-            </div>
+    <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-center">
+            <button type="button" class="btn btn-primary btn-md" onclick="printDiv('printReady')">Imprimir</button>
+            <a href="javascript:history.back(-1);">
+                <button class="btn btn-primary btn-md" type="submit" value="Atras">Volver</button>
+            </a>
         </div>
-     <br>
+    </div>
+</div>
+<br>
 
 <!-- input, button, select, textarea {
             display: none;
         }-->
-    <style>
+<style>
          .dataTables_length, .dataTables_filter, .dataTables_info,.dataTables_wrapper .dataTables_paginate .paginate_button.disabled, .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:hover, .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:active {
           display: none !important;
        }
@@ -145,51 +163,6 @@
         display:none;
         }
     </style>
-        <script language="JavaScript">
-        var gAutoPrint = true; // Flag for whether or not to automatically call the print function
-
-        function printSpecial()
-        {
-            if (document.getElementById != null)
-            {
-                var html = '<HTML>\n<HEAD>\n';
-                html+='<style> select{ display:none;} .dataTables_wrapper .dataTables_length, .dataTables_wrapper .dataTables_filter, .dataTables_wrapper .dataTables_info, .dataTables_wrapper .dataTables_processing, .dataTables_wrapper .dataTables_paginate label{display: none;} .dataTables_wrapper .dataTables_paginate .paginate_button.disabled, .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:hover, .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:active{display: none;} .dataTables_wrapper .dataTables_paginate .paginate_button{display: none!important;}</style>'
-                if (document.getElementsByTagName != null)
-                {
-                    var headTags = document.getElementsByTagName("head");
-                    if (headTags.length > 0)
-                        html += headTags[0].innerHTML;
-                }
-
-                html += '\n</HE' + 'AD>\n<BODY>\n';
-
-                var printReadyElem = document.getElementById("printReady");
-
-                if (printReadyElem != null)
-                {
-                    html += printReadyElem.innerHTML;
-                }
-                else
-                {
-                    alert("Could not find the printReady section in the HTML");
-                    return;
-                }
-
-                html += '\n</BO' + 'DY>\n</HT' + 'ML>';
-                var printWin = window.open("","printSpecial");
-                printWin.document.open();
-                printWin.document.write(html);
-                printWin.document.close();
-                if (gAutoPrint)
-                    printWin.print();
-            }
-            else
-            {
-                alert("Sorry, the print ready feature is only available in modern browsers.");
-            }
-        }
-
-        </script>
 <script>
     function printDiv(div) {
     // Create and insert new print section
@@ -199,7 +172,7 @@
     var $printSection = document.createElement("div");
     $printSection.id = "printSection";
     $printSection.appendChild(domClone);
-    $('head').append('<style> select{ display:none;}  #botones_inspeccion,#botones_visado{display:none;} .dataTables_wrapper .dataTables_length, .dataTables_wrapper .dataTables_filter, .dataTables_wrapper .dataTables_info, .dataTables_wrapper .dataTables_processing, .dataTables_wrapper .dataTables_paginate label{display: none;} .dataTables_wrapper .dataTables_paginate .paginate_button.disabled, .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:hover, .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:active{display: none;} .dataTables_wrapper .dataTables_paginate .paginate_button{display: none!important;}</style>');
+    $('head').append('<style> select{ display:none;}  #botones_inspeccion,#boton_ayuda,#botones_visado{display:none;} .dataTables_wrapper .dataTables_length, .dataTables_wrapper .dataTables_filter, .dataTables_wrapper .dataTables_info, .dataTables_wrapper .dataTables_processing, .dataTables_wrapper .dataTables_paginate label{display: none;} .dataTables_wrapper .dataTables_paginate .paginate_button.disabled, .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:hover, .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:active{display: none;} .dataTables_wrapper .dataTables_paginate .paginate_button{display: none!important;}</style>');
     //document.body.insertBefore($printSection, document.body.firstChild);
 
     window.print();
