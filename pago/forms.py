@@ -18,11 +18,13 @@ class FormularioCuota(forms.ModelForm):
             'monto',
             'numeroCuota',
             'pago',
+            'tipoPago',
         )
         labels={
             'fechaVencimiento': "Fecha Vencimiento",
             'monto': "Monto",
             'numeroCuota':"Numero de Cuota",
+            'tipoPago': "Tipo de Pago",
         }
         widgets = {
             'fechaVencimiento': forms.DateInput(attrs={'class': 'date'}),
@@ -39,6 +41,13 @@ class FormularioCuota(forms.ModelForm):
         self.fields['monto'].widget.attrs['placeholder'] = "monto"
         self.fields['numeroCuota'].widget.attrs['placeholder'] = "cuota"
         self.fields['pago'].widget.attrs['placeholder'] = "ingresar pago"
+        self.fields['tipoPago'].widget.attrs['placeholder'] = "Ingresar Tipo de Pago"
+
+    def clean_tipoPago(self):
+        tipoPago = self.cleaned_data['tipoPago']
+        if tipoPago is None:
+            raise ValidationError("Seleccione un tipo de Pago")
+        return tipoPago
 
 class FormularioTipoPago(forms.ModelForm):
     NAME = 'tipo_pago_form'
@@ -69,12 +78,11 @@ class FormularioPago(forms.ModelForm):
 
     class Meta:
         model = Pago
-        fields = ('tipoPago','cantidadCuotas',)
+        fields = ('cantidadCuotas',)
     def __init__(self, *args, **kwargs):
         super(FormularioPago, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
         self.helper.add_input(Submit('pago_submit', 'Guardar'))
-        self.fields['tipoPago'].widget.attrs['placeholder'] = "Ingresar Tipo de Pago"
         self.fields['cantidadCuotas'].widget.attrs['placeholder'] = "Ingresar cantidad de cuotas"
 
     def clean_cantidadCuotas(self):
@@ -83,11 +91,7 @@ class FormularioPago(forms.ModelForm):
             raise ValidationError("Seleccione el numero de cuotas ")
         return cantidadCuotas
 
-    def clean_tipoPago(self):
-        tipoPago = self.cleaned_data['tipoPago']
-        if tipoPago is None:
-            raise ValidationError("Seleccione un tipo de Pago")
-        return tipoPago
+
 
 
 

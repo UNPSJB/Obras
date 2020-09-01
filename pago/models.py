@@ -39,7 +39,7 @@ class Pago(models.Model):
         (6, "Seis Cuotas"),
         (12, "Doce Cuotas"),
     ]
-    tipoPago = models.ForeignKey(Tipo_Pago, blank=True, null=True)
+   # tipoPago = models.ForeignKey(Tipo_Pago, blank=True, null=True)
     cantidadCuotas = models.IntegerField(null=True, choices=CUOTAS, blank=True)
     fecha = models.DateTimeField(auto_now_add=True)  # para que sea la del momento que se da el alta
     def __str__(self):
@@ -50,6 +50,7 @@ class Cuota(models.Model):
     fechaPago = models.DateField(blank=True, null=True) #false sino se llena cuando se crea el pago
     monto = models.DecimalField(max_digits=10, decimal_places=2, null=True,blank=True)
     numeroCuota=models.IntegerField(null=True, blank=True)
+    tipoPago = models.ForeignKey(Tipo_Pago, blank=True, null=True)
     pago=models.ForeignKey(Pago, related_name='pago', blank=True, null=True)
     objects = PagoManager()
 

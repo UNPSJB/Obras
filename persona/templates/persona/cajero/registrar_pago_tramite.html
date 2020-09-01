@@ -101,7 +101,7 @@
                                             <td> {{ cuota.numeroCuota }}</td>
                                             <td>{{ cuota.fechaVencimiento }}</td>
                                             <td>{{cuota.monto}}</td>
-                                            <td>{{tramite.pago.tipoPago}}</td>
+                                            <td>{{cuota.tipoPago.nombre}}</td>
                                             <td>
                             <a  href="{% url 'comprobante_pago_cuota' cuota.id %}" target="_blank">
                                 <button type="button"  class="btn btn-primary brn-xs" name="GenerarComprobante">
