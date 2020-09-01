@@ -9,6 +9,7 @@
                   <th style="vertical-align: middle;">Nro</th>
                   <th style="vertical-align: middle;">Profesional</th>
                   <th style="vertical-align: middle;">Estado</th>
+                  <th style="vertical-align: middle;">Fecha de Inspeccion </th>
                   <th style="vertical-align: middle;">Superficie</th>
                   <th style="vertical-align: middle;">Tipo</th>
                   <th style="vertical-align: middle;">Monto total</th>
@@ -26,6 +27,14 @@
                   <td class="col-xs-1">{{tramite.id}}</td>
                   <td class="col-xs-3">{{tramite.profesional}}</td>
                   <td class="col-xs-1">{{tramite.estado}}</td>
+                    {%if tramite.estado.tipo == 5 %}
+                    <td class="col-xs-1"> {{tramite.estado.timestamp}} </td>
+                                        {%endif%}
+                    {% if tramite.estado.tipo != 5 %}
+                    <td class="col-xs-1">------</td>
+                    {%endif%}
+
+
                   <td class="col-xs-1">{{tramite.medidas}}</td>
                   <td class="col-xs-1">{{tramite.tipo_obra}}</td>
                   <td class="col-xs-1">{{tramite.monto_a_pagar}}</td>
