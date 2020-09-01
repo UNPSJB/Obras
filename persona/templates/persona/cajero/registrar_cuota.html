@@ -19,21 +19,20 @@
             </h5>
         </div>
         <div id="collapseFive" class="panel-collapse" role="tabpanel" aria-labelledby="headingFive">
-                <div class="panel-body">
+            <div class="panel-body">
+                <form method="post" action="">
                     <div class="container-fluid">
                         <div class="row" id="fila1">
                             <div class="form-group">
                                 <div class="row">
                                     <div class="col-sm-6 col-md-6">
-                                        <form method="post" action="{% url 'pagar_cuota' %}">
-                                        <label>  Tramite : </label><br>
-                                        <label> Numero de Tramite : {{ tramite.id }} </label>
-                                        <br>
-                                        <label>  Propietario  </label><br>
-                                        <label> Apellido, Nombre : {{ tramite.propietario }}</label><br>
-                                        <label>Dni : {{ tramite.propietario.persona.dni}}</label> <br>
-                                        <br>
-
+                                            <label>  Tramite : </label><br>
+                                            <label> Numero de Tramite : {{ tramite.id }} </label>
+                                            <br>
+                                            <label>  Propietario  </label><br>
+                                            <label> Apellido, Nombre : {{ tramite.propietario }}</label><br>
+                                            <label>Dni : {{ tramite.propietario.persona.dni}}</label> <br>
+                                            <br>
                                     </div>
                                     <div class="col-sm-6 col-md-6" >
                                         <label> Datos de la Obra : </label> <br>
@@ -51,35 +50,21 @@
                         </div>
                     </div>
 
-                   <!-- <form method="post" action="{% url 'pagar_cuota' %}">-->
-                    <a href="{% url 'pagar_cuota' %}">
-                                <button type="button" class="btn btn-primary brn-xs" name="pagar_cuota">
-                                    <span aria-hidden="true"> Pagar cuota </span>
-                                </button>
-                            </a>
-
-                                        <a href="javascript:history.back(-1);">
-                                            <button class="btn btn-primary btn-md " type="button" value="Atras">Volver</button>
-                                        </a>
-
-                                    </form>
+                    <a href="{% url 'pagar_cuota' cuotas.id %}">
+                        <button type="button" class="btn btn-primary brn-xs" name="pagar_cuota">
+                            <span aria-hidden="true"> Pagar cuota </span>
+                        </button>
                     </a>
-                </div>
-            </div>
 
-
-                                </td>
-                            </tr>
-
-                    </form>
-
-
-                </div>
+                    <a href="javascript:history.back(-1);">
+                        <button class="btn btn-primary btn-md " type="button" value="Atras">Volver</button>
+                    </a>
+                </form>
             </div>
         </div>
+
     </div>
 </div>
-
 
 <style>
 

@@ -19,10 +19,11 @@
             </h5>
         </div>
         <div class="container-fluid">
+                                <form method="post" action="{% url 'pagar1' cuota.id %} ">
+
             <div class="panel-body">
                 <div class="table-responsive">
 
-                    <form method="post" action="{% url 'pagar1' %} ">
 
                         <table class="table table-bordered table-striped table-hover table-condensed" style="background: white;">
                             <thead>
@@ -43,34 +44,19 @@
                                 <td class="col-xs-3">{{ cuota.fechaVencimiento  }}</td>
                                 <td class="col-xs-3">{{ cuota.monto}}</td>
                                 <td>
-                                    <!--<input name="cuotas-{{cuota.id}}" type="checkbox"><span class="slider round"></span>-->
-                                    <!--<div class="container-fluid " id="botones_cajero"-->
-                                    <!--<div><form method="POST" id="demo">-->
-                                   <!-- <form method="post" action="{% url 'pagar1' %}" >-->
-                                 <!--   <input name="guardar_financiacion" type="hidden">
-                                <div id="div_id_item" class="form-group">
-                                    <label for="id_item" class="control-label ">
-                                        Item
-                                    </label>
-                                    <input type="hidden" name="tipoPago" value="{{tipoPago_id}}"/>-->
-                                    <input name="guardar_financiacion" type="hidden">
-                                                <label for="id_tipoPago" class="control-label ">
-                                            Seleccione forma de pago
-                                        </label>
-                                        <div class="controls ">
-                                            <select name="tipoPago" placeholder="Ingresar Tipo de Pago" class="select form-control input-sm" id="id_tipoPago" required>
-                                                <option value="" selected="">---------</option>
-                                                <option value="1">Debito</option>
-                                                <option value="2">Tarjeta de credito</option>
-                                            </select>
-                                        </div>
+                                    <div class="controls ">
+                                        <select name="tipoPago" placeholder="Ingresar Tipo de Pago" class="select form-control input-sm" id="tipoPago" required>
+                                            <option value="" selected="">---------</option>
+                                            <option value="1">Debito</option>
+                                            <option value="2">Tarjeta de credito</option>
+                                        </select>
+                                    </div>
 
-                                    </form>
                                 </td>
                             </tr>
+                            {% endif %}
                             </tbody>
                         </table>
-                    </form>
                 </div>
             </div>
             <br>
@@ -78,7 +64,7 @@
                 <div class="controls ">
                     <div class="row">
                         <div class="col-sm-10 col-md-10 col-xs-6" align="right">
-                            <button class="btn btn-primary btn-sm" type="submit" name="Guardar">
+                            <button class="btn btn-primary btn-sm" type="submit" value="Guardar" name="Guardar">
                                 Aceptar
                             </button>
                         </div>
@@ -93,91 +79,12 @@
                     </div>
                 </div>
             </div>
+                    </form>
 
-<!--  <input type="hidden" id="total" value="{{tramite.monto_a_pagar}}">
-                                            <br>
-                                            <div class="form-group">
-                                                <div class="controls ">
-                                                    <div class="row">
-                                                        <div class="col-sm-10 col-md-10 col-xs-6" align="right">
-                                                            <button class="btn btn-primary btn-sm" type="submit" name="Guardar">
-                                                                Aceptar
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                    </form>
-
-
-
-                                </td>
-                            </tr>
-                           {% endif %}
-                            </tbody>
-                        </table>
-                        <br>
-                       <!-- <div class="container-fluid " id="botones_cajero">
-                            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6" align="right">
-                                <button type="submit" onclick="return confirm('Desea registrar el pago de la/s cuota/s?')" class="btn btn-primary brn-xs" name="RegistrarPago">
-                                    Aceptar
-                                </button>
-                            </div>
-                            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-                                <a href="javascript:history.back(-1);">
-                                    <button class="btn btn-primary btn-md " type="button" value="Atras">Volver</button>
-                                </a>
-                            </div>
-                        </div>-->
-<!--<a href="{% url 'registrar_pago_tramite' %}">-->
-<!--<button type="button"  class="btn btn-primary brn-xs" name="RegistrarPago">-->
-<!--Seleccionar-->
-<!--</button>-->
-<!--</a>-->
-<!--<div class="container-fluid">
-<div class="table-responsive">
-
-        <table class="table table-bordered table-striped table-hover table-condensed" style="background: white;">
-            <thead>
-                <tr>
-                    <th>FechaVencimiento</th>
-                    <th>Monto</th>
-                    <th>Numero de Cuota</th>
-                    <th>Registrar Pago</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for cuota in cuotas %}
-                    <tr>
-                        <td class="col-xs-3">{{ cuota.fechaVencimiento }}</td>
-                        <td class="col-xs-3">{{ cuota.monto }}</td>
-                        <td class="col-xs-3">{{ cuota.numeroCuota }}</td>
-                        <td>
-                            <a href="{ url 'elegir_cuota' cuota.id }">
-                                <button type="button" onclick="return confirm('Desea registrar el pago de la cuota?')" class="btn btn-primary brn-xs" name="RegistrarPago">
-                                    <span class="glyphicon glyphicon-home" aria-hidden="true"> Registrar Pago </span>
-                                </button>
-                            </a>
-                        </td>
-                    </tr>
-                {% endfor %}
-
-            </tbody>
-        </table>
-    <div class="col-xs-4 col-sm-4 col-md-12 col-lg-12" style="float: right; width: 20%; margin-top: -20px; ">
-        <br><form action='/persona/cajero'>
-            &nbsp;<Button class="btn btn-primary btn-sm" type="submit" value="Atras">Atras</Button>
-        </form><br>
-    </div>
-    </div>
-</div>-->
         </div>
-        </div>
-
     </div>
+
 </div>
-
-
 
 <style>
 
@@ -241,106 +148,4 @@
 </style>
 {% endblock %}
 
-
-<!--
-                       <!-- <table class="table table-bordered table-striped table-hover table-condensed" style="background: white;">
-                            <thead>
-                            <tr>
-                                <th>Numero de Cuota</th>
-                                <th>Fecha Vencimiento</th>
-                                <th>Monto</th>
-                                <th>Registrar Pago</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            {% if cuotas %}
-                           <!-- {% for cuota in cuotas %}
-
-                            <tr>
-                                <td class="col-xs-3">{{ cuota.numeroCuota }}</td>
-                                <td class="col-xs-3">{{ cuota.fechaVencimiento  }}</td>
-                                <td class="col-xs-3">{{ cuota.monto}}</td>
-                                <td>
-                                        <!--<input name="cuotas-{{cuota.id}}" type="checkbox"><span class="slider round"></span>-->
-                                      <!-- <form action="{% url 'pagar' %}" method="post" enctype="multipart/form-data">
-                                           <input name="cuotas-{{cuota.id}}" type="hidden">
-                                            <input name="guardar_financiacion" type="hidden">
-                                            <div id="div_id_tipoPago" class="form-group">
-                                                <label for="id_tipoPago" class="control-label ">
-                                            Seleccione forma de pago
-                                        </label>
-                                        <div class="controls ">
-                                            <select name="tipoPago" placeholder="Ingresar Tipo de Pago" class="select form-control input-sm" id="id_tipoPago" required>
-                                                <option value="" selected="">---------</option>
-                                                <option value="1">Debito</option>
-                                                <option value="2">Tarjeta de credito</option>
-                                            </select>
-                                        </div>
-                                    </div>-->
-                                    <!--  <input type="hidden" id="total" value="{{tramite.monto_a_pagar}}">
-                                            <br>
-                                            <div class="form-group">
-                                                <div class="controls ">
-                                                    <div class="row">
-                                                        <div class="col-sm-10 col-md-10 col-xs-6" align="right">
-                                                            <button class="btn btn-primary btn-sm" type="submit" name="Guardar">
-                                                                Aceptar
-                                                            </button>
-                                                        </div>
-                                                    </div>
-                                                </div>
-                                            </div>
-                                            {% endfor %}-->
-
-                                <!--<td>-->
-                                <!--<a href="{ url 'registrar_pago_tramite' cuota.id }">-->
-                                <!--<button type="button"  class="btn btn-primary brn-xs" name="RegistrarPago">-->
-                                <!--Seleccionar-->
-                                <!--</button>-->
-                                <!--</a>-->
-                                <!--</td>
-                                {% endif %}-->
-
-<!--<a href="{% url 'registrar_pago_tramite' %}">-->
-<!--<button type="button"  class="btn btn-primary brn-xs" name="RegistrarPago">-->
-<!--Seleccionar-->
-<!--</button>-->
-<!--</a>-->
-<!--<div class="container-fluid">
-<div class="table-responsive">
-
-        <table class="table table-bordered table-striped table-hover table-condensed" style="background: white;">
-            <thead>
-                <tr>
-                    <th>FechaVencimiento</th>
-                    <th>Monto</th>
-                    <th>Numero de Cuota</th>
-                    <th>Registrar Pago</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for cuota in cuotas %}
-                    <tr>
-                        <td class="col-xs-3">{{ cuota.fechaVencimiento }}</td>
-                        <td class="col-xs-3">{{ cuota.monto }}</td>
-                        <td class="col-xs-3">{{ cuota.numeroCuota }}</td>
-                        <td>
-                            <a href="{ url 'elegir_cuota' cuota.id }">
-                                <button type="button" onclick="return confirm('Desea registrar el pago de la cuota?')" class="btn btn-primary brn-xs" name="RegistrarPago">
-                                    <span class="glyphicon glyphicon-home" aria-hidden="true"> Registrar Pago </span>
-                                </button>
-                            </a>
-                        </td>
-                    </tr>
-                {% endfor %}
-
-            </tbody>
-        </table>
-    <div class="col-xs-4 col-sm-4 col-md-12 col-lg-12" style="float: right; width: 20%; margin-top: -20px; ">
-        <br><form action='/persona/cajero'>
-            &nbsp;<Button class="btn btn-primary btn-sm" type="submit" value="Atras">Atras</Button>
-        </form><br>
-    </div>
-    </div>
-</div>-->
 

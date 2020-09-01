@@ -3166,11 +3166,13 @@ def elegir_tramite(request, pk_tramite):
     tramite=get_object_or_404(Tramite,pk=pk_tramite)
     pago=tramite.pago
     cuotas=[]
+    c=None
     objetos=Cuota.objects.en_estado(Cancelacion)
     for cuota in objetos:
         if cuota.fechaPago is None and cuota.pago==pago:
-            cuotas.append(cuota)
-    return render(request, 'persona/cajero/registrar_cuota.html', {'cuotas':cuotas, 'tramite':tramite})
+            c=cuota
+            break;
+    return render(request, 'persona/cajero/registrar_cuota.html', {'cuotas':c, 'tramite':tramite})
 
 def pagarCuota(cuota):
     cuota.guardar_fecha()
@@ -3195,37 +3197,26 @@ def pagarCuota(cuota):
     #cuota = get_object_or_404(Cuota, pk=pk_cuota)
     #return render(request, 'persona/cajero/pagar_cuota.html', {'cuota':cuota})
 
-def pagar_cuota(request):
-    pk_cuota=0
-    #if name.startswith('cuota'):
-     #   pk_cuota = name.split('-')[1]
-    cuotas = Cuota.objects.en_estado(Cancelacion)
-    for c in cuotas:
-        pk_cuota = c.id
-        break
+def pagar_cuota(request,pk_cuota):
     cuota = get_object_or_404(Cuota, pk=pk_cuota)
-    #raise Exception(pk_cuota, cuota.numeroCuota, cuota.pago.cantidadCuotas)
     return render(request, 'persona/cajero/pagar_cuota.html', {'cuota':cuota})
 ##################################################
-def pagar1(request, id, tipoPago_id):
-    cuota = get_object_or_404(Cuota, pk=id)
-   # if request.method == "POST":
-    #    if "Guardar" in request.POST:
-            #for name, value in request.POST.items():
-    if request.POST:
-        if name.startswith('tipoPago'):
-            tipoPago = Tipo_Pago.objects.get(tipoPago_id=value)
+def pagar1(request, pk_cuota):
+    cuota = get_object_or_404(Cuota, pk=pk_cuota)
+    tipoPago=0
+    if "Guardar" in request.POST :
+        tipo=int(request.POST['tipoPago'])
+        tipoPago = Tipo_Pago.objects.get(id=tipo)
     cuota.guardar_fecha()
-    cuota.save()
-    cuota.hacer("cancelacion")
     pago = cuota.pago
     cuota.tipoPago = tipoPago
+    cuota.hacer("cancelacion")
+    cuota.save()
     tramite = get_object_or_404(Tramite, pago=pago)
     tramite.calcular_monto_pagado(cuota.monto)
     tramite.save()
-    pago = cuota.pago
     messages.add_message(request, messages.SUCCESS, 'Pago Registrado.')
-    contexto = {'tramite': tramite, 'pago': pago, 'cuota': cuotas}
+    contexto = {'tramite': tramite, 'pago': pago, 'cuota': cuota}
     return render(request, 'persona/cajero/registrar_pago_tramite.html', contexto)
 
 ##################################################
