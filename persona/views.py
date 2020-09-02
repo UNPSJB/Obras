@@ -2734,18 +2734,19 @@ def tramites_iniciados_finalizados(request):
             m=0
             for mes in range(mes,rango):
                 m=mes+1
-                diaFinal=monthrange(year,m)
-                tEstado=Estado.objects.filter(timestamp__range=(datetime.date(year, m, 01), datetime.date(year, m, diaFinal[1])), tipo=(1))
-                totalI=0
-                for t in tEstado:
-                    if t.previo() is None:
-                        totalI=totalI+1
-                totalIA=totalI+totalIA
-                tEstado=0
-                totalF=Estado.objects.filter(timestamp__range=(datetime.date(year, m, 01), datetime.date(year, m, diaFinal[1])), tipo=(9)).count()
-                totalFA=totalF+totalFA
-                iniciados.append(totalI)
-                finalizados.append(totalF)
+                if m<=12:  #puse esto para que no salte la excepcion
+                    diaFinal=monthrange(year,m)
+                    tEstado=Estado.objects.filter(timestamp__range=(datetime.date(year, m, 01), datetime.date(year, m, diaFinal[1])), tipo=(1))
+                    totalI=0
+                    for t in tEstado:
+                        if t.previo() is None:
+                            totalI=totalI+1
+                    totalIA=totalI+totalIA
+                    tEstado=0
+                    totalF=Estado.objects.filter(timestamp__range=(datetime.date(year, m, 01), datetime.date(year, m, diaFinal[1])), tipo=(9)).count()
+                    totalFA=totalF+totalFA
+                    iniciados.append(totalI)
+                    finalizados.append(totalF)
         i=tuple(iniciados)
         f=tuple(finalizados)
         datos.append(i)
