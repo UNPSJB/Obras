@@ -32,6 +32,7 @@
                             <th>Monto</th>
                             <th>Numero de Cuota</th>
                             <th>Fecha de Pago</th>
+                            <th>Forma de Pago</th>
                             <th>Mostrar Comprobante</th>
                         </tr>
                         </thead>
@@ -43,7 +44,7 @@
                             <td class="col-xs-3">{{ cuota.monto }}</td>
                             <td class="col-xs-3">{{ cuota.numeroCuota }}</td>
                             <td class="col-xs-3">{{ cuota.fechaPago }}</td>
-
+                            <td class="col-xs-3">{{ cuota.tipoPago.nombre }}</td>
                             <td>
                                 <a href="{% url 'comprobante_pago_cuota' cuota.id %}" target="_blank">
                                     <button type="button" class="btn btn-primary btn-xs" name="MostrarComprobante">

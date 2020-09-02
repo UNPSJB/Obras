@@ -61,12 +61,12 @@
                     <table align="center" class="table table-bordered table-striped table-hover">
                         <thead>
                             <tr>
-                                        <th p style="color:#FFFFFF"bgcolor="#2c3e50">Fecha de vencimiento</th>
+                                        <th p style="color:#FFFFFF"bgcolor="#2c3e50">Fecha de Vencimiento</th>
                                         <th p style="color:#FFFFFF"bgcolor="#2c3e50">Numero de Cuota</th>
                                         <th p style="color:#FFFFFF"bgcolor="#2c3e50">Importe</th>
-                                        <th p style="color:#FFFFFF"bgcolor="#2c3e50">Fecha de pago</th>
+                                        <th p style="color:#FFFFFF"bgcolor="#2c3e50">Fecha de Pago</th>
 
-                                        <th p style="color:#FFFFFF"bgcolor="#2c3e50">Tipo de Pago</th>
+                                        <th p style="color:#FFFFFF"bgcolor="#2c3e50">Forma de Pago</th>
 
                             </tr>
                         </thead>
@@ -79,7 +79,7 @@
                                        <td>{{ c.monto }} </td>
                                        <td>{{ c.fechaPago }} </td>
 
-                                        <td>{{ pago.tipoPago.nombre }} </td>
+                                        <td>{{ c.tipoPago.nombre }} </td>
                             </tr>
                         </tbody>
                                                            {%endfor%}
