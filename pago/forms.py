@@ -49,28 +49,28 @@ class FormularioCuota(forms.ModelForm):
             raise ValidationError("Seleccione un tipo de Pago")
         return tipoPago
 
-class FormularioTipoPago(forms.ModelForm):
-    NAME = 'tipo_pago_form'
-    SUBMIT = 'tipo_de_pago_submit'
+#class FormularioTipoPago(forms.ModelForm):
+ #   NAME = 'tipo_pago_form'
+  #  SUBMIT = 'tipo_de_pago_submit'
 
-    class Meta:
-        model = Tipo_Pago
-        fields = ('nombre',)
-        cuota = forms.ChoiceField(choices=Pago.CUOTAS)
+ #   class Meta:
+  #      model = Tipo_Pago
+   #     fields = ('nombre',)
+    #    cuota = forms.ChoiceField(choices=Pago.CUOTAS)
 
-    def __init__(self, *args, **kwargs):
-        super(FormularioTipoPago, self).__init__(*args, **kwargs)
-        self.helper = FormHelper()
-        # self.helper.form_class = 'form-horizontal'
-        self.helper.add_input(Submit(self.SUBMIT, 'Guardar'))
-        self.fields['nombre'].widget.attrs['placeholder'] = "Ingresar Nombre"
+#    def __init__(self, *args, **kwargs):
+ #       super(FormularioTipoPago, self).__init__(*args, **kwargs)
+  #      self.helper = FormHelper()
+   #     # self.helper.form_class = 'form-horizontal'
+    #    self.helper.add_input(Submit(self.SUBMIT, 'Guardar'))
+     #   self.fields['nombre'].widget.attrs['placeholder'] = "Ingresar Nombre"
 
-    def clean_nombre(self):
-        nombre = self.cleaned_data['nombre']
-        cargados = Tipo_Pago.objects.filter(nombre__icontains=nombre)
-        if cargados.exists():
-            raise ValidationError("Ya existe {}".format(cargados.first().nombre))
-        return nombre
+    #def clean_nombre(self):
+     #   nombre = self.cleaned_data['nombre']
+      #  cargados = Tipo_Pago.objects.filter(nombre__icontains=nombre)
+       # if cargados.exists():
+        #    raise ValidationError("Ya existe {}".format(cargados.first().nombre))
+        #return nombre
 
 class FormularioPago(forms.ModelForm):
     NAME = 'pago_form'

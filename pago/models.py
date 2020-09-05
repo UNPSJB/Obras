@@ -3,6 +3,7 @@ from __future__ import unicode_literals
 from django.db import models
 from pago.models import *
 from tramite.models import *
+from tipos.models import *
 from django import template
 from django.shortcuts import get_object_or_404
 
@@ -20,17 +21,6 @@ class PagoQuerySet(models.QuerySet):
             estado_cuota__tipo__in=[e.TIPO for e in estado_cuota])
 
 PagoManager = PagoBaseManager.from_queryset(PagoQuerySet)
-
-class Tipo_Pago(models.Model):
-    Pagos = [
-        ('A', 'Debito'),
-        ('B', 'Efectivo'),
-    ]
-    tipoPago = models.CharField(choices=Pagos, max_length=2)
-    nombre = models.CharField(max_length=100)
-
-    def __str__(self):
-        return self.nombre
 
 class Pago(models.Model):
     CUOTAS = [
@@ -50,7 +40,7 @@ class Cuota(models.Model):
     fechaPago = models.DateField(blank=True, null=True) #false sino se llena cuando se crea el pago
     monto = models.DecimalField(max_digits=10, decimal_places=2, null=True,blank=True)
     numeroCuota=models.IntegerField(null=True, blank=True)
-    tipoPago = models.ForeignKey(Tipo_Pago, blank=True, null=True)
+    tipoPago = models.ForeignKey(Tipo_Pago, null=True)
     pago=models.ForeignKey(Pago, related_name='pago', blank=True, null=True)
     objects = PagoManager()
 

@@ -53,7 +53,7 @@ class TipoDocumento(models.Model):
 class TipoObra(models.Model):
     nombre = models.CharField(max_length=50, unique=True)
     descripcion = models.CharField(max_length=100)
-    categorias = models.CharField(max_length=100, blank= True, null = True)
+    categorias = models.CharField(max_length=100, blank=True, null=True)
     activo = models.BooleanField(default=True)
 
     def __str__(self):
@@ -63,3 +63,10 @@ class TipoObra(models.Model):
     def tipos_para_profesional(categorias):
         return TipoObra.objects.filter(categorias__contains=categorias)
 
+#AGREGO EL TIPO DE PAGO
+
+class Tipo_Pago(models.Model):
+    nombre = models.CharField(max_length=50, unique=True)
+
+    def __str__(self):
+        return self.nombre
