@@ -17,14 +17,22 @@
         </tr>
       </thead>
     <tbody>
-        {% for item in planilla_de_visado_form %}
-        <tr>
-            <td class="col-xs-1">{{ item.label }}</td>
-            {% for columna in item %}
-            <td class="col-sm-1">{{ columna }}</td>
-            {% endfor %}
-        </tr>
-        {% endfor %}
+        {{% for fila in filas %}
+                <tr>
+                    <td class="col-xs-1">{{ fila }}</td>
+                    {% for columna in columnas %}
+                    <td class="col-sm-1">&nbsp;
+                        {% for item in itemsVisados %}
+                        {% if fila == item.fila_de_visado and columna == item.columna_de_visado %}
+                        <label class="switch">
+                            <input name="{{item.label}}" type="checkbox" disabled="disabled" checked="checked"><span class="slider round"></span>
+                        </label>
+                        {% endif %}
+                        {% endfor %}
+                    </td>
+                    {% endfor %}
+                </tr>
+                {% endfor %}
     </tbody>
 </table>
 </div>
@@ -44,7 +52,7 @@
     </form>
   </div>
 </div>
-<div class="row">
+<!--<div class="row">
   <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
     <form action="" >
       <div class="row" style="color:#fff;">
@@ -59,6 +67,6 @@
       </div>
     </form>
   </div>
-</div>
+</div>-->
 
 {% endblock %}
