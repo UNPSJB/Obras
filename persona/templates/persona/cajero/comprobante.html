@@ -25,14 +25,28 @@
                             <h5 align="right"> Fecha de Vencimiento {{ cuota.fechaVencimiento }} &nbsp; &nbsp;</h5>
                             <h5 align="right"> Fecha de Pago {{ cuota.fechaPago }} &nbsp; &nbsp; </h5>
                       <hr>
-                            <label style="color:black;">  Titular : <br> &nbsp; Apellido - Nombre : {{ tramite.propietario.persona.apellido}}  -  {{ tramite.propietario.persona.nombre }}</label>
-                            <label style="color:black;">  &nbsp;  &nbsp;DNI : {{tramite.propietario.persona.dni}}</label>
-                <hr>
-                <label style="color:black;">  Sector : {{tramite.sector}}  </label> &nbsp;
-                <label style="color:black;">Parcela : &nbsp; {{tramite.parcela}}  </label> &nbsp;
-                <label style="color:black;">Circunscripción : &nbsp; {{tramite.circunscripcion}}  </label> &nbsp;
+                    <div class="row">
+                                       <div class="col-sm-6 col-md-6 col-lg-6 col-xs-6">
+                            <label style="color:black;">  Titular : &nbsp {{ tramite.propietario.persona.apellido}}  {{ tramite.propietario.persona.nombre }}</label>
+                        <br><label style="color:black;">  &nbsp;  &nbsp;DNI : {{tramite.propietario.persona.dni}}</label>
+                                       </div>
+                <div class="col-sm-6 col-md-6 col-lg-6 col-xs-6">
+                        <h5 align="right" style="color:black;">Profesional : {{tramite.profesion}} {{tramite.profesional}}</h5>
+                            <h5 align="right" style="color:black;">M.P: {{tramite.profesional.matricula}}</h5><br>
+                        </div>
+                    </div>
+                    <hr>
+                    <label style="color:black;"> Domicilio : {{tramite.domicilio}}</label><br>
+                    <hr>
+                    <label style="color:black;"> Datos Catastrales: </label><br>
+                <label style="color:black;">  Sector : {{tramite.sector}}  -  </label> &nbsp;
+                <label style="color:black;">Parcela : &nbsp; {{tramite.parcela}}  -  </label> &nbsp;
+                <label style="color:black;">Circunscripción : &nbsp;{{tramite.circunscripcion}}  - </label> &nbsp;
                 <label style="color:black;">Manzana : &nbsp; {{tramite.manzana}}  </label>
-                <hr>
+                    <h5 align="right"  style="color:black;">Costo Total del Tramite:<td> {{tramite.monto_a_pagar}}</td></h5>
+                    <h5 align="right"  style="color:black;">Total Pagado a la Fecha: <a style="color:black;" id="total"></a>
+                    <h5 align="right"  style="color:black;">Resta Pagar: <a style="color:black;" id="restoPagar"> </a>
+                        <hr>
                 <div class="table-responsive">
                     <table  align="center" class="table table-bordered table-striped table-hover">
                         <thead>
@@ -55,12 +69,11 @@
                             </tr>
                         </tbody>
                     </table>
-                    <h5 align="right"  style="color:black;">Total pagado : <a style="color:black;" id="total"></a>
-                    <h5 align="right"  style="color:black;">Total a pagar:<td> {{tramite.monto_a_pagar}}</td></h5>
-
                 </div>
-                <hr>
-                    <label style="color:black;" align="center">&nbsp; ESTE RECIBO ES CONSTANCIA DE PAGO </label>
+
+                        <h5 align="right"  style="color:black;">Importe Cuota: <td> {{cuota.monto}}</td></h5>
+                  <hr>
+                   <!-- <label style="color:black;" align="center">&nbsp; ESTE RECIBO ES CONSTANCIA DE PAGO </label>-->
 
             </div>
         </div>
@@ -104,6 +117,17 @@ var t= {{cuota.monto}}
 {% endlocalize %}
     $("#total").text(t *{{cuota.numeroCuota}})
 });
+
+$( document ).ready(function() {
+{% load l10n %}
+
+{% localize off %}
+var totalTramite = {{tramite.monto_a_pagar}}
+var tc = {{cuota.monto}}
+{% endlocalize %}
+    $("#restoPagar").text((totalTramite - tc *{{cuota.numeroCuota}}))
+});
+
     function printDiv(div) {
     // Create and insert new print section
 
