@@ -32,8 +32,8 @@
                             <form action="" method="post" enctype="multipart/form-data">
                               <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
                                 <div class="controls ">
-                                    <select name="item" placeholder="Ingresar el Item" class="select form-control input-sm" id="id_item"  multiple>
-                                        <!--<option value="" selected="#">---------</option>-->
+                                    <select name="item" placeholder="Ingresar el Item" class="select form-control input-sm" id="id_item" >
+                                        <option value="" selected="#">---------</option>
                                         <option value="2017">2017</option>
                                         <option value="2018">2018</option>
                                         <option value="2019">2019</option>
@@ -41,26 +41,18 @@
                                     </select>
                                 </div>
                               </div>
+                                 <label> Seleccione el tipo de obra </label>
                                  <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
                                 <div class="controls ">
-                                    <select name="item1" placeholder="Ingresar el Item"  class="form-control multiple input-sm" id="id_item1" multiple>
-                                        <!--<option value="" selected="#">---------</option>-->
-                                        <option value="0">Enero</option>
-                                        <option value="1">Febrero</option>
-                                        <option value="2">Marzo</option>
-                                        <option value="3">Abril</option>
-                                        <option value="4">Mayo</option>
-                                        <option value="5">Junio</option>
-                                        <option value="6">Julio</option>
-                                        <option value="7">Agosto</option>
-                                        <option value="8">Septiembre</option>
-                                        <option value="9">Octubre</option>
-                                        <option value="10">Noviembre</option>
-                                        <option value="11">Diciembre</option>
+                                    <select name="obra" placeholder="Ingresar el Item"  class="form-control input-sm" id="id_item1">
+                                        <option value="" selected="#">---------</option>
+                                        {%for obra in tipos_obras%}
+                                        <option value="{{obra.pk}}">{{obra.nombre}}</option>
+                                        {%endfor%}
                                     </select>
                                 </div>
                               </div>
-                                <br>
+                                <br><br>
                                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="left">
                                         <button class="btn btn-primary btn-md" type="submit" name="Guardar">
                                             Aceptar

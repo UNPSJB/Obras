@@ -31,11 +31,19 @@
                         </a>
                     </td>
                     <td align="center" class="col-xs-1">
+                        {%if tramite.estado.tipo >= 5 %}
                         <a href="{% url 'profesional_solicita_final_obra' pk_tramite=tramite.id %}">
-                          <button type="button" class="btn btn-primary btn-xs" name="ver-certificado">
+                          <button style="display:block;" class="btn btn-primary btn-xs" name="ver-certificado">
                             <span class="glyphicon glyphicon-home" aria-hidden="true"> Final Obra</span>
                           </button>
                         </a>
+                        {%else%}
+                         <a href="{% url 'profesional_solicita_final_obra' pk_tramite=tramite.id %}">
+                          <button style="display:none;" class="btn btn-primary btn-xs" name="ver-certificado">
+                            <span class="glyphicon glyphicon-home" aria-hidden="true"> Final Obra</span>
+                          </button>
+                        </a>
+                        {%endif%}
                     </td>
                 </tr>
               {% endfor %}

@@ -29,9 +29,13 @@
 		  <div class="panel-body">
 			<div class="container-fluid">
 				<div class="row">
+
+
                     <el class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
                         <canvas id="pieDirectorUsuarios" width="400" height="200"></canvas>
                     </el>
+
+
 					<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                           <div class="table-responsive">
                               <table  class="table table-bordered table-striped table-hover table-condensed" style="background: white;">
@@ -73,6 +77,7 @@
                           </div>
                         <hr>
                     </div>
+
                     <div class=" col-xs-8 col-sm-8 col-md-8 col-lg-8" align="left">
                         <a id="crear_detalle" href="{% url 'reporte_tramites_director_excel' %}" class="btn btn-info btn-collapsible btn-sm" title="Generar Archivo Excel" >
                            <i class="glyphicon glyphicon-list-alt"></i><span>Exportar a EXCEL</span>
@@ -96,8 +101,10 @@
 				</div>
 			</div>
           </div>
+
         </div>
       </div>
+
     </div>
 
 
@@ -111,10 +118,48 @@
         color = [];
         labelsGrupos = [];
         dataGrupos = [];
+ {% for year,dictionary in datos.items %}
+ {% if year == 2020 %}
 
-        {% for da in datos_estados %}
-            dataGrupos.push({{da}});
-        {% endfor %}
+                    {%for i in rango %}
+{%if i == dictionary.1  %}
+            dataGrupos.push({{dictionary.1}});
+                    {%elif i == dictionary.2   %}
+                               dataGrupos.push({{dictionary.2}});
+
+
+                    {%elif i == dictionary.3  %}
+            dataGrupos.push({{dictionary.3}});
+
+
+                    {%elif i == dictionary.4 %}
+            dataGrupos.push({{dictionary.4}});
+
+                    {%elif i == dictionary.5 %}
+            dataGrupos.push({{dictionary.5}});
+
+                    {%elif i == dictionary.6 %}
+            dataGrupos.push({{dictionary.6}});
+
+
+                    {%elif i == dictionary.7 %}
+            dataGrupos.push({{dictionary.7}});
+
+                    {%elif i == dictionary.8 %}
+            dataGrupos.push({{dictionary.8}});
+
+                    {%elif i == dictionary.9 %}
+            dataGrupos.push({{dictionary.9}});
+
+                    {% else %}
+            dataGrupos.push(0);
+
+                    {%endif%}
+
+{% endfor %}
+{% endif %}
+{% endfor %}
+
 
         {% for la in label_estados %}
             labelsGrupos.push("{{la}}");
