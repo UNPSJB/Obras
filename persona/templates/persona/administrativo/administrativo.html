@@ -20,6 +20,23 @@
 				</ul>
 		</font>
 	</ul>
+<br>
+<br>
+<br>
+<br>
+<div id="boton_ayuda" class="col-xs-4 col-sm-4 col-md-12 col-lg-12">
+	<div class="dropdown" style="float:left;">
+		<button class="btn btn-primary btn-md" type="button"  id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+			<span class="glyphicon glyphicon-list-alt" aria-hidden="true">    Ayuda    <br> <br/></span>
+ 			<span class="caret"></span>
+		</button>
+		<ul class="dropdown-menu">
+			<li><li><a target="_blank"  href="{% static "documentacion/_build/html/administrativo.html" %}" target="_blank">Ayuda</a></li>
+			<li role="separator" class="divider"></li>
+			<li><a target="_blank" id="boton_ayuda1" href="{% static "documentacion/Manual.pdf" %}" target="_blank">Ayuda PDF</a></li>
+		</ul>
+	</div>
+</div>
 {% endblock %}
 
 {% block contenido %}
@@ -163,7 +180,9 @@
 			</div>
 		</div>
 	</div>
+
 	</div>
+
 
 {% endblock %}
 

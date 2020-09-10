@@ -1,6 +1,7 @@
 from django import forms
 from crispy_forms.helper import FormHelper, Layout
 from crispy_forms.layout import Submit, Field
+from django.forms import ValidationError
 import datetime
 
 from .models import *
@@ -34,6 +35,13 @@ class FormularioTipoDocumento(forms.ModelForm):
         flags = [int(e) for e in self.cleaned_data['requerido']]
         return sum(flags)
 
+    def clean_nombre(self):
+        nombre = self.cleaned_data['nombre']
+        cargados = TipoDocumento.objects.filter(nombre__icontains=nombre)
+        if cargados.exists():
+            raise ValidationError("Ya existe {}".format(cargados.first().nombre))
+        return nombre
+
 class FormularioTipoObra(forms.ModelForm):
     NAME = 'tipo_obra_form'
     SUBMIT = 'tipo_obra_submit'
@@ -49,3 +57,41 @@ class FormularioTipoObra(forms.ModelForm):
         self.fields['nombre'].widget.attrs['placeholder'] = "Ingresar Nombre"
         self.fields['descripcion'].widget.attrs['placeholder'] = "Ingresar Descripcion"
         self.fields['categorias'].widget.attrs['placeholder'] = "Ingresar Categoria/s"
+
+    def clean_tipoObra(self):
+        tipoObra = self.cleaned_data['tipoObra']
+        if tipoObra is None:
+            raise ValidationError("Seleccione un tipo de Obra")
+        return tipoObra
+
+    def clean_nombre(self):
+        nombre = self.cleaned_data['nombre']
+        cargados = TipoObra.objects.filter(nombre__icontains=nombre)
+        if cargados.exists():
+            raise ValidationError("Ya existe {}".format(cargados.first().nombre))
+        return nombre
+
+#agrego tipo pago
+
+class FormularioTipoPago(forms.ModelForm):
+    NAME = 'tipo_pago_form'
+    SUBMIT = 'tipo_de_pago_submit'
+
+    class Meta:
+        model = Tipo_Pago
+        fields = ('nombre',)
+        #cuota = forms.ChoiceField(choices=Pago.CUOTAS)
+
+    def __init__(self, *args, **kwargs):
+        super(FormularioTipoPago, self).__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        # self.helper.form_class = 'form-horizontal'
+        self.helper.add_input(Submit(self.SUBMIT, 'Guardar'))
+        self.fields['nombre'].widget.attrs['placeholder'] = "Ingresar Nombre"
+
+    def clean_nombre(self):
+        nombre = self.cleaned_data['nombre']
+        cargados = Tipo_Pago.objects.filter(nombre__icontains=nombre)
+        if cargados.exists():
+            raise ValidationError("Ya existe {}".format(cargados.first().nombre))
+        return nombre

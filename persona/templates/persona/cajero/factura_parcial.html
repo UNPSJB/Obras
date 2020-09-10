@@ -21,42 +21,35 @@
                           RESUMEN DE PAGO &nbsp;  &nbsp;
                       </h3>
                       <hr>
-                    <div class="row" style="color:black;">
-                        <label style="color:black;">&nbsp;Tramite:{{tramite.id}}</label>&nbsp;&nbsp;
-                        <label style="color:black;">Cantidad de cuotas:{{pago.cantidadCuotas}}</label>
-                                    <hr>
-                                   <div class="row">
-                                       <div class="col-sm-6 col-md-6 col-lg-6 col-xs-6">
-                            <label style="color:black;" > &nbsp; Titular: <br> &nbsp; Apellido - Nombre : {{ tramite.propietario.persona.apellido}}  -  {{ tramite.propietario.persona.nombre }}</label>
-                            <label style="color:black;">  &nbsp;  &nbsp;DNI : {{tramite.propietario.persona.dni}}</label>
-                                       </div>
-                                                                              <div class="col-sm-6 col-md-6 col-lg-6 col-xs-6">
+                    <label style="color:black;"> Tramite: {{ tramite.id }} &nbsp; &nbsp;</label><br>
+                    <label style="color:black;"> Cantidad de Cuotas: {{ pago.cantidadCuotas }} &nbsp; &nbsp; </label>
+                      <hr>
 
-                                       <label style="color:black;">Profesional : </label><br>
-                                        <label style="color:black;"> {{tramite.profesion}} {{tramite.profesional}}</label>
-                                        <label style="color:black;">M.P: {{tramite.profesional.matricula}}</label><br>
-                                                                              </div>
+                    <div class="row">
+                                       <div class="col-sm-6 col-md-6 col-lg-6 col-xs-6">
+                            <label style="color:black;" > &nbsp; Titular: &nbsp;{{ tramite.propietario.persona.apellido}} {{ tramite.propietario.persona.nombre }}</label>
+                            <br><label style="color:black;">  &nbsp;  &nbsp;DNI : {{tramite.propietario.persona.dni}}</label>
+                                       </div>
+                                                                             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-6">
+
+                        <h5 align="right" style="color:black;">Profesional : {{tramite.profesion}} {{tramite.profesional}}</h5>
+                            <h5 align="right" style="color:black;">M.P: {{tramite.profesional.matricula}}</h5><br>
+                        </div>
                                         <br>
                                 </div>
                                     <hr>
-                                    <!--<label>Obra:</label><br>-->
-                                       <div class="col-sm-6 col-md-6 col-lg-6 col-xs-6">
+                <label style="color:black;"> Domicilio : {{tramite.domicilio}}</label><br>
+                    <label style="color:black;">Tipo de Obra : {{ tramite.tipo_obra }}</label><br>
+                <hr>
+                    <label style="color:black;"> Datos Catastrales: </label><br>
+                <label style="color:black;">  Sector : {{tramite.sector}}  -  </label> &nbsp;
+                <label style="color:black;">Parcela : &nbsp; {{tramite.parcela}}  -  </label> &nbsp;
+                <label style="color:black;">Circunscripción : &nbsp;{{tramite.circunscripcion}}  - </label> &nbsp;
+                <label style="color:black;">Manzana : &nbsp; {{tramite.manzana}}  </label>
+                    <h5 align="right"  style="color:black;">Costo Total del Tramite:<td> {{tramite.monto_a_pagar}}</td></h5>
+                    <h5 align="right" style="color:black;">Total Pagado a la Fecha: {{tramite.monto_pagado}}</h5>
+                     <hr>
 
-                                    <label style="color:black;"> Domicilio : {{tramite.domicilio}}</label><br>
-
-                                                    <label style="color:black;">Tipo de Obra : {{ tramite.tipo_obra }}</label><br>
-
-                                       </div>
-                                                                           <div class="col-sm-6 col-md-6 col-lg-6 col-xs-6">
-
-                <label style="color:black;">  Sector:  {{tramite.sector}}</label><br>
-                <label style="color:black;">Parcela: {{tramite.parcela}}</label> <br>
-                <label style="color:black;">Circunscripción: {{tramite.circunscripcion}}</label> <br>
-                <label style="color:black;">Manzana: {{tramite.manzana}}</label> <br>
-                                                                           </div>
-                    </div>
-                                    <hr>
-<br>
                 <div class="table-responsive">
                     <table align="center" class="table table-bordered table-striped table-hover">
                         <thead>
@@ -88,10 +81,8 @@
 
 
                 </div>
-                <hr>
-                    <h4 align="right">Total pagado: {{tramite.monto_pagado}}</h4>
-                    <h4 align="right">Total a pagar: {{tramite.monto_a_pagar}}</h4>
-                    <label style="color:black;" align="center">&nbsp; ESTE RECIBO ES CONSTANCIA DE PAGO </label>
+                    <h5 align="right" style="color:black;">Resta Pagar: <a style="color:black;" id="totalRestante"> </a>
+<hr>
 
             </div>
         </div>
@@ -128,6 +119,17 @@
     }
 </style>
 <script>
+$( document ).ready(function() {
+{% load l10n %}
+
+{% localize off %}
+var t= {{tramite.monto_a_pagar}}
+var tp= {{tramite.monto_pagado}}
+{% endlocalize %}
+    $("#totalRestante").text(t - tp)
+});
+
+
     function printDiv(div) {
     // Create and insert new print section
 

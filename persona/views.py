@@ -2879,6 +2879,13 @@ def ver_listado_usuarios(request):
     contexto = {'listados':listados, 'grupossistema':grupossistema}
     return render(request, 'persona/director/listado_de_usuarios_segun_grupo.html', contexto)
 
+def tiempo_aprobacion_visados(request):
+    listado_tramites = []
+    tramitesVisados = tramite
+    list_estados_fechas = []
+    return render(request, 'persona/director/tiempo_aprobacion_visados.html', contexto)
+
+
 
 class ReporteTramitesDirectorExcel(TemplateView):
 
@@ -3117,6 +3124,9 @@ def alta_persona(request):
 
 #------------------------------------------------------------------------------------------------------------------
 #cajero ---------------------------------------------------------------------------------------------------------
+from tipos import forms
+from tipos import models
+
 @login_required(login_url="login")
 @grupo_requerido('cajero')
 def mostrar_cajero(request):
@@ -3249,32 +3259,23 @@ def pagarCuota(cuota):
     tramite.save()
     return tramite
 
-##################################################
-########### NUEVOS ###############################
-##################################################
-#def pagar_cuota(request):
-    #pk_cuota=0
-    #cuotas = Cuota.objects.en_estado(Cancelacion)
-          #  pk_cuota = name.split('-')[1]
-    #for c in cuotas:
-      #  pk_cuota = c.id
-     #   break
-    #cuota = get_object_or_404(Cuota, pk=pk_cuota)
-    #return render(request, 'persona/cajero/pagar_cuota.html', {'cuota':cuota})
-
 def pagar_cuota(request,pk_cuota):
     cuota = get_object_or_404(Cuota, pk=pk_cuota)
-    return render(request, 'persona/cajero/pagar_cuota.html', {'cuota':cuota})
+    tiposPagos = Tipo_Pago.objects.all()
+    return render(request, 'persona/cajero/pagar_cuota.html', {'cuota':cuota, 'tiposPagos':tiposPagos})
 ##################################################
 def pagar1(request, pk_cuota):
     cuota = get_object_or_404(Cuota, pk=pk_cuota)
-    tipoPago=0
-    if "Guardar" in request.POST :
-        tipo=int(request.POST['tipoPago'])
-        tipoPago = Tipo_Pago.objects.get(id=tipo)
+    datosPagos = Tipo_Pago.objects.all()
+    tipoPago = 0
+    if "Guardar" in request.POST:
+        for n in datosPagos:
+            if request.POST['tipoPago'] == n.nombre:
+                tipoPago = n.id
+    tp = Tipo_Pago.objects.get(id=tipoPago)
     cuota.guardar_fecha()
     pago = cuota.pago
-    cuota.tipoPago = tipoPago
+    cuota.tipoPago = tp
     cuota.hacer("cancelacion")
     cuota.save()
     tramite = get_object_or_404(Tramite, pago=pago)
