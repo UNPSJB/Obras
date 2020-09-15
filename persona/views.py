@@ -48,6 +48,8 @@ from reportlab.graphics.charts.barcharts import VerticalBarChart
 from calendar import monthrange
 from django.db.models import Max
 from django.db.models import Count
+from collections import defaultdict
+import json
 #-------------------------------------------------------------------------------------------------------------------
 #generales ---------------------------------------------------------------------------------------------------------
 
@@ -1414,8 +1416,6 @@ def cargar_planilla_visado(request,pk_tramite):
     #raise Exception("excepcion")#
 
 def planilla_visado(request, pk_tramite):
-    print("no aprobar ")
-
     if request.method == "POST":
         observacion = request.POST["observaciones"]
         tram = request.POST['tram']
@@ -1425,11 +1425,6 @@ def planilla_visado(request, pk_tramite):
             print("no aprobar visao")
         else:
             aprobar_visado(request, tram, monto_permiso)
-    # else:
-    #     filas = FilaDeVisado.objects.all()
-    #     columnas = ColumnaDeVisado.objects.all()
-    #     elementos = Elemento_Balance_Superficie.objects.all()
-    #     return render(request, 'persona/visador/planilla_visado.html', {'tramite': tramite, 'items':items, 'filas':filas, 'columnas':columnas, 'elementos':elementos})
     return redirect('visador')
 
 
@@ -2229,7 +2224,6 @@ def ver_listado_todos_usuarios(request):
             total_usuarios_grupos.setdefault(lg, 0)
     datos_grupos = total_usuarios_grupos.values()
     return render(request, 'persona/director/vista_de_usuarios.html', {"label_grupos":label_grupos, "datos_grupos":datos_grupos})
-from collections import defaultdict
 
 def ver_todos_tramites(request):
     argumentos = [Iniciado, Aceptado, Visado, Corregido, Agendado, ConInspeccion, Inspeccionado, FinalObraSolicitado, Finalizado]
@@ -2242,8 +2236,8 @@ def ver_todos_tramites(request):
             for k, d in dd.items():
                     contador[k].update(d)
     contador.default_factory = None
-
-    contexto = {'todos_los_tramites': tramites, "label_estados":["Iniciado", "Aceptado","Visado", "Corregido", "Agendado", "Con Inspeccion", "Inspeccionado", "Final Obra Solicitado","Finalizado"],"datos":contador, "rango":range(1,10)}
+    datosJSON = json.dumps(contador)
+    contexto = {'todos_los_tramites': tramites, "label_estados":["Iniciado", "Aceptado","Visado", "Corregido", "Agendado", "Con Inspeccion", "Inspeccionado", "Final Obra Solicitado","Finalizado"],"datos":datosJSON}
     return render(request, 'persona/director/vista_de_todos_tramites.html', contexto)
 
 def ver_tipos_de_obras_mas_frecuentes(request):
@@ -2319,35 +2313,25 @@ def ver_categorias_mas_frecuentes(request):
     tipos_categorias = CategoriaInspeccion.objects.all()
     detalles = DetalleDeItemInspeccion.objects.all()
     list = []
+    datos=[]
     for p in planillas:
         for t in tramites:
             if t.id == p.tramite.id:
                 list.append(p)
-    a = 0
-    b = 0
-    c = 0
     nombres=[]
     for cat in tipos_categorias:
         nombres.append(cat.nombre)
     for l in list:
-        list_categorias = l.detalles.values_list('categoria_inspeccion_id')
-        for i in list_categorias:
-            if 1 in i:
-                a+=1
-            if 2 in i:
-                b+=1
-            if 3 in i:
-                c+=1
-    datos=[a,b,c]
+        list_categorias = l.detalles.values_list('categoria_inspeccion_id', flat="True")
+    categorias=dict(collections.Counter(list_categorias))
+    for i in categorias:
+        datos.append(categorias[i])
     titulo="Categorias mas frecuentes"
     grafico=pie_chart_with_legend(datos,nombres,titulo)
     imagen=base64.b64encode(grafico.asString("png"))
     contexto = {
         "tipos_categorias":tipos_categorias,
         "detalles":detalles,
-        "totala":a,
-        "totalb":b,
-        "totalc":c,
         "grafico": imagen,
     }
     return render(request,'persona/director/categorias_mas_frecuentes.html',contexto)
@@ -2413,13 +2397,10 @@ def ver_barra_materiales(request):
     return render(request,'persona/director/barra_materiales.html',contexto)
 
 def __busco_item__(item):
-    #detalles = DetalleDeItemInspeccion.objects.all()
-    #planillas = PlanillaDeInspeccion.objects.all()
     i = get_object_or_404(ItemInspeccion, nombre=item)
     list = []
     nombres=[]
     datos=[]
-#    p=PlanillaDeInspeccion.objects.all()
     e=DetalleDeItemInspeccion.objects.filter(item_inspeccion_id=i.id)
     f=PlanillaDeInspeccion.objects.filter(detalles__in=e).values_list('detalles__nombre',flat="True")
     for i in range(0,len(e)):
@@ -2429,21 +2410,6 @@ def __busco_item__(item):
         m=[nombres[n],cant]
         list.append(m)
         datos.append(cant)
-    # for d in detalles:
-    #      if i == d.item_inspeccion:
-    #          m = [d.nombre,0]
-    #          list.append(m)
-    # list_detalles = []
-    # for p in planillas:
-    #     for d in p.detalles.all():
-    #         list_detalles.append(d.nombre)
-    # for l in list_detalles:
-    #     aux = 0
-    #     for name,value in list:
-    #         if l == name:
-    #             aux += value +1
-    #             i = list.index([name,value])
-    #             list[i] = [name,aux]
     contexto={'datos':datos,'nombres':nombres,'detalles':list}
     return contexto
 
@@ -2973,18 +2939,6 @@ class ReporteTramitesDirectorPdf(View):
         Story.append(detalle_orden)
         doc.build(Story)
         return response
-    ##############
-       # def inspecciones_realizadas_durante_el_anio(request):
-           # year = date.today()
-            #tramites1 = Tramite.objects.all()
-            #tramitesEstado = Estado.objects.filter(
-            #    timestamp__range=(datetime.date(year.year, 01, 01), datetime.date(year.year, 12, 12)), tipo=(6))
-           # tramites = []
-           # for i in range(0, len(tramitesEstado)):
-            #    aux = tramites1.filter(id=tramitesEstado[i].tramite_id).exclude(id__isnull=True)
-             #   tramites.append({"tramite": aux, "fecha": tramitesEstado[i].timestamp})
-            #return {"tramites": tramites}
-    ##############
 
 class ReporteInspeccionesDirectorExcel(TemplateView):
     def get(self, request, *args, **kwargs):
