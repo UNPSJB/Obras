@@ -46,6 +46,10 @@ from reportlab.graphics.charts.linecharts import HorizontalLineChart
 from reportlab.lib.colors import Color, PCMYKColor, white
 from reportlab.graphics.charts.barcharts import VerticalBarChart
 from calendar import monthrange
+from django.db.models import Max
+from django.db.models import Count
+from collections import defaultdict
+import json
 #-------------------------------------------------------------------------------------------------------------------
 #generales ---------------------------------------------------------------------------------------------------------
 
@@ -193,7 +197,7 @@ def documentos_de_estado(request, pk_estado):
             'estilos':estilos
             #'items': items,
             #'elementos': elementos,
-        }    
+        }
     if (estado.tipo >5 and estado.tipo <8):                        
         for p in PlanillaDeInspeccion.objects.all():
             if (p.tramite.pk == estado.tramite.pk):
@@ -546,7 +550,7 @@ class ReporteTramitesProfesionalPdf(View):
         styles.add(ParagraphStyle(name='Usuario', alignment=TA_RIGHT, fontName='Helvetica', fontSize=8))
         styles.add(ParagraphStyle(name='Titulo', alignment=TA_RIGHT, fontName='Helvetica', fontSize=18))
         styles.add(ParagraphStyle(name='Subtitulo', alignment=TA_RIGHT, fontName='Helvetica', fontSize=12))
-        usuario = 'Usuario: ' + request.user.username + ' -  Fecha:' + ' ... aca va la fecha'
+        usuario = 'Usuario: ' + request.user.username + ' -  Fecha:' + str(datetime.date.today())
         Story.append(Paragraph(usuario, styles["Usuario"]))
         Story.append(Spacer(0, cm * 0.15))
         im0 = Image(settings.MEDIA_ROOT + '/imagenes/espacioPDF.png', width=490, height=3)
@@ -1412,8 +1416,6 @@ def cargar_planilla_visado(request,pk_tramite):
     #raise Exception("excepcion")#
 
 def planilla_visado(request, pk_tramite):
-    print("no aprobar ")
-
     if request.method == "POST":
         observacion = request.POST["observaciones"]
         tram = request.POST['tram']
@@ -1423,11 +1425,6 @@ def planilla_visado(request, pk_tramite):
             print("no aprobar visao")
         else:
             aprobar_visado(request, tram, monto_permiso)
-    # else:
-    #     filas = FilaDeVisado.objects.all()
-    #     columnas = ColumnaDeVisado.objects.all()
-    #     elementos = Elemento_Balance_Superficie.objects.all()
-    #     return render(request, 'persona/visador/planilla_visado.html', {'tramite': tramite, 'items':items, 'filas':filas, 'columnas':columnas, 'elementos':elementos})
     return redirect('visador')
 
 
@@ -1743,7 +1740,7 @@ def tramites_agendados_por_inspector(request):
     #estados_agendados = filter(lambda estado: (estado.usuario is not None and estado.usuario == usuario and estado.tipo == tipo), estados)
     argumentos = [Visado, ConInspeccion]
     tramites = Tramite.objects.en_estado(Agendado)
-    tramites_del_inspector = filter(lambda t: t.estado().usuario == usuario, tramites)
+    tramites_del_inspector = filter(lambda t: t.estado().usuario == usuario and t.estado().rol==2, tramites)
     contexto = {"tramites_del_inspector": tramites_del_inspector}
     return tramites_del_inspector
 
@@ -1989,6 +1986,8 @@ class ReporteTramitesAgendarInspeccionPdf(View):
 @login_required(login_url="login")
 @grupo_requerido('jefeinspector')
 def mostrar_jefe_inspector(request):
+    if (request.user_agent.is_mobile):  # returns True
+        return redirect('movil_jefe')
     contexto = {
         "ctxtramitesconinspeccion": tramite_con_inspecciones_list(request),
         "ctxtramitesagendados": tramites_agendados_por_inspector(request),
@@ -2390,13 +2389,14 @@ def ver_todos_tramites(request):
     tramites = Tramite.objects.en_estado(argumentos)
     estados = []
     for t in tramites:
-        estados.append(t.estado().tipo);
-    estados_cant = dict(collections.Counter(estados))
-    for n in range(1, 9):
-        if (not estados_cant.has_key(n)):
-            estados_cant.setdefault(n, 0);
-    estados_datos = estados_cant.values()
-    contexto = {'todos_los_tramites': tramites, "datos_estados":estados_datos, "label_estados":["Iniciado", "Aceptado","Visado", "Corregido", "Agendado", "Con Inspeccion", "Inspeccionado", "Final Obra Solicitado","Finalizado"]}
+        estados.append( { t.estado().timestamp.year : { str(t.estado().tipo):1 }})
+    contador = defaultdict(collections.Counter)
+    for dd in estados:
+            for k, d in dd.items():
+                    contador[k].update(d)
+    contador.default_factory = None
+    datosJSON = json.dumps(contador)
+    contexto = {'todos_los_tramites': tramites, "label_estados":["Iniciado", "Aceptado","Visado", "Corregido", "Agendado", "Con Inspeccion", "Inspeccionado", "Final Obra Solicitado","Finalizado"],"datos":datosJSON}
     return render(request, 'persona/director/vista_de_todos_tramites.html', contexto)
 
 def ver_tipos_de_obras_mas_frecuentes(request):
@@ -2472,35 +2472,25 @@ def ver_categorias_mas_frecuentes(request):
     tipos_categorias = CategoriaInspeccion.objects.all()
     detalles = DetalleDeItemInspeccion.objects.all()
     list = []
+    datos=[]
     for p in planillas:
         for t in tramites:
             if t.id == p.tramite.id:
                 list.append(p)
-    a = 0
-    b = 0
-    c = 0
     nombres=[]
     for cat in tipos_categorias:
         nombres.append(cat.nombre)
     for l in list:
-        list_categorias = l.detalles.values_list('categoria_inspeccion_id')
-        for i in list_categorias:
-            if 1 in i:
-                a+=1
-            if 2 in i:
-                b+=1
-            if 3 in i:
-                c+=1
-    datos=[a,b,c]
+        list_categorias = l.detalles.values_list('categoria_inspeccion_id', flat="True")
+    categorias=dict(collections.Counter(list_categorias))
+    for i in categorias:
+        datos.append(categorias[i])
     titulo="Categorias mas frecuentes"
     grafico=pie_chart_with_legend(datos,nombres,titulo)
     imagen=base64.b64encode(grafico.asString("png"))
     contexto = {
         "tipos_categorias":tipos_categorias,
         "detalles":detalles,
-        "totala":a,
-        "totalb":b,
-        "totalc":c,
         "grafico": imagen,
     }
     return render(request,'persona/director/categorias_mas_frecuentes.html',contexto)
@@ -2566,13 +2556,10 @@ def ver_barra_materiales(request):
     return render(request,'persona/director/barra_materiales.html',contexto)
 
 def __busco_item__(item):
-    #detalles = DetalleDeItemInspeccion.objects.all()
-    #planillas = PlanillaDeInspeccion.objects.all()
     i = get_object_or_404(ItemInspeccion, nombre=item)
     list = []
     nombres=[]
     datos=[]
-#    p=PlanillaDeInspeccion.objects.all()
     e=DetalleDeItemInspeccion.objects.filter(item_inspeccion_id=i.id)
     f=PlanillaDeInspeccion.objects.filter(detalles__in=e).values_list('detalles__nombre',flat="True")
     for i in range(0,len(e)):
@@ -2582,21 +2569,6 @@ def __busco_item__(item):
         m=[nombres[n],cant]
         list.append(m)
         datos.append(cant)
-    # for d in detalles:
-    #      if i == d.item_inspeccion:
-    #          m = [d.nombre,0]
-    #          list.append(m)
-    # list_detalles = []
-    # for p in planillas:
-    #     for d in p.detalles.all():
-    #         list_detalles.append(d.nombre)
-    # for l in list_detalles:
-    #     aux = 0
-    #     for name,value in list:
-    #         if l == name:
-    #             aux += value +1
-    #             i = list.index([name,value])
-    #             list[i] = [name,aux]
     contexto={'datos':datos,'nombres':nombres,'detalles':list}
     return contexto
 
@@ -2792,50 +2764,48 @@ def seleccionar_fecha_item_inspeccion(request):
     item = []
     year=date.today().year
     cant=[]
-    lista=[]
     if "Guardar" in request.POST:
         listaItems=request.POST.getlist('item')
         total=DetalleDeItemInspeccion.objects.all().count()
-        # promedioA = 0
-        subTotal=0
-        totalI=0
-        # promedioTotal=0
+        lista=[]
+        totalItems=0
+        subtotales=[]
         for l in listaItems:
             i=DetalleDeItemInspeccion.objects.get(nombre=l)
             item.append(i)
         for name, value in request.POST.items():
             if (name == 'fecha'):
                  year = int(value)
+        tramites=PlanillaDeInspeccion.objects.values('tramite_id').distinct().order_by('tramite_id').annotate(Max('fecha'))
         for i in item:
-          #  promedioA=0
             totalI=0
+            subtotal=0
             for mes in range(12):
-           #     promedio=0
                 m = mes + 1
                 diaFinal = monthrange(year, m)
-                subtotal=PlanillaDeInspeccion.objects.filter(fecha__range=(datetime.date(year, m, 01), datetime.date(year, m, diaFinal[1])),detalles__nombre=i.nombre).count()
+                subtotal=0
+                for t in tramites:
+                    try:
+                        resultado=PlanillaDeInspeccion.objects.filter(fecha=t['fecha__max'],tramite_id=t['tramite_id'], fecha__range=(
+                        datetime.date(year, m, 01), datetime.date(year, m, diaFinal[1])), detalles__nombre=i.nombre)
+                        if resultado:
+                           subtotal+=1
+                    except:
+                        pass
                 totalI+=subtotal
-           #     if (subtotal != 0):
-            #        promedio=subtotal/total
-             #   promedioA+=promedio
-              #  cant.append(promedio)
                 cant.append(subtotal)
             datos.append(tuple(cant))
             nombre=str(i.nombre)
-             # if (promedioA is not None):
-            #     promedioTotal=promedioA/12
-            #
-
-            # if promedioTotal==0:
-            #     aux = [nombre, 0]
-            # else:
-            #     aux = [nombre, PromedioTotal
             series.append(nombre)
-            aux = [nombre, totalI]
+            totalItems=PlanillaDeInspeccion.objects.filter(detalles__nombre=i.nombre).values('tramite_id').distinct().order_by('tramite_id').annotate(Max('fecha')).count()
+            if (totalItems==0):
+                porcentaje=0
+            else:
+                porcentaje= (totalI/float(totalItems))*100
+            aux = [nombre, porcentaje]
             lista.append(aux)
             cant = []
-    #    titulo = "Promedio mensual item/s de inspeccion"
-        titulo = "Cantidad mensual item/s de inspeccion"
+        titulo = "Items de inspeccion por mes"
         if len(datos) > 0:
             grafico = grafico_de_barras_v(datos, nombres, titulo,series)
             imagen = base64.b64encode(grafico.asString("png"))
@@ -2850,85 +2820,145 @@ def seleccionar_fecha_item_inspeccion(request):
         return render(request, 'persona/director/seleccionar_item_fecha.html',{"items":items,"categorias":categorias})
 
 def tramites_iniciados_finalizados(request):
-    datos=[]
-    iniciados=[]
-    finalizados=[]
-    series=[]
-    lista=[]
-    years=[]
-    rango=12
-    nombres=[]
-    listaItems=[]
-    listaItem=[]
-    meses=["Enero", "Febrero", "Marzo", "Abril", "Mayo","Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"]
-    if "Guardar" in request.POST:
-        listaItems = request.POST.getlist('item1')
-        listaItem = request.POST.getlist('item')
-        if listaItem[0] != "":
-            for l in listaItem:
-                years.append(int(l))
+        datos = []
+        iniciados = []
+        finalizados = []
+        series = []
+        lista = []
+        nombres = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre",
+                   "Noviembre", "Diciembre"]
+        if "Guardar" in request.POST:
+            for name, value in request.POST.items():
+                if name.startswith('item'):
+                    year = int(value)
+                if name.startswith('obra'):
+                    tipoObra=int(value)
+            totalIniciados = 0
+            totalFinalizados = 0
+            for mes in range(12):
+                m = mes + 1
+                diaFinal = monthrange(year, m)
+                totalI = Estado.objects.filter(tramite__tipo_obra=tipoObra,timestamp__range=(datetime.date(year, m, 01), datetime.date(year, m, diaFinal[1])),
+                    tipo=(1)).count()
+                totalF = Estado.objects.filter(tramite__tipo_obra=tipoObra, timestamp__range=(datetime.date(year, m, 01), datetime.date(year, m, diaFinal[1])), tipo=(9)).count()
+                # if (totalI==0):
+                #     iniciados.append(0)
+                # if (totalF==0):
+                #     finalizados.append(0)
+                iniciados.append(totalI)
+                totalIniciados=totalI+totalIniciados
+                totalFinalizados=totalF+totalFinalizados
+                finalizados.append(totalF)
+            i = tuple(iniciados)
+            f = tuple(finalizados)
+            datos.append(i)
+            datos.append(f)
+            iniciales = Estado.objects.filter(tipo=1)
+            finalizados = Estado.objects.filter(tipo=9).count()
+            inicial=0
+            for i in iniciales:
+                if i.previo() is None:
+                  inicial =inicial+1
+            finales = Estado.objects.filter(tipo=9).count()
+            porcentajeI=(totalIniciados/float(inicial))*100
+            porcentajeF=(totalFinalizados/float(inicial))*100
+            lista.append(["iniciados", porcentajeI])
+            lista.append(["finalizados", porcentajeF])
+            print(porcentajeI)
+            print(inicial)
+            print(totalIniciados)
+            print(porcentajeF)
+            series = ("iniciados", "finalizados")
+            titulo = "Tramites iniciados y finalidos por mes"
+            if len(datos) > 0:
+                grafico = grafico_de_barras_v(datos, nombres, titulo, series)
+                imagen = base64.b64encode(grafico.asString("png"))
+                contexto = {"grafico": imagen, "lista": lista}  # "tipos_obras": list}
+            return render(request, 'persona/director/listado_tramites_iniciados_finalizados.html', contexto)
         else:
-            year=Datime.Date.today().year
-        if listaItems[0]!="":
-            mes =int(listaItems[0])
-            for i in range(len(years)):
-                for l in listaItems:
-                    n=meses[int(l)]
-                    nombres.append(n+"-"+str(years[i]))
-            rango = len(listaItems) +1
-        else:
-            rango = 12
-            mes=0
-            nombres = meses
-        iniciales = Estado.objects.filter(tipo=1)
-        inicial=0
-        for i in iniciales:
-            if i.previo() is None:
-                inicial =inicial+1
-        finales = Estado.objects.filter(tipo=9).count()
-        totalIA=0
-        totalFA=0
-        for year in years:
-            mes=int(listaItems[0])
-            m=0
-            for mes in range(mes,rango):
-                m=mes+1
-                if m<=12:  #puse esto para que no salte la excepcion
-                    diaFinal=monthrange(year,m)
-                    tEstado=Estado.objects.filter(timestamp__range=(datetime.date(year, m, 01), datetime.date(year, m, diaFinal[1])), tipo=(1))
-                    totalI=0
-                    for t in tEstado:
-                        if t.previo() is None:
-                            totalI=totalI+1
-                    totalIA=totalI+totalIA
-                    tEstado=0
-                    totalF=Estado.objects.filter(timestamp__range=(datetime.date(year, m, 01), datetime.date(year, m, diaFinal[1])), tipo=(9)).count()
-                    totalFA=totalF+totalFA
-                    iniciados.append(totalI)
-                    finalizados.append(totalF)
-        i=tuple(iniciados)
-        f=tuple(finalizados)
-        datos.append(i)
-        datos.append(f)
-        if inicial == 0:
-            promedioI=0
-        else:
-            promedioI = totalIA/float(inicial)
-        if finales == 0:
-            promedioF=0
-        else:
-            promedioF = totalFA/float(finales)
-        lista.append(["iniciados",promedioI])
-        lista.append(["finalizados",promedioF])
-        series=("iniciados","finalizados")
-        titulo = "Tramites iniciados y finalidos por mes"
-        if len(datos) > 0:
-            grafico = grafico_de_barras_v(datos, nombres, titulo,series)
-            imagen = base64.b64encode(grafico.asString("png"))
-            contexto = {"grafico": imagen,"lista":lista}
-        return render(request, 'persona/director/listado_tramites_iniciados_finalizados.html', contexto)
-    else:
-        return render(request, 'persona/director/seleccionar_fecha.html')
+            tipos_obras=TipoObra.objects.all()
+            return render(request, 'persona/director/seleccionar_fecha.html', {"tipos_obras":tipos_obras})
+
+# def tramites_iniciados_finalizados(request):
+#     datos=[]
+#     iniciados=[]
+#     finalizados=[]
+#     series=[]
+#     lista=[]
+#     years=[]
+#     rango=12
+#     nombres=[]
+#     listaItems=[]
+#     listaItem=[]
+#     meses=["Enero", "Febrero", "Marzo", "Abril", "Mayo","Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"]
+#     if "Guardar" in request.POST:
+#         listaItems = request.POST.getlist('item1')
+#         listaItem = request.POST.getlist('item')
+#         if len(listaItem)!= 0:
+#             for l in listaItem:
+#                 years.append(int(l))
+#         else:
+#             years.append(datetime.date.today().year)
+#         if len(listaItems)!=0:
+#             numeroMes =int(listaItems[0])
+#             for i in range(len(years)):
+#                 for l in listaItems:
+#                     n=meses[int(l)]
+#                     nombres.append(n+"-"+str(years[i]))
+#             rango = len(listaItems) +1
+#         else:
+#             rango = 12
+#             numeroMes=0
+#             nombres = meses
+#         iniciales = Estado.objects.filter(tipo=1)
+#         inicial=0
+#         for i in iniciales:
+#             if i.previo() is None:
+#                 inicial =inicial+1
+#         finales = Estado.objects.filter(tipo=9).count()
+#         totalIA=0
+#         totalFA=0
+#         for year in years:
+#             mes=numeroMes
+#             m=0
+#             for mes in range(mes,rango):
+#                 m=mes+1
+#                 if m<=12:  #puse esto para que no salte la excepcion
+#                     diaFinal=monthrange(year,m)
+#                     tEstado=Estado.objects.filter(timestamp__range=(datetime.date(year, m, 01), datetime.date(year, m, diaFinal[1])), tipo=(1))
+#                     totalI=0
+#                     for t in tEstado:
+#                         if t.previo() is None:
+#                             totalI=totalI+1
+#                     totalIA=totalI+totalIA
+#                     tEstado=0
+#                     totalF=Estado.objects.filter(timestamp__range=(datetime.date(year, m, 01), datetime.date(year, m, diaFinal[1])), tipo=(9)).count()
+#                     totalFA=totalF+totalFA
+#                     iniciados.append(totalI)
+#                     finalizados.append(totalF)
+#         i=tuple(iniciados)
+#         f=tuple(finalizados)
+#         datos.append(i)
+#         datos.append(f)
+#         if inicial == 0:
+#             promedioI=0
+#         else:
+#             promedioI = totalIA/float(inicial)
+#         if finales == 0:
+#             promedioF=0
+#         else:
+#             promedioF = totalFA/float(finales)
+#         lista.append(["iniciados",promedioI])
+#         lista.append(["finalizados",promedioF])
+#         series=("iniciados","finalizados")
+#         titulo = "Tramites iniciados y finalidos por mes"
+#         if len(datos) > 0:
+#             grafico = grafico_de_barras_v(datos, nombres, titulo,series)
+#             imagen = base64.b64encode(grafico.asString("png"))
+#             contexto = {"grafico": imagen,"lista":lista}
+#         return render(request, 'persona/director/listado_tramites_iniciados_finalizados.html', contexto)
+#     else:
+#         return render(request, 'persona/director/seleccionar_fecha.html')
 
 def ver_sectores_con_mas_obras(request):
     tramites = Tramite.objects.all()
@@ -3054,7 +3084,7 @@ class ReporteTramitesDirectorPdf(View):
         styles.add(ParagraphStyle(name='Usuario', alignment=TA_RIGHT, fontName='Helvetica', fontSize=8))
         styles.add(ParagraphStyle(name='Titulo', alignment=TA_RIGHT, fontName='Helvetica', fontSize=18))
         styles.add(ParagraphStyle(name='Subtitulo', alignment=TA_RIGHT, fontName='Helvetica', fontSize=12))
-        usuario = 'Usuario: ' + request.user.username + ' -  Fecha:' + ' ... aca va la fecha'
+        usuario = 'Usuario: ' + request.user.username + ' -  Fecha:' + str(datetime.date.today())
         Story.append(Paragraph(usuario, styles["Usuario"]))
         Story.append(Spacer(0, cm * 0.15))
         im0 = Image(settings.MEDIA_ROOT + '/imagenes/espacioPDF.png', width=490, height=3)
@@ -3088,18 +3118,6 @@ class ReporteTramitesDirectorPdf(View):
         Story.append(detalle_orden)
         doc.build(Story)
         return response
-    ##############
-       # def inspecciones_realizadas_durante_el_anio(request):
-           # year = date.today()
-            #tramites1 = Tramite.objects.all()
-            #tramitesEstado = Estado.objects.filter(
-            #    timestamp__range=(datetime.date(year.year, 01, 01), datetime.date(year.year, 12, 12)), tipo=(6))
-           # tramites = []
-           # for i in range(0, len(tramitesEstado)):
-            #    aux = tramites1.filter(id=tramitesEstado[i].tramite_id).exclude(id__isnull=True)
-             #   tramites.append({"tramite": aux, "fecha": tramitesEstado[i].timestamp})
-            #return {"tramites": tramites}
-    ##############
 
 class ReporteInspeccionesDirectorExcel(TemplateView):
     def get(self, request, *args, **kwargs):
@@ -3500,14 +3518,42 @@ def listado_comprobantes(request,pk_tramite):
 def es_inspector(usuario):
     return usuario.groups.filter(name='inspector' or 'jefeinspector').exists()
 
+#@grupo_requerido('inspector' or 'jefeinspector')
 @user_passes_test(es_inspector)
+
 def mostrar_inspector_movil(request):
+    usuario = request.user
     if (request.user_agent.is_mobile):
         contexto = {
-            "ctxlistado_inspector":listado_inspector_movil(request)
+            "ctxlistado_inspector": listado_inspector_movil(request)
         }
     else:
         return redirect('inspector')
+    return render(request, 'persona/movil/inspector_movil.html',contexto)
+
+def mostrar_inspector_movil_jefe(request):
+    usuario = request.user
+    if (request.user_agent.is_mobile):
+        contexto = {
+            "ctxlistado_inspector": listado_inspecciones(request)#listado_inspector_movil(request)
+        }
+        # usuario = request.user
+        # if (request.user_agent.is_mobile):
+        #     if (usuario.groups.filter(name='inspector').exists()):
+        #         print("va a inspector movil")
+        #
+        #         contexto = {
+        #             "ctxlistado_inspector": listado_inspector_movil(request)
+        #         }
+        #     else:
+        #         if (usuario.groups.filter(name='jefeinspector').exists()):
+        #             print("va a jefe movil")
+        #
+        #             contexto = {
+        #                 "ctxlistado_inspector": listado_inspecciones(request)
+        #             }
+    else:
+        return redirect('jefe_inspector')
     return render(request, 'persona/movil/inspector_movil.html',contexto)
 
 def movil_inspector(request):
@@ -3532,7 +3578,7 @@ def listado_inspector_movil(request):
     tipo = 5 #Agendados
     argumentos = [Visado, ConInspeccion]
     tramites_del_inspector = Tramite.objects.en_estado(Agendado)
-    tramites = filter(lambda t: t.estado().usuario == usuario, tramites_del_inspector)
+    tramites = filter(lambda t: t.estado().usuario == usuario and t.estado().rol==2, tramites_del_inspector)
     contexto={'tramites':tramites}
     return contexto
 
@@ -3546,7 +3592,7 @@ def listado_inspecciones_mensuales(request):
     tipo = 5 #Agendados
     argumentos = [Visado, ConInspeccion]
     tramites_del_inspector = Tramite.objects.en_estado(Agendado)
-    tramites = filter(lambda t: t.estado().usuario == usuario and t.estado().fecha.date()<=datetime.date(year,mes,diaFinal[1]) and t.estado().fecha.date()>=datetime.date(year,mes,dia), tramites_del_inspector)
+    tramites = filter(lambda t: t.estado().usuario == usuario and t.estado().rol==2 and t.estado().fecha.date()<=datetime.date(year,mes,diaFinal[1]) and t.estado().fecha.date()>=datetime.date(year,mes,dia), tramites_del_inspector)
     contexto={'tramites':tramites}
     return contexto
 

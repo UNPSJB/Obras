@@ -176,11 +176,13 @@ urlpatterns = [
     url(r'^cajero/listado_comprobantes/(?P<pk_tramite>\d+)$', views.listado_comprobantes, name="listado_comprobantes"),
     url(r'^cajero/pagar_cuota.html/(?P<pk_cuota>\d+)/$', views.pagar_cuota, name="pagar_cuota"),
     #movil -------------------------------------------------------------------------------------------------------
+    url(r'^movil$', views.mostrar_inspector_movil_jefe, name="movil_jefe"),
+
     url(r'^movil$', views.mostrar_inspector_movil, name="movil_"),
+
     #url(r'^movil$', views.movil_inspector, name="movil_inspector"),
     url(r'^inspector_movil$', views.mostrar_inspector_movil, name="inspector_movil"),
     url(r'^inspector_movil/listado_inspector_movil$', views.listado_inspector_movil, name="listado_inspector_movil"),
-
     url(r'^planilla_inspeccion/(?P<pk_tramite>\d+)$', views.planilla_inspeccion_movil, name="planilla_inspeccion_movil"),
     #url(r'^vista_de_inspecciones/(?P<pk_tramite>\d+)/$', views.ver_inspecciones_movil, name="ver_inspecciones_movil"),
 
