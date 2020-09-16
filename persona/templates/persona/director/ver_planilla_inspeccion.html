@@ -12,24 +12,32 @@
         <tr>
           <th></th>
           {% for item in items %}
+          {% if item.activo == True %}
             <th>{{item.nombre}}</th>
+          {% endif %}
           {% endfor %}
         </tr>
       </thead>
       <tbody>
         {% for categoria in categorias %}
+        {% if categoria.activo == True %}
           <tr>
             <td class="col-xs-1">{{ categoria.nombre }}</td>
             {% for item in items %}
+            {% if item.activo == True %}
             <td class="col-sm-1">&nbsp;
               {% for detalle in detalles %}
+              {% if detalle.activo == True %}
                 {% if categoria.nombre == detalle.categoria_inspeccion.nombre and item.nombre == detalle.item_inspeccion.nombre %}
                     {{ detalle.nombre }}<hr>
                 {% endif %}
+              {% endif %}
               {% endfor %}
             </td>
+            {% endif %}
             {% endfor %}
           </tr>
+        {% endif %}
         {% endfor %}
       </tbody>
     </table>
@@ -42,8 +50,10 @@
           <ol>
             <label>Descripcion de categorias:</h2></label>
             {% for categoria in categorias %}
+            {% if categoria.activo == True %}
             <li> {{categoria.tipo}}</li>
             <li> {{categoria.descripcion}}</li>
+            {% endif %}
             {% endfor %}
           </ol>
         </div>

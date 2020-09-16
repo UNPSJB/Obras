@@ -49,7 +49,9 @@
                                                 class="select form-control input-sm" id="tipoPago" required>
                                             <option value="" selected="#">---------</option>
                                             {% for p in tiposPagos %}
+                                            {% if p.activo == True %}
                                             <option value="{{p}}">{{p}}</option>
+                                            {% endif %}
                                             {% endfor %}
                                         </select>
                                     </div>

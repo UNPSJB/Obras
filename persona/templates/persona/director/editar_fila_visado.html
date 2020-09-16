@@ -1,0 +1,385 @@
+
+{% block editar_fila_visado %}
+
+<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+    <div class="panel">
+        <div id="collapseFive" class="panel-collapse" role="tabpanel" aria-labelledby="headingFive">
+            <div class="panel-body">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="row">
+				<div class="container-fluid" id="alta_fila" {% if submit_name != 'fila_visado_submit' %} class="hide"{% endif %} style="display:none;">
+			<div class="row">
+				<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+					{% block alta_fila %}
+						{% crispy fila_visado_form %}
+					{% endblock %}
+				</div>
+				<form method="post" enctype="multipart/form-data"> {% csrf_token %}
+					<div id="nombre_fila" class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
+					</div>
+					<div id="boton_fila" class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="right">
+						<button class="btn btn-danger btn-sm" type="reset" title="Borrar datos del formulario">
+							Limpiar
+						</button>
+					</div>
+				</form>
+			</div>
+		</div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+
+	<script type="text/javascript">
+	(function(){
+		$(".datepicker").datepicker({
+				changeDay: true,
+				changeMonth: true,
+				changeYear: true,
+				yearRange: "1990:2030",
+				dateFormat: 'dd/mm/yy'
+		});
+	})();
+	</script>
+
+	<script>
+		$("#perfil").fileinput({
+			showCaption: false,
+			browseClass: "btn btn-primary btn-sm",
+			fileType: "any",
+			maxFileCount: 1,
+			browseLabel: 'Cargar nueva foto de perfil',
+			showUpload: false,
+			showRemove: false
+		});
+	</script>
+
+	<script type="text/javascript">
+		function opcionesGrupo(id) {
+			if (id == "nada") {
+				$("#alta_grupo").hide();
+				$("#baja_grupo").hide();
+				$("#modificar_grupo").hide();
+				$("#" + "opcionesDelGrupo").val('nada');
+			}
+			if (id == "alta_grupo") {
+				$("#alta_grupo").show();
+				$("#baja_grupo").hide();
+				$("#modificar_grupo").hide();
+				//esto es por si dejo los submenu
+				$("#" + "opcionesDelGrupo").val('alta_grupo');
+			}
+			if (id == "baja_grupo") {
+				$("#alta_grupo").hide();
+				$("#modificar_grupo").hide();
+				$("#baja_grupo").show();
+				//esto es por si dejo los submenu
+				$("#" + "opcionesDelGrupo").val('baja_grupo');
+			}
+			if (id == "modificar_grupo") {
+				$("#alta_grupo").hide();
+				$("#modificar_grupo").show();
+				$("#baja_grupo").hide();
+				//esto es por si dejo los submenu
+				$("#" + "opcionesDelGrupo").val('modificar_grupo');
+			}
+		}
+
+		function opcionesUsuario(id) {
+			if (id == "nada") {
+				$("#alta_usuario").hide();
+				$("#modificar_usuario_grupo").hide();
+				$("#" + "opcionesDelUsuario").val('nada');
+			}
+			if (id == "alta_usuario"){
+				$("#alta_usuario").show();
+				$("#modificar_usuario_grupo").hide();
+				$("#" + "opcionesDelUsuario").val('alta_usuario');
+			}
+			if (id == "modificar_usuario_grupo") {
+				$("#alta_usuario").hide();
+				$("#modificar_usuario_grupo").show();
+				//esto es por si dejo los submenu
+				$("#" + "opcionesDelUsuario").val('modificar_usuario_grupo');
+			}
+
+		}
+
+		function opcionesDatosTramite(id) {
+				if (id == "nada") {
+					$("#alta_tipo_documento").hide();
+					$("#alta_tipo_de_obra").hide();
+					$("#alta_tipo_de_pago").hide();
+					$("#" + "opcionesDelTramite").val('nada');
+				}
+				if (id == "alta_tipo_documento") {
+					$("#alta_tipo_documento").show();
+					$("#alta_tipo_de_obra").hide();
+					$("#alta_tipo_de_pago").hide();
+					//esto es por si dejo los submenu
+					$("#" + "opcionesDelTramite").val('alta_tipo_documento');
+				}
+				if (id == "alta_tipo_de_obra") {
+					$("#alta_tipo_documento").hide();
+					$("#alta_tipo_de_obra").show();
+					$("#alta_tipo_de_pago").hide();
+					//esto es por si dejo los submenu
+					$("#" + "opcionesDelTramite").val('alta_tipo_de_obra');
+				}
+				if (id == "alta_tipo_de_pago") {
+					$("#alta_tipo_documento").hide();
+					$("#alta_tipo_de_obra").hide();
+					$("#alta_tipo_de_pago").show();
+					//esto es por si dejo los submenu
+					$("#" + "opcionesDelTramite").val('alta_tipo_de_pago');
+				}
+		}
+
+		function opcionesVisado(id){
+			if (id == "nada"){
+				$("#alta_fila").hide();
+				$("#alta_columna").hide();
+				$("#alta_item").hide();
+				$("#alta_elemento_balance").hide();
+				$("#ver_planilla_visado").hide();
+				$("#"+"opcionesVisado").val('nada');
+			}
+			if (id == "alta_fila"){
+				$("#alta_fila").show();
+				$("#alta_columna").hide();
+				$("#alta_item").hide();
+				$("#alta_elemento_balance").hide();
+				$("#ver_planilla_visado").hide();
+				$("#"+"opcionesVisado").val('alta_fila');
+			}
+			if (id == "alta_columna"){
+				$("#alta_fila").hide();
+				$("#alta_columna").show();
+				$("#alta_item").hide();
+				$("#alta_elemento_balance").hide();
+				$("#ver_planilla_visado").hide();
+				$("#"+"opcionesVisado").val('alta_columna');
+			}
+			if (id == "alta_item"){
+				$("#alta_fila").hide();
+				$("#alta_columna").hide();
+				$("#alta_item").show();
+				$("#alta_elemento_balance").hide();
+				$("#ver_planilla_visado").hide();
+				$("#"+"opcionesVisado").val('alta_item');
+			}
+			if (id == "alta_elemento_balance"){
+				$("#alta_fila").hide();
+				$("#alta_columna").hide();
+				$("#alta_item").hide();
+				$("#alta_elemento_balance").show();
+				$("#ver_planilla_visado").hide();
+				$("#"+"opcionesVisado").val('alta_elemento_balance');
+			}
+			if (id == "ver_planilla_visado"){
+				$("#alta_fila").hide();
+				$("#alta_columna").hide();
+				$("#alta_item").hide();
+				$("#alta_elemento_balance").hide();
+				$("#ver_planilla_visado").show();
+				$("#"+"opcionesVisado").val('ver_planilla_visado');
+			}
+			if (id == "editar_fila_visado"){
+				$("#alta_fila").hide();
+				$("#alta_columna").hide();
+				$("#alta_item").hide();
+				$("#alta_elemento_balance").hide();
+				$("#ver_planilla_visado").hide();
+				$("#editar_fila_visado").show();
+				$("#"+"opcionesVisado").val('editar_fila_visado');
+			}
+
+		}
+
+		function opcionesInspeccion(id){
+			if (id == "nada"){
+				$("#alta_categoria_inspeccion").hide();
+				$("#alta_item_inspeccion").hide();
+				$("#alta_detalle_item").hide();
+				$("#generar_planilla_inspeccion").hide();
+				$("#"+"opcionesInspeccion").val('nada');
+			}
+			if (id == "alta_categoria_inspeccion"){
+				$("#alta_categoria_inspeccion").show();
+				$("#alta_item_inspeccion").hide();
+				$("#alta_detalle_item").hide();
+				$("#generar_planilla_inspeccion").hide();
+				$("#"+"opcionesInspeccion").val('alta_categoria_inspeccion');
+			}
+			if (id == "alta_item_inspeccion"){
+				$("#alta_categoria_inspeccion").hide();
+				$("#alta_item_inspeccion").show();
+				$("#alta_detalle_item").hide();
+				$("#generar_planilla_inspeccion").hide();
+				$("#"+"opcionesInspeccion").val('alta_item_inspeccion');
+			}
+			if (id == "alta_detalle_item"){
+				$("#alta_categoria_inspeccion").hide();
+				$("#alta_item_inspeccion").hide();
+				$("#alta_detalle_item").show();
+				$("#generar_planilla_inspeccion").hide();
+				$("#"+"opcionesInspeccion").val('alta_detalle_item');
+			}
+			if (id == "generar_planilla_inspeccion"){
+				$("#alta_categoria_inspeccion").hide();
+				$("#alta_item_inspeccion").hide();
+				$("#alta_detalle_item").hide();
+				$("#generar_planilla_inspeccion").show();
+				$("#"+"opcionesInspeccion").val('generar_planilla_inspeccion');
+			}
+
+		}
+
+		function opcionesInformes(id){
+			if (id == "nada"){
+				$("#alta_categoria_inspeccion").hide();
+				$("#alta_item_inspeccion").hide();
+				$("#alta_detalle_item").hide();
+				$("#generar_planilla_inspeccion").hide();
+				$("#"+"opcionesInspeccion").val('nada');
+			}
+			if (id == "alta_categoria_inspeccion"){
+				$("#alta_categoria_inspeccion").show();
+				$("#alta_item_inspeccion").hide();
+				$("#alta_detalle_item").hide();
+				$("#generar_planilla_inspeccion").hide();
+				$("#"+"opcionesInspeccion").val('alta_categoria_inspeccion');
+			}
+			if (id == "alta_item_inspeccion"){
+				$("#alta_categoria_inspeccion").hide();
+				$("#alta_item_inspeccion").show();
+				$("#alta_detalle_item").hide();
+				$("#generar_planilla_inspeccion").hide();
+				$("#"+"opcionesInspeccion").val('alta_item_inspeccion');
+			}
+			if (id == "alta_detalle_item"){
+				$("#alta_categoria_inspeccion").hide();
+				$("#alta_item_inspeccion").hide();
+				$("#alta_detalle_item").show();
+				$("#generar_planilla_inspeccion").hide();
+				$("#"+"opcionesInspeccion").val('alta_detalle_item');
+			}
+			if (id == "generar_planilla_inspeccion"){
+				$("#alta_categoria_inspeccion").hide();
+				$("#alta_item_inspeccion").hide();
+				$("#alta_detalle_item").hide();
+				$("#generar_planilla_inspeccion").show();
+				$("#"+"opcionesInspeccion").val('generar_planilla_inspeccion');
+			}
+		}
+	</script>
+
+	<script type="text/javascript">
+		function mostrarSubmenu(subformulario)
+		{
+			if(subformulario=="sin_submenu"){
+				$('.' + "sidebar-2").hide();
+			}
+			else{
+				var idSubformulario=document.getElementById(subformulario).id;
+				if($('#' + idSubformulario).is(':hidden')){
+					$('.' + "sidebar-2").hide();
+					$('#' + idSubformulario).show();
+				}else{
+					$('#' + idSubformulario).hide();
+				}
+			}
+		}
+	</script>
+
+	<script>
+
+		$('#div_id_dni').appendTo('#persona_administrativo');
+		$('#div_id_nombre').appendTo('#persona_administrativo');
+		$('#div_id_apellido').appendTo('#persona_administrativo');
+		$('#div_id_telefono').appendTo('#persona_administrativo');
+		$('#div_id_domicilio').appendTo('#profesional_administrativo');
+		$('#div_id_cuil').appendTo('#profesional_administrativo');
+		$('#div_id_mail').appendTo('#profesional_administrativo');
+		$('#div_id_matricula').appendTo('#profesional_administrativo');
+		$('#div_id_usuario').appendTo('#usuario_administrativo');
+		$('#div_id_password').appendTo('#usuario_administrativo');
+		$('#div_id_grupo').appendTo('#usuario_administrativo')
+		$('#submit-id-usuario_persona_submit').appendTo('#boton_administrativo');
+
+		$('#id_password').removeAttr("type");
+		$('#id_password').attr("type","password");
+
+		$('.selectmultiple').attr( "size", "6" );
+		$('.selectmultiple').append($('<option>',{value:0, text:'Seleccione un grupo'}));
+		$('.selectmultiple > option[value="0"]').attr('selected', 'selected');
+
+		var selectList = $('#id_grupo option');
+		selectList.sort(function(a,b){
+			a = a.value;
+			b = b.value;
+			return a-b;
+		});
+		$('#id_grupo').html(selectList);
+
+		$('#alta_tipo_documento #div_id_nombre').appendTo('#tipo')
+		$('#alta_tipo_documento #div_id_descripcion').appendTo('#tipo')
+
+		$('#div_id_fecha_alta').appendTo('#tipo')
+		$('#div_id_activo').appendTo('#tipo')
+		$('#div_id_requerido').appendTo('#requerido_para')
+		$('#submit-id-tipo_documento_submit').appendTo('#boton_tipo')
+
+		$('#alta_tipo_de_obra #div_id_nombre').appendTo('#nombre_tipo_obra')
+		$('#alta_tipo_de_obra #div_id_descripcion').appendTo('#desc_tipo_obra')
+		$('#alta_tipo_de_obra #div_id_categorias').appendTo('#categoria_tipo_obra')
+		$('#submit-id-tipo_obra_submit').appendTo('#boton_tipo_obra')
+
+		$('#alta_tipo_de_pago #div_id_nombre').appendTo('#nombre_tipo_pago')
+		$('#submit-id-tipo_de_pago_submit').appendTo('#boton_tipo_pago')
+
+		$('#alta_fila #div_id_nombre').appendTo('#nombre_fila')
+		$('#submit-id-fila_visado_submit').appendTo('#boton_fila')
+
+		$('#alta_columna #div_id_nombre').appendTo('#nombre_columna')
+		$('#submit-id-columna_visado_submit').appendTo('#boton_columna')
+
+		$('#alta_elemento_balance #div_id_nombre').appendTo('#nombre_elemento_balance')
+		$('#alta_elemento_balance #div_id_descripcion').appendTo('#desc_elemento_balance')
+		$('#submit-id-elemento_balance_submit').appendTo('#boton_elemento_balance')
+
+		$('#alta_categoria_inspeccion #div_id_nombre').appendTo('#nombre_cat_inspeccion')
+		$('#alta_categoria_inspeccion #div_id_descripcion').appendTo('#desc_cat_inspeccion')
+		$('#alta_categoria_inspeccion #div_id_tipo').appendTo('#tipo_cat_inspeccion')
+		$('#submit-id-cat_inspeccion_submit').appendTo('#boton_cat_inspeccion')
+
+		$('#alta_item_inspeccion #div_id_nombre').appendTo('#nombre_item_inspeccion')
+		$('#alta_item_inspeccion #div_id_categorias').appendTo('#cat_inspeccion')
+		$('#submit-id-item_inspeccion_submit').appendTo('#boton_item_inspeccion')
+
+		$('#alta_detalle_item #div_id_item_inspeccion').appendTo('#item_detalle_inspeccion')
+		$('#alta_detalle_item #div_id_categoria_inspeccion').appendTo('#cat_detalle')
+		$('#alta_detalle_item #div_id_nombre').appendTo('#nombre_detalle_item')
+		$('#submit-id-detalle_item_inspeccion_submit').appendTo('#boton_detalle_inspeccion')
+
+		$('#alta_doc_inspeccion #div_id_nombre').appendTo('#nombre_doc_inspeccion')
+		$('#alta_doc_inspeccion #div_id_descripcion').appendTo('#descripcion_doc')
+		$('#alta_doc_inspeccion #div_id_detalles').appendTo('#detalle_doc')
+		$('#submit-id-doc_tecnico_inspeccion_submit').appendTo('#boton_doc_inspeccion')
+
+	</script>
+
+	<script type="text/javascript">
+		function cargarpermisosSeleccionados(objeto,selectUsado)
+		{
+			var indexSelect=document.getElementById(objeto.id).selectedIndex;
+			var idUsado=document.getElementById(selectUsado);
+			idUsado.options[idUsado.options.length]=new Option(($("#"+objeto.id+" option:selected").text()),indexSelect);
+		}
+	</script>

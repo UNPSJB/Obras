@@ -1,0 +1,110 @@
+
+{% load staticfiles %}
+{% load crispy_forms_tags%}
+
+{% block contenido %}
+<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" >
+    <div class="panel">
+        <div class="col-sm-6 col-md-6 col-xs-6" align="right">
+
+                                <form method="post" action="{% url 'eliminar_categoria_inspeccion' %} ">
+            <br><div class="controls ">
+                                    <select name="categoria" placeholder="Seleccione"
+                                                class="select form-control input-sm" id="categoria" required>
+                                            <option value="" selected="#">---------</option>
+                                            {% for cat in categorias %}
+                                            {% if cat.activo == True %}
+                                                <option value="{{cat}}">{{cat}}</option>
+                                            {% endif %}
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+            <div class="form-group">
+                <div class="controls ">
+                    <div class="row">
+                        <div class="col-sm-12 col-md-12 col-xs-12" align="right">
+                            <button class="btn btn-primary btn-sm" type="submit" value="Guardar" name="Guardar">
+                                Eliminar
+                            </button>
+
+                        </div>
+
+                        <!--<div class="col-sm-2 col-md-2 col-xs-6" >
+                            <a href="javascript:history.back(-1);">
+                                <button type="button" class="btn btn-primary" name="Volver">
+                                    Volver
+                                </button>
+                            </a>
+
+                        </div>-->
+                    </div>
+                </div>
+            </div>
+                    </form>
+
+        </div>
+    </div>
+
+</div>
+
+<style>
+
+  .switch {
+      position: relative;
+      display: inline-block;
+      width: 30px;
+      height: 17px;
+  }
+
+  /* Hide default HTML checkbox */
+  .switch input {display:none;}
+
+  /* The slider */
+  .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #ccc;
+      -webkit-transition: .4s;
+      transition: .4s;
+  }
+
+  .slider:before {
+      position: absolute;
+      content: "";
+      height: 13px;
+      width: 13px;
+      left: 2px;
+      bottom: 2px;
+      background-color: white;
+      -webkit-transition: .4s;
+      transition: .4s;
+  }
+
+  input:checked + .slider {
+      background-color: #2196F3;
+  }
+
+  input:focus + .slider {
+      box-shadow: 0 0 1px #2196F3;
+  }
+
+  input:checked + .slider:before {
+      -webkit-transform: translateX(13px);
+      -ms-transform: translateX(13px);
+      transform: translateX(13px);
+  }
+
+  /* Rounded sliders */
+  .slider.round {
+      border-radius: 17px;
+  }
+
+  .slider.round:before {
+      border-radius: 50%;
+  }
+</style>
+{% endblock %}

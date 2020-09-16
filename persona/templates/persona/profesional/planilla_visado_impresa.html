@@ -68,15 +68,19 @@
                             <tr id="columnasVisado">
                                 <th> </th>
                                 {% for columna in columnas %}
+                                {% if columna.activo == True %}
                                 <th>{{columna}}</th>
+                                {% endif %}
                                 {% endfor %}
                             </tr>
                             </thead>
                             <tbody>
                             {% for fila in filas %}
+                            {% if fila.activo == True %}
                             <tr id="filasVisado">
                                 <td class="col-xs-1">{{ fila }}</td>
                                 {% for columna in columnas %}
+                                {% if columna.activo == True %}
                                 <td class="col-sm-1">&nbsp;
                                     {% for item in planilla.items.all %}
                                     {% if fila == item.fila_de_visado and columna == item.columna_de_visado %}
@@ -86,8 +90,10 @@
                                     {% endif %}
                                     {% endfor %}
                                 </td>
+                                {% endif %}
                                 {% endfor %}
                             </tr>
+                            {% endif %}
                             {% endfor %}
                             </tbody>
                         </table>
@@ -102,6 +108,7 @@
                                 </thead>
                                 <tbody>
                                 {% for elemento in planilla.elementos.all %}
+                                {% if elemento.activo == True %}
                                 <tr id="filasBalance">
                                     <td class="col-xs-1">{{ elemento }}</td>
                                     <td class="col-sm-4">
@@ -110,6 +117,7 @@
                                         </label>
                                     </td>
                                 </tr>
+                                {% endif %}
                                 {% endfor %}
                                 </tbody>
                                 <table class="table table-bordered table-striped table-hover table-condensed" style="text-align:center;">

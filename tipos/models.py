@@ -67,6 +67,7 @@ class TipoObra(models.Model):
 
 class Tipo_Pago(models.Model):
     nombre = models.CharField(max_length=50, unique=True)
+    activo = models.BooleanField(default=True)
 
     def __str__(self):
         return self.nombre

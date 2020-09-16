@@ -31,6 +31,7 @@ class Doc_Balance_Superficie(models.Model):
 class Elemento_Balance_Superficie(models.Model):
     nombre = models.CharField(max_length=100)
     descripcion = models.CharField(max_length=150)
+    activo = models.BooleanField(default=True)
 
     def __str__(self):
         return self.nombre
@@ -45,6 +46,7 @@ class ColumnaDeVisado(models.Model):
     """las columnas de una vista de planilla de visado
     Plantas, Cortes, Fachadas, etc...."""
     nombre = models.CharField(max_length=100)
+    activo = models.BooleanField(default=True)
 
     def __str__(self):
         return self.nombre
@@ -76,6 +78,7 @@ class FilaDeVisado(models.Model):
     Indicacion de corte....
     """
     nombre = models.CharField(max_length=200)
+    activo = models.BooleanField(default=True)
     #items = models.ManyToManyField(ColumnaDeVisado, through='ItemDeVisado', related_name='items')
 
     def __str__(self):

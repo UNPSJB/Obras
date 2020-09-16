@@ -109,22 +109,24 @@ class HorizontalCheckboxRenderer(forms.CheckboxSelectMultiple):
 def PlanillaDeVisadoFormFactory(filas, columnas):
     COL_CHOICES = []
     for columna in columnas:
-        COL_CHOICES.append((columna.pk, columna.nombre))
-    fields = {
-        'NAME': 'planilla_de_visado_form',
-        'SUBMIT': 'planilla_de_visado_submit'
-    }
+        if columna.activo == True:
+            COL_CHOICES.append((columna.pk, columna.nombre))
+        fields = {
+            'NAME': 'planilla_de_visado_form',
+            'SUBMIT': 'planilla_de_visado_submit'
+        }
 
     for fila in filas:
-        items = ItemDeVisado.objects.filter(fila_de_visado=fila)
-        initial = [str(i.columna_de_visado.pk) for i in items]
-        fields["fila-" + str(fila.pk)] = forms.MultipleChoiceField(
-            label=fila.nombre,
-            required=False,
-            initial=initial,
-            widget=forms.CheckboxSelectMultiple(),
-            choices=COL_CHOICES,
-        )
+        if fila.activo == True:
+            items = ItemDeVisado.objects.filter(fila_de_visado=fila)
+            initial = [str(i.columna_de_visado.pk) for i in items]
+            fields["fila-" + str(fila.pk)] = forms.MultipleChoiceField(
+                label=fila.nombre,
+                required=False,
+                initial=initial,
+                widget=forms.CheckboxSelectMultiple(),
+                choices=COL_CHOICES,
+            )
 
     class PlanillaDeVisadoMixin(forms.Form):
         NAME = 'planilla_de_visado_form'

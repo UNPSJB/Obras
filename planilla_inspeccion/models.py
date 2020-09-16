@@ -21,6 +21,7 @@ class CategoriaInspeccion(models.Model):
     nombre = models.CharField(max_length=100)
     descripcion = models.CharField(max_length=300)
     tipo = models.CharField(max_length=1)    # A, B, C, D, F
+    activo = models.BooleanField(default=True)
 
     def __str__(self):
         return self.nombre
@@ -49,6 +50,7 @@ class CategoriaInspeccion(models.Model):
 class ItemInspeccion(models.Model): #Frente o fachada, paredes, techos, cielorraso,
     # revoques, puertas, ventanas, baños, cocinas, revestimientos, instalaciones complementarias, pisos
     nombre = models.CharField(max_length=100)
+    activo = models.BooleanField(default=True)
     #categorias = models.ManyToManyField(CategoriaInspeccion, through='DetalleDeItemInspeccion')
 
     def __str__(self):
@@ -79,6 +81,7 @@ class DetalleDeItemInspeccion(models.Model):
     item_inspeccion = models.ForeignKey(ItemInspeccion, related_name="detalles")
     categoria_inspeccion = models.ForeignKey(CategoriaInspeccion, related_name="detalles")
     nombre = models.CharField(max_length=100)   # Marmol, piedra - Cristales,
+    activo = models.BooleanField(default=True)
 
     class Meta:
         ordering = ['item_inspeccion', 'categoria_inspeccion']

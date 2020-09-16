@@ -16,6 +16,7 @@
 					<li><a href="#" onclick='opcionesDatosTramite("alta_tipo_documento")'>Crear tipo de documento</a></li>
 					<li><a href="#" onclick='opcionesDatosTramite("alta_tipo_de_obra")'>Crear tipo de obra</a></li>
 					<li><a href="#" onclick='opcionesDatosTramite("alta_tipo_de_pago")'>Crear tipo de pago</a></li>
+					<li><a href="#" onclick='opcionesDatosTramite("baja_tipo_pago")'>Eliminar tipo de pago</a></li>
 				</ul>
 			<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree" onclick='mostrarSubmenu("tareasPlanillaVisado"),opcionesVisado("nada")'>Generar planilla visado <span class="caret"></span></a></li>
 				<ul class="sidebar sidebar-2" style="display:none;" id="tareasPlanillaVisado">
@@ -24,6 +25,11 @@
 					<li><a href="#" onclick='opcionesVisado("alta_item")'>Generar planilla visado</a></li>
 					<li><a href="#" onclick='opcionesVisado("alta_elemento_balance")'>Crear elemento balance superficie</a></li>
 					<li><a href="#" onclick='opcionesVisado("ver_planilla_visado")'>Ver planilla visado</a></li>
+					<li><a href="#" onclick='opcionesVisado("editar_fila_visado")'>Editar fila de visado</a></li>
+					<li><a href="#" onclick='opcionesVisado("baja_fila_visado")'>Eliminar fila de visado</a></li>
+					<li><a href="#" onclick='opcionesVisado("baja_columna_visado")'>Eliminar columna de visado</a></li>
+					<li><a href="#" onclick='opcionesVisado("baja_elemento_visado")'>Eliminar elemento balance de superficie de visado</a></li>
+
 				</ul>
 			<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseSeven" aria-expanded="false" aria-controls="collapseSeven" onclick='mostrarSubmenu("tareasPlanillaInspeccion"),opcionesInspeccion("nada")'>Generar planilla inspeccion <span class="caret"></span></a></li>
 			<ul class="sidebar sidebar-2" style="display:none;" id="tareasPlanillaInspeccion">
@@ -31,7 +37,10 @@
 					<li><a href="#" onclick='opcionesInspeccion("alta_item_inspeccion")'>Crear item inspeccion</a></li>
 					<li><a href="#" onclick='opcionesInspeccion("alta_detalle_item")'>Crear detalle inspeccion</a></li>
 					<li><a href="#" onclick='opcionesInspeccion("generar_planilla_inspeccion")'>Ver planilla de inspeccion</a></li>
-				</ul>
+					<li><a href="#" onclick='opcionesInspeccion("baja_categoria_inspeccion")'>Eliminar categoria de inspeccion</a></li>
+					<li><a href="#" onclick='opcionesInspeccion("baja_item_inspeccion")'>Eliminar item de inspeccion</a></li>
+					<li><a href="#" onclick='opcionesInspeccion("baja_detalle_inspeccion")'>Eliminar detalle de inspeccion</a></li>
+			</ul>
 			<!--<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseSix" aria-expanded="false" aria-controls="collapseSix" onclick='mostrarSubmenu("sin_submenu")'>Modificar mis datos personales</a></li>-->
 			<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseFour" onclick='mostrarSubmenu("consultasInformes")'>Consultas e Informes <span class="caret"></span></a></li>
 				<ul class="sidebar sidebar-2" style="display:none;" id="consultasInformes">
@@ -148,6 +157,7 @@
 									<option value="alta_tipo_documento">Crear tipo de documento</option>
 									<option value="alta_tipo_de_obra">Crear tipo de obra</option>
 									<option value="alta_tipo_de_pago">Crear tipo de pago</option>
+									<option value="baja_tipo_pago">Eliminar tipo de pago</option>
 								</select>
 							</div>
 						</div>
@@ -225,6 +235,14 @@
 						</div>
 					</div>
 				</div>
+
+			</div>
+			<div class="container-fluid" id="baja_tipo_pago" style="display:none;">
+				<div class="row">
+					{% block baja_tipo_pago %}
+						{% include "persona/director/baja_tipo_pago.html" with tiposPagos=tiposPagos %}
+					{% endblock %}
+				</div>
 			</div>
 		</div>
 	</div>
@@ -251,6 +269,10 @@
 									<option value="alta_item">Generar planilla visado</option>
 									<option value="alta_elemento_balance">Crear elemento balance superficie</option>
 									<option value="ver_planilla_visado">Ver planilla visado</option>
+									<option value="editar_fila_visado">Editar fila de visado</option>
+									<option value="baja_fila_visado">Eliminar fila de visado</option>
+									<option value="baja_columna_visado">Eliminar columna de visado</option>
+									<option value="baja_elemento_visado">Eliminar elemento balance de superficie de visado</option>
 								</select>
 							</div>
 						</div>
@@ -332,6 +354,36 @@
 				{% endblock %}
 			</div>
 		</div>
+		<div class="container-fluid" id="editar_fila_visado" style="display:none;">
+			<div class="row">
+				{% block editar_fila_visado %}
+					{% include "persona/director/editarFilaVisado.html" with filas=filas %}
+				{% endblock %}
+			</div>
+		</div>
+		<div class="container-fluid" id="baja_fila_visado" style="display:none;">
+			<div class="row">
+				{% block baja_fila_visado %}
+					{% include "persona/director/baja_fila_visado.html" with filas=filas %}
+				{% endblock %}
+			</div>
+		</div>
+		<div class="container-fluid" id="baja_columna_visado" style="display:none;">
+			<div class="row">
+				{% block baja_columna_visado %}
+					{% include "persona/director/baja_columna_visado.html" with columnas=columnas %}
+				{% endblock %}
+			</div>
+		</div>
+		<div class="container-fluid" id="baja_elemento_visado" style="display:none;">
+			<div class="row">
+				{% block baja_elemento_visado %}
+					{% include "persona/director/eliminar_elemento_visado.html" with elementos=elementos %}
+				{% endblock %}
+			</div>
+		</div>
+
+
 	</div>
 
 	<div class="panel">
@@ -355,6 +407,9 @@
 									<option value="alta_item_inspeccion">Crear item inspeccion</option>
 									<option value="alta_detalle_item">Crear detalle inspeccion</option>
 									<option value="generar_planilla_inspeccion">Ver planilla de inspeccion</option>
+									<option value="baja_categoria_inspeccion">Eliminar categoria de inspeccion</option>
+									<option value="baja_item_inspeccion">Eliminar item de inspeccion</option>
+									<option value="baja_detalle_inspeccion">Eliminar detalle de inspeccion</option>
 								</select>
 							</div>
 						</div>
@@ -442,6 +497,27 @@
 			<div class="row">
 				{% block generar_planilla_inspeccion %}
 					{% include "persona/director/ver_planilla_inspeccion.html" with items=items filas=filas detalles=detalles%}
+				{% endblock %}
+			</div>
+		</div>
+		<div class="container-fluid" id="baja_categoria_inspeccion" style="display:none;">
+			<div class="row">
+				{% block baja_categoria_inspeccion %}
+					{% include "persona/director/baja_categoria_inspeccion.html" with categorias=categorias %}
+				{% endblock %}
+			</div>
+		</div>
+		<div class="container-fluid" id="baja_item_inspeccion" style="display:none;">
+			<div class="row">
+				{% block baja_item_inspeccion %}
+					{% include "persona/director/baja_item_inspeccion.html" with items=items %}
+				{% endblock %}
+			</div>
+		</div>
+		<div class="container-fluid" id="baja_detalle_inspeccion" style="display:none;">
+			<div class="row">
+				{% block baja_detalle_inspeccion %}
+					{% include "persona/director/baja_detalle_inspeccion.html" with detalles=detalles%}
 				{% endblock %}
 			</div>
 		</div>
@@ -600,12 +676,14 @@
 					$("#alta_tipo_documento").hide();
 					$("#alta_tipo_de_obra").hide();
 					$("#alta_tipo_de_pago").hide();
+					$("#baja_tipo_pago").hide();
 					$("#" + "opcionesDelTramite").val('nada');
 				}
 				if (id == "alta_tipo_documento") {
 					$("#alta_tipo_documento").show();
 					$("#alta_tipo_de_obra").hide();
 					$("#alta_tipo_de_pago").hide();
+					$("#baja_tipo_pago").hide();
 					//esto es por si dejo los submenu
 					$("#" + "opcionesDelTramite").val('alta_tipo_documento');
 				}
@@ -613,6 +691,7 @@
 					$("#alta_tipo_documento").hide();
 					$("#alta_tipo_de_obra").show();
 					$("#alta_tipo_de_pago").hide();
+					$("#baja_tipo_pago").hide();
 					//esto es por si dejo los submenu
 					$("#" + "opcionesDelTramite").val('alta_tipo_de_obra');
 				}
@@ -620,8 +699,17 @@
 					$("#alta_tipo_documento").hide();
 					$("#alta_tipo_de_obra").hide();
 					$("#alta_tipo_de_pago").show();
+					$("#baja_tipo_pago").hide();
 					//esto es por si dejo los submenu
 					$("#" + "opcionesDelTramite").val('alta_tipo_de_pago');
+				}
+				if (id == "baja_tipo_pago") {
+					$("#alta_tipo_documento").hide();
+					$("#alta_tipo_de_obra").hide();
+					$("#alta_tipo_de_pago").hide();
+					$("#baja_tipo_pago").show();
+					//esto es por si dejo los submenu
+					$("#" + "opcionesDelTramite").val('baja_tipo_pago');
 				}
 		}
 
@@ -632,6 +720,10 @@
 				$("#alta_item").hide();
 				$("#alta_elemento_balance").hide();
 				$("#ver_planilla_visado").hide();
+				$("#editar_fila_visado").hide();
+				$("#baja_fila_visado").hide();
+				$("#baja_columna_visado").hide();
+				$("#baja_elemento_visado").hide();
 				$("#"+"opcionesVisado").val('nada');
 			}
 			if (id == "alta_fila"){
@@ -640,6 +732,10 @@
 				$("#alta_item").hide();
 				$("#alta_elemento_balance").hide();
 				$("#ver_planilla_visado").hide();
+				$("#editar_fila_visado").hide();
+				$("#baja_fila_visado").hide();
+				$("#baja_columna_visado").hide();
+				$("#baja_elemento_visado").hide();
 				$("#"+"opcionesVisado").val('alta_fila');
 			}
 			if (id == "alta_columna"){
@@ -648,6 +744,10 @@
 				$("#alta_item").hide();
 				$("#alta_elemento_balance").hide();
 				$("#ver_planilla_visado").hide();
+				$("#editar_fila_visado").hide();
+				$("#baja_fila_visado").hide();
+				$("#baja_columna_visado").hide();
+				$("#baja_elemento_visado").hide();
 				$("#"+"opcionesVisado").val('alta_columna');
 			}
 			if (id == "alta_item"){
@@ -656,6 +756,10 @@
 				$("#alta_item").show();
 				$("#alta_elemento_balance").hide();
 				$("#ver_planilla_visado").hide();
+				$("#editar_fila_visado").hide();
+				$("#baja_fila_visado").hide();
+				$("#baja_columna_visado").hide();
+				$("#baja_elemento_visado").hide();
 				$("#"+"opcionesVisado").val('alta_item');
 			}
 			if (id == "alta_elemento_balance"){
@@ -664,6 +768,10 @@
 				$("#alta_item").hide();
 				$("#alta_elemento_balance").show();
 				$("#ver_planilla_visado").hide();
+				$("#editar_fila_visado").hide();
+				$("#baja_fila_visado").hide();
+				$("#baja_columna_visado").hide();
+				$("#baja_elemento_visado").hide();
 				$("#"+"opcionesVisado").val('alta_elemento_balance');
 			}
 			if (id == "ver_planilla_visado"){
@@ -672,8 +780,62 @@
 				$("#alta_item").hide();
 				$("#alta_elemento_balance").hide();
 				$("#ver_planilla_visado").show();
+				$("#editar_fila_visado").hide();
+				$("#baja_fila_visado").hide();
+				$("#baja_columna_visado").hide();
+				$("#baja_elemento_visado").hide();
 				$("#"+"opcionesVisado").val('ver_planilla_visado');
 			}
+			if (id == "editar_fila_visado"){
+				$("#alta_fila").hide();
+				$("#alta_columna").hide();
+				$("#alta_item").hide();
+				$("#alta_elemento_balance").hide();
+				$("#ver_planilla_visado").hide();
+				$("#editar_fila_visado").show();
+				$("#baja_fila_visado").hide();
+				$("#baja_columna_visado").hide();
+				$("#baja_elemento_visado").hide();
+				$("#"+"opcionesVisado").val('editar_fila_visado');
+			}
+			if (id == "baja_fila_visado"){
+				$("#alta_fila").hide();
+				$("#alta_columna").hide();
+				$("#alta_item").hide();
+				$("#alta_elemento_balance").hide();
+				$("#ver_planilla_visado").hide();
+				$("#editar_fila_visado").hide();
+				$("#baja_fila_visado").show();
+				$("#baja_columna_visado").hide();
+				$("#baja_elemento_visado").hide();
+				$("#"+"opcionesVisado").val('baja_fila_visado');
+			}
+			if (id == "baja_columna_visado"){
+				$("#alta_fila").hide();
+				$("#alta_columna").hide();
+				$("#alta_item").hide();
+				$("#alta_elemento_balance").hide();
+				$("#ver_planilla_visado").hide();
+				$("#editar_fila_visado").hide();
+				$("#baja_fila_visado").hide();
+				$("#baja_columna_visado").show();
+				$("#baja_elemento_visado").hide();
+				$("#"+"opcionesVisado").val('baja_columna_visado');
+			}
+			if (id == "baja_elemento_visado"){
+				$("#alta_fila").hide();
+				$("#alta_columna").hide();
+				$("#alta_item").hide();
+				$("#alta_elemento_balance").hide();
+				$("#ver_planilla_visado").hide();
+				$("#editar_fila_visado").hide();
+				$("#baja_fila_visado").hide();
+				$("#baja_columna_visado").hide();
+				$("#baja_elemento_visado").show();
+				$("#"+"opcionesVisado").val('baja_elemento_visado');
+			}
+
+
 		}
 
 		function opcionesInspeccion(id){
@@ -682,6 +844,9 @@
 				$("#alta_item_inspeccion").hide();
 				$("#alta_detalle_item").hide();
 				$("#generar_planilla_inspeccion").hide();
+				$("#baja_categoria_inspeccion").hide();
+				$("#baja_item_inspeccion").hide();
+				$("#baja_detalle_inspeccion").hide();
 				$("#"+"opcionesInspeccion").val('nada');
 			}
 			if (id == "alta_categoria_inspeccion"){
@@ -689,6 +854,9 @@
 				$("#alta_item_inspeccion").hide();
 				$("#alta_detalle_item").hide();
 				$("#generar_planilla_inspeccion").hide();
+				$("#baja_categoria_inspeccion").hide();
+				$("#baja_item_inspeccion").hide();
+				$("#baja_detalle_inspeccion").hide();
 				$("#"+"opcionesInspeccion").val('alta_categoria_inspeccion');
 			}
 			if (id == "alta_item_inspeccion"){
@@ -696,6 +864,9 @@
 				$("#alta_item_inspeccion").show();
 				$("#alta_detalle_item").hide();
 				$("#generar_planilla_inspeccion").hide();
+				$("#baja_categoria_inspeccion").hide();
+				$("#baja_item_inspeccion").hide();
+				$("#baja_detalle_inspeccion").hide();
 				$("#"+"opcionesInspeccion").val('alta_item_inspeccion');
 			}
 			if (id == "alta_detalle_item"){
@@ -703,6 +874,9 @@
 				$("#alta_item_inspeccion").hide();
 				$("#alta_detalle_item").show();
 				$("#generar_planilla_inspeccion").hide();
+				$("#baja_categoria_inspeccion").hide();
+				$("#baja_item_inspeccion").hide();
+				$("#baja_detalle_inspeccion").hide();
 				$("#"+"opcionesInspeccion").val('alta_detalle_item');
 			}
 			if (id == "generar_planilla_inspeccion"){
@@ -710,7 +884,40 @@
 				$("#alta_item_inspeccion").hide();
 				$("#alta_detalle_item").hide();
 				$("#generar_planilla_inspeccion").show();
+				$("#baja_categoria_inspeccion").hide();
+				$("#baja_item_inspeccion").hide();
+				$("#baja_detalle_inspeccion").hide();
 				$("#"+"opcionesInspeccion").val('generar_planilla_inspeccion');
+			}
+			if (id == "baja_categoria_inspeccion"){
+				$("#alta_categoria_inspeccion").hide();
+				$("#alta_item_inspeccion").hide();
+				$("#alta_detalle_item").hide();
+				$("#generar_planilla_inspeccion").hide();
+				$("#baja_categoria_inspeccion").show();
+				$("#baja_item_inspeccion").hide();
+				$("#baja_detalle_inspeccion").hide();
+				$("#"+"opcionesInspeccion").val('baja_categoria_inspeccion');
+			}
+			if (id == "baja_item_inspeccion"){
+				$("#alta_categoria_inspeccion").hide();
+				$("#alta_item_inspeccion").hide();
+				$("#alta_detalle_item").hide();
+				$("#generar_planilla_inspeccion").hide();
+				$("#baja_categoria_inspeccion").hide();
+				$("#baja_item_inspeccion").show();
+				$("#baja_detalle_inspeccion").hide();
+				$("#"+"opcionesInspeccion").val('baja_item_inspeccion');
+			}
+			if (id == "baja_detalle_inspeccion"){
+				$("#alta_categoria_inspeccion").hide();
+				$("#alta_item_inspeccion").hide();
+				$("#alta_detalle_item").hide();
+				$("#generar_planilla_inspeccion").hide();
+				$("#baja_categoria_inspeccion").hide();
+				$("#baja_item_inspeccion").hide();
+				$("#baja_detalle_inspeccion").show();
+				$("#"+"opcionesInspeccion").val('baja_detalle_inspeccion');
 			}
 
 		}

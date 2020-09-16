@@ -26,10 +26,12 @@
         <div class="col-sm-10 col-xs-10 col-md-10 ">
             <form action="{% url 'cargar_inspeccion' tramite.id%}" method="post">
                 {% for categoria in categorias %}
+                {% if categoria.activo == True %}
                 <h3>{{ categoria.nombre }}</h3>
 
                 <table class="table-bordered table-striped table-hover table-condensed" style="text-align:center;">
                     {% for item in items %}
+                    {% if item.activo == True %}
                     <thead>
                     <tr>
 
@@ -43,6 +45,7 @@
 
                         <td>&nbsp;
                             {% for detalle in detalles %}
+                            {% if detalle.activo == True %}
                             {% if categoria.nombre == detalle.categoria_inspeccion.nombre and item.nombre == detalle.item_inspeccion.nombre %}
                             <div class="row">
                                 <div class="col-xs-6 col-sm-6 col-md-6">
@@ -74,14 +77,16 @@
 
                             </div>
                             {% endif %}
+                            {% endif %}
                             {% endfor %}
                         </td>
 
                     </tr>
                     </tbody>
+                    {% endif %}
                     {% endfor %}
                 </table>
-
+                {% endif %}
                 {% endfor %}
                 <br>
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-center">
@@ -108,19 +113,24 @@
                             <th></th>
 
                             {% for item in items %}
+                            {% if item.activo == True %}
                             <th>{{item.nombre}}</th>
+                            {% endif %}
                             {% endfor %}
                         </tr>
                         </thead>
                         <tbody>
 
                         {% for categoria in categorias %}
+                        {% if categoria.activo == True %}
                         <tr>
 
                             <td class="col-xs-1">{{ categoria.nombre }}</td>
                             {% for item in items %}
+                            {% if item.activo == True %}
                             <td>&nbsp;
                                 {% for detalle in detalles %}
+                                {% if detalle.activo == True %}
                                 {% if categoria.nombre == detalle.categoria_inspeccion.nombre and item.nombre == detalle.item_inspeccion.nombre %}
                                 <div class="container-fluid">
                                     <div class="row">
@@ -152,11 +162,14 @@
                                     </div>
                                 </div>
                                 {% endif %}
+                                {% endif %}
 
                                 {% endfor %}
                             </td>
+                            {% endif %}
                             {% endfor %}
                         </tr>
+                        {% endif %}
                         {% endfor %}
                         </tbody>
 
@@ -182,11 +195,13 @@
         <div class="col-sm-10 col-xs-10 col-md-10 ">
             <form action="{% url 'cargar_inspeccion' tramite.id%}" method="post">
                 {% for categoria in categorias %}
+                {% if categoria.activo == True %}
 
                 <h3>{{ categoria.nombre }}</h3>
 
                 <table class="table-bordered table-striped table-hover table-condensed" style="text-align:center;">
                     {% for item in items %}
+                    {% if item.activo == True %}
                     <thead>
                     <tr>
 
@@ -200,6 +215,7 @@
 
                         <td>&nbsp;
                             {% for detalle in detalles %}
+                            {% if detalle.activo == True %}
                             {% if categoria.nombre == detalle.categoria_inspeccion.nombre and item.nombre == detalle.item_inspeccion.nombre %}
                             <div class="row">
                                 <div class="col-xs-8 col-sm-8 col-md-8">
@@ -215,14 +231,16 @@
                                 <hr>
                             </div>
                             {% endif %}
+                            {% endif %}
                             {% endfor %}
                         </td>
 
                     </tr>
                     </tbody>
+                    {% endif %}
                     {% endfor %}
                 </table>
-
+                {% endif %}
                 {% endfor %}
                 <br>
                 <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-center">
@@ -246,17 +264,22 @@
                     <tr>
                         <th></th>
                         {% for item in items %}
+                        {% if item.activo == True %}
                         <th>{{item.nombre}}</th>
+                        {% endif %}
                         {% endfor %}
                     </tr>
                     </thead>
                     <tbody>
                     {% for categoria in categorias %}
+                    {% if categoria.activo == True %}
                     <tr>
                         <td class="col-xs-1">{{ categoria.nombre }}</td>
                         {% for item in items %}
+                        {% if item.activo == True %}
                         <td>&nbsp;
                             {% for detalle in detalles %}
+                            {% if detalle.activo == True %}
                             {% if categoria.nombre == detalle.categoria_inspeccion.nombre and item.nombre == detalle.item_inspeccion.nombre %}
                             <div class="container-fluid">
                                 <div class="row">
@@ -273,10 +296,13 @@
                                 </div>
                             </div>
                             {% endif %}
+                            {% endif %}
                             {% endfor %}
                         </td>
+                        {% endif %}
                         {% endfor %}
                     </tr>
+                    {% endif %}
                     {% endfor %}
                     </tbody>
                 </table>

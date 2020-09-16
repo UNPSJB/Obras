@@ -85,25 +85,33 @@
                         <tr  style="text-align:center;">
                             <th></th>
                             {% for item in items %}
+                            {% if item.activo == True %}
                             <th>{{item.nombre}}</th>
+                            {% endif %}
                             {% endfor %}
                         </tr>
                         </thead>
                         <tbody>
                         {% for categoria in categorias %}
+                        {% if categoria.activo == True %}
                         <tr>
                             <td class="col-xs-1">{{ categoria.nombre }}</td>
                             {% for item in items %}
+                            {% if item.activo == True %}
                             <td class="col-sm-4">&nbsp;
                                 {% for detalle in detalles %}
+                                {% if detalle.activo == True %}
                                 {% if categoria.nombre == detalle.categoria_inspeccion.nombre and item.nombre == detalle.item_inspeccion.nombre %}
                                 {{ detalle.nombre }}
                                 <br>
                                 {% endif %}
+                                {% endif %}
                                 {% endfor %}
                             </td>
+                            {% endif %}
                             {% endfor %}
                         </tr>
+                        {% endif %}
                         {% endfor %}
                         </tbody>
                     </table>
@@ -116,11 +124,13 @@
                         </tr>
                         </thead>
                         {% for categoria in categorias %}
+                        {% if categoria.activo == True %}
                         <tr>
                             <td id="nombre{{categoria.id}}" class="col-xs-1" align="center">{{categoria.nombre}}</td>
                             <td id="tipo{{categoria.id}}" class="col-xs-1" align="center">{{categoria.tipo}}</td>
                             <td id="descripcion{{categoria.id}}" class="col-xs-2">{{categoria.descripcion}}</td>
                         </tr>
+                        {% endif %}
                         {% endfor %}
                     </table>
                 </div>

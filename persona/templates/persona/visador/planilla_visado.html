@@ -67,15 +67,19 @@
                         <tr>
                             <th></th>
                             {% for columna in columnas %}
+                            {% if columna.activo == True %}
                             <th>{{columna}}</th>
+                            {% endif %}
                             {% endfor %}
                         </tr>
                         </thead>
                         <tbody>
                         {% for fila in filas %}
+                        {% if fila.activo == True %}
                         <tr>
                             <td class="col-xs-1">{{ fila }}</td>
                             {% for columna in columnas %}
+                            {% if columna.activo == True %}
                             <td class="col-sm-1">&nbsp;
 
                                 {% for item in items %}
@@ -101,8 +105,10 @@
 
                                 {% endfor %}
                             </td>
+                            {% endif %}
                             {% endfor %}
                         </tr>
+                        {% endif %}
                         {% endfor %}
                         </tbody>
                     </table>
@@ -124,6 +130,7 @@
                                 <tbody>
 
                                 {% for elemento in elementos %}
+                                {% if elemento.activo == True %}
                                 <tr>
                                     <td class="col-xs-1">{{ elemento }}</td>
                                     <td class="col-sm-4">
@@ -145,6 +152,7 @@
 
                                     </td>
                                 </tr>
+                                {% endif %}
                                 {% endfor %}
 
                                 </tbody>
@@ -189,15 +197,19 @@
                         <tr>
                             <th></th>
                             {% for columna in columnas %}
+                            {% if columna.activo == True %}
                             <th>{{columna}}</th>
+                            {% endif %}
                             {% endfor %}
                         </tr>
                         </thead>
                         <tbody>
                         {% for fila in filas %}
+                        {% if fila.activo == True %}
                         <tr>
                             <td class="col-xs-1">{{ fila }}</td>
                             {% for columna in columnas %}
+                            {% if columna.activo == True %}
                             <td class="col-sm-1">&nbsp;
                                 {% for item in items %}
                                 {% if fila == item.fila_de_visado and columna == item.columna_de_visado %}
@@ -212,8 +224,10 @@
 
                                 {% endfor %}
                             </td>
+                            {% endif %}
                             {% endfor %}
                         </tr>
+                        {% endif %}
                         {% endfor %}
                         </tbody>
                     </table>
@@ -234,6 +248,7 @@
                                 </thead>
                                 <tbody>
                                 {% for elemento in elementos %}
+                                {% if elemento.activo == True %}
                                 <tr>
                                     <td class="col-xs-1">{{ elemento }}</td>
                                     <td class="col-sm-4">
@@ -242,6 +257,7 @@
                                         </label>
                                     </td>
                                 </tr>
+                                {% endif %}
                                 {% endfor %}
                                 </tbody>
                             </table>

@@ -2127,6 +2127,9 @@ from planilla_inspeccion.forms import FormularioItemInspeccion
 from planilla_inspeccion.forms import FormularioDetalleItem
 from planilla_inspeccion.models import *
 from planilla_inspeccion.models import CategoriaInspeccion, ItemInspeccion, DetalleDeItemInspeccion
+from tipos.models import TipoObra, Tipo_Pago
+from tipos.forms import FormularioTipoObra
+from tipos.forms import FormularioTipoPago
 
 @login_required(login_url="login")
 @grupo_requerido('director')
@@ -2139,7 +2142,9 @@ def mostrar_director(request):
     columnas = ColumnaDeVisado.objects.all()
     itemsVisados = ItemDeVisado.objects.all()
     elementos = Elemento_Balance_Superficie.objects.all()
+    tiposPagos = Tipo_Pago.objects.all()
     values = {"items":items, "categorias":categorias, "detalles":detalles, "filas": filas, "columnas":columnas, "itemsVisados":itemsVisados, "elementos":elementos, "ctxtramites_anuales":inspecciones_realizadas_durante_el_anio(request),
+              "tiposPagos":tiposPagos
 }
     FORMS_DIRECTOR.update({(k.NAME, k.SUBMIT): k for k in [
         pforms.PlanillaDeVisadoFormFactory(pmodels.FilaDeVisado.objects.all(), pmodels.ColumnaDeVisado.objects.all()),
@@ -2176,6 +2181,160 @@ FORMS_DIRECTOR = {(k.NAME, k.SUBMIT): k for k in {
     FormularioItemInspeccion,
     FormularioDetalleItem
 }}
+
+########## PARA EDITAR FALTA ACA#############################################
+def editarFilaVisado(request):
+    filas = FilaDeVisado.objects.all()
+    return render(request, 'persona/director/editarfilaVisado.html', {'filas': filas})
+
+def editarFilaVisado2(request):
+    listFilas = FilaDeVisado.objects.all()
+    filaVisado = 0
+    if "Guardar" in request.POST:
+        for f in listFilas:
+            if request.POST['fila'] == f.nombre:
+                filaVisado = f.id
+    fv = FilaDeVisado.objects.get(id=filaVisado)
+    return render(request, 'persona/director/editar_fila_visado.html', {"fv": fv})
+####################################################################
+########## PARA ELIMINAR #############################################
+def baja_fila_visado(request):
+    filas = FilaDeVisado.objects.all()
+    return render(request, 'persona/director/baja_fila_visado.html', {'filas':filas})
+
+def eliminar_fila_visado(request):
+    listFilas = FilaDeVisado.objects.all()
+    filaVisado = 0
+    if "Guardar" in request.POST:
+        for f in listFilas:
+            if request.POST['fila'] == f.nombre:
+                filaVisado = f.id
+    fv = FilaDeVisado.objects.get(id=filaVisado)
+    fv.activo = False
+    fv.nombre = "eliminada"
+    fv.save()
+    messages.add_message(request, messages.SUCCESS, 'Fila de visado eliminada.')
+    return redirect('director')
+
+def baja_columna_visado(request):
+    columnas = ColumnaDeVisado.objects.all()
+    return render(request, 'persona/director/baja_columna_visado.html', {'columnas':columnas})
+
+def eliminar_columna_visado(request):
+    listColumnas = ColumnaDeVisado.objects.all()
+    columnaVisado = 0
+    if "Guardar" in request.POST:
+        for c in listColumnas:
+            if request.POST['columna'] == c.nombre:
+                columnaVisado = c.id
+    cv = ColumnaDeVisado.objects.get(id=columnaVisado)
+    cv.activo = False
+    cv.nombre = "eliminada"
+    cv.save()
+    messages.add_message(request, messages.SUCCESS, 'Columna de visado eliminada.')
+    return redirect('director')
+
+def baja_elemento_visado(request):
+    elementos = Elemento_Balance_Superficie.objects.all()
+    return render(request, 'persona/director/baja_columna_visado.html', {'elementos':elementos})
+
+def eliminar_elemento_visado(request):
+    listElementos = Elemento_Balance_Superficie.objects.all()
+    elementoVisado = 0
+    if "Guardar" in request.POST:
+        for e in listElementos:
+            if request.POST['elemento'] == e.nombre:
+                elementoVisado = e.id
+    ev = Elemento_Balance_Superficie.objects.get(id=elementoVisado)
+    ev.activo = False
+    ev.nombre = "eliminado"
+    ev.save()
+    messages.add_message(request, messages.SUCCESS, 'Elemento de visado eliminado.')
+    return redirect('director')
+
+def baja_categoria_inspeccion(request):
+    categorias = CategoriaInspeccion.objects.all()
+    return render(request, 'persona/director/baja_categoria_inspeccion.html', {'categorias':categorias})
+
+def eliminar_categoria_inspeccion(request):
+    listCategorias = CategoriaInspeccion.objects.all()
+    categoriaInspeccion = 0
+    detalles = DetalleDeItemInspeccion.objects.all()
+    if "Guardar" in request.POST:
+        for c in listCategorias:
+            if request.POST['categoria'] == c.nombre:
+                categoriaInspeccion = c.id
+    cat = CategoriaInspeccion.objects.get(id=categoriaInspeccion)
+    cat.activo = False
+    cat.nombre = "eliminada"
+    cat.save()
+    for d in detalles:
+        if d.categoria_inspeccion == cat:
+            d.activo = False
+            d.nombre = "eliminado"
+            d.save()
+    messages.add_message(request, messages.SUCCESS, 'Categoria de inspeccion eliminada.')
+    return redirect('director')
+
+def baja_item_inspeccion(request):
+    items = ItemInspeccion.objects.all()
+    return render(request, 'persona/director/baja_item_inspeccion.html', {'items':items})
+
+def eliminar_item_inspeccion(request):
+    listItems = ItemInspeccion.objects.all()
+    itemInspeccion = 0
+    detalles = DetalleDeItemInspeccion.objects.all()
+    if "Guardar" in request.POST:
+        for i in listItems:
+            if request.POST['item'] == i.nombre:
+                itemInspeccion = i.id
+    item_inspeccion = ItemInspeccion.objects.get(id=itemInspeccion)
+    item_inspeccion.activo = False
+    item_inspeccion.nombre = "eliminado"
+    item_inspeccion.save()
+    for d in detalles:
+        if d.item_inspeccion == item_inspeccion:
+            d.activo = False
+            d.nombre = "eliminado"
+            d.save()
+    messages.add_message(request, messages.SUCCESS, 'Item de inspeccion eliminado.')
+    return redirect('director')
+
+def baja_detalle_inspeccion(request):
+    detalles = DetalleDeItemInspeccion.objects.all()
+    return render(request, 'persona/director/baja_detalle_inspeccion.html', {'detalles':detalles})
+
+def eliminar_detalle_inspeccion(request):
+    listDetalles = DetalleDeItemInspeccion.objects.all()
+    detalleInspeccion = 0
+    if "Guardar" in request.POST:
+        for d in listDetalles:
+            if request.POST['detalle'] == d.nombre:
+                detalleInspeccion = d.id
+    detalle_inspeccion = DetalleDeItemInspeccion.objects.get(id=detalleInspeccion)
+    detalle_inspeccion.activo = False
+    detalle_inspeccion.nombre = "eliminado"
+    detalle_inspeccion.save()
+    messages.add_message(request, messages.SUCCESS, 'Detalle de inspeccion eliminado.')
+    return redirect('director')
+
+
+def baja_tipo_pago(request):
+    tiposPagos = Tipo_Pago.objects.all()
+    return render(request, 'persona/director/baja.html', {'tiposPagos':tiposPagos})
+
+def eliminar_tipo_pago(request):
+    listTiposPagos = Tipo_Pago.objects.all()
+    tipoPago = 0
+    if "Guardar" in request.POST:
+        for t in listTiposPagos:
+            if request.POST['tipo_pago'] == t.nombre:
+                tipoPago = t.id
+    tipoP = Tipo_Pago.objects.get(id=tipoPago)
+    tipoP.activo = False
+    tipoP.save()
+    messages.add_message(request, messages.SUCCESS, 'Tipo de pago eliminado.')
+    return redirect('director')
 
 def cambiar_usuario_de_grupo(request):
     contexto = {
@@ -2817,10 +2976,30 @@ def ver_listado_usuarios(request):
 
 def tiempo_aprobacion_visados(request):
     listado_tramites = []
-    tramitesVisados = tramite
+    tramites = Tramite.objects.all()
     list_estados_fechas = []
-    return render(request, 'persona/director/tiempo_aprobacion_visados.html', contexto)
+    iniciados = []
+    finalizados = []
+    planillas = PlanillaDeVisado.objects.all()
+    list = []
+    meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre",
+             "Noviembre", "Diciembre"]
 
+    for p in planillas:
+        for t in tramites:
+            if t.id == p.tramite.id:
+                list.append(p)
+    #raise Exception(list)
+    for p in planillas:
+        visadosTramites = PlanillaDeVisado.objects.filter(tramite_id=p.id).exclude(tramite_id__isnull=True).count()
+    raise Exception(visadosTramites)
+    #visadosIniciados = Estado.objects.filter(tipo=3)
+    #visadosAprobados = Estado.objects.filter(tipo=5).count()
+
+    return render(request, 'persona/director/tiempo_aprobacion_visados.html')
+##########################################################################
+
+###########################################################################
 
 
 class ReporteTramitesDirectorExcel(TemplateView):
