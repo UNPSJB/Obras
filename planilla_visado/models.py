@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 
+from django.core.exceptions import ObjectDoesNotExist
 from django.db import models
 from tramite.models import *
 
@@ -84,22 +85,60 @@ class FilaDeVisado(models.Model):
     def __str__(self):
         return self.nombre
 
-    def relacionar_con_columnas(self, columnas):
-        for columna in columnas:
-            self.relacionar_con_columna(columna)
+    def crearItem(self,columna, fila):
+        item=ItemDeVisado.objects.create(columna_de_visado=columna, fila_de_visado=fila)
+        return item
 
-    def relacionar_con_columna(self, columna):
+    def guardarItems(self, lista):
+        for i in range(0, len(lista)):
+            try:
+                item=lista[i]["item"]
+                if item.activo==0:
+                    if  lista[i]["cantidad"]==1:
+                            self.relacionar_con_columna(lista[i]["item"])
+                else:
+                    if lista[i]["cantidad"]==0 :
+                        if item.activo==1:
+                            self.quitar_columna(lista[i]["item"])
+            except:
+                pass
+        return
+
+    def relacionar_con_columnas(self,lista):
+        items=ItemDeVisado.objects.all()
+        sigue=True
+        listaEncontrados=[]
+        for it in items:
+            i=0
+            aux={'item':it, 'cantidad':0}
+            encontrado=False
+            crear=False
+            for i in range(0, len(lista)):
+                try:
+                        item=ItemDeVisado.objects.get(columna_de_visado=lista[i]['columna'],fila_de_visado=lista[i]['fila'])
+                        if it.columna_de_visado==item.columna_de_visado and  it.fila_de_visado==item.fila_de_visado:
+                            aux={"item":it,"cantidad":1}
+                            break;
+
+                except ObjectDoesNotExist:
+                        item = self.crearItem(lista[i]['columna'], lista[i]['fila'])
+                        aux={'item':item, 'cantidad':1}
+                        break;
+            listaEncontrados.append(aux)
+        self.guardarItems(listaEncontrados)
+        return
+
+    def relacionar_con_columna(self, item):
         try:
-            item = self.items.get(columna_de_visado=columna)
             item.activo = True
             item.save()
             return item
         except ItemDeVisado.DoesNotExist as ex:
-            return ItemDeVisado.objects.create(columna_de_visado=columna, fila_de_visado=self)
+            pass
+       #     return ItemDeVisado.objects.create(columna_de_visado=columna, fila_de_visado=self)
 
-    def quitar_columna(self, columna):
+    def quitar_columna(self, item):
         try:
-            item = self.items.get(columna_de_visado=columna)
             item.activo = False
             item.save()
         except ItemDeVisado.DoesNotExist as ex:
@@ -155,7 +194,7 @@ class PlanillaDeVisado(models.Model):
     def local_activo(self, local):
         return self.locales.filter(pk=local.pk).exists()
 
-        def marcar_locales(self, locales):
+    def marcar_locales(self, locales):
             for local in locales:
                 if self.local_activo(local):
                     print("{item}: O".format(item=local))

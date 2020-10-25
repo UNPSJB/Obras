@@ -90,8 +90,11 @@ class FormularioTipoPago(forms.ModelForm):
         self.fields['nombre'].widget.attrs['placeholder'] = "Ingresar Nombre"
 
     def clean_nombre(self):
-        nombre = self.cleaned_data['nombre']
-        cargados = Tipo_Pago.objects.filter(nombre__icontains=nombre)
+        tipoPago = self.cleaned_data['nombre']
+        cargados = Tipo_Pago.objects.filter(nombre__icontains=tipoPago)
         if cargados.exists():
-            raise ValidationError("Ya existe {}".format(cargados.first().nombre))
-        return nombre
+              for i in cargados:
+                   if tipoPago == i.nombre and i.activo == 0:
+                       return tipoPago
+              raise ValidationError("Ya existe {}".format(cargados.first().nombre))
+        return tipoPago

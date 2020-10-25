@@ -571,7 +571,7 @@ class ReporteTramitesProfesionalPdf(View):
            for fila in
              FilaDeVisado.objects.all()
                     for columna in ColumnaDeVisado.objects.all()
-                        for item in ItemDeVisado.objects.all()
+                        for item in ItemDeVisado.objects.filter(activo=True)
                             if fila == item.fila_de_visado and columna == item.columna_de_visado]
             # for item in
             # ItemDeVisado.objects.all()]
@@ -1289,7 +1289,7 @@ def ver_documentos_visados(request, pk_tramite):
 from planilla_visado.models import FilaDeVisado, ColumnaDeVisado
 
 def ver_planilla_visado(request):
-    items = ItemDeVisado.objects.all()
+    items = ItemDeVisado.objects.filter(activo=True)
     filas = FilaDeVisado.objects.all()
     columnas = ColumnaDeVisado.objects.all()
     elementos = Elemento_Balance_Superficie.objects.all()
@@ -1380,7 +1380,7 @@ def mostrar_visados_noaprobados(request, pk_tramite):
 
 def cargar_planilla_visado(request,pk_tramite):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
-    items = ItemDeVisado.objects.all()
+    items = ItemDeVisado.objects.filter(activo=True)
     planilla=PlanillaDeVisado.objects.filter(tramite_id=tramite).last() #ultima planilla de visado
     p=[]
     el=[]
@@ -1441,7 +1441,7 @@ def aprobar_visado(request, pk_tramite, monto):
         if name.startswith('item'):
             ipk= name.split('-')[1]
             list_items.append(ipk)
-    items = ItemDeVisado.objects.all()
+    items = ItemDeVisado.objects.filter(activo=True)
     for item in items:
         for i in list_items:
             if (item.id == int(i)):
@@ -1478,7 +1478,7 @@ def no_aprobar_visado(request, pk_tramite, observacion,monto):
         if name.startswith('item'):
             ipk= name.split('-')[1]
             list_items.append(ipk)
-    items = ItemDeVisado.objects.all()
+    items = ItemDeVisado.objects.filter(activo=True)
     for item in items:
         for i in list_items:
             if (item.id == int(i)):
@@ -2119,6 +2119,7 @@ def listado_inspecciones_mensuales_jefe_inspector(request):
 #------------------------------------------------------------------------------------------------------------------
 #director ---------------------------------------------------------------------------------------------------------
 from planilla_visado import forms as pforms
+from planilla_visado.forms import FormularioColumnaVisado
 from planilla_visado import models as pmodels
 from planilla_visado.models import *
 from planilla_inspeccion.forms import FormularioCategoriaInspeccion
@@ -2139,7 +2140,7 @@ def mostrar_director(request):
     categorias = CategoriaInspeccion.objects.all()
     filas = FilaDeVisado.objects.all()
     columnas = ColumnaDeVisado.objects.all()
-    itemsVisados = ItemDeVisado.objects.all()
+    itemsVisados = ItemDeVisado.objects.filter(activo=True)
     elementos = Elemento_Balance_Superficie.objects.all()
     tiposPagos = Tipo_Pago.objects.all()
     values = {"items":items, "categorias":categorias, "detalles":detalles, "filas": filas, "columnas":columnas, "itemsVisados":itemsVisados, "elementos":elementos, "ctxtramites_anuales":inspecciones_realizadas_durante_el_anio(request),
@@ -2149,13 +2150,36 @@ def mostrar_director(request):
         pforms.PlanillaDeVisadoFormFactory(pmodels.FilaDeVisado.objects.all(), pmodels.ColumnaDeVisado.objects.all()),
           ]})
     for form_name, submit_name in FORMS_DIRECTOR:
+
         KlassForm = FORMS_DIRECTOR[(form_name, submit_name)]
         if request.method == "POST" and submit_name in request.POST:
             _form = KlassForm(request.POST)
             if _form.is_valid():
-                _form.save()
+                resultado=_form.save(commit=False)
+                try:
+                    if isinstance(resultado,ColumnaDeVisado):
+                            columna=ColumnaDeVisado.objects.get(nombre=resultado.nombre)
+                            columna.activo=1
+                            columna.save()
+                    elif isinstance(resultado,FilaDeVisado):
+                            fila=FilaDeVisado.objects.get(nombre=resultado.nombre)
+                            fila.activo=1
+                            fila.save()
+                    elif isinstance(resultado,Tipo_Pago):
+                            tipoPago=Tipo_Pago.objects.get(nombre=resultado.nombre)
+                            tipoPago.activo=1
+                            tipoPago.save()
+                    elif isinstance(resultado,Elemento_Balance_Superficie):#elemento de visado
+                            elemento=Elemento_Balance_Superficie.objects.get(nombre=resultado.nombre)
+                            elemento.activo=1
+                            elemento.descripcion=resultado.descripcion
+                            elemento.save()
+                    else:
+                         _form.save()
+                except:
+                    resultado.save()
                 messages.add_message(request, messages.SUCCESS, "La accion solicitada ha sido ejecutada con exito")
-                return redirect(usuario.get_view_name())
+                return redirect('director')
             else:
                 values["submit_name"] = submit_name
                 messages.add_message(request, messages.ERROR, "La accion solicitada no a podido ser ejecutada")
@@ -2180,6 +2204,7 @@ FORMS_DIRECTOR = {(k.NAME, k.SUBMIT): k for k in {
     FormularioItemInspeccion,
     FormularioDetalleItem
 }}
+
 
 ########## PARA EDITAR FALTA ACA#############################################
 def editarFilaVisado(request):
@@ -2210,7 +2235,7 @@ def eliminar_fila_visado(request):
                 filaVisado = f.id
     fv = FilaDeVisado.objects.get(id=filaVisado)
     fv.activo = False
-    fv.nombre = "eliminada"
+    #fv.nombre = "eliminada"
     fv.save()
     messages.add_message(request, messages.SUCCESS, 'Fila de visado eliminada.')
     return redirect('director')
@@ -2228,7 +2253,7 @@ def eliminar_columna_visado(request):
                 columnaVisado = c.id
     cv = ColumnaDeVisado.objects.get(id=columnaVisado)
     cv.activo = False
-    cv.nombre = "eliminada"
+    #cv.nombre = "eliminada"
     cv.save()
     messages.add_message(request, messages.SUCCESS, 'Columna de visado eliminada.')
     return redirect('director')
@@ -2246,7 +2271,7 @@ def eliminar_elemento_visado(request):
                 elementoVisado = e.id
     ev = Elemento_Balance_Superficie.objects.get(id=elementoVisado)
     ev.activo = False
-    ev.nombre = "eliminado"
+    #ev.nombre = "eliminado"
     ev.save()
     messages.add_message(request, messages.SUCCESS, 'Elemento de visado eliminado.')
     return redirect('director')
@@ -2265,12 +2290,12 @@ def eliminar_categoria_inspeccion(request):
                 categoriaInspeccion = c.id
     cat = CategoriaInspeccion.objects.get(id=categoriaInspeccion)
     cat.activo = False
-    cat.nombre = "eliminada"
+    #cat.nombre = "eliminada"
     cat.save()
     for d in detalles:
         if d.categoria_inspeccion == cat:
             d.activo = False
-            d.nombre = "eliminado"
+           # d.nombre = "eliminado"
             d.save()
     messages.add_message(request, messages.SUCCESS, 'Categoria de inspeccion eliminada.')
     return redirect('director')
@@ -2607,7 +2632,7 @@ def generar_planilla_visado(request):
     contexto = {'filas': filas}
     contexto_columnas = {'columnas': columnas}
     balancesSuperficies = Elemento_Balance_Superficie.objects.all()
-    itemsVisados = ItemDeVisado.objects.all()
+    itemsVisados = ItemDeVisado.objects.filter(activo=True)
     contexto = {'filas': filas, 'columnas':columnas, 'itemsVisados':itemsVisados,'balancesSuperficies':balancesSuperficies}
     return render(request, 'persona/director/item_visado.html', contexto)
 
