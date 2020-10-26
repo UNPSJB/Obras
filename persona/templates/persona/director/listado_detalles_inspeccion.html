@@ -1,0 +1,69 @@
+
+{% block contenido %}
+
+	<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" >
+	  <div class="panel">
+		<div class="panel-heading box" role="tab" id="headingFive">
+		  <h5 class="panel-title">
+			<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+			  <font color="#ffffff" size="2">Listado de detalles de inspeccion</font>
+			</a>
+		  </h5>
+		</div>
+		<div id="collapseFive" class="panel-collapse" role="tabpanel" aria-labelledby="headingFive">
+		  <div class="panel-body">
+			<div class="container-fluid">
+				<div class="row">
+					<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                          <div class="table-responsive">
+                              <table  class="table table-bordered table-striped table-hover table-condensed" style="background: white;">
+                                  <thead>
+                                      <tr>
+                                          <th>ID</th>
+                                          <th>Nombre detalle de inspeccion</th>
+                                          <th>Item</th>
+                                          <th>Categoria</th>
+                                          <th>Modificar</th>
+                                          <th>Eliminar</th>
+                                      </tr>
+                                  </thead>
+                                  <tbody>
+
+                                  {% if detalles %}
+                                      {% for detalle in detalles %}
+                                        {% if detalle.activo == True %}
+                                        <tr>
+                                              <td class="col-xs-1" align="center">{{detalle.id}}</td>
+                                              <td class="col-xs-2">{{detalle.nombre}}</td>
+                                              <td class="col-xs-3">{{detalle.item_inspeccion}}</td>
+                                              <td class="col-xs-4">{{detalle.categoria_inspeccion}}</td>
+                                              <td align="center" class="col-xs-1">
+                                                  <a class="btn btn-primary" href="{% url 'edit_detalle_inspeccion' detalle.pk %}"> Modificar </a>
+
+                                              </td>
+                                            <td align="center" class="col-xs-1">
+                                                <a class="btn btn-primary" href="{% url 'delete_detalle_inspeccion' detalle.pk %}"> Eliminar </a>
+
+                                              </td>
+                                        </tr>
+                                        {% endif %}
+                                      {% endfor %}
+                                  {% endif%}
+
+                                  </tbody>
+                              </table>
+                          </div>
+                        <hr>
+                    </div>
+
+				</div>
+			</div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+
+
+{% endblock %}

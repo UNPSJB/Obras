@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load crispy_forms_tags%}
+
+{% block barra %}
+	<ul class="sidebar sidebar-1">
+		<font size="2">
+			<li><a href="javascript:history.back(-1);" class="current"><font color="white">Director</font></a></li>
+		</font>
+	</ul>
+{% endblock %}
+
+{% block contenido %}
+<div class="panel">
+		  <h5 class="panel-title">
+			  <font color="#ffffff" size="2">
+                  <form method="POST">
+                    {% csrf_token %}
+                    <h4>¿Desea eliminar el item de inspeccion: < {{item.nombre}} > ?</h4>
+                      <br>
+                        <br>
+                    <button class="btn btn-danger" type="submit">Si, eliminar</button>
+                      <a href="javascript:history.back(-1);">
+                        <button type="button" class="btn btn-primary" name="Volver">
+                            Cancelar
+                        </button>
+                </form>
+              </font>
+		  </h5>
+    <br>
+</div>
+     </div>
+ </div>
+</div>
+{% endblock %}

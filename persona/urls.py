@@ -133,13 +133,11 @@ urlpatterns = [
     url(r'^ver_filtro_obra_fechas', views.ver_filtro_obra_fechas, name="ver_filtro_obra_fechas"),
     url(r'^ver_sectores_con_mas_obras', views.ver_sectores_con_mas_obras, name="ver_sectores_con_mas_obras"),
 #    url(r'^tipos_obras_periodo_fechas', views.ver_filtro_obra_fechas, name="tipos_obras_periodo_fechas"),
-    #url(r'^director/inspecciones_realizadas_durante_el_anio', views.inspecciones_realizadas_durante_el_anio, name="inspecciones_realizadas_durante_el_anio"),
+    url(r'^director/inspecciones_realizadas_durante_el_anio', views.inspecciones_realizadas_durante_el_anio, name="inspecciones_realizadas_durante_el_anio"),
     url(r'^vista_de_todos_tramites$', views.ver_todos_tramites, name="vista_de_todos_tramites"),
     url(r'^listado_de_usuarios_segun_grupo', views.ver_listado_usuarios, name="listado_de_usuarios_segun_grupo"),
     url(r'^tiempo_aprobacion_visados', views.tiempo_aprobacion_visados, name="tiempo_aprobacion_visados"),
 
-    url(r'^editarFilaVisado', views.editarFilaVisado, name="editarFilaVisado"),
-    url(r'^editar_fila_visado', views.editarFilaVisado2, name="editarFilaVisado2"),
     url(r'^baja_fila_visado', views.baja_fila_visado, name="baja_fila_visado"),
     url(r'^eliminar_fila_visado', views.eliminar_fila_visado, name="eliminar_fila_visado"),
     url(r'^baja_columna_visado', views.baja_columna_visado, name="baja_columna_visado"),
@@ -154,6 +152,32 @@ urlpatterns = [
     url(r'^eliminar_detalle_inspeccion', views.eliminar_detalle_inspeccion, name="eliminar_detalle_inspeccion"),
     url(r'^baja_tipo_pago', views.baja_tipo_pago, name="baja_tipo_pago"),
     url(r'^eliminar_tipo_pago', views.eliminar_tipo_pago, name="eliminar_tipo_pago"),
+
+    url(r'^edit_tipoObra/(?P<pk_tipoObra>\d+)$', views.edit_tipoObra, name="edit_tipoObra"),
+    url(r'^delete_tipoObra/(?P<pk_tipoObra>\d+)$', views.delete_tipoObra, name="delete_tipoObra"),
+
+    url(r'^edit_fila_visado/(?P<pk_fila>\d+)$', views.edit_fila_visado, name="edit_fila_visado"),
+    url(r'^delete_fila_visado/(?P<pk_fila>\d+)$', views.delete_fila_visado, name="delete_fila_visado"),
+
+    url(r'^listado_tiposPago', views.listado_tiposPago, name="listado_tiposPago"),
+    url(r'^editar_tipoPago/(?P<pk_tipoPago>\d+)$', views.editar_tipoPago, name="editar_tipoPago"),
+    url(r'^delete_tipo_pago/(?P<pk_tipoPago>\d+)$', views.delete_tipo_pago, name="delete_tipo_pago"),
+
+    url(r'^edit_columna_visado/(?P<pk_columna>\d+)$', views.edit_columna_visado, name="edit_columna_visado"),
+    url(r'^delete_columna_visado/(?P<pk_columna>\d+)$', views.delete_columna_visado, name="delete_columna_visado"),
+
+    url(r'^edit_elemento_visado/(?P<pk_elemento>\d+)$', views.edit_elemento_visado, name="edit_elemento_visado"),
+    url(r'^delete_elemento_visado/(?P<pk_elemento>\d+)$', views.delete_elemento_visado, name="delete_elemento_visado"),
+
+    url(r'^edit_item_inspeccion/(?P<pk_item>\d+)$', views.edit_item_inspeccion, name="edit_item_inspeccion"),
+    url(r'^delete_item_inspeccion/(?P<pk_item>\d+)$', views.delete_item_inspeccion, name="delete_item_inspeccion"),
+
+    url(r'^edit_categoria_inspeccion/(?P<pk_categoria>\d+)$', views.edit_categoria_inspeccion, name="edit_categoria_inspeccion"),
+    url(r'^delete_categoria_inspeccion/(?P<pk_categoria>\d+)$', views.delete_categoria_inspeccion, name="delete_categoria_inspeccion"),
+
+    url(r'^edit_detalle_inspeccion/(?P<pk_detalle>\d+)$', views.edit_detalle_inspeccion, name="edit_detalle_inspeccion"),
+    url(r'^delete_detalle_inspeccion/(?P<pk_detalle>\d+)$', views.delete_detalle_inspeccion, name="delete_detalle_inspeccion"),
+
 
     #cajero -------------------------------------------------------------------------------------------------------
     url(r'^cajero$', views.mostrar_cajero, name="cajero"),

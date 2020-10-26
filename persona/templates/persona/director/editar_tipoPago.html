@@ -1,0 +1,46 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load crispy_forms_tags%}
+
+{% block barra %}
+	<ul class="sidebar sidebar-1">
+		<font size="2">
+			<li><a href="javascript:history.back(-1);" class="current"><font color="white">Director</font></a></li>
+		</font>
+	</ul>
+{% endblock %}
+
+{% block contenido %}
+<div class="panel">
+		<div class="panel-heading box" role="tab" id="headingFive">
+		  <h5 class="panel-title">
+			<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+			  <font color="#ffffff" size="3">Modifique el tipo de pago</font>
+			</a>
+		  </h5>
+		</div>
+<form method="POST">
+    {{ form.as_p }}
+    {% csrf_token %}
+    <br>
+        <button class="btn btn-primary btn-md" type="submit">
+            Guardar
+        </button>
+        <a href="javascript:history.back(-1);">
+          <button type="button" class="btn btn-primary" name="Volver">
+               Volver
+         </button>
+       </a>
+</form>
+
+</div>
+{% endblock %}
+
+{% block scripts %}
+
+	<script>
+        $('#alta_fila #div_id_nombre').appendTo('#nombre_fila')
+        $('#submit-id-fila_visado_modificada_submit').appendTo('#boton_fila')
+    </script>
+
+{% endblock %}

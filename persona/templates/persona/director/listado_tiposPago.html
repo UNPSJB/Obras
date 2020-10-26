@@ -1,0 +1,68 @@
+
+{% block contenido %}
+
+	<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" >
+	  <div class="panel">
+		<div class="panel-heading box" role="tab" id="headingFive">
+		  <h5 class="panel-title">
+			<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+			  <font color="#ffffff" size="2">Listado de tipos de pago</font>
+			</a>
+		  </h5>
+		</div>
+		<div id="collapseFive" class="panel-collapse" role="tabpanel" aria-labelledby="headingFive">
+		  <div class="panel-body">
+			<div class="container-fluid">
+				<div class="row">
+					<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                          <div class="table-responsive">
+                              <table  class="table table-bordered table-striped table-hover table-condensed" style="background: white;">
+                                  <thead>
+                                      <tr>
+                                          <th>ID</th>
+                                          <th>Nombre tipo de pago</th>
+                                          <th>Modificar</th>
+                                          <th>Eliminar</th>
+                                      </tr>
+                                  </thead>
+                                  <tbody>
+
+                                  {% if tiposPagos %}
+                                      {% for tipoPago in tiposPagos %}
+                                        {% if tipoPago.activo == True %}
+                                        <tr>
+                                              <td class="col-xs-1" align="center">{{tipoPago.id}}</td>
+                                              <td class="col-xs-3">{{tipoPago.nombre}}</td>
+                                              <td align="center" class="col-xs-1">
+                                                  <a class="btn btn-primary" href="{% url 'editar_tipoPago' tipoPago.pk %}"> Modificar </a>
+
+                                              </td>
+                                            <td align="center" class="col-xs-1">
+                                                <a class="btn btn-primary" href="{% url 'delete_tipo_pago' tipoPago.pk %}"> Eliminar </a>
+
+                                              </td>
+                                        </tr>
+                                        {% endif %}
+                                      {% endfor %}
+                                  {% endif%}
+
+                                  </tbody>
+                              </table>
+                          </div>
+                        <hr>
+                    </div>
+
+				</div>
+			</div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+
+
+{% endblock %}
+
+
+

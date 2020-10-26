@@ -1,0 +1,64 @@
+
+{% block contenido %}
+
+	<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" >
+	  <div class="panel">
+		<div class="panel-heading box" role="tab" id="headingFive">
+		  <h5 class="panel-title">
+			<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+			  <font color="#ffffff" size="2">Listado de tipos de obras</font>
+			</a>
+		  </h5>
+		</div>
+		<div id="collapseFive" class="panel-collapse" role="tabpanel" aria-labelledby="headingFive">
+		  <div class="panel-body">
+			<div class="container-fluid">
+				<div class="row">
+					<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                          <div class="table-responsive">
+                              <table  class="table table-bordered table-striped table-hover table-condensed" style="background: white;">
+                                  <thead>
+                                      <tr>
+                                          <th>ID</th>
+                                          <th>Nombre tipo de obra</th>
+                                          <th>Modificar</th>
+                                          <th>Eliminar</th>
+                                      </tr>
+                                  </thead>
+                                  <tbody>
+
+                                  {% if tiposObras %}
+                                      {% for tipoObra in tiposObras %}
+                                        {% if tipoObra.activo == True %}
+                                        <tr>
+                                              <td class="col-xs-1" align="center">{{tipoObra.id}}</td>
+                                              <td class="col-xs-3">{{tipoObra.nombre}}</td>
+                                              <td align="center" class="col-xs-1">
+                                                  <a class="btn btn-primary" href="{% url 'edit_tipoObra' tipoObra.pk %}"> Modificar </a>
+
+                                              </td>
+                                            <td align="center" class="col-xs-1">
+                                                <a class="btn btn-primary" href="{% url 'delete_tipoObra' tipoObra.pk %}"> Eliminar </a>
+                                                
+                                              </td>
+                                        </tr>
+                                        {% endif %}
+                                      {% endfor %}
+                                  {% endif%}
+
+                                  </tbody>
+                              </table>
+                          </div>
+                        <hr>
+                    </div>
+				</div>
+			</div>
+          </div>
+
+        </div>
+      </div>
+
+    </div>
+
+
+{% endblock %}
