@@ -98,3 +98,33 @@ class FormularioTipoPago(forms.ModelForm):
                        return tipoPago
               raise ValidationError("Ya existe {}".format(cargados.first().nombre))
         return tipoPago
+
+class FormularioTipoPagoModificado(forms.ModelForm):
+    NAME = 'tipo_pago_form'
+    SUBMIT = 'tipo_de_pago_submit'
+
+    class Meta:
+        model = Tipo_Pago
+        fields = ('nombre',)
+
+    def __init__(self, *args, **kwargs):
+        super(FormularioTipoPagoModificado, self).__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.add_input(Submit(self.SUBMIT, 'Guardar'))
+        self.fields['nombre'].widget.attrs['placeholder'] = "Ingresar Nombre"
+
+class FormularioTipoObraModificada(forms.ModelForm):
+    NAME = 'tipo_obra_form'
+    SUBMIT = 'tipo_obra_submit'
+    class Meta:
+        model = TipoObra
+        fields = ('nombre','descripcion','categorias')
+
+    def __init__(self, *args, **kwargs):
+        super(FormularioTipoObraModificada, self).__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.add_input(Submit('tipo_obra_submit', 'Guardar'))
+        self.fields['nombre'].widget.attrs['placeholder'] = "Ingresar Nombre"
+        self.fields['descripcion'].widget.attrs['placeholder'] = "Ingresar Descripcion"
+        self.fields['categorias'].widget.attrs['placeholder'] = "Ingresar Categoria/s"
+

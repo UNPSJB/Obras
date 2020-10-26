@@ -29,6 +29,22 @@ class FormularioCategoriaInspeccion(forms.ModelForm):
             raise ValidationError("Ya existe {}".format(cargados.first().nombre))
         return nombre
 
+class FormularioCategoriaInspeccionModificada(forms.ModelForm):
+    NAME = 'cat_inspeccion_form'
+    SUBMIT = 'cat_inspeccion_submit'
+
+    class Meta:
+        model = CategoriaInspeccion
+        fields = ('nombre','descripcion','tipo')
+
+    def __init__(self, *args, **kwargs):
+        super(FormularioCategoriaInspeccionModificada, self).__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.add_input(Submit(self.SUBMIT, 'Guardar'))
+        self.fields['nombre'].widget.attrs['placeholder'] = "Ingresar nombre"
+        self.fields['descripcion'].widget.attrs['placeholder'] = "Ingresar Descripcion"
+        self.fields['tipo'].widget.attrs['placeholder'] = "Ingresar tipo"
+
 class FormularioItemInspeccion(forms.ModelForm):
     NAME = 'item_inspeccion_form'
     SUBMIT = 'item_inspeccion_submit'
@@ -50,6 +66,20 @@ class FormularioItemInspeccion(forms.ModelForm):
         if cargados.exists():
             raise ValidationError("Ya existe {}".format(cargados.first().nombre))
         return nombre
+
+class FormularioItemInspeccionModificado(forms.ModelForm):
+    NAME = 'item_inspeccion_form'
+    SUBMIT = 'item_inspeccion_submit'
+
+    class Meta:
+        model = ItemInspeccion
+        fields = ('nombre', )
+
+    def __init__(self, *args, **kwargs):
+        super(FormularioItemInspeccionModificado, self).__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.add_input(Submit(self.SUBMIT, 'Guardar'))
+        self.fields['nombre'].widget.attrs['placeholder'] = "Ingresar nombre"
 
 class FormularioDetalleItem(forms.ModelForm):
     NAME = 'detalle_item_inspeccion_form'
@@ -75,3 +105,18 @@ class FormularioDetalleItem(forms.ModelForm):
             raise ValidationError("Ya existe {}".format(cargados.first().nombre))
         return nombre
 
+class FormularioDetalleItemModificado(forms.ModelForm):
+    NAME = 'detalle_item_inspeccion_form'
+    SUBMIT = 'detalle_item_inspeccion_submit'
+
+    class Meta:
+        model = DetalleDeItemInspeccion
+        fields = ('item_inspeccion','categoria_inspeccion','nombre')
+
+    def __init__(self, *args, **kwargs):
+        super(FormularioDetalleItemModificado, self).__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        self.helper.add_input(Submit(self.SUBMIT, 'Guardar'))
+        self.fields['item_inspeccion'].widget.attrs['placeholder'] = "Ingresar item inspeccion"
+        self.fields['categoria_inspeccion'].widget.attrs['placeholder'] = "Ingresar Categoria"
+        self.fields['nombre'].widget.attrs['placeholder'] = "Ingresar nombre"

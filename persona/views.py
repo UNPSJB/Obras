@@ -2143,8 +2143,9 @@ def mostrar_director(request):
     itemsVisados = ItemDeVisado.objects.filter(activo=True)
     elementos = Elemento_Balance_Superficie.objects.all()
     tiposPagos = Tipo_Pago.objects.all()
+    tiposObras = TipoObra.objects.all()
     values = {"items":items, "categorias":categorias, "detalles":detalles, "filas": filas, "columnas":columnas, "itemsVisados":itemsVisados, "elementos":elementos, "ctxtramites_anuales":inspecciones_realizadas_durante_el_anio(request),
-              "tiposPagos":tiposPagos
+              "tiposPagos":tiposPagos, "tiposObras": tiposObras
 }
     FORMS_DIRECTOR.update({(k.NAME, k.SUBMIT): k for k in [
         pforms.PlanillaDeVisadoFormFactory(pmodels.FilaDeVisado.objects.all(), pmodels.ColumnaDeVisado.objects.all()),
@@ -2359,7 +2360,229 @@ def eliminar_tipo_pago(request):
     tipoP.save()
     messages.add_message(request, messages.SUCCESS, 'Tipo de pago eliminado.')
     return redirect('director')
+from planilla_visado.forms import FormularioFilaVisado
+from planilla_visado.forms import FormularioColumnaVisado
+from planilla_visado.forms import FormularioItemDeVisado
+from planilla_visado.forms import FormularioDocBalanceSuperficie
+from planilla_visado.forms import FormularioElementoBalanceSuperficie
+from planilla_visado.forms import FormularioFilaVisadoModificada
+from tipos.forms import FormularioTipoPagoModificado
+from planilla_visado.forms import FormularioColumnaVisadoModificada
+from planilla_visado.forms import FormularioElementoBalanceSuperficieModificado
+from planilla_inspeccion.forms import FormularioCategoriaInspeccionModificada
+from planilla_inspeccion.forms import FormularioItemInspeccionModificado
+from planilla_inspeccion.forms import FormularioDetalleItemModificado
+from tipos.forms import FormularioTipoObraModificada
 
+def listado_tiposPago(request):
+    tiposPagos = Tipo_Pago.objects.all()
+    return render(request, 'persona/director/listado_tiposPago.html', {'tiposPagos':tiposPagos})
+def editar_tipoPago(request, pk_tipoPago):
+    tipoPago = Tipo_Pago.objects.get(id=pk_tipoPago)
+    if request.method == 'GET':
+        form = FormularioTipoPagoModificado(instance=tipoPago)
+    else:
+        form = FormularioTipoPagoModificado(request.POST, instance=tipoPago)
+        if form.is_valid():
+            form.save()
+        messages.add_message(request, messages.SUCCESS, "Tipo de pago modificado correctamente")
+        return redirect('director')
+    return render(request, 'persona/director/editar_tipoPago.html', {'form':form})
+
+def delete_tipo_pago(request, pk_tipoPago):
+    tipoPago = Tipo_Pago.objects.get(id=pk_tipoPago)
+    if request.method == 'POST':
+        tipoPago.activo = False
+        tipoPago.save()
+        messages.add_message(request, messages.SUCCESS, "El tipo de pago ha sido eliminado correctamente")
+        return redirect('director')
+    return render(request, "persona/director/delete_tipo_pago.html", {'tipoPago':tipoPago})
+
+################### tipos de obras #####################################
+def listado_tiposObras(request):
+    tiposObras = TipoObra.objects.all()
+    #raise Exception(tiposObras)
+    return render(request, 'persona/director/listado_tiposObras.html', {'tiposObras':tiposObras})
+
+def edit_tipoObra(request, pk_tipoObra):
+    tipoObra = TipoObra.objects.get(id=pk_tipoObra)
+    if request.method == 'GET':
+        form = FormularioTipoObraModificada(instance=tipoObra)
+    else:
+        form = FormularioTipoObraModificada(request.POST, instance=tipoObra)
+        if form.is_valid():
+            form.save()
+        messages.add_message(request, messages.SUCCESS, "Tipo de obra modificada correctamente")
+        return redirect('director')
+    return render(request, 'persona/director/edit_tipoObra.html', {'form':form})
+
+def delete_tipoObra(request, pk_tipoObra):
+    tipoObra = TipoObra.objects.get(id=pk_tipoObra)
+    if request.method == 'POST':
+        tipoObra.activo = False
+        tipoObra.save()
+        messages.add_message(request, messages.SUCCESS, "El tipo de obra ha sido eliminada correctamente")
+        return redirect('director')
+    return render(request, "persona/director/delete_tipoObra.html", {'tipoObra':tipoObra})
+################### filas de visado #####################################
+def listado_filas_visado(request):
+    filas = FilaDeVisado.objects.all()
+    return render(request, 'persona/director/listado_filas_visado.html', {'filas':filas})
+
+def edit_fila_visado(request, pk_fila):
+    fila = FilaDeVisado.objects.get(id=pk_fila)
+    if request.method == 'GET':
+        form = FormularioFilaVisadoModificada(instance=fila)
+    else:
+        form = FormularioFilaVisadoModificada(request.POST, instance=fila)
+        if form.is_valid():
+            form.save()
+        messages.add_message(request, messages.SUCCESS, "La fila de visado fue modificada correctamente")
+        return redirect('director')
+    return render(request, "persona/director/edit_fila_visado.html", {'form':form})
+
+def delete_fila_visado(request, pk_fila):
+    fila = FilaDeVisado.objects.get(id=pk_fila)
+    if request.method == 'POST':
+        #fila.delete()
+        fila.activo = False
+        fila.save()
+        messages.add_message(request, messages.SUCCESS, "La fila de visado ha sido eliminada correctamente")
+        return redirect('director')
+    return render(request, "persona/director/delete_fila_visado.html", {'fila':fila})
+
+################## columnas de visado #################################
+def listado_columnas_visado(request):
+    columnas = ColumnaDeVisado.objects.all()
+    return render(request, 'persona/director/listado_columnas_visado.html', {'columnas':columnas})
+
+def edit_columna_visado(request, pk_columna):
+    columna = ColumnaDeVisado.objects.get(id=pk_columna)
+    if request.method == 'GET':
+        form = FormularioColumnaVisadoModificada(instance=columna)
+    else:
+        form = FormularioFilaVisadoModificada(request.POST, instance=columna)
+        if form.is_valid():
+            form.save()
+        messages.add_message(request, messages.SUCCESS, "La columna de visado fue modificada correctamente")
+        return redirect('director')
+    return render(request, "persona/director/edit_columna_visado.html", {'form':form})
+
+def delete_columna_visado(request, pk_columna):
+    columna = ColumnaDeVisado.objects.get(id=pk_columna)
+    if request.method == 'POST':
+        columna.activo = False
+        columna.save()
+        messages.add_message(request, messages.SUCCESS, "La columna de visado ha sido eliminada correctamente")
+        return redirect('director')
+    return render(request, "persona/director/delete_columna_visado.html", {'columna':columna})
+
+############################ elementos de visado################################################
+def listado_elementos_visado(request):
+    elementos = Elemento_Balance_Superficie.objects.all()
+    return render(request, 'persona/director/listado_elemento_visado.html', {'elementos':elementos})
+
+def edit_elemento_visado(request, pk_elemento):
+    elemento = Elemento_Balance_Superficie.objects.get(id=pk_elemento)
+    if request.method == 'GET':
+        form = FormularioElementoBalanceSuperficieModificado(instance=elemento)
+    else:
+        form = FormularioElementoBalanceSuperficieModificado(request.POST, instance=elemento)
+        if form.is_valid():
+            form.save()
+        messages.add_message(request, messages.SUCCESS, "El elemento de visado fue modificado correctamente")
+        return redirect('director')
+    return render(request, "persona/director/edit_elemento_visado.html", {'form':form})
+
+def delete_elemento_visado(request, pk_elemento):
+    elemento = Elemento_Balance_Superficie.objects.get(id=pk_elemento)
+    if request.method == 'POST':
+        elemento.activo = False
+        elemento.save()
+        messages.add_message(request, messages.SUCCESS, "El elemento de visado ha sido eliminado correctamente")
+        return redirect('director')
+    return render(request, "persona/director/delete_elemento_visado.html", {'elemento':elemento})
+
+
+############################ ITEMS DE INSPECCION ################################################
+def listado_item_inspeccion(request):
+    items = ItemInspeccion.objects.all()
+    return render(request, 'persona/director/listado_items_planilla_inspeccion.html', {'items':items})
+
+def edit_item_inspeccion(request, pk_item):
+    item = ItemInspeccion.objects.get(id=pk_item)
+    if request.method == 'GET':
+        form = FormularioItemInspeccionModificado(instance=item)
+    else:
+        form = FormularioItemInspeccionModificado(request.POST, instance=item)
+        if form.is_valid():
+            form.save()
+        messages.add_message(request, messages.SUCCESS, "El item de inspeccion fue modificado correctamente")
+        return redirect('director')
+    return render(request, "persona/director/edit_item_inspeccion.html", {'form':form})
+
+def delete_item_inspeccion(request, pk_item):
+    item = ItemInspeccion.objects.get(id=pk_item)
+    if request.method == 'POST':
+        item.activo = False
+        item.save()
+        messages.add_message(request, messages.SUCCESS, "El item de inspeccion ha sido eliminado correctamente")
+        return redirect('director')
+    return render(request, "persona/director/delete_item_inspeccion.html", {'item':item})
+
+############################ CATEGORIAS DE INSPECCION ################################################
+def listado_categoria_inspeccion(request):
+    categorias = CategoriaInspeccion.objects.all()
+    return render(request, 'persona/director/listado_categorias_planilla_inspeccion.html', {'categorias':categorias})
+
+def edit_categoria_inspeccion(request, pk_categoria):
+    categoria = CategoriaInspeccion.objects.get(id=pk_categoria)
+    if request.method == 'GET':
+        form = FormularioCategoriaInspeccionModificada(instance=categoria)
+    else:
+        form = FormularioCategoriaInspeccionModificada(request.POST, instance=categoria)
+        if form.is_valid():
+            form.save()
+        messages.add_message(request, messages.SUCCESS, "La categoria de inspeccion fue modificada correctamente")
+        return redirect('director')
+    return render(request, "persona/director/edit_elemento_visado.html", {'form':form})
+
+def delete_categoria_inspeccion(request, pk_categoria):
+    categoria = CategoriaInspeccion.objects.get(id=pk_categoria)
+    if request.method == 'POST':
+        categoria.activo = False
+        categoria.save()
+        messages.add_message(request, messages.SUCCESS, "La categoria de inspeccion ha sido eliminada correctamente")
+        return redirect('director')
+    return render(request, "persona/director/delete_categoria_inspeccion.html", {'categoria':categoria})
+
+############################ DETALLE DE INSPECCION ################################################
+def listado_detalle_inspeccion(request):
+    detalles = DetalleDeItemInspeccion.objects.all()
+    return render(request, 'persona/director/listado_detalles_planilla_inspeccion.html', {'detalles':detalles})
+
+def edit_detalle_inspeccion(request, pk_detalle):
+    detalle = DetalleDeItemInspeccion.objects.get(id=pk_detalle)
+    if request.method == 'GET':
+        form = FormularioDetalleItemModificado(instance=detalle)
+    else:
+        form = FormularioDetalleItemModificado(request.POST, instance=detalle)
+        if form.is_valid():
+            form.save()
+        messages.add_message(request, messages.SUCCESS, "El detalle de inspeccion fue modificado correctamente")
+        return redirect('director')
+    return render(request, "persona/director/edit_detalle_inspeccion.html", {'form':form})
+
+def delete_detalle_inspeccion(request, pk_detalle):
+    detalle = DetalleDeItemInspeccion.objects.get(id=pk_detalle)
+    if request.method == 'POST':
+        detalle.activo = False
+        detalle.save()
+        messages.add_message(request, messages.SUCCESS, "El detalle de inspeccion ha sido eliminado correctamente")
+        return redirect('director')
+    return render(request, "persona/director/delete_detalle_inspeccion.html", {'detalle':detalle})
+
+###########################################################################################
 def cambiar_usuario_de_grupo(request):
     contexto = {
         "ctxempleados": empleados(request),
