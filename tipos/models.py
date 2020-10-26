@@ -66,7 +66,7 @@ class TipoObra(models.Model):
 #AGREGO EL TIPO DE PAGO
 
 class Tipo_Pago(models.Model):
-    nombre = models.CharField(max_length=50, unique=True)
+    nombre = models.CharField(max_length=50,unique=False)
     activo = models.BooleanField(default=True)
 
     def __str__(self):

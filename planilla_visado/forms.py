@@ -2,6 +2,7 @@ from crispy_forms.helper import FormHelper
 from django import forms
 from django.forms import ValidationError
 from crispy_forms.layout import Submit, Field
+from planilla_visado.models import *
 
 from .models import *
 
@@ -49,7 +50,11 @@ class FormularioElementoBalanceSuperficie(forms.ModelForm):
         nombre = self.cleaned_data['nombre']
         cargados = Elemento_Balance_Superficie.objects.filter(nombre__icontains=nombre)
         if cargados.exists():
-            raise ValidationError("Ya existe {}".format(cargados.first().nombre))
+            if cargados.exists():
+                for col in cargados:
+                    if nombre == col.nombre and col.activo == 0:
+                        return col
+                raise ValidationError("Ya existe {}".format(cargados.first().nombre))
         return nombre
 
 class FormularioColumnaVisado(forms.ModelForm):
@@ -71,6 +76,9 @@ class FormularioColumnaVisado(forms.ModelForm):
         nombre = self.cleaned_data['nombre']
         cargados = ColumnaDeVisado.objects.filter(nombre__icontains=nombre)
         if cargados.exists():
+            for col in cargados:
+                if nombre == col.nombre and  col.activo == 0:
+                    return col
             raise ValidationError("Ya existe {}".format(cargados.first().nombre))
         return nombre
 
@@ -93,6 +101,9 @@ class FormularioFilaVisado(forms.ModelForm):
         nombre = self.cleaned_data['nombre']
         cargados = FilaDeVisado.objects.filter(nombre__icontains=nombre)
         if cargados.exists():
+            for col in cargados:
+                if nombre == col.nombre and col.activo == 0:
+                    return col
             raise ValidationError("Ya existe {}".format(cargados.first().nombre))
         return nombre
 
@@ -117,10 +128,9 @@ def PlanillaDeVisadoFormFactory(filas, columnas):
         }
 
     for fila in filas:
-        if fila.activo == True:
-            items = ItemDeVisado.objects.filter(fila_de_visado=fila)
+            items = ItemDeVisado.objects.filter(fila_de_visado=fila,activo=True)
             initial = [str(i.columna_de_visado.pk) for i in items]
-            fields["fila-" + str(fila.pk)] = forms.MultipleChoiceField(
+            fields[str(fila.pk)] = forms.MultipleChoiceField(
                 label=fila.nombre,
                 required=False,
                 initial=initial,
@@ -131,17 +141,21 @@ def PlanillaDeVisadoFormFactory(filas, columnas):
     class PlanillaDeVisadoMixin(forms.Form):
         NAME = 'planilla_de_visado_form'
         SUBMIT = 'planilla_de_visado_submit'
-
+        print("planilla visado mixin")
         def save(self, *args, **kwargs):
             datos = self.cleaned_data
+            cols=[]
+            lista=[]
             for field, values in datos.items():
-                pk = int(field.split("-")[1])
+                pk = int(field)
                 fila = filter(lambda f: f.pk == pk, filas).pop()
                 cols = filter(lambda c: str(c.pk) in values, columnas)
-                ItemDeVisado.objects.filter(fila_de_visado=fila).delete()
-                fila.relacionar_con_columnas(cols)
+                #  ItemDeVisado.objects.filter(fila_de_visado=fila).delete()
+                for i in cols:
+                    aux={"fila":fila, "columna": i}
+                    lista.append(aux)
+            fila.relacionar_con_columnas(lista)
                 # ItemDeVisado.objects.create(coumna_de_visado=columna, fila_de_visado=fila)
-            print datos
             return
 
         def __init__(self, *args, **kwargs):
@@ -169,7 +183,7 @@ class FormularioItemDeVisado(forms.ModelForm):
         self.fields['fila_de_visado'].widget.attrs['placeholder'] = "Ingresar fila"
         self.fields['activo'].widget.attrs['placeholder'] = "Ingresar si es activo"
 
-    def clean_nombre(self): #aca iria validacion de columna valida y fila valida
+    def clean_nombre(self):
         nombre = self.cleaned_data['nombre']
         cargados = ItemDeVisado.objects.filter(nombre__icontains=nombre)
         if cargados.exists():
