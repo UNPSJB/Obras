@@ -57,6 +57,23 @@ class FormularioElementoBalanceSuperficie(forms.ModelForm):
                 raise ValidationError("Ya existe {}".format(cargados.first().nombre))
         return nombre
 
+class FormularioElementoBalanceSuperficieModificado(forms.ModelForm):
+    NAME = 'elemento_balance_form'
+    SUBMIT = 'elemento_balance_submit'
+
+    class Meta:
+        model = Elemento_Balance_Superficie
+        fields = ('nombre','descripcion')
+
+    def __init__(self, *args, **kwargs):
+        super(FormularioElementoBalanceSuperficieModificado, self).__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        # self.helper.form_class = 'form-horizontal'
+        self.helper.add_input(Submit(self.SUBMIT, 'Guardar'))
+        self.fields['nombre'].widget.attrs['placeholder'] = "Ingresar Nombre"
+        self.fields['descripcion'].widget.attrs['placeholder'] = "Ingresar Descripcion"
+
+
 class FormularioColumnaVisado(forms.ModelForm):
     NAME = 'columna_visado_form'
     SUBMIT = 'columna_visado_submit'
@@ -74,13 +91,28 @@ class FormularioColumnaVisado(forms.ModelForm):
 
     def clean_nombre(self):
         nombre = self.cleaned_data['nombre']
-        cargados = ColumnaDeVisado.objects.filter(nombre__icontains=nombre)
+        cargados = ColumnaDeVisado.objects.filter(nombre__icontains=nombre, activo=True)
         if cargados.exists():
             for col in cargados:
                 if nombre == col.nombre and  col.activo == 0:
                     return col
             raise ValidationError("Ya existe {}".format(cargados.first().nombre))
         return nombre
+
+class FormularioColumnaVisadoModificada(forms.ModelForm):
+    NAME = 'columna_visado_form'
+    SUBMIT = 'columna_visado_submit'
+
+    class Meta:
+        model = ColumnaDeVisado
+        fields = ('nombre',)
+
+    def __init__(self, *args, **kwargs):
+        super(FormularioColumnaVisadoModificada, self).__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        # self.helper.form_class = 'form-horizontal'
+        self.helper.add_input(Submit(self.SUBMIT, 'Guardar'))
+        self.fields['nombre'].widget.attrs['placeholder'] = "Ingresar Nombre columna"
 
 class FormularioFilaVisado(forms.ModelForm):
     NAME = 'fila_visado_form'
@@ -99,13 +131,29 @@ class FormularioFilaVisado(forms.ModelForm):
 
     def clean_nombre(self):
         nombre = self.cleaned_data['nombre']
-        cargados = FilaDeVisado.objects.filter(nombre__icontains=nombre)
+        cargados = FilaDeVisado.objects.filter(nombre__icontains=nombre, activo=True)
         if cargados.exists():
             for col in cargados:
                 if nombre == col.nombre and col.activo == 0:
                     return col
             raise ValidationError("Ya existe {}".format(cargados.first().nombre))
         return nombre
+
+class FormularioFilaVisadoModificada(forms.ModelForm):
+    NAME = 'fila_visado_form'
+    SUBMIT = 'fila_visado_submit'
+
+    class Meta:
+        model = FilaDeVisado
+        fields = ('nombre',)
+
+    def __init__(self, *args, **kwargs):
+        super(FormularioFilaVisadoModificada, self).__init__(*args, **kwargs)
+        self.helper = FormHelper()
+        # self.helper.form_class = 'form-horizontal'
+        self.helper.add_input(Submit(self.SUBMIT, 'Guardar'))
+        self.fields['nombre'].widget.attrs['placeholder'] = "Ingresar Nombre fila"
+
 
 from django.utils.safestring import mark_safe
 
@@ -128,6 +176,7 @@ def PlanillaDeVisadoFormFactory(filas, columnas):
         }
 
     for fila in filas:
+        if fila.activo == True:
             items = ItemDeVisado.objects.filter(fila_de_visado=fila,activo=True)
             initial = [str(i.columna_de_visado.pk) for i in items]
             fields[str(fila.pk)] = forms.MultipleChoiceField(
@@ -190,46 +239,3 @@ class FormularioItemDeVisado(forms.ModelForm):
             raise ValidationError("Ya existe {}".format(cargados.first().nombre))
         return nombre
 
-class FormularioElementoBalanceSuperficieModificado(forms.ModelForm):
-    NAME = 'elemento_balance_form'
-    SUBMIT = 'elemento_balance_submit'
-
-    class Meta:
-        model = Elemento_Balance_Superficie
-        fields = ('nombre','descripcion')
-
-    def __init__(self, *args, **kwargs):
-        super(FormularioElementoBalanceSuperficieModificado, self).__init__(*args, **kwargs)
-        self.helper = FormHelper()
-        # self.helper.form_class = 'form-horizontal'
-        self.helper.add_input(Submit(self.SUBMIT, 'Guardar'))
-        self.fields['nombre'].widget.attrs['placeholder'] = "Ingresar Nombre"
-        self.fields['descripcion'].widget.attrs['placeholder'] = "Ingresar Descripcion"
-
-class FormularioColumnaVisadoModificada(forms.ModelForm):
-    NAME = 'columna_visado_modificada_form'
-    SUBMIT = 'columna_visado_modificada_submit'
-
-    class Meta:
-        model = ColumnaDeVisado
-        fields = ('nombre',)
-
-    def __init__(self, *args, **kwargs):
-        super(FormularioColumnaVisadoModificada, self).__init__(*args, **kwargs)
-        self.helper = FormHelper()
-        self.helper.add_input(Submit(self.SUBMIT, 'Guardar'))
-        self.fields['nombre'].widget.attrs['placeholder'] = "Ingresar Nombre columna"
-
-class FormularioFilaVisadoModificada(forms.ModelForm):
-    NAME = 'fila_visado_modificada_form'
-    SUBMIT = 'fila_visado_modificada_submit'
-
-    class Meta:
-        model = FilaDeVisado
-        fields = ('nombre',)
-
-    def __init__(self, *args, **kwargs):
-        super(FormularioFilaVisadoModificada, self).__init__(*args, **kwargs)
-        self.helper = FormHelper()
-        self.helper.add_input(Submit(self.SUBMIT, 'Guardar'))
-        self.fields['nombre'].widget.attrs['placeholder'] = "Ingresar Nombre fila"

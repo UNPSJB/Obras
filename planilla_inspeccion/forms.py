@@ -24,7 +24,7 @@ class FormularioCategoriaInspeccion(forms.ModelForm):
 
     def clean_nombre(self):
         nombre = self.cleaned_data['nombre']
-        cargados = CategoriaInspeccion.objects.filter(nombre__icontains=nombre)
+        cargados = CategoriaInspeccion.objects.filter(nombre__icontains=nombre, activo=True)
         if cargados.exists():
             raise ValidationError("Ya existe {}".format(cargados.first().nombre))
         return nombre
@@ -40,6 +40,7 @@ class FormularioCategoriaInspeccionModificada(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(FormularioCategoriaInspeccionModificada, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
+        # self.helper.form_class = 'form-horizontal'
         self.helper.add_input(Submit(self.SUBMIT, 'Guardar'))
         self.fields['nombre'].widget.attrs['placeholder'] = "Ingresar nombre"
         self.fields['descripcion'].widget.attrs['placeholder'] = "Ingresar Descripcion"
@@ -62,7 +63,7 @@ class FormularioItemInspeccion(forms.ModelForm):
 
     def clean_nombre(self):
         nombre = self.cleaned_data['nombre']
-        cargados = ItemInspeccion.objects.filter(nombre__icontains=nombre)
+        cargados = ItemInspeccion.objects.filter(nombre__icontains=nombre, activo=True)
         if cargados.exists():
             raise ValidationError("Ya existe {}".format(cargados.first().nombre))
         return nombre
@@ -78,6 +79,7 @@ class FormularioItemInspeccionModificado(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(FormularioItemInspeccionModificado, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
+        # self.helper.form_class = 'form-horizontal'
         self.helper.add_input(Submit(self.SUBMIT, 'Guardar'))
         self.fields['nombre'].widget.attrs['placeholder'] = "Ingresar nombre"
 
@@ -94,13 +96,13 @@ class FormularioDetalleItem(forms.ModelForm):
         self.helper = FormHelper()
         # self.helper.form_class = 'form-horizontal'
         self.helper.add_input(Submit(self.SUBMIT, 'Guardar'))
-        self.fields['item_inspeccion'].widget.attrs['placeholder'] = "Ingresar item inspeccion"
-        self.fields['categoria_inspeccion'].widget.attrs['placeholder'] = "Ingresar Categoria"
+        self.fields['item_inspeccion'].queryset = ItemInspeccion.objects.filter(activo=True)
+        self.fields['categoria_inspeccion'].queryset = CategoriaInspeccion.objects.filter(activo=True)
         self.fields['nombre'].widget.attrs['placeholder'] = "Ingresar nombre"
 
     def clean_nombre(self):
         nombre = self.cleaned_data['nombre']
-        cargados = DetalleDeItemInspeccion.objects.filter(nombre__icontains=nombre)
+        cargados = DetalleDeItemInspeccion.objects.filter(nombre__icontains=nombre, activo=True)
         if cargados.exists():
             raise ValidationError("Ya existe {}".format(cargados.first().nombre))
         return nombre
@@ -116,7 +118,8 @@ class FormularioDetalleItemModificado(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         super(FormularioDetalleItemModificado, self).__init__(*args, **kwargs)
         self.helper = FormHelper()
+        # self.helper.form_class = 'form-horizontal'
         self.helper.add_input(Submit(self.SUBMIT, 'Guardar'))
-        self.fields['item_inspeccion'].widget.attrs['placeholder'] = "Ingresar item inspeccion"
-        self.fields['categoria_inspeccion'].widget.attrs['placeholder'] = "Ingresar Categoria"
+        self.fields['item_inspeccion'].queryset = ItemInspeccion.objects.filter(activo=True)
+        self.fields['categoria_inspeccion'].queryset = CategoriaInspeccion.objects.filter(activo=True)
         self.fields['nombre'].widget.attrs['placeholder'] = "Ingresar nombre"

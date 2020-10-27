@@ -2175,6 +2175,22 @@ def mostrar_director(request):
                             elemento.activo=1
                             elemento.descripcion=resultado.descripcion
                             elemento.save()
+                    elif isinstance(resultado, TipoObra):
+                            tipoObra = TipoObra.objects.get(nombre=resultado.nombre)
+                            tipoObra.activo = 1
+                            tipoObra.save()
+                    elif isinstance(resultado, CategoriaInspeccion):
+                            categoria = CategoriaInspeccion.objects.get(nombre=resultado.nombre)
+                            categoria.activo = 1
+                            categoria.save()
+                    elif isinstance(resultado, ItemInspeccion):
+                            item = ItemInspeccion.objects.get(nombre=resultado.nombre)
+                            item.activo = 1
+                            item.save()
+                    elif isinstance(resultado, DetalleDeItemInspeccion):
+                            detalle = DetalleDeItemInspeccion.objects.get(nombre=resultado.nombre)
+                            detalle.activo = 1
+                            detalle.save()
                     else:
                          _form.save()
                 except:
@@ -2206,177 +2222,19 @@ FORMS_DIRECTOR = {(k.NAME, k.SUBMIT): k for k in {
     FormularioDetalleItem
 }}
 
-
-########## PARA EDITAR FALTA ACA#############################################
-def editarFilaVisado(request):
-    filas = FilaDeVisado.objects.all()
-    return render(request, 'persona/director/editarfilaVisado.html', {'filas': filas})
-
-def editarFilaVisado2(request):
-    listFilas = FilaDeVisado.objects.all()
-    filaVisado = 0
-    if "Guardar" in request.POST:
-        for f in listFilas:
-            if request.POST['fila'] == f.nombre:
-                filaVisado = f.id
-    fv = FilaDeVisado.objects.get(id=filaVisado)
-    return render(request, 'persona/director/editar_fila_visado.html', {"fv": fv})
-####################################################################
-########## PARA ELIMINAR #############################################
-def baja_fila_visado(request):
-    filas = FilaDeVisado.objects.all()
-    return render(request, 'persona/director/baja_fila_visado.html', {'filas':filas})
-
-def eliminar_fila_visado(request):
-    listFilas = FilaDeVisado.objects.all()
-    filaVisado = 0
-    if "Guardar" in request.POST:
-        for f in listFilas:
-            if request.POST['fila'] == f.nombre:
-                filaVisado = f.id
-    fv = FilaDeVisado.objects.get(id=filaVisado)
-    fv.activo = False
-    #fv.nombre = "eliminada"
-    fv.save()
-    messages.add_message(request, messages.SUCCESS, 'Fila de visado eliminada.')
-    return redirect('director')
-
-def baja_columna_visado(request):
-    columnas = ColumnaDeVisado.objects.all()
-    return render(request, 'persona/director/baja_columna_visado.html', {'columnas':columnas})
-
-def eliminar_columna_visado(request):
-    listColumnas = ColumnaDeVisado.objects.all()
-    columnaVisado = 0
-    if "Guardar" in request.POST:
-        for c in listColumnas:
-            if request.POST['columna'] == c.nombre:
-                columnaVisado = c.id
-    cv = ColumnaDeVisado.objects.get(id=columnaVisado)
-    cv.activo = False
-    #cv.nombre = "eliminada"
-    cv.save()
-    messages.add_message(request, messages.SUCCESS, 'Columna de visado eliminada.')
-    return redirect('director')
-
-def baja_elemento_visado(request):
-    elementos = Elemento_Balance_Superficie.objects.all()
-    return render(request, 'persona/director/baja_columna_visado.html', {'elementos':elementos})
-
-def eliminar_elemento_visado(request):
-    listElementos = Elemento_Balance_Superficie.objects.all()
-    elementoVisado = 0
-    if "Guardar" in request.POST:
-        for e in listElementos:
-            if request.POST['elemento'] == e.nombre:
-                elementoVisado = e.id
-    ev = Elemento_Balance_Superficie.objects.get(id=elementoVisado)
-    ev.activo = False
-    #ev.nombre = "eliminado"
-    ev.save()
-    messages.add_message(request, messages.SUCCESS, 'Elemento de visado eliminado.')
-    return redirect('director')
-
-def baja_categoria_inspeccion(request):
-    categorias = CategoriaInspeccion.objects.all()
-    return render(request, 'persona/director/baja_categoria_inspeccion.html', {'categorias':categorias})
-
-def eliminar_categoria_inspeccion(request):
-    listCategorias = CategoriaInspeccion.objects.all()
-    categoriaInspeccion = 0
-    detalles = DetalleDeItemInspeccion.objects.all()
-    if "Guardar" in request.POST:
-        for c in listCategorias:
-            if request.POST['categoria'] == c.nombre:
-                categoriaInspeccion = c.id
-    cat = CategoriaInspeccion.objects.get(id=categoriaInspeccion)
-    cat.activo = False
-    #cat.nombre = "eliminada"
-    cat.save()
-    for d in detalles:
-        if d.categoria_inspeccion == cat:
-            d.activo = False
-           # d.nombre = "eliminado"
-            d.save()
-    messages.add_message(request, messages.SUCCESS, 'Categoria de inspeccion eliminada.')
-    return redirect('director')
-
-def baja_item_inspeccion(request):
-    items = ItemInspeccion.objects.all()
-    return render(request, 'persona/director/baja_item_inspeccion.html', {'items':items})
-
-def eliminar_item_inspeccion(request):
-    listItems = ItemInspeccion.objects.all()
-    itemInspeccion = 0
-    detalles = DetalleDeItemInspeccion.objects.all()
-    if "Guardar" in request.POST:
-        for i in listItems:
-            if request.POST['item'] == i.nombre:
-                itemInspeccion = i.id
-    item_inspeccion = ItemInspeccion.objects.get(id=itemInspeccion)
-    item_inspeccion.activo = False
-    item_inspeccion.nombre = "eliminado"
-    item_inspeccion.save()
-    for d in detalles:
-        if d.item_inspeccion == item_inspeccion:
-            d.activo = False
-            d.nombre = "eliminado"
-            d.save()
-    messages.add_message(request, messages.SUCCESS, 'Item de inspeccion eliminado.')
-    return redirect('director')
-
-def baja_detalle_inspeccion(request):
-    detalles = DetalleDeItemInspeccion.objects.all()
-    return render(request, 'persona/director/baja_detalle_inspeccion.html', {'detalles':detalles})
-
-def eliminar_detalle_inspeccion(request):
-    listDetalles = DetalleDeItemInspeccion.objects.all()
-    detalleInspeccion = 0
-    if "Guardar" in request.POST:
-        for d in listDetalles:
-            if request.POST['detalle'] == d.nombre:
-                detalleInspeccion = d.id
-    detalle_inspeccion = DetalleDeItemInspeccion.objects.get(id=detalleInspeccion)
-    detalle_inspeccion.activo = False
-    detalle_inspeccion.nombre = "eliminado"
-    detalle_inspeccion.save()
-    messages.add_message(request, messages.SUCCESS, 'Detalle de inspeccion eliminado.')
-    return redirect('director')
-
-
-def baja_tipo_pago(request):
-    tiposPagos = Tipo_Pago.objects.all()
-    return render(request, 'persona/director/baja.html', {'tiposPagos':tiposPagos})
-
-def eliminar_tipo_pago(request):
-    listTiposPagos = Tipo_Pago.objects.all()
-    tipoPago = 0
-    if "Guardar" in request.POST:
-        for t in listTiposPagos:
-            if request.POST['tipo_pago'] == t.nombre:
-                tipoPago = t.id
-    tipoP = Tipo_Pago.objects.get(id=tipoPago)
-    tipoP.activo = False
-    tipoP.save()
-    messages.add_message(request, messages.SUCCESS, 'Tipo de pago eliminado.')
-    return redirect('director')
-from planilla_visado.forms import FormularioFilaVisado
-from planilla_visado.forms import FormularioColumnaVisado
-from planilla_visado.forms import FormularioItemDeVisado
-from planilla_visado.forms import FormularioDocBalanceSuperficie
-from planilla_visado.forms import FormularioElementoBalanceSuperficie
-from planilla_visado.forms import FormularioFilaVisadoModificada
-from tipos.forms import FormularioTipoPagoModificado
-from planilla_visado.forms import FormularioColumnaVisadoModificada
-from planilla_visado.forms import FormularioElementoBalanceSuperficieModificado
 from planilla_inspeccion.forms import FormularioCategoriaInspeccionModificada
 from planilla_inspeccion.forms import FormularioItemInspeccionModificado
 from planilla_inspeccion.forms import FormularioDetalleItemModificado
+from planilla_visado.forms import FormularioFilaVisadoModificada
+from planilla_visado.forms import FormularioElementoBalanceSuperficieModificado
+from planilla_visado.forms import FormularioColumnaVisadoModificada
+from tipos.forms import FormularioTipoPagoModificado
 from tipos.forms import FormularioTipoObraModificada
 
 def listado_tiposPago(request):
     tiposPagos = Tipo_Pago.objects.all()
     return render(request, 'persona/director/listado_tiposPago.html', {'tiposPagos':tiposPagos})
+
 def editar_tipoPago(request, pk_tipoPago):
     tipoPago = Tipo_Pago.objects.get(id=pk_tipoPago)
     if request.method == 'GET':
@@ -2385,7 +2243,9 @@ def editar_tipoPago(request, pk_tipoPago):
         form = FormularioTipoPagoModificado(request.POST, instance=tipoPago)
         if form.is_valid():
             form.save()
-        messages.add_message(request, messages.SUCCESS, "Tipo de pago modificado correctamente")
+            messages.add_message(request, messages.SUCCESS, "Tipo de pago modificado correctamente")
+        else:
+            messages.add_message(request, messages.ERROR, "El tipo de pago no pudo ser modificado (nombre existente)")
         return redirect('director')
     return render(request, 'persona/director/editar_tipoPago.html', {'form':form})
 
@@ -2401,7 +2261,6 @@ def delete_tipo_pago(request, pk_tipoPago):
 ################### tipos de obras #####################################
 def listado_tiposObras(request):
     tiposObras = TipoObra.objects.all()
-    #raise Exception(tiposObras)
     return render(request, 'persona/director/listado_tiposObras.html', {'tiposObras':tiposObras})
 
 def edit_tipoObra(request, pk_tipoObra):
@@ -2412,7 +2271,9 @@ def edit_tipoObra(request, pk_tipoObra):
         form = FormularioTipoObraModificada(request.POST, instance=tipoObra)
         if form.is_valid():
             form.save()
-        messages.add_message(request, messages.SUCCESS, "Tipo de obra modificada correctamente")
+            messages.add_message(request, messages.SUCCESS, "Tipo de obra modificada correctamente")
+        else:
+            messages.add_message(request, messages.ERROR, "El tipo de obra no pudo ser modificada (nombre existente)")
         return redirect('director')
     return render(request, 'persona/director/edit_tipoObra.html', {'form':form})
 
@@ -2424,6 +2285,7 @@ def delete_tipoObra(request, pk_tipoObra):
         messages.add_message(request, messages.SUCCESS, "El tipo de obra ha sido eliminada correctamente")
         return redirect('director')
     return render(request, "persona/director/delete_tipoObra.html", {'tipoObra':tipoObra})
+
 ################### filas de visado #####################################
 def listado_filas_visado(request):
     filas = FilaDeVisado.objects.all()
@@ -2437,14 +2299,15 @@ def edit_fila_visado(request, pk_fila):
         form = FormularioFilaVisadoModificada(request.POST, instance=fila)
         if form.is_valid():
             form.save()
-        messages.add_message(request, messages.SUCCESS, "La fila de visado fue modificada correctamente")
+            messages.add_message(request, messages.SUCCESS, "La fila de visado fue modificada correctamente")
+        else:
+            messages.add_message(request, messages.ERROR, "La fila de visado no pudo ser modificada (nombre existente)")
         return redirect('director')
     return render(request, "persona/director/edit_fila_visado.html", {'form':form})
 
 def delete_fila_visado(request, pk_fila):
     fila = FilaDeVisado.objects.get(id=pk_fila)
     if request.method == 'POST':
-        #fila.delete()
         fila.activo = False
         fila.save()
         messages.add_message(request, messages.SUCCESS, "La fila de visado ha sido eliminada correctamente")
@@ -2461,10 +2324,12 @@ def edit_columna_visado(request, pk_columna):
     if request.method == 'GET':
         form = FormularioColumnaVisadoModificada(instance=columna)
     else:
-        form = FormularioFilaVisadoModificada(request.POST, instance=columna)
+        form = FormularioColumnaVisadoModificada(request.POST, instance=columna)
         if form.is_valid():
             form.save()
-        messages.add_message(request, messages.SUCCESS, "La columna de visado fue modificada correctamente")
+            messages.add_message(request, messages.SUCCESS, "La columna de visado fue modificada correctamente")
+        else:
+            messages.add_message(request, messages.ERROR, "La columna de visado no pudo ser modificada (nombre existente)")
         return redirect('director')
     return render(request, "persona/director/edit_columna_visado.html", {'form':form})
 
@@ -2490,7 +2355,9 @@ def edit_elemento_visado(request, pk_elemento):
         form = FormularioElementoBalanceSuperficieModificado(request.POST, instance=elemento)
         if form.is_valid():
             form.save()
-        messages.add_message(request, messages.SUCCESS, "El elemento de visado fue modificado correctamente")
+            messages.add_message(request, messages.SUCCESS, "El elemento de visado fue modificado correctamente")
+        else:
+            messages.add_message(request, messages.ERROR, "El elemento de visado no pudo ser modificado (nombre existente)")
         return redirect('director')
     return render(request, "persona/director/edit_elemento_visado.html", {'form':form})
 
@@ -2517,15 +2384,22 @@ def edit_item_inspeccion(request, pk_item):
         form = FormularioItemInspeccionModificado(request.POST, instance=item)
         if form.is_valid():
             form.save()
-        messages.add_message(request, messages.SUCCESS, "El item de inspeccion fue modificado correctamente")
+            messages.add_message(request, messages.SUCCESS, "El item de inspeccion fue modificado correctamente")
+        else:
+            messages.add_message(request, messages.ERROR, "El item de inspeccion no pudo ser modificado (nombre existente)")
         return redirect('director')
     return render(request, "persona/director/edit_item_inspeccion.html", {'form':form})
 
 def delete_item_inspeccion(request, pk_item):
     item = ItemInspeccion.objects.get(id=pk_item)
+    detalles = DetalleDeItemInspeccion.objects.all()
     if request.method == 'POST':
         item.activo = False
         item.save()
+        for d in detalles:
+            if d.item_inspeccion == item_inspeccion:
+                d.activo = False
+                d.save()
         messages.add_message(request, messages.SUCCESS, "El item de inspeccion ha sido eliminado correctamente")
         return redirect('director')
     return render(request, "persona/director/delete_item_inspeccion.html", {'item':item})
@@ -2543,15 +2417,22 @@ def edit_categoria_inspeccion(request, pk_categoria):
         form = FormularioCategoriaInspeccionModificada(request.POST, instance=categoria)
         if form.is_valid():
             form.save()
-        messages.add_message(request, messages.SUCCESS, "La categoria de inspeccion fue modificada correctamente")
+            messages.add_message(request, messages.SUCCESS, "La categoria de inspeccion fue modificada correctamente")
+        else:
+            messages.add_message(request, messages.ERROR, "La categoria de inspeccion no pudo ser modificada (nombre existente)")
         return redirect('director')
     return render(request, "persona/director/edit_elemento_visado.html", {'form':form})
 
 def delete_categoria_inspeccion(request, pk_categoria):
     categoria = CategoriaInspeccion.objects.get(id=pk_categoria)
+    detalles = DetalleDeItemInspeccion.objects.all()
     if request.method == 'POST':
         categoria.activo = False
         categoria.save()
+        for d in detalles:
+            if d.categoria_inspeccion == categoria:
+                d.activo = False
+                d.save()
         messages.add_message(request, messages.SUCCESS, "La categoria de inspeccion ha sido eliminada correctamente")
         return redirect('director')
     return render(request, "persona/director/delete_categoria_inspeccion.html", {'categoria':categoria})
@@ -2569,7 +2450,9 @@ def edit_detalle_inspeccion(request, pk_detalle):
         form = FormularioDetalleItemModificado(request.POST, instance=detalle)
         if form.is_valid():
             form.save()
-        messages.add_message(request, messages.SUCCESS, "El detalle de inspeccion fue modificado correctamente")
+            messages.add_message(request, messages.SUCCESS, "El detalle de inspeccion fue modificado correctamente")
+        else:
+            messages.add_message(request, messages.ERROR, "El detalle de inspeccion no pudo ser modificado (nombre existente)")
         return redirect('director')
     return render(request, "persona/director/edit_detalle_inspeccion.html", {'form':form})
 
