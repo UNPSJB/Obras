@@ -41,7 +41,9 @@
                                                 class="select form-control input-sm" id="id_item" required>
                                             <option value="" selected="#">---------</option>
                                             {% for i in items %}
+                                            {% if i.activo == True%}
                                             <option value="{{i}}">{{i}}</option>
+                                            {% endif %}
                                             {% endfor %}
                                         </select>
                                     </div>

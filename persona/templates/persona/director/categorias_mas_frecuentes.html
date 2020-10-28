@@ -34,17 +34,7 @@
                     <div class="row">
                             <img src="data:image/png;base64,{{grafico}}" width="800px" height="400px">
 
-                       <!-- <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4" style="float: right;">
-                            &lt;!&ndash;<form>
-                                <canvas style="height:230px;" id="canvas1"></canvas>
-                            </form>&ndash;&gt;
-                        </div>-->
-                            <!--<div class="col-xs-4 col-sm-4 col-md-4 col-lg-4" style="float: right;">
-                                <form>
-                                  <h3>Referencias</h3>
-                                    <div id="leyenda1" class="leyenda"> </div>
-                                </form>
-                        </div>-->
+
 <br>
                         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                             <div class="table-responsive">
@@ -59,10 +49,12 @@
                                         </thead>
                                         <tbody>
                                         {% for tipo_cat in tipos_categorias %}
+                                        {% if tipo_cat.activo == True %}
                                         <tr>
                                             <td class="col-xs-1">{{ tipo_cat.nombre }}</td>
                                             <td class="col-xs-1">{{ tipo_cat.descripcion }}</td>
                                         </tr>
+                                        {% endif %}
                                         {% endfor %}
                                         </tbody>
                                     </table>

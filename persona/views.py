@@ -2610,7 +2610,8 @@ def ver_categorias_mas_frecuentes(request):
                 list.append(p)
     nombres=[]
     for cat in tipos_categorias:
-        nombres.append(cat.nombre)
+        if cat.activo == True:
+            nombres.append(cat.nombre)
     for l in list:
         list_categorias = l.detalles.values_list('categoria_inspeccion_id', flat="True")
     categorias=dict(collections.Counter(list_categorias))
