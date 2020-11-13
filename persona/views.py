@@ -2604,7 +2604,17 @@ def ver_categorias_mas_frecuentes(request):
     detalles = DetalleDeItemInspeccion.objects.all()
     list = []
     datos=[]
+    planillasInspecciones = []
+    plan = []
+    for d in detalles:
+        if d.activo == True:
+            planillasInspecciones.append(d)
+
     for p in planillas:
+        for d in planillasInspecciones:
+            if p.id == d.id:
+                plan.append(p)
+    for p in plan:
         for t in tramites:
             if t.id == p.tramite.id:
                 list.append(p)
@@ -2692,7 +2702,7 @@ def __busco_item__(item):
     list = []
     nombres=[]
     datos=[]
-    e=DetalleDeItemInspeccion.objects.filter(item_inspeccion_id=i.id)
+    e=DetalleDeItemInspeccion.objects.filter(item_inspeccion_id=i.id, activo=True)
     f=PlanillaDeInspeccion.objects.filter(detalles__in=e).values_list('detalles__nombre',flat="True")
     for i in range(0,len(e)):
         nombres.append(e[i].nombre)
@@ -2768,7 +2778,7 @@ def ver_filtro_obra_fechas(request):
                  fechaFinal = value
         datos = []
         nombres = []
-        tipos = TipoObra.objects.all()
+        tipos = TipoObra.objects.filter(activo=True)
         if fechaInicial and fechaFinal is not None:
             rango = True
             e=Estado.objects.filter(timestamp__range=(fechaInicial,fechaFinal))
@@ -2947,8 +2957,8 @@ def seleccionar_fecha_item_inspeccion(request):
         else:
             return render(request, 'persona/director/listado_item_inspeccion.html')
     else:
-        categorias=DetalleDeItemInspeccion.objects.select_related().values('categoria_inspeccion_id','categoria_inspeccion__nombre','item_inspeccion_id','item_inspeccion__nombre').order_by('categoria_inspeccion_id','item_inspeccion_id').distinct()
-        items=DetalleDeItemInspeccion.objects.select_related().values('id','nombre','categoria_inspeccion_id','item_inspeccion_id','item_inspeccion__nombre').order_by('categoria_inspeccion_id','item_inspeccion_id').all()
+        categorias=DetalleDeItemInspeccion.objects.select_related().values('categoria_inspeccion_id','categoria_inspeccion__nombre','item_inspeccion_id','item_inspeccion__nombre','activo').order_by('categoria_inspeccion_id','item_inspeccion_id').distinct()
+        items=DetalleDeItemInspeccion.objects.select_related().values('id','nombre','categoria_inspeccion_id','item_inspeccion_id','item_inspeccion__nombre','activo').order_by('categoria_inspeccion_id','item_inspeccion_id').all()
         return render(request, 'persona/director/seleccionar_item_fecha.html',{"items":items,"categorias":categorias})
 
 def tramites_iniciados_finalizados(request):
@@ -3119,6 +3129,56 @@ def ver_sectores_con_mas_obras(request):
     return render(request,'persona/director/ver_sectores_con_mas_obras.html',contexto)
 
 
+############################################################################
+def seleccionar_tipoObra_sector(request):
+    datos = []
+    dato = []
+    iniciados = []
+    series = []
+    lista = []
+    nombres = ["Sectores"]
+    #nombres = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre",
+     #          "Noviembre", "Diciembre"]
+    tramites = Tramite.objects.all()
+    tiposObras = TipoObra.objects.all()
+    if "Guardar" in request.POST:
+        for name, value in request.POST.items():
+            if name.startswith('obra'):
+                tipoObra = int(value)
+        for to in tiposObras:
+            if to.id == tipoObra:
+                tipo_obra = to.nombre
+        sectores = []
+        list = []
+        tramite = Tramite.objects.filter(tipo_obra_id=tipoObra)
+        for t in tramite:
+            if not t.sector in sectores:
+                sectores.append(t.sector)
+        for s in sectores:
+            list.append([s, 0])
+        sectores = list
+        list_sectores = []
+        listaSectores = []
+        for name, value in sectores:
+            v = 0
+            for t in tramites:
+                if t.sector == name:
+                    v += 1
+                    s = str(t.sector)
+            list_sectores.append([name, v])
+            listaSectores.append(v)
+            series.append(s)
+            datos.append([v])
+        titulo = "Sectores con mas obras segun obra seleccionada"
+        if len(datos) > 0:
+            grafico = grafico_de_barras_v(datos, nombres, titulo,series)
+            imagen = base64.b64encode(grafico.asString("png"))
+            contexto = {"grafico": imagen, "lista": list_sectores, "tipo_obra":tipo_obra}
+        return render(request, 'persona/director/sectores_con_mas_obras.html', contexto)
+    else:
+        tipos_obras = TipoObra.objects.all()
+        return render(request, 'persona/director/seleccionar_tipoObra_sector.html', {"tipos_obras": tipos_obras})
+
 def ver_listado_usuarios(request):
     grupossistema = Group.objects.all()
     personas = Persona.objects.all()
@@ -3135,35 +3195,57 @@ def ver_listado_usuarios(request):
 
     contexto = {'listados':listados, 'grupossistema':grupossistema}
     return render(request, 'persona/director/listado_de_usuarios_segun_grupo.html', contexto)
+#####################################################################################
 
 def tiempo_aprobacion_visados(request):
-    listado_tramites = []
-    tramites = Tramite.objects.all()
-    list_estados_fechas = []
-    iniciados = []
-    finalizados = []
-    planillas = PlanillaDeVisado.objects.all()
-    list = []
-    meses = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre",
-             "Noviembre", "Diciembre"]
+    datos = []
+    series = []
+    visados = []
+    aprobados = []
+    list_tramites = []
+    list_planillas = []
+    tram = 0
+    cant = 0
+    cantV = 0
+    cantA = 0
+    lista = []
+    nombres = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre",
+              "Noviembre", "Diciembre"]
+    year = date.today().year
+    if "Guardar" in request.POST:
+        for name, value in request.POST.items():
+            if name.startswith('fecha'):
+                year = int(value)
+        totalAprobados = 0
+        totalVisados = 0
+        for mes in range(12):
+            m = mes + 1
+            diaFinal = monthrange(year, m)
+            tramites = Tramite.objects.en_estado(Visado)
+            listPlanillas = PlanillaDeVisado.objects.all()
+            fechas = []
+            list = []
+            for t in tramites:
+                planilla = PlanillaDeVisado.objects.filter(tramite_id=t.id)#.count()  # ultima planilla de visado
+                cant = PlanillaDeVisado.objects.filter(tramite_id=t.id).count()
+                list_planillas.append(planilla)
+                lista.append([t.id, cant])
+                primerPlanilla = PlanillaDeVisado.objects.filter(tramite_id=t.id).first()
+                ultimaPlanilla = PlanillaDeVisado.objects.filter(tramite_id=t.id).last()
+                visados.append(primerPlanilla)
 
-    for p in planillas:
-        for t in tramites:
-            if t.id == p.tramite.id:
-                list.append(p)
-    #raise Exception(list)
-    for p in planillas:
-        visadosTramites = PlanillaDeVisado.objects.filter(tramite_id=p.id).exclude(tramite_id__isnull=True).count()
-    raise Exception(visadosTramites)
-    #visadosIniciados = Estado.objects.filter(tipo=3)
-    #visadosAprobados = Estado.objects.filter(tipo=5).count()
+        raise Exception(lista)
+        titulo = "Tiempo aprobacion visados"
+        if len(datos) > 0:
+            #raise Exception(lista)
+            grafico = grafico_de_barras_v(datos, nombres, titulo, series)
+            imagen = base64.b64encode(grafico.asString("png"))
+            contexto = {"grafico": imagen, "lista": lista}
+        return render(request, 'persona/director/tiempo_aprobacion_visados.html')
+    else:
+        return render(request, 'persona/director/seleccionar_fecha_visados_aprobados.html')
 
-    return render(request, 'persona/director/tiempo_aprobacion_visados.html')
-##########################################################################
-
-###########################################################################
-
-
+############################################################################
 class ReporteTramitesDirectorExcel(TemplateView):
 
     def get(self, request, *args, **kwargs):

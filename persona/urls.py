@@ -178,6 +178,7 @@ urlpatterns = [
     url(r'^edit_detalle_inspeccion/(?P<pk_detalle>\d+)$', views.edit_detalle_inspeccion, name="edit_detalle_inspeccion"),
     url(r'^delete_detalle_inspeccion/(?P<pk_detalle>\d+)$', views.delete_detalle_inspeccion, name="delete_detalle_inspeccion"),
 
+    url(r'^seleccionar_tipoObra_sector', views.seleccionar_tipoObra_sector, name="seleccionar_tipoObra_sector"),
 
     #cajero -------------------------------------------------------------------------------------------------------
     url(r'^cajero$', views.mostrar_cajero, name="cajero"),

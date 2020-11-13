@@ -20,7 +20,7 @@
             <h5 class="panel-title">
                 <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFive"
                    aria-expanded="false" aria-controls="collapseFive">
-                    <font color="#ffffff" size="2">Ver item mas usados anualmente</font>
+                    <font color="#ffffff" size="2">Visados aprobados en año seleccionado</font>
                 </a>
             </h5>
         </div>
@@ -44,7 +44,7 @@
                                 </div>
 
                                 <br>
-                                <label> Seleccione el item de inspeccion</label>
+                                <!--<label> Seleccione el item de inspeccion</label>
                                 <input name="guardar_financiacion" type="hidden">
                                 <div id="div_id_item" class="form-group">
                                     <div class="controls ">
@@ -52,24 +52,22 @@
                                                 class="form-control multiple input-sm" id="id_item" required multiple>
                                             <option value="" selected="#">--------</option>
                                             {%for c in categorias%}
-                                            {% if c.activo == True %}
                                             <optgroup label="{{c.categoria_inspeccion__nombre}} - {{c.item_inspeccion__nombre}}">
                                                 {% for i in items %}
-                                                {% if i.activo == True %}
+
                                                 {%if c.categoria_inspeccion_id == i.categoria_inspeccion_id and c.item_inspeccion_id == i.item_inspeccion_id%}
                                                 <option   value="{{i.nombre}}">{{i.nombre}}</option>
 
                                                 {%endif%}
-                                                {% endif %}
                                                 {% endfor %}
-                                                {% endif %}
+
                                             </optgroup>
                                             {%endfor%}
 
                                         </select>
 
                                     </div>
-                                </div>
+                                </div>-->
                                                         </div>
                                 <div class="row">
                                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="left">
