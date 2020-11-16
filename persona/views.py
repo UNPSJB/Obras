@@ -2875,6 +2875,8 @@ def grafico_de_barras_v(datos,nombres, titulo,series):
         for i in range(longitud): bc.bars[i].fillColor = col[i]
     for i in range(len(series)): bc.bars[i].name = series[i]
     bc.categoryAxis.categoryNames=[n for n in nombres]
+    print(nombres)
+    print(datos)
     drawing.add(bc)
     drawing.add(my_title)
     add_legend(drawing, bc, datos)
@@ -2895,7 +2897,7 @@ def grafico_de_barras(datos,nombres,titulo):
   #  lc.lines[0].strokeWidth = 1.5
     drawing.add(lc)
     drawing.add(my_title)
-
+    print(drawing)
     return drawing
 
 def seleccionar_fecha_item_inspeccion(request):
@@ -3197,7 +3199,7 @@ def ver_listado_usuarios(request):
     return render(request, 'persona/director/listado_de_usuarios_segun_grupo.html', contexto)
 #####################################################################################
 
-def tiempo_aprobacion_visados(request):
+def tiempo_aprobacion_visado(request):
     datos = []
     series = []
     visados = []
@@ -3211,37 +3213,124 @@ def tiempo_aprobacion_visados(request):
     lista = []
     nombres = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre",
               "Noviembre", "Diciembre"]
-    year = date.today().year
+    #year = date.today().year
     if "Guardar" in request.POST:
         for name, value in request.POST.items():
             if name.startswith('fecha'):
                 year = int(value)
         totalAprobados = 0
         totalVisados = 0
+        tramites = Tramite.objects.en_estado(Aceptado)
         for mes in range(12):
             m = mes + 1
+            cant = 0
+
             diaFinal = monthrange(year, m)
-            tramites = Tramite.objects.en_estado(Visado)
             listPlanillas = PlanillaDeVisado.objects.all()
             fechas = []
             list = []
-            for t in tramites:
-                planilla = PlanillaDeVisado.objects.filter(tramite_id=t.id)#.count()  # ultima planilla de visado
-                cant = PlanillaDeVisado.objects.filter(tramite_id=t.id).count()
-                list_planillas.append(planilla)
-                lista.append([t.id, cant])
-                primerPlanilla = PlanillaDeVisado.objects.filter(tramite_id=t.id).first()
-                ultimaPlanilla = PlanillaDeVisado.objects.filter(tramite_id=t.id).last()
-                visados.append(primerPlanilla)
 
-        raise Exception(lista)
+            tEstado=Estado.objects.filter(timestamp__range=(datetime.date(year, m, 01), datetime.date(year, m, diaFinal[1])), tipo=(5)).count()
+
+            #for t in tramites:
+            #    cant += Estado.objects.filter(timestamp__range=(datetime.date(year, m, 01), datetime.date(year, m, diaFinal[1])), tipo=(5), tramite_id= t.id).count()
+# aceptados finalizados siguiente estado y aceptados finalizados  promedio de
+            #if tEstado is None:
+              #  datos.append(0)
+            lista.append(cant)
+        print("".join([str(x.id) for x in tramites]))
+            # for t in tramites:
+            #     planilla = PlanillaDeVisado.objects.filter(tramite_id=t.id)#.count()  # ultima planilla de visado
+            #     cant = PlanillaDeVisado.objects.filter(tramite_id=t.id).count()
+            #     list_planillas.append(planilla)
+            #     lista.append([t.id, cant])
+            #     primerPlanilla = PlanillaDeVisado.objects.filter(tramite_id=t.id).first()
+            #     ultimaPlanilla = PlanillaDeVisado.objects.filter(tramite_id=t.id).last()
+            #     visados.append(primerPlanilla)
+        datos.append(lista)
+
+        #raise Exception(datos)
         titulo = "Tiempo aprobacion visados"
+        print(len(datos))
         if len(datos) > 0:
-            #raise Exception(lista)
-            grafico = grafico_de_barras_v(datos, nombres, titulo, series)
-            imagen = base64.b64encode(grafico.asString("png"))
-            contexto = {"grafico": imagen, "lista": lista}
-        return render(request, 'persona/director/tiempo_aprobacion_visados.html')
+                #raise Exception(lista)
+              grafico = grafico_de_barras_v(datos, nombres, titulo,["aceptados"])
+              imagen = base64.b64encode(grafico.asString("png"))
+              contexto = {"grafico": imagen, "lista": datos}
+#             except:
+  #              return redirect('director')
+        return render(request, 'persona/director/tiempo_aprobacion_visados.html',contexto)
+
+    else:
+        return render(request, 'persona/director/seleccionar_fecha_visados_aprobados.html')
+
+def tiempo_aprobacion_visados(request):
+    datos = []
+    visados = []
+    aprobados = []
+    tramitesAgendados=[]
+    tramitesAprobados=[]
+    agendados=[]
+    tramA = []
+    tramAg = []
+    cant = 0
+    lista = []
+    lista2=[]
+    tramites = []
+    tramitesV = []
+    meses = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+    listaAp = []
+    nombres = ["1 mes", "2 meses", "3 meses", "4 meses", "5 meses", "6 meses", "7 meses", "8 meses", "9 meses", "10 meses", "11 meses", "12 meses"]
+    if "Guardar" in request.POST:
+        for name, value in request.POST.items():
+            if name.startswith('fecha'):
+                year = int(value)
+        tramites=Estado.objects.filter(timestamp__range=(datetime.date(year, 01, 01),(datetime.date(year, 12, 31))),tipo=1).values_list('tramite', flat="True").distinct().count()
+        tramitesV=Estado.objects.filter(timestamp__range=(datetime.date(year, 01, 01),(datetime.date(year, 12, 31))),tipo=5).values_list('tramite', flat="True").distinct() #todos los tramites que terminaron de ser visados (anuales)
+        tramitesAprobados=Estado.objects.filter(timestamp__range=(datetime.date(year, 01, 01),(datetime.date(year, 12, 31))),tipo=3).values_list('tramite', flat="True").distinct() #todos los tramites que terminaron de ser visados (anuales)
+        tramitesAgendados=Estado.objects.filter(timestamp__range=(datetime.date(year, 01, 01),(datetime.date(year, 12, 31))),tipo=5, tramite_id__in=tramitesAprobados).values_list('tramite', flat="True").distinct().count() #todos los tramites que terminaron de ser visados (anuales)
+        listaAg=[]
+        for mes in range(12):
+            m = mes + 1
+            cant = 0
+            diaFinal = monthrange(year, m)
+            tEstadoAprobado=Estado.objects.filter(timestamp__range=(datetime.date(year, m, 01), datetime.date(year, m, diaFinal[1])), tipo=(3))#.count()
+            tramA=[t.tramite_id for t in tEstadoAprobado]
+            aprobados=list(set(tramA))
+            tEstadoAgendado = Estado.objects.filter(timestamp__range=(datetime.date(year, m, 01), datetime.date(year, m, diaFinal[1])),tipo=(5))  # .count()
+            tramAg = [t.tramite_id for t in tEstadoAgendado]
+            agendados = list(set(tramAg))
+            a={"mes":mes,"aprobados":aprobados}
+            b={"mes":mes,"agendados":agendados}
+            listaAp.append(a)
+            listaAg.append(b)
+        for i in listaAp:
+            for j in i["aprobados"]:
+                for s in listaAg:
+                    for d in s["agendados"]:
+                        diferencia=s["mes"]-i["mes"]
+                        if j==d:
+                             if diferencia >=0:
+                                 try:
+                                     cant=meses[diferencia]+1
+                                     meses[diferencia]=cant
+                                 except:
+                                     pass
+        meses=[cant/float(tramites) for cant in meses]
+        planillas= PlanillaDeVisado.objects.filter(fecha__range=(datetime.date(year, 01, 01),(datetime.date(year, 12, 31))))
+        for t in tramitesV:
+            aux=filter(lambda p: t==p.tramite_id, planillas)
+            lista.append([t,len(aux)])
+        datos.append(meses)
+        lista2.append(["Aprobados",tramitesAprobados.count()/float(tramites)])
+        lista2.append(["Finalizados", tramitesAgendados/float(tramites)])
+        titulo = "Promedio de duracion (en meses) de inicio y finalizacion de visados"
+        if len(datos) > 0:
+              grafico = grafico_de_barras_v(datos, nombres, titulo,["promedio"])
+              imagen = base64.b64encode(grafico.asString("png"))
+              contexto = {"grafico": imagen, "lista": lista,"Promedio":lista2}
+        return render(request, 'persona/director/tiempo_aprobacion_visados.html',contexto)
+
     else:
         return render(request, 'persona/director/seleccionar_fecha_visados_aprobados.html')
 
