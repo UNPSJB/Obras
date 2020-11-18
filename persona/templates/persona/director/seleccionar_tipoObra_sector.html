@@ -45,7 +45,7 @@
                             <form action="" method="post" enctype="multipart/form-data">
                                  <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
                                 <div class="controls ">
-                                    <select name="obra" placeholder="Ingresar el Item"  class="form-control input-sm" id="id_item1" required multiple>
+                                    <select name="obra" placeholder="Ingresar el Item"  class="form-control input-sm" id="id_item1" required>
                                         <option value="" selected="#">---------</option>
                                         {%for obra in tipos_obras%}
                                         {% if obra.activo == True %}
