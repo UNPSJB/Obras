@@ -414,57 +414,57 @@ def enviar_correcciones(request, pk_tramite):
     messages.add_message(request, messages.SUCCESS, 'Tramite con documentos corregidos y enviados')
     return redirect('profesional')
 
-def obtener_documentos_de_estado(request, pk_estado):
+def documento_de_estado(request, pk_estado):
     estado = get_object_or_404(Estado, pk=pk_estado)
     documentos = estado.tramite.documentacion_para_estado(estado)
-    print documentos
+    #print documentos
     return render(request, 'persona/profesional/documento_de_estado.html', documentos)
     #return render(request, 'persona/profesional/documento_de_estado.html', { 'documentos': documentos } )
 
-def documento_de_estado(request, pk_estado):
-    estado = get_object_or_404(Estado, pk=pk_estado)
-    fecha = estado.timestamp
-    fecha_str = date.strftime(fecha, '%d/%m/%Y %H:%M')
+#def documento_de_estado(request, pk_estado):
+ #   estado = get_object_or_404(Estado, pk=pk_estado)
+  #  fecha = estado.timestamp
+   # fecha_str = date.strftime(fecha, '%d/%m/%Y %H:%M')
     # documentos = estado.tramite.documentacion_para_estado(estado)
     # documentos = estado.tramite.documentos.all()
-    documentos = estado.tramite.documentos.all()
-    documentos_fecha = filter(lambda e: (date.strftime(e.fecha, '%d/%m/%Y %H:%M') == fecha_str), documentos)
-    contexto = {'documentos_de_fecha': documentos_fecha}
-    planillas = []
-    inspecciones = []
-    documento = estado.tramite.documentacion_para_estado(estado)
-    if (estado.tipo==1 or estado.tipo==2):
-        contexto={'documentos':documento}
-    if (estado.tipo > 2 and estado.tipo < 5):
-        for p in PlanillaDeVisado.objects.all():
-            if (p.tramite.pk == estado.tramite.pk):
-                planillas.append(p)
+    #documentos = estado.tramite.documentos.all()
+    #documentos_fecha = filter(lambda e: (date.strftime(e.fecha, '%d/%m/%Y %H:%M') == fecha_str), documentos)
+    #contexto = {'documentos_de_fecha': documentos_fecha}
+    #planillas = []
+    #inspecciones = []
+    #documento = estado.tramite.documentacion_para_estado(estado)
+    #if (estado.tipo==1 or estado.tipo==2):
+     #   contexto={'documentos':documento}
+   # if (estado.tipo > 2 and estado.tipo < 5):
+    #    for p in PlanillaDeVisado.objects.all():
+     ##       if (p.tramite.pk == estado.tramite.pk):
+       #         planillas.append(p)
         #items = planilla.items.all()
-        filas = FilaDeVisado.objects.all()
-        columnas = ColumnaDeVisado.objects.all()
+        #filas = FilaDeVisado.objects.all()
+        #columnas = ColumnaDeVisado.objects.all()
         #elementos = planilla.elementos.all()
-        contexto = {
-            'documentos_de_fecha': documentos_fecha,
-            'planillas': planillas,
-            'filas': filas,
-            'columnas': columnas,
+        #contexto = {
+         #   'documentos_de_fecha': documentos_fecha,
+          #  'planillas': planillas,
+           # 'filas': filas,
+            #'columnas': columnas,
             #'items': items,
             #'elementos': elementos,
-        }
-    if (estado.tipo >5 and estado.tipo <8):
-        for p in PlanillaDeInspeccion.objects.all():
-            if (p.tramite.pk == estado.tramite.pk):
-                inspecciones.append(p)
-        items = ItemInspeccion.objects.all()
-        categorias = CategoriaInspeccion.objects.all()
+        #}
+    #if (estado.tipo >5 and estado.tipo <8):
+     #   for p in PlanillaDeInspeccion.objects.all():
+      #      if (p.tramite.pk == estado.tramite.pk):
+       #         inspecciones.append(p)
+       # items = ItemInspeccion.objects.all()
+        #categorias = CategoriaInspeccion.objects.all()
         #detalles = inspeccion.detalles.all()
-        contexto = {
-            'inspecciones': inspecciones,
-            'items': items,
-            'categorias': categorias,
+        #contexto = {
+         #   'inspecciones': inspecciones,
+          #  'items': items,
+           # 'categorias': categorias,
             #'detalles': detalles,
-        }
-    return render(request, 'persona/profesional/documento_de_estado.html', contexto)
+        #}
+    #return render(request, 'persona/profesional/documento_de_estado.html', contexto)
 
 # def visados_profesional(request):
 #     usuario = request.user
@@ -1708,20 +1708,28 @@ def mostrar_inspector(request):
 def mis_inspecciones(request):
     usuario = request.user
     estados = Estado.objects.all()
-    tipo = 6 #visado
-    argumentos = [ConInspeccion]
-    tramites = Tramite.objects.en_estado(ConInspeccion)
+    tipo = 6 #con inspeccion
+    tramitesConInspeccion = Tramite.objects.en_estado(ConInspeccion)
+    tramites = filter(lambda t: t.estado().usuario == usuario, tramitesConInspeccion)
     return tramites
 
 def tramites_visados_y_con_inspeccion(request):
+    usuario = request.user
     argumentos = [Visado, ConInspeccion]
-    tramites = Tramite.objects.en_estado(argumentos)
+    tramitesVisados = Tramite.objects.en_estado(Visado)
+    estados = Estado.objects.all()
+    tramitesConInspeccion = Tramite.objects.en_estado(ConInspeccion)
+    tramites = filter(lambda t: t.estado().usuario == usuario, tramitesConInspeccion)
     tram = []
+    for r in tramites:
+        for v in tramitesVisados:
+            if v not in tramites:
+                tramites.append(v)
     for t in tramites:
         planillas = PlanillaDeInspeccion.objects.filter(tramite_id=t.id).count()
-        if planillas <3:
+        if planillas < 3:
             tram.append(t)
-    return tram
+        return tram
 
 def tramites_inspeccionados_por_inspector(request):
     usuario = request.user
