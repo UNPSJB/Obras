@@ -1,3 +1,4 @@
+# coding=utf-8
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import  login_required,user_passes_test
@@ -3324,20 +3325,24 @@ def tiempo_aprobacion_visados(request):
                                      meses[diferencia]=cant
                                  except:
                                      pass
-        meses=[cant/float(tramites) for cant in meses]
-        planillas= PlanillaDeVisado.objects.filter(fecha__range=(datetime.date(year, 01, 01),(datetime.date(year, 12, 31))))
-        for t in tramitesV:
-            aux=filter(lambda p: t==p.tramite_id, planillas)
-            lista.append([t,len(aux)])
-        datos.append(meses)
-        lista2.append(["Aprobados",tramitesAprobados.count()/float(tramites)])
-        lista2.append(["Finalizados", tramitesAgendados/float(tramites)])
-        titulo = "Promedio de duracion (en meses) de inicio y finalizacion de visados"
-        if len(datos) > 0:
-              grafico = grafico_de_barras_v(datos, nombres, titulo,["promedio"])
-              imagen = base64.b64encode(grafico.asString("png"))
-              contexto = {"grafico": imagen, "lista": lista,"Promedio":lista2}
-        return render(request, 'persona/director/tiempo_aprobacion_visados.html',contexto)
+        if tramites == 0:
+            messages.add_message(request, messages.SUCCESS, 'No hay visados aprobados en el año seleccionado')
+            return render(request, 'persona/director/seleccionar_fecha_visados_aprobados.html')
+        else:
+            meses=[cant/float(tramites) for cant in meses]
+            planillas= PlanillaDeVisado.objects.filter(fecha__range=(datetime.date(year, 01, 01),(datetime.date(year, 12, 31))))
+            for t in tramitesV:
+                aux=filter(lambda p: t==p.tramite_id, planillas)
+                lista.append([t,len(aux)])
+            datos.append(meses)
+            lista2.append(["Aprobados",tramitesAprobados.count()/float(tramites)])
+            lista2.append(["Finalizados", tramitesAgendados/float(tramites)])
+            titulo = "Promedio de duracion (en meses) de inicio y finalizacion de visados"
+            if len(datos) > 0:
+                  grafico = grafico_de_barras_v(datos, nombres, titulo,["promedio"])
+                  imagen = base64.b64encode(grafico.asString("png"))
+                  contexto = {"grafico": imagen, "lista": lista,"Promedio":lista2}
+            return render(request, 'persona/director/tiempo_aprobacion_visados.html',contexto)
 
     else:
         return render(request, 'persona/director/seleccionar_fecha_visados_aprobados.html')
