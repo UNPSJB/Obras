@@ -112,20 +112,44 @@ class Tramite(models.Model):
 
     def documentacion_para_estado(self, estado):
         previo = estado.previo()
+        primero = estado.siguiente()
         # visados = list(self.visados.all())
         # inspecciones = list(self.inspecciones.all())
         # documentos = list(self.documentos.all())
-        if previo:
-            visados = list(self.visados.filter(fecha__lte=estado.timestamp, fecha__gte=previo.timestamp))
-            inspecciones = list(self.inspecciones.filter(fecha__lte=estado.timestamp, fecha__gte=previo.timestamp))
+        if primero and not previo:
+            visados = list(self.visados.filter(fecha__lte=estado.timestamp, fecha__gte=primero.timestamp))
+            inspecciones = list(self.inspecciones.filter(fecha__lte=estado.timestamp, fecha__gte=primero.timestamp))
             documentos = list(self.documentos.filter(fecha__lte=estado.timestamp))
             tramites = get_object_or_404(Tramite, pk=self.pk)
+            return {'planillas': visados, 'inspecciones': inspecciones, 'documentos': documentos}
         else:
-            visados = list(self.visados.filter(fecha=estado.timestamp))
-            inspecciones = list(self.inspecciones.filter(fecha=estado.timestamp))
-            documentos = list(self.documentos.filter(fecha=estado.timestamp))
+            if previo:
+                visados = list(self.visados.filter(fecha__lte=estado.timestamp, fecha__gte=previo.timestamp))
+                inspecciones = list(self.inspecciones.filter(fecha__lte=estado.timestamp, fecha__gte=previo.timestamp))
+                documentos = list(self.documentos.filter(fecha__lte=estado.timestamp))
+                tramites = get_object_or_404(Tramite, pk=self.pk)
+            else:
+                visados = list(self.visados.filter(fecha=estado.timestamp))
+                inspecciones = list(self.inspecciones.filter(fecha=estado.timestamp))
+                documentos = list(self.documentos.filter(fecha=estado.timestamp))
+                # return visados + inspecciones + documentos
+            return {'planillas': visados, 'inspecciones': inspecciones, 'documentos': documentos}
+
+            #previo = estado.previo()
+        # visados = list(self.visados.all())
+        # inspecciones = list(self.inspecciones.all())
+        # documentos = list(self.documentos.all())
+        #if previo:
+         #   visados = list(self.visados.filter(fecha__lte=estado.timestamp, fecha__gte=previo.timestamp))
+          #  inspecciones = list(self.inspecciones.filter(fecha__lte=estado.timestamp, fecha__gte=previo.timestamp))
+           # documentos = list(self.documentos.filter(fecha__lte=estado.timestamp))
+            #tramites = get_object_or_404(Tramite, pk=self.pk)
+        #else:
+         #   visados = list(self.visados.filter(fecha=estado.timestamp))
+          #  inspecciones = list(self.inspecciones.filter(fecha=estado.timestamp))
+           # documentos = list(self.documentos.filter(fecha=estado.timestamp))
             # return visados + inspecciones + documentos
-        return {'planillas': visados, 'inspecciones': inspecciones, 'documentos': documentos}
+        #return {'planillas': visados, 'inspecciones': inspecciones, 'documentos': documentos}
 
     def estado(self):
         if self.estados.exists():
@@ -185,6 +209,10 @@ class Estado(models.Model):
 
     def siguiente(self):
         return self.tramite.estados.filter(timestamp__gt=self.timestamp).first()
+
+    def primero(self):
+        fecha = self.timestamp
+        return self.tramite.estados.filter(tipo=1).first()
 
     def save(self, *args, **kwargs):
         if self.pk is None:

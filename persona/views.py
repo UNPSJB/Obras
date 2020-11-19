@@ -169,7 +169,7 @@ def ver_historial_tramite(request, pk_tramite):
         fechas_del_estado.append(est.timestamp.strftime("%d/%m/%Y"));
     return render(request, 'persona/propietario/ver_historial_tramite.html', {"tramite": contexto0, "estadosp": contexto1, "fecha":fechas_del_estado,'estilos':estilos})
 
-def documentos_de_estado(request, pk_estado):
+'''def documentos_de_estado(request, pk_estado):
     estilos = ''
     usuario = request.user
     propietario = get_object_or_404(Propietario, pk=usuario.persona.propietario.pk)
@@ -179,7 +179,7 @@ def documentos_de_estado(request, pk_estado):
     fecha = estado.timestamp
     fecha_str = date.strftime(fecha, '%d/%m/%Y %H:%M')
     documentos = estado.tramite.documentos.all()
-    documentos_fecha = filter(lambda e:(date.strftime(e.fecha, '%d/%m/%Y %H:%M') == fecha_str), documentos)    
+    documentos_fecha = filter(lambda e:(date.strftime(e.fecha, '%d/%m/%Y %H:%M') == fecha_str), documentos)
     contexto = {'documentos_de_fecha': documentos_fecha,'estilos':estilos}
     planillas = []
     inspecciones = []
@@ -214,6 +214,12 @@ def documentos_de_estado(request, pk_estado):
             #'detalles': detalles,
         }
     return render(request, 'persona/propietario/documentos_de_estado.html', contexto)
+'''
+def documentos_de_estado(request, pk_estado):
+    estado = get_object_or_404(Estado, pk=pk_estado)
+    documentos = estado.tramite.documentacion_para_estado(estado)
+    #print documentos
+    return render(request, 'persona/propietario/documentos_de_estado.html', documentos)
 
 #-------------------------------------------------------------------------------------------------------------------
 #profesional -------------------------------------------------------------------------------------------------------
@@ -1715,22 +1721,14 @@ def mis_inspecciones(request):
     return tramites
 
 def tramites_visados_y_con_inspeccion(request):
-    usuario = request.user
     argumentos = [Visado, ConInspeccion]
-    tramitesVisados = Tramite.objects.en_estado(Visado)
-    estados = Estado.objects.all()
-    tramitesConInspeccion = Tramite.objects.en_estado(ConInspeccion)
-    tramites = filter(lambda t: t.estado().usuario == usuario, tramitesConInspeccion)
+    tramites = Tramite.objects.en_estado(argumentos)
     tram = []
-    for r in tramites:
-        for v in tramitesVisados:
-            if v not in tramites:
-                tramites.append(v)
     for t in tramites:
         planillas = PlanillaDeInspeccion.objects.filter(tramite_id=t.id).count()
-        if planillas < 3:
+        if planillas <3:
             tram.append(t)
-        return tram
+    return tram
 
 def tramites_inspeccionados_por_inspector(request):
     usuario = request.user
@@ -2769,6 +2767,64 @@ def ver_planilla_inspeccion(request):
      contexto = {'items': items}
      #return render(request, 'persona/director/ver_planilla_inspeccion.html', {"items":items, "detalles": detalles, "categorias":categorias})
      return render(request, 'persona/director/ver_planilla_inspeccion.html', contexto)
+
+######################################
+
+def planilla_visado_impresa_director(request, pk_tramite):
+    planilla = get_object_or_404(PlanillaDeVisado,id=pk_tramite)
+    tramite = get_object_or_404(Tramite, pk=planilla.tramite_id)
+    filas = FilaDeVisado.objects.all()
+    columnas = ColumnaDeVisado.objects.all()
+    try:
+        elementos = planilla.elementos.all()
+        items = planilla.items.all()
+        obs = planilla.observacion
+        contexto={'tramite': tramite,
+                  'planilla': planilla,
+                  'filas': filas,
+                  'columnas': columnas,
+                  'elementos': elementos,
+                  'items': items,
+                  'obs': obs,
+                  }
+        return render(request, 'persona/director/planilla_visado_impresa_director.html',contexto)
+    except:
+         contexto = {
+             'tramite': tramite,
+             'planilla': planilla,
+             'filas': filas,
+             'columnas': columnas,
+             'obs': obs,
+         }
+         return render(request, 'persona/director/planilla_visado_impresa_director.html', contexto)
+
+def planilla_inspeccion_impresa_director(request, pk_tramite):
+    planilla = get_object_or_404(PlanillaDeInspeccion, id=pk_tramite)
+    tramite=get_object_or_404(Tramite, id=planilla.tramite_id)
+    items = ItemInspeccion.objects.all()
+    categorias = CategoriaInspeccion.objects.all()
+    try:
+        detalles = planilla.detalles.all()
+        contexto = {
+            'tramite': tramite,
+            'planilla': planilla,
+            'items': items,
+            'categorias': categorias,
+            'detalles': detalles,
+        }
+        return render(request, 'persona/director/planilla_inspeccion_impresa_director.html', contexto)
+
+    except:
+        contexto = {
+            'tramite':tramite,
+            'planilla': planilla,
+            'items': items,
+            'categorias': categorias,
+        }
+        return render(request, 'persona/director/planilla_inspeccion_impresa_director.html', contexto)
+
+
+#####################################
 
 def ver_filtro_obra_fechas(request):
     listado_tramites = []
