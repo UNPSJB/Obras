@@ -138,21 +138,6 @@ urlpatterns = [
     url(r'^listado_de_usuarios_segun_grupo', views.ver_listado_usuarios, name="listado_de_usuarios_segun_grupo"),
     url(r'^tiempo_aprobacion_visados', views.tiempo_aprobacion_visados, name="tiempo_aprobacion_visados"),
 
-    #url(r'^baja_fila_visado', views.baja_fila_visado, name="baja_fila_visado"),
-    #url(r'^eliminar_fila_visado', views.eliminar_fila_visado, name="eliminar_fila_visado"),
-    #url(r'^baja_columna_visado', views.baja_columna_visado, name="baja_columna_visado"),
-    #url(r'^eliminar_columna_visado', views.eliminar_columna_visado, name="eliminar_columna_visado"),
-    #url(r'^baja_elemento_visado', views.baja_elemento_visado, name="baja_elemento_visado"),
-    #url(r'^eliminar_elemento_visado', views.eliminar_elemento_visado, name="eliminar_elemento_visado"),
-    #url(r'^baja_categoria_inspeccion', views.baja_categoria_inspeccion, name="baja_categoria_inspeccion"),
-    #url(r'^eliminar_categoria_inspeccion', views.eliminar_categoria_inspeccion, name="eliminar_categoria_inspeccion"),
-    #url(r'^baja_item_inspeccion', views.baja_item_inspeccion, name="baja_item_inspeccion"),
-    #url(r'^eliminar_item_inspeccion', views.eliminar_item_inspeccion, name="eliminar_item_inspeccion"),
-    #url(r'^baja_detalle_inspeccion', views.baja_detalle_inspeccion, name="baja_detalle_inspeccion"),
-    #url(r'^eliminar_detalle_inspeccion', views.eliminar_detalle_inspeccion, name="eliminar_detalle_inspeccion"),
-    #url(r'^baja_tipo_pago', views.baja_tipo_pago, name="baja_tipo_pago"),
-    #url(r'^eliminar_tipo_pago', views.eliminar_tipo_pago, name="eliminar_tipo_pago"),
-
     url(r'^edit_tipoObra/(?P<pk_tipoObra>\d+)$', views.edit_tipoObra, name="edit_tipoObra"),
     url(r'^delete_tipoObra/(?P<pk_tipoObra>\d+)$', views.delete_tipoObra, name="delete_tipoObra"),
 
@@ -179,6 +164,9 @@ urlpatterns = [
     url(r'^delete_detalle_inspeccion/(?P<pk_detalle>\d+)$', views.delete_detalle_inspeccion, name="delete_detalle_inspeccion"),
 
     url(r'^seleccionar_tipoObra_sector', views.seleccionar_tipoObra_sector, name="seleccionar_tipoObra_sector"),
+
+    url(r'^planilla_inspeccion_impresa_director/(?P<pk_tramite>\d+)/$', views.planilla_inspeccion_impresa_director, name="planilla_inspeccion_impresa_director"),
+    url(r'^planilla_visado_impresa_director/(?P<pk_tramite>\d+)/$', views.planilla_visado_impresa_director, name="planilla_visado_impresa_director"),
 
     #cajero -------------------------------------------------------------------------------------------------------
     url(r'^cajero$', views.mostrar_cajero, name="cajero"),

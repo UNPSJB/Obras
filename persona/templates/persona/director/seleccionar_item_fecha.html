@@ -50,7 +50,7 @@
                                     <div class="controls ">
                                         <select name="item"  placeholder="Ingresar el Item"
                                                 class="form-control multiple input-sm" id="id_item" required multiple>
-                                            <option value="" selected="#">--------</option>
+                                            <!--<option value="" selected="#">--------</option>-->
                                             {%for c in categorias%}
                                             {% if c.activo == True %}
                                             <optgroup label="{{c.categoria_inspeccion__nombre}} - {{c.item_inspeccion__nombre}}">
@@ -76,11 +76,11 @@
                                         <button class="btn btn-primary btn-md" type="submit" name="Guardar">
                                             Aceptar
                                         </button>
-                                        <!--<a href="javascript:history.back(-1);">
+                                        <a href='director'>
                                             <button type="button" class="btn btn-primary" name="Volver">
                                                 Volver
                                             </button>
-                                        </a>-->
+                                        </a>
                                     </div>
                                 </div>
                             </form>
