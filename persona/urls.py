@@ -206,8 +206,8 @@ urlpatterns = [
     url(r'^movil$', views.mostrar_inspector_movil, name="movil_"),
 
     #url(r'^movil$', views.movil_inspector, name="movil_inspector"),
-    url(r'^inspector_movil$', views.mostrar_inspector_movil, name="inspector_movil"),
-    url(r'^inspector_movil/listado_inspector_movil$', views.listado_inspector_movil, name="listado_inspector_movil"),
+    #url(r'^inspector_movil$', views.mostrar_inspector_movil, name="inspector_movil"),
+    url(r'^listado_inspector_movil$', views.listado_inspector_movil, name="listado_inspector_movil"),
     url(r'^planilla_inspeccion/(?P<pk_tramite>\d+)$', views.planilla_inspeccion_movil, name="planilla_inspeccion_movil"),
     #url(r'^vista_de_inspecciones/(?P<pk_tramite>\d+)/$', views.ver_inspecciones_movil, name="ver_inspecciones_movil"),
 

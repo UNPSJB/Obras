@@ -640,9 +640,7 @@ def solicitud_final_obra_list(request):
     return contexto
 
 def registrar_pago_tramite(request):
-    print(request.FILES)
     if request.method == "POST":
-        print("POST")
         archivo_pago_form = FormularioArchivoPago(request.POST, request.FILES)
         if archivo_pago_form.is_valid():
             Pago.procesar_pagos(request.FILES['pagos'])
@@ -2152,7 +2150,7 @@ def mostrar_director(request):
     itemsVisados = ItemDeVisado.objects.filter(activo=True)
     elementos = Elemento_Balance_Superficie.objects.all()
     tiposPagos = Tipo_Pago.objects.all()
-    tiposObras = TipoObra.objects.all()
+    tiposObras = TipoObra.objects.filter(activo=1)
     values = {"items":items, "categorias":categorias, "detalles":detalles, "filas": filas, "columnas":columnas, "itemsVisados":itemsVisados, "elementos":elementos, "ctxtramites_anuales":inspecciones_realizadas_durante_el_anio(request),
               "tiposPagos":tiposPagos, "tiposObras": tiposObras
 }
@@ -2541,7 +2539,7 @@ def ver_todos_tramites(request):
 
 def ver_tipos_de_obras_mas_frecuentes(request):
     tramites = Tramite.objects.all()
-    tipos_obras = TipoObra.objects.all()
+    tipos_obras = TipoObra.objects.filter(activo=1)
     list = []
     list_obras = []
     # for o in tipos_obras:
@@ -2774,7 +2772,7 @@ def ver_filtro_obra_fechas(request):
     listado_tramites = []
     list_estados_fechas = []
     if "Guardar" in request.POST:
-        tipos = TipoObra.objects.all()
+        tipos = TipoObra.objects.filter(activo=1)
         tramites = Tramite.objects.all()
         estados = Estado.objects.all()
       #  tramites_estados = Tramite.objects.en_estado(Aceptado)
@@ -2884,8 +2882,6 @@ def grafico_de_barras_v(datos,nombres, titulo,series):
         for i in range(longitud): bc.bars[i].fillColor = col[i]
     for i in range(len(series)): bc.bars[i].name = series[i]
     bc.categoryAxis.categoryNames=[n for n in nombres]
-    print(nombres)
-    print(datos)
     drawing.add(bc)
     drawing.add(my_title)
     add_legend(drawing, bc, datos)
@@ -2906,7 +2902,6 @@ def grafico_de_barras(datos,nombres,titulo):
   #  lc.lines[0].strokeWidth = 1.5
     drawing.add(lc)
     drawing.add(my_title)
-    print(drawing)
     return drawing
 
 def seleccionar_fecha_item_inspeccion(request):
@@ -3017,10 +3012,6 @@ def tramites_iniciados_finalizados(request):
             porcentajeF=(totalFinalizados/float(inicial))*100
             lista.append(["iniciados", porcentajeI])
             lista.append(["finalizados", porcentajeF])
-            print(porcentajeI)
-            print(inicial)
-            print(totalIniciados)
-            print(porcentajeF)
             series = ("iniciados", "finalizados")
             titulo = "Tramites iniciados y finalidos por mes"
             if len(datos) > 0:
@@ -3029,7 +3020,7 @@ def tramites_iniciados_finalizados(request):
                 contexto = {"grafico": imagen, "lista": lista}  # "tipos_obras": list}
             return render(request, 'persona/director/listado_tramites_iniciados_finalizados.html', contexto)
         else:
-            tipos_obras=TipoObra.objects.all()
+            tipos_obras=TipoObra.objects.filter(activo=1)
             return render(request, 'persona/director/seleccionar_fecha.html', {"tipos_obras":tipos_obras})
 
 # def tramites_iniciados_finalizados(request):
@@ -3151,7 +3142,7 @@ def seleccionar_tipoObra_sector(request):
     #nombres = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre",
      #          "Noviembre", "Diciembre"]
     tramites = Tramite.objects.all()
-    tiposObras = TipoObra.objects.all()
+    tiposObras = TipoObra.objects.filter(activo=1)
     if "Guardar" in request.POST:
         for name, value in request.POST.items():
             if name.startswith('obra'):
@@ -3187,7 +3178,7 @@ def seleccionar_tipoObra_sector(request):
             contexto = {"grafico": imagen, "lista": list_sectores, "tipo_obra":tipo_obra}
         return render(request, 'persona/director/sectores_con_mas_obras.html', contexto)
     else:
-        tipos_obras = TipoObra.objects.all()
+        tipos_obras = TipoObra.objects.filter(activo=1)
         return render(request, 'persona/director/seleccionar_tipoObra_sector.html', {"tipos_obras": tipos_obras})
 
 def ver_listado_usuarios(request):
@@ -3247,7 +3238,6 @@ def tiempo_aprobacion_visado(request):
             #if tEstado is None:
               #  datos.append(0)
             lista.append(cant)
-        print("".join([str(x.id) for x in tramites]))
             # for t in tramites:
             #     planilla = PlanillaDeVisado.objects.filter(tramite_id=t.id)#.count()  # ultima planilla de visado
             #     cant = PlanillaDeVisado.objects.filter(tramite_id=t.id).count()
@@ -3260,7 +3250,6 @@ def tiempo_aprobacion_visado(request):
 
         #raise Exception(datos)
         titulo = "Tiempo aprobacion visados"
-        print(len(datos))
         if len(datos) > 0:
                 #raise Exception(lista)
               grafico = grafico_de_barras_v(datos, nombres, titulo,["aceptados"])

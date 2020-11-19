@@ -48,7 +48,7 @@ def ayuda(request):
 
 def home1(request):
     usuario = request.user
-    if usuario is not None:
+    if usuario is not None and not usuario.is_anonymous:
         return redirect('inspector_movil')
     else:
         form = FormularioProfesional()
@@ -58,7 +58,7 @@ def home(request):
     movil= es_movil(request)
     if movil:
         usuario= request.user
-        if usuario is not None:
+        if usuario is not None and not usuario.is_anonymous:
             return redirect('inspector_movil')
         else:
             return redirect('home1')
