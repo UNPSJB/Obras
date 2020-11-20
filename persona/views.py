@@ -3007,8 +3007,10 @@ def seleccionar_fecha_item_inspeccion(request):
             totalItems=PlanillaDeInspeccion.objects.filter(detalles__nombre=i.nombre).values('tramite_id').distinct().order_by('tramite_id').annotate(Max('fecha')).count()
             if (totalItems==0):
                 porcentaje=0
+                porcentaje1=0
             else:
-                porcentaje= (totalI/float(totalItems))*100
+                porcentaje1= (totalI/float(totalItems))*100
+                porcentaje = "{0:.2f}".format(porcentaje1)
             aux = [nombre, porcentaje]
             lista.append(aux)
             cant = []
@@ -3067,8 +3069,10 @@ def tramites_iniciados_finalizados(request):
                 if i.previo() is None:
                   inicial =inicial+1
             finales = Estado.objects.filter(tipo=9).count()
-            porcentajeI=(totalIniciados/float(inicial))*100
-            porcentajeF=(totalFinalizados/float(inicial))*100
+            porcentajeIni=(totalIniciados/float(inicial))*100
+            porcentajeI="{0:.2f}".format(porcentajeIni)
+            porcentajeFini=(totalFinalizados/float(inicial))*100
+            porcentajeF = "{0:.2f}".format(porcentajeFini)
             lista.append(["iniciados", porcentajeI])
             lista.append(["finalizados", porcentajeF])
             series = ("iniciados", "finalizados")
@@ -3383,8 +3387,14 @@ def tiempo_aprobacion_visados(request):
                 aux=filter(lambda p: t==p.tramite_id, planillas)
                 lista.append([t,len(aux)])
             datos.append(meses)
-            lista2.append(["Aprobados",tramitesAprobados.count()/float(tramites)])
-            lista2.append(["Finalizados", tramitesAgendados/float(tramites)])
+            '''lista2.append(["Aprobados",tramitesAprobados.count()/float(tramites)])
+            lista2.append(["Finalizados", tramitesAgendados/float(tramites)])'''
+            porcentajeVisadosAprobados = tramitesAprobados.count() / float(tramites)
+            porcentajeApr = "{0:.2f}".format(porcentajeVisadosAprobados)
+            lista2.append(["Aprobados", porcentajeApr])
+            porcentajeVisadosFinalizados = tramitesAgendados / float(tramites)
+            porcentajeFin = "{0:.2f}".format(porcentajeVisadosFinalizados)
+            lista2.append(["Finalizados", porcentajeFin])
             titulo = "Promedio de duracion (en meses) de inicio y finalizacion de visados"
             if len(datos) > 0:
                   grafico = grafico_de_barras_v(datos, nombres, titulo,["promedio"])
