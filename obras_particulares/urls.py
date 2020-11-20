@@ -17,4 +17,6 @@ urlpatterns = [
     url(r'^documento/', include('documento.urls')),
     url(r'^movil/', include('movil.urls')),
     url(r'^registrarse', views.registrarse, name='registrarse'),
-] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+    url(r'^accounts/',views.login_view, name='login'),
+
+    ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
