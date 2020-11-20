@@ -2002,7 +2002,7 @@ def agendar_inspeccion_final(request,pk_tramite):
     tramite = get_object_or_404(Tramite,pk=pk_tramite)
     fecha = convertidor_de_fechas(request.GET["msg"])
     tramite.hacer(Tramite.AGENDAR, usuario=request.user, fecha_inspeccion=fecha, inspector=request.user,rol=1) #para agendar jefe inspector rol=1
-    return redirect('jefe_inspector')
+    return redirect('jefeinspector')
 
 def inspeccion_final(request,pk_tramite):
    # tramite = get_object_or_404(Tramite, pk=pk_tramite)
@@ -2058,7 +2058,7 @@ def completar_inspeccion_final(request,pk_tramite):
             messages.add_message(request, messages.SUCCESS, 'Inspeccion Finalizada')
         except:
             messages.add_message(request, messages.WARNING, "La inspeccion ya fue cargada")
-    return redirect('jefe_inspector')
+    return redirect('jefeinspector')
     #return render(request, 'persona/jefe_inspector/cargar_inspeccion_final.html', {'tramite': tramite})
 
 def aceptar_inspeccion_final(request,pk_tramite):
@@ -2066,7 +2066,7 @@ def aceptar_inspeccion_final(request,pk_tramite):
     tramite.hacer(Tramite.INSPECCIONAR, usuario=u, inspector=u)#agendado->ConInspeccion
     tramite.hacer(Tramite.INSPECCIONAR, usuario=u)#ConInspeccion->Inspeccionado
     messages.add_message(request, messages.SUCCESS, 'Inspeccion Finalizada')
-    return redirect('jefe_inspector')
+    return redirect('jefeinspector')
 
 # ve la inspeccion de un tramite o inspecciones
 def ver_inspecciones(request, pk_tramite):
@@ -2101,7 +2101,7 @@ def listado_inspecciones_mensuales_jefe_inspector(request):
     diaFinal=monthrange(year, mes)
     usuario = request.user
     tramites_del_inspector = Tramite.objects.en_estado(Agendado)
-    tramites = filter(lambda t: t.estado().usuario == usuario and t.estado().fecha.date()<=datetime.date(year,mes,diaFinal[1]) and t.estado().fecha.date()>=datetime.date(year,mes,dia), tramites_del_inspector)
+    tramites = filter(lambda t: t.estado().usuario == usuario  and t.estado().fecha.date()<=datetime.date(year,mes,diaFinal[1]) and t.estado().fecha.date()>=datetime.date(year,mes,dia), tramites_del_inspector)
     tram=[]
     for t in tramites:
         if t.estado().rol == 1:
@@ -3885,23 +3885,20 @@ def mostrar_inspector_movil_jefe(request):
         contexto = {
             "ctxlistado_inspector": listado_inspecciones(request)#listado_inspector_movil(request)
         }
-        # usuario = request.user
-        # if (request.user_agent.is_mobile):
-        #     if (usuario.groups.filter(name='inspector').exists()):
-        #         print("va a inspector movil")
-        #
-        #         contexto = {
-        #             "ctxlistado_inspector": listado_inspector_movil(request)
-        #         }
-        #     else:
-        #         if (usuario.groups.filter(name='jefeinspector').exists()):
-        #             print("va a jefe movil")
-        #
-        #             contexto = {
-        #                 "ctxlistado_inspector": listado_inspecciones(request)
-        #             }
+        usuario = request.user
+        if (usuario.groups.filter(name='inspector').exists()):
+                contexto = {
+                    "ctxlistado_inspector": listado_inspector_movil(request),
+                    "ctxlistadomensual_inspector": listado_inspecciones_mensuales(request),
+                }
+        else:
+                if (usuario.groups.filter(name='jefeinspector').exists()):
+                    contexto = {
+                        "ctxlistado_inspector": listado_inspecciones(request),
+                        "ctxlistadomensual_inspector":listado_inspecciones_mensuales_jefe_inspector(request),
+                    }
     else:
-        return redirect('jefe_inspector')
+        return redirect('jefeinspector')
     return render(request, 'persona/movil/inspector_movil.html',contexto)
 
 def movil_inspector(request):

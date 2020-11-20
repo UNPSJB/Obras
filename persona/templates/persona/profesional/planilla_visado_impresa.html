@@ -2,13 +2,6 @@
 {% load staticfiles %}
 {% load crispy_forms_tags%}
 
-{% block barra %}
-<ul class="sidebar sidebar-1">
-    <font size="2">
-        <li><a href="{% url 'profesional'  %}" class="current"><font color="white">Profesional</font></a></li>
-    </font>
-</ul>
-{% endblock %}
 
 {%block contenido%}
 <div id="printReady">
@@ -153,9 +146,9 @@
     <div class="row">
         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-center">
             <button type="button" class="btn btn-primary btn-md" onclick="printDiv('printReady')">Imprimir</button>
-            <a href="{% url 'profesional' %}">
+          <!--  <a href="javascript:history.back(-1);"> No es necesario abre en una nueva pagina y lo usan distintas vistas
                 <button class="btn btn-primary btn-md " type="submit" value="Atras">Volver</button>
-            </a>
+            </a>-->
         </div>
     </div>
 </div>
