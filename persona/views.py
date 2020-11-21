@@ -171,17 +171,6 @@ def ver_historial_tramite(request, pk_tramite):
         fechas_del_estado.append(est.timestamp.strftime("%d/%m/%Y"));
     return render(request, 'persona/propietario/ver_historial_tramite.html', {"tramite": contexto0, "estadosp": contexto1, "fecha":fechas_del_estado,'estilos':estilos})
 
-'''def documentos_de_estado(request, pk_estado):
-    estado = get_object_or_404(Estado, pk=pk_estado)
-    estilos = ''
-    usuario = request.user
-    propietario = get_object_or_404(Propietario, pk=usuario.persona.propietario.pk)
-    if propietario.estilo:
-        estilos = propietario.estilo
-    documentos = estado.tramite.documentacion_para_estado(estado)
-    contexto = {'documentos': documentos, 'estilos': estilos}
-    return render(request, 'persona/propietario/documentos_de_estado.html', contexto)
-'''
 def documentos_de_estado(request, pk_estado):
     estilos = ''
     usuario = request.user
@@ -430,11 +419,6 @@ def enviar_correcciones(request, pk_tramite):
 
 def documento_de_estado(request, pk_estado):
     estado = get_object_or_404(Estado, pk=pk_estado)
-    documentos = estado.tramite.documentacion_para_estado(estado)
-    return render(request, 'persona/profesional/documento_de_estado.html', documentos)
-
-'''def documento_de_estado(request, pk_estado):
-    estado = get_object_or_404(Estado, pk=pk_estado)
     fecha = estado.timestamp
     fecha_str = date.strftime(fecha, '%d/%m/%Y %H:%M')
     # documentos = estado.tramite.documentacion_para_estado(estado)
@@ -477,7 +461,7 @@ def documento_de_estado(request, pk_estado):
             #'detalles': detalles,
         }
     return render(request, 'persona/profesional/documento_de_estado.html', contexto)
-'''
+
 # def visados_profesional(request):
 #     usuario = request.user
 #     estados = Estado.objects.all()
