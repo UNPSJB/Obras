@@ -3029,55 +3029,14 @@ def seleccionar_fecha_item_inspeccion(request):
         return render(request, 'persona/director/seleccionar_item_fecha.html',{"items":items,"categorias":categorias})
 
 def devolverNombreMes(m):
+    nombres = [["Enero",1], ["Febrero",2], ["Marzo",3], ["Abril",4], ["Mayo",5],
+               ["Junio",6], ["Julio",7], ["Agosto",8], ["Septiembre",9], ["Octubre",10],
+                   ["Noviembre",11], ["Diciembre",12]]
     mes = ""
-    if m == 1:
-        mes = "Enero"
-        return mes
-    else:
-        if m == 2:
-            mes = "Febrero"
+    for name,value in nombres:
+        if value == m:
+            mes = name
             return mes
-        else:
-            if m == 3:
-                mes = "Marzo"
-                return mes
-            else:
-                if m == 4:
-                    mes = "Abril"
-                    return mes
-                else:
-                    if m == 5:
-                        mes = "Mayo"
-                        return mes
-                    else:
-                        if m == 6:
-                            mes = "Junio"
-                            return mes
-                        else:
-                            if m == 7:
-                                mes = "Julio"
-                                return mes
-                            else:
-                                if m == 8:
-                                    mes = "Agosto"
-                                    return mes
-                                else:
-                                    if m == 9:
-                                        mes = "Septiembre"
-                                        return mes
-                                    else:
-                                        if m == 10:
-                                            mes = "Octubre"
-                                            return mes
-                                        else:
-                                            if m == 11:
-                                                mes = "Noviembre"
-                                                return mes
-                                            else:
-                                                if m == 12:
-                                                    mes = "Diciembre"
-                                                    return mes
-
 
 def tramites_iniciados_finalizados(request):
         datos = []
@@ -3115,7 +3074,6 @@ def tramites_iniciados_finalizados(request):
                 nombreMes=devolverNombreMes(m)
                 lista1.append([nombreMes,totalI])
                 lista2.append([nombreMes,totalF])
-            #raise Exception(lista1)
             i = tuple(iniciados)
             f = tuple(finalizados)
             datos.append(i)
