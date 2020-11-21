@@ -3028,12 +3028,65 @@ def seleccionar_fecha_item_inspeccion(request):
         items=DetalleDeItemInspeccion.objects.select_related().values('id','nombre','categoria_inspeccion_id','item_inspeccion_id','item_inspeccion__nombre','activo').order_by('categoria_inspeccion_id','item_inspeccion_id').all()
         return render(request, 'persona/director/seleccionar_item_fecha.html',{"items":items,"categorias":categorias})
 
+def devolverNombreMes(m):
+    mes = ""
+    if m == 1:
+        mes = "Enero"
+        return mes
+    else:
+        if m == 2:
+            mes = "Febrero"
+            return mes
+        else:
+            if m == 3:
+                mes = "Marzo"
+                return mes
+            else:
+                if m == 4:
+                    mes = "Abril"
+                    return mes
+                else:
+                    if m == 5:
+                        mes = "Mayo"
+                        return mes
+                    else:
+                        if m == 6:
+                            mes = "Junio"
+                            return mes
+                        else:
+                            if m == 7:
+                                mes = "Julio"
+                                return mes
+                            else:
+                                if m == 8:
+                                    mes = "Agosto"
+                                    return mes
+                                else:
+                                    if m == 9:
+                                        mes = "Septiembre"
+                                        return mes
+                                    else:
+                                        if m == 10:
+                                            mes = "Octubre"
+                                            return mes
+                                        else:
+                                            if m == 11:
+                                                mes = "Noviembre"
+                                                return mes
+                                            else:
+                                                if m == 12:
+                                                    mes = "Diciembre"
+                                                    return mes
+
+
 def tramites_iniciados_finalizados(request):
         datos = []
         iniciados = []
         finalizados = []
         series = []
         lista = []
+        lista1 = []
+        lista2 = []
         nombres = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre",
                    "Noviembre", "Diciembre"]
         if "Guardar" in request.POST:
@@ -3046,6 +3099,7 @@ def tramites_iniciados_finalizados(request):
             totalFinalizados = 0
             for mes in range(12):
                 m = mes + 1
+                nombreMes = ""
                 diaFinal = monthrange(year, m)
                 totalI = Estado.objects.filter(tramite__tipo_obra=tipoObra,timestamp__range=(datetime.date(year, m, 01), datetime.date(year, m, diaFinal[1])),
                     tipo=(1)).count()
@@ -3058,6 +3112,10 @@ def tramites_iniciados_finalizados(request):
                 totalIniciados=totalI+totalIniciados
                 totalFinalizados=totalF+totalFinalizados
                 finalizados.append(totalF)
+                nombreMes=devolverNombreMes(m)
+                lista1.append([nombreMes,totalI])
+                lista2.append([nombreMes,totalF])
+            #raise Exception(lista1)
             i = tuple(iniciados)
             f = tuple(finalizados)
             datos.append(i)
@@ -3080,7 +3138,7 @@ def tramites_iniciados_finalizados(request):
             if len(datos) > 0:
                 grafico = grafico_de_barras_v(datos, nombres, titulo, series)
                 imagen = base64.b64encode(grafico.asString("png"))
-                contexto = {"grafico": imagen, "lista": lista}  # "tipos_obras": list}
+                contexto = {"grafico": imagen, "lista": lista, "lista1":lista1, "lista2":lista2}  # "tipos_obras": list}
             return render(request, 'persona/director/listado_tramites_iniciados_finalizados.html', contexto)
         else:
             tipos_obras=TipoObra.objects.filter(activo=1)
