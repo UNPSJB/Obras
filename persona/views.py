@@ -171,6 +171,17 @@ def ver_historial_tramite(request, pk_tramite):
         fechas_del_estado.append(est.timestamp.strftime("%d/%m/%Y"));
     return render(request, 'persona/propietario/ver_historial_tramite.html', {"tramite": contexto0, "estadosp": contexto1, "fecha":fechas_del_estado,'estilos':estilos})
 
+'''def documentos_de_estado(request, pk_estado):
+    estado = get_object_or_404(Estado, pk=pk_estado)
+    estilos = ''
+    usuario = request.user
+    propietario = get_object_or_404(Propietario, pk=usuario.persona.propietario.pk)
+    if propietario.estilo:
+        estilos = propietario.estilo
+    documentos = estado.tramite.documentacion_para_estado(estado)
+    contexto = {'documentos': documentos, 'estilos': estilos}
+    return render(request, 'persona/propietario/documentos_de_estado.html', contexto)
+'''
 def documentos_de_estado(request, pk_estado):
     estilos = ''
     usuario = request.user
@@ -180,9 +191,9 @@ def documentos_de_estado(request, pk_estado):
     estado = get_object_or_404(Estado, pk=pk_estado)
     fecha = estado.timestamp
     fecha_str = date.strftime(fecha, '%d/%m/%Y %H:%M')
-    documentos = estado.tramite.documentos.all()
-    documentos_fecha = filter(lambda e:(date.strftime(e.fecha, '%d/%m/%Y %H:%M') == fecha_str), documentos)
-    contexto = {'documentos_de_fecha': documentos_fecha,'estilos':estilos}
+    documentosF = estado.tramite.documentos.all()
+    documentos = filter(lambda e:(date.strftime(e.fecha, '%d/%m/%Y %H:%M') == fecha_str), documentosF)
+    contexto = {'documentos': documentos,'estilos':estilos}
     planillas = []
     inspecciones = []
     if (estado.tipo >2 and estado.tipo <5):
@@ -193,7 +204,7 @@ def documentos_de_estado(request, pk_estado):
         columnas = ColumnaDeVisado.objects.all()
         #elementos = planilla.elementos.all()
         contexto = {
-            'documentos_de_fecha': documentos_fecha,
+            'documentos': documentos,
             'planillas':planillas,
             'filas': filas,
             'columnas': columnas,
@@ -419,6 +430,11 @@ def enviar_correcciones(request, pk_tramite):
 
 def documento_de_estado(request, pk_estado):
     estado = get_object_or_404(Estado, pk=pk_estado)
+    documentos = estado.tramite.documentacion_para_estado(estado)
+    return render(request, 'persona/profesional/documento_de_estado.html', documentos)
+
+'''def documento_de_estado(request, pk_estado):
+    estado = get_object_or_404(Estado, pk=pk_estado)
     fecha = estado.timestamp
     fecha_str = date.strftime(fecha, '%d/%m/%Y %H:%M')
     # documentos = estado.tramite.documentacion_para_estado(estado)
@@ -461,7 +477,7 @@ def documento_de_estado(request, pk_estado):
             #'detalles': detalles,
         }
     return render(request, 'persona/profesional/documento_de_estado.html', contexto)
-
+'''
 # def visados_profesional(request):
 #     usuario = request.user
 #     estados = Estado.objects.all()
@@ -3030,8 +3046,10 @@ def seleccionar_fecha_item_inspeccion(request):
             totalItems=PlanillaDeInspeccion.objects.filter(detalles__nombre=i.nombre).values('tramite_id').distinct().order_by('tramite_id').annotate(Max('fecha')).count()
             if (totalItems==0):
                 porcentaje=0
+                porcentaje1=0
             else:
-                porcentaje= (totalI/float(totalItems))*100
+                porcentaje1= (totalI/float(totalItems))*100
+                porcentaje = "{0:.2f}".format(porcentaje1)
             aux = [nombre, porcentaje]
             lista.append(aux)
             cant = []
@@ -3049,12 +3067,65 @@ def seleccionar_fecha_item_inspeccion(request):
         items=DetalleDeItemInspeccion.objects.select_related().values('id','nombre','categoria_inspeccion_id','item_inspeccion_id','item_inspeccion__nombre','activo').order_by('categoria_inspeccion_id','item_inspeccion_id').all()
         return render(request, 'persona/director/seleccionar_item_fecha.html',{"items":items,"categorias":categorias})
 
+def devolverNombreMes(m):
+    mes = ""
+    if m == 1:
+        mes = "Enero"
+        return mes
+    else:
+        if m == 2:
+            mes = "Febrero"
+            return mes
+        else:
+            if m == 3:
+                mes = "Marzo"
+                return mes
+            else:
+                if m == 4:
+                    mes = "Abril"
+                    return mes
+                else:
+                    if m == 5:
+                        mes = "Mayo"
+                        return mes
+                    else:
+                        if m == 6:
+                            mes = "Junio"
+                            return mes
+                        else:
+                            if m == 7:
+                                mes = "Julio"
+                                return mes
+                            else:
+                                if m == 8:
+                                    mes = "Agosto"
+                                    return mes
+                                else:
+                                    if m == 9:
+                                        mes = "Septiembre"
+                                        return mes
+                                    else:
+                                        if m == 10:
+                                            mes = "Octubre"
+                                            return mes
+                                        else:
+                                            if m == 11:
+                                                mes = "Noviembre"
+                                                return mes
+                                            else:
+                                                if m == 12:
+                                                    mes = "Diciembre"
+                                                    return mes
+
+
 def tramites_iniciados_finalizados(request):
         datos = []
         iniciados = []
         finalizados = []
         series = []
         lista = []
+        lista1 = []
+        lista2 = []
         nombres = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre",
                    "Noviembre", "Diciembre"]
         if "Guardar" in request.POST:
@@ -3067,6 +3138,7 @@ def tramites_iniciados_finalizados(request):
             totalFinalizados = 0
             for mes in range(12):
                 m = mes + 1
+                nombreMes = ""
                 diaFinal = monthrange(year, m)
                 totalI = Estado.objects.filter(tramite__tipo_obra=tipoObra,timestamp__range=(datetime.date(year, m, 01), datetime.date(year, m, diaFinal[1])),
                     tipo=(1)).count()
@@ -3079,6 +3151,10 @@ def tramites_iniciados_finalizados(request):
                 totalIniciados=totalI+totalIniciados
                 totalFinalizados=totalF+totalFinalizados
                 finalizados.append(totalF)
+                nombreMes=devolverNombreMes(m)
+                lista1.append([nombreMes,totalI])
+                lista2.append([nombreMes,totalF])
+            #raise Exception(lista1)
             i = tuple(iniciados)
             f = tuple(finalizados)
             datos.append(i)
@@ -3090,8 +3166,10 @@ def tramites_iniciados_finalizados(request):
                 if i.previo() is None:
                   inicial =inicial+1
             finales = Estado.objects.filter(tipo=9).count()
-            porcentajeI=(totalIniciados/float(inicial))*100
-            porcentajeF=(totalFinalizados/float(inicial))*100
+            porcentajeIni=(totalIniciados/float(inicial))*100
+            porcentajeI="{0:.2f}".format(porcentajeIni)
+            porcentajeFini=(totalFinalizados/float(inicial))*100
+            porcentajeF = "{0:.2f}".format(porcentajeFini)
             lista.append(["iniciados", porcentajeI])
             lista.append(["finalizados", porcentajeF])
             series = ("iniciados", "finalizados")
@@ -3099,7 +3177,7 @@ def tramites_iniciados_finalizados(request):
             if len(datos) > 0:
                 grafico = grafico_de_barras_v(datos, nombres, titulo, series)
                 imagen = base64.b64encode(grafico.asString("png"))
-                contexto = {"grafico": imagen, "lista": lista}  # "tipos_obras": list}
+                contexto = {"grafico": imagen, "lista": lista, "lista1":lista1, "lista2":lista2}  # "tipos_obras": list}
             return render(request, 'persona/director/listado_tramites_iniciados_finalizados.html', contexto)
         else:
             tipos_obras=TipoObra.objects.filter(activo=1)
@@ -3525,6 +3603,12 @@ def tiempo_aprobacion_visados(request):
             datos.append(meses)
             lista2.append(["Aprobados",((tramitesAprobados.count()/float(tramites))*100)])
             lista2.append(["Finalizados", ((tramitesAgendados/float(tramites))*100)])
+            porcentajeVisadosAprobados = tramitesAprobados.count() / float(tramites)
+            porcentajeApr = "{0:.2f}".format(porcentajeVisadosAprobados)
+            lista2.append(["Aprobados", porcentajeApr])
+            porcentajeVisadosFinalizados = tramitesAgendados / float(tramites)
+            porcentajeFin = "{0:.2f}".format(porcentajeVisadosFinalizados)
+            lista2.append(["Finalizados", porcentajeFin])
             titulo = "Promedio de duracion (en meses) de inicio y finalizacion de visados"
             if len(datos) > 0:
                   grafico = grafico_de_barras_v(datos, nombres, titulo,["promedio"])
