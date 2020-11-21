@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+
+{% block estilos %}
+
+{% endblock %}
+
+{% block barra %}
+<ul class="sidebar sidebar-1">
+    <font size="2">
+        <li><a href="{% url 'director'  %}" class="current"><font color="white">Director</font></a></li>
+    </font>
+</ul>
+{% endblock %}
+{% block contenido %}
+
+<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+    <div class="panel">
+        <div class="panel-heading box" role="tab" id="headingFive">
+            <h5 class="panel-title">
+                <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFive"
+                   aria-expanded="false" aria-controls="collapseFive">
+                    <font color="#ffffff" size="2">Tramites iniciados y finalizados por año</font>
+                </a>
+            </h5>
+        </div>
+        <div id="collapseFive" class="panel-collapse" role="tabpanel" aria-labelledby="headingFive">
+            <div class="panel-body">
+                <div class="container-fluid">
+                    <div class="row">
+                            <label> Seleccione un año </label>
+                            <form action="" method="post" enctype="multipart/form-data">
+                              <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                                <div class="controls ">
+                                    <select name="item" placeholder="Ingresar el Item" class="select form-control input-sm" id="id_item" required>
+                                        <option value="" selected="#">---------</option>
+                                        <option value="2017">2017</option>
+                                        <option value="2018">2018</option>
+                                        <option value="2019">2019</option>
+                                        <option value="2020">2020</option>
+                                    </select>
+                                </div>
+                              </div>
+                                 <label> Seleccione el tipo de obra </label>
+                                 <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                                <div class="controls ">
+                                    <select name="obra" placeholder="Ingresar el Item"  class="form-control input-sm" id="id_item1" required>
+                                        <option value="" selected="#">---------</option>
+                                        {%for obra in tipos_obras%}
+                                        <option value="{{obra.pk}}">{{obra.nombre}}</option>
+                                        {%endfor%}
+                                    </select>
+                                </div>
+                              </div>
+                                <label> Seleccione el tipo de pago </label>
+                                 <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                                <div class="controls ">
+                                    <select name="tipoPago" placeholder="Ingresar el Item"  class="form-control input-sm" id="id_item2" >
+                                        <option value="-1" selected="#">---------</option>
+                                        {%for pago in tipo_pago%}
+                                        <option value="{{pago.pk}}">{{pago.nombre}}</option>
+                                        {%endfor%}
+                                    </select>
+                                </div>
+                              </div>
+                                <br><br>
+                                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="left">
+                                        <button class="btn btn-primary btn-md" type="submit" name="Guardar">
+                                            Aceptar
+                                        </button>
+                                        <a href='director'>
+                                            <button type="button" class="btn btn-primary" name="Volver">
+                                                Volver
+                                            </button>
+                                        </a>
+
+                                    </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

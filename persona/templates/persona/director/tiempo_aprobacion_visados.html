@@ -43,14 +43,14 @@
                                         <thead>
                                         <tr>
                                             <th p style="color:#FFFFFF"bgcolor="#2c3e50">Visado</th>
-                                            <th p style="color:#FFFFFF"bgcolor="#2c3e50">Promedio</th>
+                                            <th p style="color:#FFFFFF"bgcolor="#2c3e50">Porcentaje promedio(en relacion a tramites iniciados en el año)</th>
                                         </tr>
                                         </thead>
                                         <tbody>
                                         {% for name,value in Promedio %}
                                         <tr>
                                             <td class="col-xs-1">{{ name }} </td>
-                                            <td class="col-xs-1">{{ value }} </td>
+                                            <td class="col-xs-1">{{ value }} %</td>
                                         </tr>
                                         {% endfor %}
                                         </tbody>

@@ -16,21 +16,23 @@
             </thead>
             <tbody>
                 {% for tramite in tramites %}
-                    <tr>
-                        <td class="col-xs-1">{{ tramite.id }}</td>
-                        <td class="col-xs-3">{{ tramite.domicilio }}</td>
-                        <td class="col-xs-3">{{ tramite.monto_a_pagar }}</td>
-                        <td class="col-xs-3">{{ tramite.saldo_restante_a_pagar }}</td>
-                        <td class="col-xs-3">{{ tramite.monto_pagado }}</td>
+                    {%if tramite.saldo_restante_a_pagar >= 0%}
+                        <tr>
+                            <td class="col-xs-1">{{ tramite.id }}</td>
+                            <td class="col-xs-3">{{ tramite.domicilio }}</td>
+                            <td class="col-xs-3">{{ tramite.monto_a_pagar }}</td>
+                            <td class="col-xs-3">{{ tramite.saldo_restante_a_pagar }}</td>
+                            <td class="col-xs-3">{{ tramite.monto_pagado }}</td>
 
-                        <td>
-                            <a href="{% url 'elegir_tramite' tramite.id %}">
-                                <button type="button" class="btn btn-primary brn-xs" name="RegistrarPago">
-                                    <span class="glyphicon glyphicon-home" aria-hidden="true"> Seleccionar tramite </span>
-                                </button>
-                            </a>
-                        </td>
-                    </tr>
+                            <td>
+                                <a href="{% url 'elegir_tramite' tramite.id %}">
+                                    <button type="button" class="btn btn-primary brn-xs" name="RegistrarPago">
+                                        <span class="glyphicon glyphicon-home" aria-hidden="true"> Seleccionar tramite </span>
+                                    </button>
+                                </a>
+                            </td>
+                        </tr>
+                    {%endif%}
                 {% endfor %}
 
             </tbody>
