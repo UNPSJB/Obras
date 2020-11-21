@@ -3605,10 +3605,10 @@ def tiempo_aprobacion_visados(request):
             lista2.append(["Finalizados", ((tramitesAgendados/float(tramites))*100)])
             porcentajeVisadosAprobados = tramitesAprobados.count() / float(tramites)
             porcentajeApr = "{0:.2f}".format(porcentajeVisadosAprobados)
-            lista2.append(["Aprobados", porcentajeApr])
+            lista2.append(["Aprobados", (porcentajeApr*100)])
             porcentajeVisadosFinalizados = tramitesAgendados / float(tramites)
             porcentajeFin = "{0:.2f}".format(porcentajeVisadosFinalizados)
-            lista2.append(["Finalizados", porcentajeFin])
+            lista2.append(["Finalizados", (porcentajeFin*100)])
             titulo = "Promedio de duracion (en meses) de inicio y finalizacion de visados"
             if len(datos) > 0:
                   grafico = grafico_de_barras_v(datos, nombres, titulo,["promedio"])
