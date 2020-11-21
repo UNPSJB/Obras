@@ -26,16 +26,11 @@
                         &nbsp; Rivadavia 390 <br>
                         &nbsp; 9100 TRELEW- Provincia del Chubut
                     </div>
-
                     <h3 align="center">
-                        SECTORES CON MAS OBRAS SEGUN TIPO DE OBRA&nbsp;  &nbsp;
-                        <hr style="border-width:">
-                        <h3 align="left">
-                            En: {{tipo_obra}} &nbsp;  &nbsp;
-                        </h3>
+                        CANTIDAD DE RECAUDACION MENSUAL SEGUN TIPO DE PAGO Y TIPO DE OBRA  &nbsp;  &nbsp;
                     </h3>
+                    <hr style="border-width:">
                     <br>
-                    {% if not respuesta %}
                     <div class="row">
                         <img src="data:image/png;base64,{{grafico}}" width="800px" height="400px">
                         <br>
@@ -46,27 +41,40 @@
                                     <table align="center" class="table table-bordered table-striped table-hover">
                                         <thead>
                                         <tr>
-                                            <th p style="color:#FFFFFF"bgcolor="#2c3e50">Tramite</th>
-                                            <th p style="color:#FFFFFF"bgcolor="#2c3e50">Porcentaje</th>
+                                            <th p style="color:#FFFFFF"bgcolor="#2c3e50">Numero de mes</th>
+                                            <th p style="color:#FFFFFF"bgcolor="#2c3e50">Mes</th>
+                                            <th p style="color:#FFFFFF"bgcolor="#2c3e50">Total</th>
                                         </tr>
                                         </thead>
                                         <tbody>
-                                        {% for name,value in lista %}
+                                        {% for l in lista %}
                                         <tr>
-                                            <td class="col-xs-1">{{ name }} </td>
-                                            <td class="col-xs-1">{{ value }} %</td>
+                                            <td class="col-xs-1">{{ l.id }} </td>
+                                            <td class="col-xs-1">{{ l.mes }} </td>
+                                            <td class="col-xs-1">{{ l.total }} </td>
                                         </tr>
                                         {% endfor %}
                                         </tbody>
                                     </table>
+
+                                    <table align="center" class="table table-bordered table-striped table-hover">
+                                        <thead>
+                                        <tr>
+                                            <th p style="color:#FFFFFF"bgcolor="#2c3e50">Recaudacion Total Anual</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <tr>
+                                            <td class="col-xs-1">{{ totalAnual }} </td>
+                                        </tr>
+                                        </tbody>
+                                    </table>
+
                                 </div>
                                 <br>
                             </div>
                         </div>
                     </div>
-                    {%else%}
-                    <h4>{{respuesta}}</h4>
-                    {%endif%}
                 </div>
             </div>
         </div>

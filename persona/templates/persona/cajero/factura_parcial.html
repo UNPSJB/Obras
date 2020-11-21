@@ -126,7 +126,7 @@ $( document ).ready(function() {
 var t= {{tramite.monto_a_pagar}}
 var tp= {{tramite.monto_pagado}}
 {% endlocalize %}
-    $("#totalRestante").text(t - tp)
+    $("#totalRestante").text((t - tp).toFixed(2))
 });
 
 

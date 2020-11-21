@@ -51,6 +51,8 @@ from django.db.models import Max
 from django.db.models import Count
 from collections import defaultdict
 import json
+from itertools import chain
+import math
 #-------------------------------------------------------------------------------------------------------------------
 #generales ---------------------------------------------------------------------------------------------------------
 
@@ -199,10 +201,10 @@ def documentos_de_estado(request, pk_estado):
             #'items': items,
             #'elementos': elementos,
         }
-    if (estado.tipo >5 and estado.tipo <8):                        
+    if (estado.tipo >5 and estado.tipo <8):
         for p in PlanillaDeInspeccion.objects.all():
             if (p.tramite.pk == estado.tramite.pk):
-                inspecciones.append(p)              
+                inspecciones.append(p)
         items = ItemInspeccion.objects.all()
         categorias = CategoriaInspeccion.objects.all()
         #detalles = inspeccion.detalles.all()
@@ -2590,44 +2592,34 @@ def pie_chart_with_legend(datos, nombres,titulo):
 
 def ver_categorias_mas_frecuentes(request):
     planillas = PlanillaDeInspeccion.objects.all()
-    #tramites_inspeccionados = Tramite.objects.en_estado(Inspeccionado)
+    # tramites_inspeccionados = Tramite.objects.en_estado(Inspeccionado)
     tramites = Tramite.objects.all()
-    tipos_categorias = CategoriaInspeccion.objects.all()
-    detalles = DetalleDeItemInspeccion.objects.all()
+    tipos_categorias = CategoriaInspeccion.objects.filter(activo=1)
+    detalles = DetalleDeItemInspeccion.objects.filter(activo=1)
     list = []
-    datos=[]
-    planillasInspecciones = []
-    plan = []
-    for d in detalles:
-        if d.activo == True:
-            planillasInspecciones.append(d)
-
+    datos = []
     for p in planillas:
-        for d in planillasInspecciones:
-            if p.id == d.id:
-                plan.append(p)
-    for p in plan:
         for t in tramites:
             if t.id == p.tramite.id:
                 list.append(p)
-    nombres=[]
+    nombres = []
     for cat in tipos_categorias:
         if cat.activo == True:
             nombres.append(cat.nombre)
     for l in list:
         list_categorias = l.detalles.values_list('categoria_inspeccion_id', flat="True")
-    categorias=dict(collections.Counter(list_categorias))
+    categorias = dict(collections.Counter(list_categorias))
     for i in categorias:
         datos.append(categorias[i])
-    titulo="Categorias mas frecuentes"
-    grafico=pie_chart_with_legend(datos,nombres,titulo)
-    imagen=base64.b64encode(grafico.asString("png"))
+    titulo = "Categorias mas frecuentes"
+    grafico = pie_chart_with_legend(datos, nombres, titulo)
+    imagen = base64.b64encode(grafico.asString("png"))
     contexto = {
-        "tipos_categorias":tipos_categorias,
-        "detalles":detalles,
+        "tipos_categorias": tipos_categorias,
+        "detalles": detalles,
         "grafico": imagen,
     }
-    return render(request,'persona/director/categorias_mas_frecuentes.html',contexto)
+    return render(request, 'persona/director/categorias_mas_frecuentes.html', contexto)
 
 def ver_profesionales_mas_requeridos(request):
     planillas = PlanillaDeInspeccion.objects.all()
@@ -2729,10 +2721,50 @@ def detalle_de_tramite(request, pk_tramite):
 
 
 def documentos_del_estado(request, pk_estado):
-    estado = get_object_or_404(Estado, pk=pk_estado)
-    documentos = estado.tramite.documentacion_para_estado(estado)
     #print documentos
-    return render(request, 'persona/director/documentos_del_estado.html', documentos)
+    estado = get_object_or_404(Estado, pk=pk_estado)
+    fecha = estado.timestamp
+    fecha_str = date.strftime(fecha, '%d/%m/%Y %H:%M')
+    # documentos = estado.tramite.documentacion_para_estado(estado)
+    # documentos = estado.tramite.documentos.all()
+    documentos = estado.tramite.documentos.all()
+    documentos_fecha = filter(lambda e: (date.strftime(e.fecha, '%d/%m/%Y %H:%M') == fecha_str), documentos)
+    contexto = {'documentos_de_fecha': documentos_fecha}
+    planillas = []
+    inspecciones = []
+    documento = estado.tramite.documentacion_para_estado(estado)
+    if (estado.tipo==1 or estado.tipo==2):
+        contexto={'documentos':documento}
+    if (estado.tipo > 2 and estado.tipo < 5):
+        for p in PlanillaDeVisado.objects.all():
+            if (p.tramite.pk == estado.tramite.pk):
+                planillas.append(p)
+        #items = planilla.items.all()
+        filas = FilaDeVisado.objects.all()
+        columnas = ColumnaDeVisado.objects.all()
+        #elementos = planilla.elementos.all()
+        contexto = {
+            'documentos_de_fecha': documentos_fecha,
+            'planillas': planillas,
+            'filas': filas,
+            'columnas': columnas,
+            #'items': items,
+            #'elementos': elementos,
+        }
+    if (estado.tipo >5 and estado.tipo <8):
+        for p in PlanillaDeInspeccion.objects.all():
+            if (p.tramite.pk == estado.tramite.pk):
+                inspecciones.append(p)
+        items = ItemInspeccion.objects.all()
+        categorias = CategoriaInspeccion.objects.all()
+        #detalles = inspeccion.detalles.all()
+        contexto = {
+            'inspecciones': inspecciones,
+            'items': items,
+            'categorias': categorias,
+            #'detalles': detalles,
+        }
+    return render(request, 'persona/director/documentos_del_estado.html', contexto)
 
 
 def generar_planilla_visado(request):
@@ -2915,8 +2947,15 @@ def grafico_de_barras_v(datos,nombres, titulo,series):
     bc.width=410
     bc.height=90
     bc.valueAxis.valueMin = 0
-    bc.valueAxis.valueMax = 50
-    bc.groupSpacing = 10
+    lista=list(chain.from_iterable(datos))
+    print(lista)
+    tope=max(lista)
+    if math.log10(tope)>1:
+        bc.valueAxis.valueMax = tope+(tope/10)
+        bc.groupSpacing = tope/10
+    else:
+        bc.valueAxis.valueMax = 50
+        bc.groupSpacing = 10
     bc.barSpacing = 1.5
     bc.categoryAxis.labels.boxAnchor = 'ne'
     bc.categoryAxis.labels.dy = -2
@@ -3066,6 +3105,119 @@ def tramites_iniciados_finalizados(request):
             tipos_obras=TipoObra.objects.filter(activo=1)
             return render(request, 'persona/director/seleccionar_fecha.html', {"tipos_obras":tipos_obras})
 
+
+# def tramites_iniciados_finalizados(request):
+#     datos = []
+#     iniciados = []
+#     finalizados = []
+#     listadoMes = []
+#     finalizadosXMes = []
+#     series = []
+#     lista = []
+#     nombres = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre",
+#                "Noviembre", "Diciembre"]
+#     if "Guardar" in request.POST:
+#         for name, value in request.POST.items():
+#             if name.startswith('item'):
+#                 year = int(value)
+#             if name.startswith('obra'):
+#                 tipoObra = int(value)
+#         totalIniciados = 0
+#         totalFinalizados = 0
+#         for mes in range(12):
+#             m = mes + 1
+#             diaFinal = monthrange(year, m)
+#             totalI = Estado.objects.filter(tramite__tipo_obra=tipoObra, timestamp__range=(
+#             datetime.date(year, m, 01), datetime.date(year, m, diaFinal[1])),
+#                                            tipo=(1)).count()
+#             totalF = Estado.objects.filter(tramite__tipo_obra=tipoObra, timestamp__range=(
+#             datetime.date(year, m, 01), datetime.date(year, m, diaFinal[1])), tipo=(9)).count()
+#             aux = {"id": m, "mes": nombres[mes], "iniciado": totalI, "finalizado": totalF}
+#             print(aux)
+#             listadoMes.append(aux)
+#             iniciados.append(totalI)
+#             totalIniciados = totalI + totalIniciados
+#             totalFinalizados = totalF + totalFinalizados
+#             finalizados.append(totalF)
+#         i = tuple(iniciados)
+#         f = tuple(finalizados)
+#         datos.append(i)
+#         datos.append(f)
+#         iniciales = Estado.objects.filter(tipo=1)
+#         finalizados = Estado.objects.filter(tipo=9).count()
+#         inicial = 0
+#         for i in iniciales:
+#             if i.previo() is None:
+#                 inicial = inicial + 1
+#         finales = Estado.objects.filter(tipo=9).count()
+#         porcentajeI = (totalIniciados / float(inicial)) * 100
+#         porcentajeF = (totalFinalizados / float(inicial)) * 100
+#         lista.append(["iniciados", porcentajeI])
+#         lista.append(["finalizados", porcentajeF])
+#         series = ("iniciados", "finalizados")
+#         titulo = "Tramites iniciados y finalidos por mes"
+#         if len(datos) > 0:
+#             grafico = grafico_de_barras_v(datos, nombres, titulo, series)
+#             imagen = base64.b64encode(grafico.asString("png"))
+#             contexto = {"grafico": imagen, "lista": lista, "listadoM": listadoMes}  # "tipos_obras": list}
+#         return render(request, 'persona/director/listado_tramites_iniciados_finalizados.html', contexto)
+#     else:
+#         tipos_obras = TipoObra.objects.filter(activo=1)
+#         return render(request, 'persona/director/seleccionar_fecha.html', {"tipos_obras": tipos_obras})
+
+def recaudacion_tipo_obra_tipo_pago(request):
+        datos = []
+        iniciados = []
+        finalizados = []
+        listadoMes = []
+        finalizadosXMes = []
+        series = []
+        lista = []
+        nombres = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre",
+                   "Noviembre", "Diciembre"]
+        if "Guardar" in request.POST:
+            for name, value in request.POST.items():
+                if name.startswith('item'):
+                    year = int(value)
+                if name.startswith('obra'):
+                    tipoObra = int(value)
+                if name.startswith('tipoPago'):
+                    tipoPago = int(value)
+            totalIniciados = 0
+            totalFinalizados = 0
+            tramites=[]
+            totalAnual=0
+            pagos=[]
+            cuotas=[]
+            totales=[]
+            tramites=Tramite.objects.filter(tipo_obra=tipoObra).values_list('pago_id', flat="True").distinct() #filtrar por tipo
+            for mes in range(12):
+                m = mes + 1
+                diaFinal = monthrange(year, m)
+                if tipoPago>-1:
+                    cuotas = Cuota.objects.filter(fechaPago__range=(datetime.date(year, m, 01), datetime.date(year, m, diaFinal[1])),pago_id__in=tramites, tipoPago_id=tipoPago)
+                else:
+                    cuotas = Cuota.objects.filter(fechaPago__range=(datetime.date(year, m, 01), datetime.date(year, m, diaFinal[1])),pago_id__in=tramites)
+                total=0
+                for c in cuotas:
+                    total=float(c.monto)+total
+                totales.append(total)
+                totalAnual=total+totalAnual
+                aux={"id":mes,"mes":nombres[mes],"total":total}
+                lista.append(aux)
+            datos.append(totales)
+            series = ["Recaudacion"]
+            if len(datos) > 0:
+                grafico = grafico_de_barras_v(datos, nombres, "", series)
+                imagen = base64.b64encode(grafico.asString("png"))
+                contexto = {"grafico": imagen,"lista":lista, "totalAnual":totalAnual}
+            return render(request, 'persona/director/recaudacion_tipo_obra_tipo_pago.html', contexto)
+        else:
+            tipos_obras = TipoObra.objects.filter(activo=1)
+            tipo_pago = Tipo_Pago.objects.filter(activo=1)
+        return render(request, 'persona/director/seleccionar_datos.html', {"tipos_obras": tipos_obras,"tipo_pago":tipo_pago})
+
+
 # def tramites_iniciados_finalizados(request):
 #     datos=[]
 #     iniciados=[]
@@ -3196,30 +3348,35 @@ def seleccionar_tipoObra_sector(request):
         sectores = []
         list = []
         tramite = Tramite.objects.filter(tipo_obra_id=tipoObra)
-        for t in tramite:
-            if not t.sector in sectores:
-                sectores.append(t.sector)
-        for s in sectores:
-            list.append([s, 0])
-        sectores = list
-        list_sectores = []
-        listaSectores = []
-        for name, value in sectores:
-            v = 0
-            for t in tramites:
-                if t.sector == name:
-                    v += 1
-                    s = str(t.sector)
-            list_sectores.append([name, v])
-            listaSectores.append(v)
-            series.append(s)
-            datos.append([v])
-        titulo = "Sectores con mas obras segun obra seleccionada"
-        if len(datos) > 0:
-            grafico = grafico_de_barras_v(datos, nombres, titulo,series)
-            imagen = base64.b64encode(grafico.asString("png"))
-            contexto = {"grafico": imagen, "lista": list_sectores, "tipo_obra":tipo_obra}
-        return render(request, 'persona/director/sectores_con_mas_obras.html', contexto)
+        try:
+            for t in tramite:
+                if not t.sector in sectores:
+                    sectores.append(t.sector)
+            for s in sectores:
+                list.append([s, 0])
+            sectores = list
+            list_sectores = []
+            listaSectores = []
+            for name, value in sectores:
+                v = 0
+                for t in tramites:
+                    if t.sector == name:
+                        v += 1
+                        s = str(t.sector)
+                list_sectores.append([name, v])
+                listaSectores.append(v)
+                series.append(s)
+                datos.append([v])
+            titulo = "Sectores con mas obras segun obra seleccionada"
+            if len(datos) > 0:
+                grafico = grafico_de_barras_v(datos, nombres, titulo,series)
+                imagen = base64.b64encode(grafico.asString("png"))
+                contexto = {"grafico": imagen, "lista": list_sectores, "tipo_obra":tipo_obra}
+            return render(request, 'persona/director/sectores_con_mas_obras.html', contexto)
+        except:
+            contexto={"respuesta":"No hay datos para mostrar"}
+            return render(request, 'persona/director/sectores_con_mas_obras.html', contexto)
+
     else:
         tipos_obras = TipoObra.objects.filter(activo=1)
         return render(request, 'persona/director/seleccionar_tipoObra_sector.html', {"tipos_obras": tipos_obras})
@@ -3240,7 +3397,6 @@ def ver_listado_usuarios(request):
 
     contexto = {'listados':listados, 'grupossistema':grupossistema}
     return render(request, 'persona/director/listado_de_usuarios_segun_grupo.html', contexto)
-#####################################################################################
 
 def tiempo_aprobacion_visado(request):
     datos = []
@@ -3367,8 +3523,8 @@ def tiempo_aprobacion_visados(request):
                 aux=filter(lambda p: t==p.tramite_id, planillas)
                 lista.append([t,len(aux)])
             datos.append(meses)
-            lista2.append(["Aprobados",tramitesAprobados.count()/float(tramites)])
-            lista2.append(["Finalizados", tramitesAgendados/float(tramites)])
+            lista2.append(["Aprobados",((tramitesAprobados.count()/float(tramites))*100)])
+            lista2.append(["Finalizados", ((tramitesAgendados/float(tramites))*100)])
             titulo = "Promedio de duracion (en meses) de inicio y finalizacion de visados"
             if len(datos) > 0:
                   grafico = grafico_de_barras_v(datos, nombres, titulo,["promedio"])

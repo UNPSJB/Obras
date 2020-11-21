@@ -115,7 +115,7 @@ $( document ).ready(function() {
 {% localize off %}
 var t= {{cuota.monto}}
 {% endlocalize %}
-    $("#total").text(t *{{cuota.numeroCuota}})
+    $("#total").text((t *{{cuota.numeroCuota}}).toFixed(2))
 });
 
 $( document ).ready(function() {
@@ -125,7 +125,7 @@ $( document ).ready(function() {
 var totalTramite = {{tramite.monto_a_pagar}}
 var tc = {{cuota.monto}}
 {% endlocalize %}
-    $("#restoPagar").text((totalTramite - tc *{{cuota.numeroCuota}}))
+    $("#restoPagar").text(((totalTramite - tc *{{cuota.numeroCuota}})).toFixed(2))
 });
 
     function printDiv(div) {

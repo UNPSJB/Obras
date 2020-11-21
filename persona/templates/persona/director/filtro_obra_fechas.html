@@ -33,7 +33,7 @@
                             <form method="post" enctype="multipart/form-data"> {% csrf_token %}
                                 <label> Fecha inicial</label><br>
                                 <input type="date" id="fechaInicial" name="fechaInicial" min="1980-03-25"
-                                       max="2020-07-31" step="1">
+                                       onClick="javascript:calendario();"  step="1">
                                 <br>
                                 <label>Fecha Final </label> <br>
                                 <input type="date" id="fechaFinal" name="fechaFinal" min="1980-03-25"
@@ -64,4 +64,34 @@
         </div>
     </div>
 </div>
+<script>
+function calendario(){
+        var hoy= new Date();
+        var dia=hoy.getDate();
+        var mes=hoy.getMonth()+1;
+        var a=hoy.getFullYear();
+        if (dia<10 && mes<10){
+          d="0"+dia;
+          m="0"+mes;
+          fecha=a+"-"+m+"-"+d;
+        }
+        else{
+            if (dia<10){
+              d="0"+dia;
+              fecha=a+"-"+mes+"-"+d;
+            }
+            else{
+                if (mes<10){
+                    m="0"+mes;
+                    fecha=a+"-"+m+"-"+dia;
+                }
+                else{
+                    fecha=a+"-"+mes+"-"+dia;
+                }
+            }
+        }
+        $("#fechaInicial").attr('max',fecha);
+
+    }
+</script>
 {% endblock %}
