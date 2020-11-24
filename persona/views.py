@@ -80,8 +80,11 @@ def mostrar_propietario(request):
         if propietario.estilo:
             estilos = propietario.estilo
     contexto = {
-        "ctxtramitespropietario": listado_tramites_propietario(request),
+        "ctxtramitespropietario": tramites_de_propietario(request),
         "ctxmis_tramites_para_financiar": tramites_para_financiar(request),
+        "ctxtramites_para_financiar_propietario": listado_tramites_para_financiar_propietario(request),
+        "ctxcuotas": listado_tramites_a_pagar_propietario(request),
+        "ctxlistado": listado_tramites_propietario(request),
         'estilos': estilos,
     }
     return render(request, 'persona/propietario/propietario.html', contexto)
@@ -134,7 +137,8 @@ def tramites_para_financiar(request):
     tramites = filter(lambda tramite: (tramite.propietario == propietario and tramite.pago is  None), tramites_propietario)
     return tramites
 
-def listado_tramites_propietario(request):
+####### nombre esto de nuevo con tramites_de_propietario
+def tramites_de_propietario(request):
     tramites = Tramite.objects.all()
     personas = Persona.objects.all()
     usuario = request.user
@@ -145,6 +149,16 @@ def listado_tramites_propietario(request):
     return tramites_de_propietario
 
 def propietario_solicita_final_obra(request, pk_tramite):
+    tramite = get_object_or_404(Tramite, pk=pk_tramite)
+    try:
+        tramite.hacer(Tramite.SOLICITAR_FINAL_OBRA, request.user)
+        messages.add_message(request, messages.SUCCESS, 'final de obra solicitado.')
+    except:
+        messages.add_message(request, messages.ERROR, 'No puede solicitar el final de obra para ese tramite.')
+    finally:
+        return redirect('propietario')
+
+def propietario_solicita_final_obraDos(request, pk_tramite):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
     try:
         tramite.hacer(Tramite.SOLICITAR_FINAL_OBRA, request.user)
@@ -180,8 +194,9 @@ def documentos_de_estado(request, pk_estado):
     estado = get_object_or_404(Estado, pk=pk_estado)
     fecha = estado.timestamp
     fecha_str = date.strftime(fecha, '%d/%m/%Y %H:%M')
+    documentos = estado.tramite.documentacion_para_estado(estado)
     documentosF = estado.tramite.documentos.all()
-    documentos = filter(lambda e:(date.strftime(e.fecha, '%d/%m/%Y %H:%M') == fecha_str), documentosF)
+    documentos = filter(lambda e:(date.strftime(e.fecha, '%d/%m/%Y %H:%M') <= fecha_str), documentosF)
     contexto = {'documentos': documentos,'estilos':estilos}
     planillas = []
     inspecciones = []
@@ -216,6 +231,446 @@ def documentos_de_estado(request, pk_estado):
             #'detalles': detalles,
         }
     return render(request, 'persona/propietario/documentos_de_estado.html', contexto)
+'''def documentos_de_estado(request, pk_estado):
+    estilos = ''
+    usuario = request.user
+    propietario = get_object_or_404(Propietario, pk=usuario.persona.propietario.pk)
+    if propietario.estilo:
+        estilos = propietario.estilo
+    estado = get_object_or_404(Estado, pk=pk_estado)
+    documentos = estado.tramite.documentacion_para_estado(estado)
+    contexto = {'documentos':documentos,'estilos':estilos}
+    return render(request, 'persona/propietario/documentos_de_estado.html', contexto)'''
+
+def listado_tramites_para_financiar_propietario(request):
+    estilos = ''
+    usuario = request.user
+    propietario = get_object_or_404(Propietario, pk=usuario.persona.propietario.pk)
+    if propietario.estilo:
+        estilos = propietario.estilo
+    tramites = Tramite.objects.en_estado([Visado, Agendado, ConInspeccion, Inspeccionado, FinalObraSolicitado])
+    personas = Persona.objects.all()
+    usuario = request.user
+    lista_de_persona_que_esta_logueada = filter(
+        lambda persona: (persona.usuario is not None and persona.usuario == usuario), personas)
+    persona = lista_de_persona_que_esta_logueada.pop()  # Saco de la lista la persona porque no puedo seguir trabajando con una lista
+    propietario = persona.get_propietario()  # Me quedo con el atributo propietario de la persona
+    tramites_de_propietario = filter(lambda tramite: (tramite.propietario == propietario), tramites)
+    listado = []
+    for t in tramites_de_propietario:
+        if t.pago is None:
+           listado.append(t)
+    contexto = {'tramites':listado, 'estilos':estilos}
+    return contexto
+
+
+def listado_de_comprobantes_propietario(request, pk_tramite):
+    estilos = ''
+    usuario = request.user
+    propietario = get_object_or_404(Propietario, pk=usuario.persona.propietario.pk)
+    if propietario.estilo:
+        estilos = propietario.estilo
+    tramite = get_object_or_404(Tramite, pk=pk_tramite)
+    tramites = Tramite.objects.all()
+    personas = Persona.objects.all()
+    usuario = request.user
+    lista_de_persona_que_esta_logueada = filter(
+        lambda persona: (persona.usuario is not None and persona.usuario == usuario), personas)
+    persona = lista_de_persona_que_esta_logueada.pop()  # Saco de la lista la persona porque no puedo seguir trabajando con una lista
+    propietario = persona.get_propietario()  # Me quedo con el atributo propietario de la persona
+    tramites_de_propietario = filter(lambda tramite: (tramite.propietario == propietario), tramites)
+    list = []
+    for t in tramites_de_propietario:
+        list.append(t.pago_id)
+        pago = tramite.pago
+        canceladas = []
+        cuotas = Cuota.objects.en_estado(Cancelada)
+        for cuota in cuotas:
+            if cuota.pago == pago:
+                canceladas.append(cuota)
+        if canceladas is None:
+            messages.add_message(request, messages.WARNING, 'No hay pagos registrados para el tramite seleccionado.')
+        return render(request, 'persona/propietario/listado_de_comprobantes_propietario.html', {'cuotas': canceladas,'tramite':tramite, 'estilos':estilos})
+
+
+'''def listado_tramites_para_financiar_propietario(request):
+    tramite = Tramite.objects.en_estado([Visado,Agendado,ConInspeccion,Inspeccionado,FinalObraSolicitado])
+    listado=[]
+    for tramites in tramite:
+        if tramites.pago is None:
+           listado.append(tramites)
+    contexto = {'tramites':listado}
+    return contexto
+'''
+def elegir_financiacion_propietario(request,pk_tramite):
+    estilos = ''
+    usuario = request.user
+    propietario = get_object_or_404(Propietario, pk=usuario.persona.propietario.pk)
+    if propietario.estilo:
+        estilos = propietario.estilo
+    tramite = get_object_or_404(Tramite, pk=pk_tramite)
+    if request.method == "POST":
+        if "Guardar" in request.POST:
+            pago = Pago()
+            contador = 31
+            fms = "%A"
+            for name, value in request.POST.items():
+                if name.startswith('cantidadCuotas'):
+                    pago.cantidadCuotas=value
+            total = tramite.monto_a_pagar/int(pago.cantidadCuotas)
+            pago.save()
+            for i in range(1, int(pago.cantidadCuotas)+1):
+                cuota = Cuota(monto=total, numeroCuota=i, pago=pago)
+                cuota.fechaVencimiento=date.today() + timedelta(days=contador)
+                dia=cuota.fechaVencimiento.strftime(fms)
+                if dia=="Sunday":
+                    cuota.fechaVencimiento==date.today() + timedelta(days=contador+1)
+                else:
+                    if dia=="Saturday":
+                        cuota.fechaVencimiento = date.today() + timedelta(days=contador +2)
+                contador=contador+31
+                cuota.save()
+                cuota.hacer("Cancelacion")
+            messages.add_message(request, messages.SUCCESS, 'Todo bien =)')
+            tramite.pago = pago
+            tramite.save()
+        return redirect('propietario')
+    return render(request, 'persona/propietario/elegir_financiacion_propietario.html',{'tramite': tramite, 'estilos':estilos})
+
+def registrar_pago_propietario(request,pk_tramite):
+    estilos = ''
+    usuario = request.user
+    propietario = get_object_or_404(Propietario, pk=usuario.persona.propietario.pk)
+    if propietario.estilo:
+        estilos = propietario.estilo
+    tramite = get_object_or_404(Tramite, pk=pk_tramite)
+    if request.method == "POST":
+        form = FormularioPago(request.POST)
+        if form.is_valid():
+            pago = form.save(commit=False)
+            contador=31
+            fms = "%A"
+            if tramite.pago is None:
+                pago.save()
+                tramite.pago = pago
+                tramite.save()
+                total=tramite.monto_a_pagar/pago.cantidadCuotas
+                for i in range(1, pago.cantidadCuotas+1):
+                    cuota = Cuota(monto=total,numeroCuota=i,pago=pago)
+                    cuota.fechaVencimiento=date.today() + timedelta(days=contador)
+                    dia=cuota.fechaVencimiento.strftime(fms)
+                    if (dia=="Sunday"):
+                        cuota.fechaVencimiento=date.today() + timedelta(days=contador+1)
+                    else:
+                        if (dia=="Saturday"):
+                            cuota.fechaVencimiento = date.today() + timedelta(days=contador + 2)
+                    contador=contador+31
+                    cuota.save()
+                    cuota.hacer("Cancelacion")
+            else:
+                messages.add_message(request, messages.ERROR, 'El tramite ya tiene un pago registrado.')
+    else:
+        form = FormularioPago()
+    return form
+
+def listado_tramites_a_pagar_propietario(request):
+    estilos = ''
+    usuario = request.user
+    propietario = get_object_or_404(Propietario, pk=usuario.persona.propietario.pk)
+    if propietario.estilo:
+        estilos = propietario.estilo
+    tramites = Tramite.objects.all()
+    personas = Persona.objects.all()
+    usuario = request.user
+    lista_de_persona_que_esta_logueada = filter(
+        lambda persona: (persona.usuario is not None and persona.usuario == usuario), personas)
+    persona = lista_de_persona_que_esta_logueada.pop()  # Saco de la lista la persona porque no puedo seguir trabajando con una lista
+    propietario = persona.get_propietario()  # Me quedo con el atributo propietario de la persona
+    tramites_de_propietario = filter(lambda tramite: (tramite.propietario == propietario), tramites)
+    tramites=[]
+    for tramite in tramites_de_propietario:
+        if ((tramite.pago is not None) and (tramite.esta_pagado()==False)):
+            tramites.append(tramite)
+    contexto={'tramites':tramites, 'estilos':estilos}
+    return contexto
+
+def listado_cuotas_propietario(request):
+    estilos = ''
+    usuario = request.user
+    propietario = get_object_or_404(Propietario, pk=usuario.persona.propietario.pk)
+    if propietario.estilo:
+        estilos = propietario.estilo
+    cuotas=Cuota.objects.en_estado(Cancelacion)
+    contexto= {'cuotas':cuotas, 'estilos':estilos}
+    return contexto
+
+def elegir_tramite_propietario(request, pk_tramite):
+    estilos = ''
+    usuario = request.user
+    propietario = get_object_or_404(Propietario, pk=usuario.persona.propietario.pk)
+    if propietario.estilo:
+        estilos = propietario.estilo
+    tramite=get_object_or_404(Tramite,pk=pk_tramite)
+    pago=tramite.pago
+    cuotas=[]
+    c=None
+    objetos=Cuota.objects.en_estado(Cancelacion)
+    for cuota in objetos:
+        if cuota.fechaPago is None and cuota.pago==pago:
+            c=cuota
+            break;
+    return render(request, 'persona/propietario/registrar_cuota_propietario.html', {'cuotas':c, 'tramite':tramite, 'estilos':estilos})
+
+def pagarCuota_propietario(cuota):
+    estilos = ''
+    usuario = request.user
+    propietario = get_object_or_404(Propietario, pk=usuario.persona.propietario.pk)
+    if propietario.estilo:
+        estilos = propietario.estilo
+    cuota.guardar_fecha()
+    cuota.save()
+    cuota.hacer("cancelacion")
+    pago = cuota.pago
+    tramite = get_object_or_404(Tramite, pago=pago)
+    tramite.calcular_monto_pagado(cuota.monto)
+    tramite.save()
+    contexto = {'tramite':tramite, 'estilos':estilos}
+    return tramite
+
+def pagar_cuota_propietario(request,pk_cuota):
+    estilos = ''
+    usuario = request.user
+    propietario = get_object_or_404(Propietario, pk=usuario.persona.propietario.pk)
+    if propietario.estilo:
+        estilos = propietario.estilo
+    cuota = get_object_or_404(Cuota, pk=pk_cuota)
+    tiposPagos = Tipo_Pago.objects.all()
+    return render(request, 'persona/propietario/pagar_cuota_propietario.html', {'cuota':cuota, 'tiposPagos':tiposPagos, 'estilos':estilos})
+
+def pagar1_propietario(request, pk_cuota):
+    estilos = ''
+    usuario = request.user
+    propietario = get_object_or_404(Propietario, pk=usuario.persona.propietario.pk)
+    if propietario.estilo:
+        estilos = propietario.estilo
+    cuota = get_object_or_404(Cuota, pk=pk_cuota)
+    datosPagos = Tipo_Pago.objects.all()
+    tipoPago = 0
+    if "Guardar" in request.POST:
+        for n in datosPagos:
+            if request.POST['tipoPago'] == n.nombre:
+                tipoPago = n.id
+    tp = Tipo_Pago.objects.get(id=tipoPago)
+    cuota.guardar_fecha()
+    pago = cuota.pago
+    cuota.tipoPago = tp
+    cuota.hacer("cancelacion")
+    cuota.save()
+    tramite = get_object_or_404(Tramite, pago=pago)
+    tramite.calcular_monto_pagado(cuota.monto)
+    tramite.save()
+    messages.add_message(request, messages.SUCCESS, 'Pago Registrado.')
+    contexto = {'tramite': tramite, 'pago': pago, 'cuota': cuota, 'estilos':estilos}
+    return render(request, 'persona/propietario/registrar_pago_tramite_propietario.html', contexto)
+
+def pagar_propietario(request):
+    estilos = ''
+    usuario = request.user
+    propietario = get_object_or_404(Propietario, pk=usuario.persona.propietario.pk)
+    if propietario.estilo:
+        estilos = propietario.estilo
+    c = []
+    for name, value in request.POST.items():
+        if name.startswith('cuota'):
+            pk = name.split('-')[1]
+            c.append(pk)
+    p = []
+    cuotas = []
+    for cs in c:
+        cuota = get_object_or_404(Cuota, pk=cs)
+        cuotas.append(cuota)
+        tramite=pagarCuota(cuota)
+    pago=cuota.pago
+    messages.add_message(request, messages.SUCCESS, 'Pago Registrado.')
+    contexto = {'tramite': tramite, 'pago': pago, 'cuota': cuotas, 'estilos':estilos}
+    return render ( request,'persona/propietario/registrar_pago_tramite_propietario.html', contexto)
+
+def elegir_cuota_propietario(request,pk_cuota):
+    estilos = ''
+    usuario = request.user
+    propietario = get_object_or_404(Propietario, pk=usuario.persona.propietario.pk)
+    if propietario.estilo:
+        estilos = propietario.estilo
+    cuota=get_object_or_404(Cuota,pk=pk_cuota)
+    cuota.guardar_fecha()
+    cuota.save()
+    cuota.hacer("cancelacion")
+    pago = cuota.pago
+    tramite = get_object_or_404(Tramite, pago=pago)
+    tramite.calcular_monto_pagado(cuota.monto)
+    tramite.save()
+    messages.add_message(request, messages.SUCCESS, 'Pago Registrado.')
+    return render(request, 'persona/propietario/actualizar_cuota_propietario.html',{'cuota':cuota, 'estilos':estilos})
+
+def comprobante_pago_cuota_propietario(request,pk_cuota):
+    estilos = ''
+    usuario = request.user
+    propietario = get_object_or_404(Propietario, pk=usuario.persona.propietario.pk)
+    if propietario.estilo:
+        estilos = propietario.estilo
+    cuota = get_object_or_404(Cuota, pk=pk_cuota)
+    value = "estilo3"
+    pago = cuota.pago
+    tramite = get_object_or_404(Tramite, pago=pago)
+    if estilos == value:
+        return render(request, 'persona/propietario/comprobante_propietario_modoNocturno.html',{'cuota': cuota, 'pago':pago,'tramite':tramite,'estilos':estilos})
+    return render(request, 'persona/propietario/comprobante_propietario.html',{'cuota': cuota, 'pago':pago,'tramite':tramite,'estilos':estilos})
+
+def registrar_el_pago_tramite_propietario(request):
+    estilos = ''
+    usuario = request.user
+    propietario = get_object_or_404(Propietario, pk=usuario.persona.propietario.pk)
+    if propietario.estilo:
+        estilos = propietario.estilo
+    c = []
+    for name, value in request.POST.items():
+        if name.startswith('cuota'):
+            pk = name.split('-')[1]
+            c.append(pk)
+    p = []
+    cuotas = []
+    for cs in c:
+        cuota = get_object_or_404(Cuota, pk=cs)
+        cuotas.append(cuota)
+    pago = cuota.pago
+    tramite = get_object_or_404(Tramite, pago=pago)
+    contexto = {'tramite': tramite,'pago':pago, 'cuota': cuotas, 'estilos':estilos}
+    return render (request,'persona/propietario/registrar_pago_tramite_propietario.html', contexto)
+
+def listado_tramites_propietario(request):
+    estilos = ''
+    usuario = request.user
+    propietario = get_object_or_404(Propietario, pk=usuario.persona.propietario.pk)
+    if propietario.estilo:
+        estilos = propietario.estilo
+    tramites = Tramite.objects.all()
+    personas = Persona.objects.all()
+    usuario = request.user
+    lista_de_persona_que_esta_logueada = filter(
+        lambda persona: (persona.usuario is not None and persona.usuario == usuario), personas)
+    persona = lista_de_persona_que_esta_logueada.pop()  # Saco de la lista la persona porque no puedo seguir trabajando con una lista
+    propietario = persona.get_propietario()  # Me quedo con el atributo propietario de la persona
+    tramites_de_propietario = filter(lambda tramite: (tramite.propietario == propietario), tramites)
+    list = []
+    for t in tramites_de_propietario:
+        if (t.pago is not None and t.monto_pagado>0):
+            list.append(t)
+    contexto={'tramites':list, 'estilos':estilos}
+    return contexto
+
+def listado_comprobantes_propietario(request,pk_tramite):
+    estilos = ''
+    usuario = request.user
+    propietario = get_object_or_404(Propietario, pk=usuario.persona.propietario.pk)
+    if propietario.estilo:
+        estilos = propietario.estilo
+    tramite=get_object_or_404(Tramite,pk=pk_tramite)
+    if tramite.propietario_id == propietario:
+        pago=tramite.pago
+        canceladas=[]
+        cuotas=Cuota.objects.en_estado(Cancelada)
+        for cuota in cuotas:
+            if cuota.pago==pago:
+                canceladas.append(cuota)
+        if canceladas is None:
+            messages.add_message(request, messages.WARNING, 'No hay pagos registrados para el tramite seleccionado.')
+        return render (request, 'persona/propietario/factura_parcial.html', {'cuotas':canceladas,'tramite':tramite,'pago':pago, 'estilos':estilos})
+
+def planilla_visado_impresa_propietario(request, pk_tramite):
+    estilos = ''
+    usuario = request.user
+    propietario = get_object_or_404(Propietario, pk=usuario.persona.propietario.pk)
+    if propietario.estilo:
+        estilos = propietario.estilo
+    value = "estilo3"
+    planilla = get_object_or_404(PlanillaDeVisado,id=pk_tramite)
+    tramite = get_object_or_404(Tramite, pk=planilla.tramite_id)
+    filas = FilaDeVisado.objects.all()
+    columnas = ColumnaDeVisado.objects.all()
+    try:
+        elementos = planilla.elementos.all()
+        items = planilla.items.all()
+        obs = planilla.observacion
+        contexto={'tramite': tramite,
+                  'planilla': planilla,
+                  'filas': filas,
+                  'columnas': columnas,
+                  'elementos': elementos,
+                  'items': items,
+                  'obs': obs,
+                  'estilos':estilos,
+                  }
+        if estilos == value:
+            return render(request, 'persona/propietario/planilla_visado_impresa_propietarioModoNocturno.html',
+                          contexto)
+
+        return render(request, 'persona/propietario/planilla_visado_impresa_propietario.html',contexto)
+    except:
+         contexto = {
+             'tramite': tramite,
+             'planilla': planilla,
+             'filas': filas,
+             'columnas': columnas,
+             'obs': obs,
+             'estilos':estilos,
+         }
+         if estilos == value:
+             return render(request, 'persona/propietario/planilla_visado_impresa_propietarioModoNocturno.html',
+                           contexto)
+
+         return render(request, 'persona/propietario/planilla_visado_impresa_propietario.html', contexto)
+
+def planilla_inspeccion_impresa_propietario(request, pk_tramite):
+    estilos = ''
+    usuario = request.user
+    propietario = get_object_or_404(Propietario, pk=usuario.persona.propietario.pk)
+    if propietario.estilo:
+        estilos = propietario.estilo
+    value = "estilo3"
+    planilla = get_object_or_404(PlanillaDeInspeccion, id=pk_tramite)
+    tramite=get_object_or_404(Tramite, id=planilla.tramite_id)
+    items = ItemInspeccion.objects.all()
+    categorias = CategoriaInspeccion.objects.all()
+    try:
+        detalles = planilla.detalles.all()
+        contexto = {
+            'tramite': tramite,
+            'planilla': planilla,
+            'items': items,
+            'categorias': categorias,
+            'detalles': detalles,
+            'estilos':estilos,
+        }
+        if estilos == value:
+            return render(request, 'persona/propietario/planilla_inspeccion_impresa_propietarioModoNocturno.html',
+                          contexto)
+
+        return render(request, 'persona/propietario/planilla_inspeccion_impresa_propietario.html', contexto)
+
+    except:
+        contexto = {
+            'tramite':tramite,
+            'planilla': planilla,
+            'items': items,
+            'categorias': categorias,
+            'estilos':estilos,
+        }
+        if estilos == value:
+            return render(request, 'persona/propietario/planilla_inspeccion_impresa_propietarioModoNocturno.html',
+                          contexto)
+
+        return render(request, 'persona/propietario/planilla_inspeccion_impresa_propietario.html', contexto)
+
 
 #-------------------------------------------------------------------------------------------------------------------
 #profesional -------------------------------------------------------------------------------------------------------
@@ -419,48 +874,8 @@ def enviar_correcciones(request, pk_tramite):
 
 def documento_de_estado(request, pk_estado):
     estado = get_object_or_404(Estado, pk=pk_estado)
-    fecha = estado.timestamp
-    fecha_str = date.strftime(fecha, '%d/%m/%Y %H:%M')
-    # documentos = estado.tramite.documentacion_para_estado(estado)
-    # documentos = estado.tramite.documentos.all()
-    documentos = estado.tramite.documentos.all()
-    documentos_fecha = filter(lambda e: (date.strftime(e.fecha, '%d/%m/%Y %H:%M') == fecha_str), documentos)
-    contexto = {'documentos_de_fecha': documentos_fecha}
-    planillas = []
-    inspecciones = []
-    documento = estado.tramite.documentacion_para_estado(estado)
-    if (estado.tipo==1 or estado.tipo==2):
-        contexto={'documentos':documento}
-    if (estado.tipo > 2 and estado.tipo < 5):
-        for p in PlanillaDeVisado.objects.all():
-            if (p.tramite.pk == estado.tramite.pk):
-                planillas.append(p)
-        #items = planilla.items.all()
-        filas = FilaDeVisado.objects.all()
-        columnas = ColumnaDeVisado.objects.all()
-        #elementos = planilla.elementos.all()
-        contexto = {
-            'documentos_de_fecha': documentos_fecha,
-            'planillas': planillas,
-            'filas': filas,
-            'columnas': columnas,
-            #'items': items,
-            #'elementos': elementos,
-        }
-    if (estado.tipo >5 and estado.tipo <8):
-        for p in PlanillaDeInspeccion.objects.all():
-            if (p.tramite.pk == estado.tramite.pk):
-                inspecciones.append(p)
-        items = ItemInspeccion.objects.all()
-        categorias = CategoriaInspeccion.objects.all()
-        #detalles = inspeccion.detalles.all()
-        contexto = {
-            'inspecciones': inspecciones,
-            'items': items,
-            'categorias': categorias,
-            #'detalles': detalles,
-        }
-    return render(request, 'persona/profesional/documento_de_estado.html', contexto)
+    documentos = estado.tramite.documentacion_para_estado(estado)
+    return render(request, 'persona/profesional/documento_de_estado.html', documentos)
 
 # def visados_profesional(request):
 #     usuario = request.user
@@ -2719,7 +3134,7 @@ def detalle_de_tramite(request, pk_tramite):
    # contexto= {'documentos_de_fecha': documentos_fecha}
     #return render(request, 'persona/director/documentos_del_estado.html', contexto)
 
-
+'''
 def documentos_del_estado(request, pk_estado):
     #print documentos
     estado = get_object_or_404(Estado, pk=pk_estado)
@@ -2765,6 +3180,11 @@ def documentos_del_estado(request, pk_estado):
             #'detalles': detalles,
         }
     return render(request, 'persona/director/documentos_del_estado.html', contexto)
+'''
+def documentos_del_estado(request, pk_estado):
+    estado = get_object_or_404(Estado, pk=pk_estado)
+    documentos = estado.tramite.documentacion_para_estado(estado)
+    return render(request, 'persona/director/documentos_del_estado.html', documentos)
 
 
 def generar_planilla_visado(request):
@@ -2785,7 +3205,6 @@ def ver_planilla_inspeccion(request):
      #return render(request, 'persona/director/ver_planilla_inspeccion.html', {"items":items, "detalles": detalles, "categorias":categorias})
      return render(request, 'persona/director/ver_planilla_inspeccion.html', contexto)
 
-######################################
 
 def planilla_visado_impresa_director(request, pk_tramite):
     planilla = get_object_or_404(PlanillaDeVisado,id=pk_tramite)
@@ -2839,9 +3258,6 @@ def planilla_inspeccion_impresa_director(request, pk_tramite):
             'categorias': categorias,
         }
         return render(request, 'persona/director/planilla_inspeccion_impresa_director.html', contexto)
-
-
-#####################################
 
 def ver_filtro_obra_fechas(request):
     listado_tramites = []
@@ -3126,65 +3542,6 @@ def tramites_iniciados_finalizados(request):
             return render(request, 'persona/director/seleccionar_fecha.html', {"tipos_obras":tipos_obras})
 
 
-# def tramites_iniciados_finalizados(request):
-#     datos = []
-#     iniciados = []
-#     finalizados = []
-#     listadoMes = []
-#     finalizadosXMes = []
-#     series = []
-#     lista = []
-#     nombres = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre",
-#                "Noviembre", "Diciembre"]
-#     if "Guardar" in request.POST:
-#         for name, value in request.POST.items():
-#             if name.startswith('item'):
-#                 year = int(value)
-#             if name.startswith('obra'):
-#                 tipoObra = int(value)
-#         totalIniciados = 0
-#         totalFinalizados = 0
-#         for mes in range(12):
-#             m = mes + 1
-#             diaFinal = monthrange(year, m)
-#             totalI = Estado.objects.filter(tramite__tipo_obra=tipoObra, timestamp__range=(
-#             datetime.date(year, m, 01), datetime.date(year, m, diaFinal[1])),
-#                                            tipo=(1)).count()
-#             totalF = Estado.objects.filter(tramite__tipo_obra=tipoObra, timestamp__range=(
-#             datetime.date(year, m, 01), datetime.date(year, m, diaFinal[1])), tipo=(9)).count()
-#             aux = {"id": m, "mes": nombres[mes], "iniciado": totalI, "finalizado": totalF}
-#             print(aux)
-#             listadoMes.append(aux)
-#             iniciados.append(totalI)
-#             totalIniciados = totalI + totalIniciados
-#             totalFinalizados = totalF + totalFinalizados
-#             finalizados.append(totalF)
-#         i = tuple(iniciados)
-#         f = tuple(finalizados)
-#         datos.append(i)
-#         datos.append(f)
-#         iniciales = Estado.objects.filter(tipo=1)
-#         finalizados = Estado.objects.filter(tipo=9).count()
-#         inicial = 0
-#         for i in iniciales:
-#             if i.previo() is None:
-#                 inicial = inicial + 1
-#         finales = Estado.objects.filter(tipo=9).count()
-#         porcentajeI = (totalIniciados / float(inicial)) * 100
-#         porcentajeF = (totalFinalizados / float(inicial)) * 100
-#         lista.append(["iniciados", porcentajeI])
-#         lista.append(["finalizados", porcentajeF])
-#         series = ("iniciados", "finalizados")
-#         titulo = "Tramites iniciados y finalidos por mes"
-#         if len(datos) > 0:
-#             grafico = grafico_de_barras_v(datos, nombres, titulo, series)
-#             imagen = base64.b64encode(grafico.asString("png"))
-#             contexto = {"grafico": imagen, "lista": lista, "listadoM": listadoMes}  # "tipos_obras": list}
-#         return render(request, 'persona/director/listado_tramites_iniciados_finalizados.html', contexto)
-#     else:
-#         tipos_obras = TipoObra.objects.filter(activo=1)
-#         return render(request, 'persona/director/seleccionar_fecha.html', {"tipos_obras": tipos_obras})
-
 def recaudacion_tipo_obra_tipo_pago(request):
         datos = []
         iniciados = []
@@ -3238,87 +3595,6 @@ def recaudacion_tipo_obra_tipo_pago(request):
         return render(request, 'persona/director/seleccionar_datos.html', {"tipos_obras": tipos_obras,"tipo_pago":tipo_pago})
 
 
-# def tramites_iniciados_finalizados(request):
-#     datos=[]
-#     iniciados=[]
-#     finalizados=[]
-#     series=[]
-#     lista=[]
-#     years=[]
-#     rango=12
-#     nombres=[]
-#     listaItems=[]
-#     listaItem=[]
-#     meses=["Enero", "Febrero", "Marzo", "Abril", "Mayo","Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"]
-#     if "Guardar" in request.POST:
-#         listaItems = request.POST.getlist('item1')
-#         listaItem = request.POST.getlist('item')
-#         if len(listaItem)!= 0:
-#             for l in listaItem:
-#                 years.append(int(l))
-#         else:
-#             years.append(datetime.date.today().year)
-#         if len(listaItems)!=0:
-#             numeroMes =int(listaItems[0])
-#             for i in range(len(years)):
-#                 for l in listaItems:
-#                     n=meses[int(l)]
-#                     nombres.append(n+"-"+str(years[i]))
-#             rango = len(listaItems) +1
-#         else:
-#             rango = 12
-#             numeroMes=0
-#             nombres = meses
-#         iniciales = Estado.objects.filter(tipo=1)
-#         inicial=0
-#         for i in iniciales:
-#             if i.previo() is None:
-#                 inicial =inicial+1
-#         finales = Estado.objects.filter(tipo=9).count()
-#         totalIA=0
-#         totalFA=0
-#         for year in years:
-#             mes=numeroMes
-#             m=0
-#             for mes in range(mes,rango):
-#                 m=mes+1
-#                 if m<=12:  #puse esto para que no salte la excepcion
-#                     diaFinal=monthrange(year,m)
-#                     tEstado=Estado.objects.filter(timestamp__range=(datetime.date(year, m, 01), datetime.date(year, m, diaFinal[1])), tipo=(1))
-#                     totalI=0
-#                     for t in tEstado:
-#                         if t.previo() is None:
-#                             totalI=totalI+1
-#                     totalIA=totalI+totalIA
-#                     tEstado=0
-#                     totalF=Estado.objects.filter(timestamp__range=(datetime.date(year, m, 01), datetime.date(year, m, diaFinal[1])), tipo=(9)).count()
-#                     totalFA=totalF+totalFA
-#                     iniciados.append(totalI)
-#                     finalizados.append(totalF)
-#         i=tuple(iniciados)
-#         f=tuple(finalizados)
-#         datos.append(i)
-#         datos.append(f)
-#         if inicial == 0:
-#             promedioI=0
-#         else:
-#             promedioI = totalIA/float(inicial)
-#         if finales == 0:
-#             promedioF=0
-#         else:
-#             promedioF = totalFA/float(finales)
-#         lista.append(["iniciados",promedioI])
-#         lista.append(["finalizados",promedioF])
-#         series=("iniciados","finalizados")
-#         titulo = "Tramites iniciados y finalidos por mes"
-#         if len(datos) > 0:
-#             grafico = grafico_de_barras_v(datos, nombres, titulo,series)
-#             imagen = base64.b64encode(grafico.asString("png"))
-#             contexto = {"grafico": imagen,"lista":lista}
-#         return render(request, 'persona/director/listado_tramites_iniciados_finalizados.html', contexto)
-#     else:
-#         return render(request, 'persona/director/seleccionar_fecha.html')
-
 def ver_sectores_con_mas_obras(request):
     tramites = Tramite.objects.all()
     sectores = []
@@ -3346,7 +3622,6 @@ def ver_sectores_con_mas_obras(request):
     return render(request,'persona/director/ver_sectores_con_mas_obras.html',contexto)
 
 
-############################################################################
 def seleccionar_tipoObra_sector(request):
     datos = []
     dato = []
@@ -3543,14 +3818,12 @@ def tiempo_aprobacion_visados(request):
                 aux=filter(lambda p: t==p.tramite_id, planillas)
                 lista.append([t,len(aux)])
             datos.append(meses)
-            #lista2.append(["Aprobados",((tramitesAprobados.count()/float(tramites))*100)])
-            #lista2.append(["Finalizados", ((tramitesAgendados/float(tramites))*100)])
-            porcentajeVisadosAprobados = tramitesAprobados.count() / float(tramites)
+            porcentajeVisadosAprobados = ((tramitesAprobados.count() / float(tramites)) * 100)
             porcentajeApr = "{0:.2f}".format(porcentajeVisadosAprobados)
-            lista2.append(["Aprobados", (porcentajeVisadosAprobados*100)])
-            porcentajeVisadosFinalizados = tramitesAgendados / float(tramites)
-           # porcentajeFin = "{0:.2f}".format(porcentajeVisadosFinalizados)
-            lista2.append(["Finalizados", (porcentajeVisadosFinalizados*100)])
+            lista2.append(["Aprobados", porcentajeApr])
+            porcentajeVisadosFinalizados = ((tramitesAgendados / float(tramites)) * 100)
+            porcentajeFin = "{0:.2f}".format(porcentajeVisadosFinalizados)
+            lista2.append(["Finalizados", porcentajeFin])
             titulo = "Promedio de duracion (en meses) de inicio y finalizacion de visados"
             if len(datos) > 0:
                   grafico = grafico_de_barras_v(datos, nombres, titulo,["promedio"])
@@ -3561,7 +3834,6 @@ def tiempo_aprobacion_visados(request):
     else:
         return render(request, 'persona/director/seleccionar_fecha_visados_aprobados.html')
 
-############################################################################
 class ReporteTramitesDirectorExcel(TemplateView):
 
     def get(self, request, *args, **kwargs):

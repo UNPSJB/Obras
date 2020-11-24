@@ -41,7 +41,7 @@
                   <td class="col-xs-1">{{tramite.monto_pagado}}</td>
                   <td class="col-xs-1">{{ tramite.saldo_restante_a_pagar}}</td>
                   <td align="center" class="col-xs-1">
-                        <a href="{% url 'profesional_solicita_final_obra' pk_tramite=tramite.id %}">
+                        <a href="{% url 'propietario_solicita_final_obra' pk_tramite=tramite.id %}">
                           <button type="button" class="btn btn-primary btn-xs" name="ver-certificado">
                             <span class="glyphicon glyphicon-home" aria-hidden="true"> Final Obra</span>
                           </button>

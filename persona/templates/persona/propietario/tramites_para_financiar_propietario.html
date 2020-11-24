@@ -1,0 +1,33 @@
+{% load staticfiles %}
+
+{% block contenido_tramites_para_financiar_propietario %}
+<div class="table-responsive">
+        <table class="table table-bordered table-striped table-hover table-condensed" style="background: white;">
+            <thead>
+                <tr>
+                    <th>Numero de tramite</th>
+                    <th>Propietario</th>
+                    <th>Profesional</th>
+                    <th>Elegir Forma de Pago</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for tramite in tramites %}
+                    <tr>
+                        <td class="col-xs-1">{{ tramite.id }}</td>
+                        <td class="col-xs-3">{{ tramite.propietario }},  DNI: {{ tramite.propietario.persona.dni}}</td>
+                        <td class="col-xs-4">{{ tramite.profesional }} </td>
+                        <td>
+                            <a href="{% url 'financiar_propietario' tramite.id%}">
+                                <button type="button" class="btn btn-primary brn-xs" name="ver-financiacion">
+                                    <span class="glyphicon glyphicon-home" aria-hidden="true"> Seleccionar Forma </span>
+                                </button>
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+</div>
+
+{% endblock %}

@@ -1,6 +1,6 @@
 {% load staticfiles %}
 
-{% block listado_tramites_a_pagar %}
+{% block listado_tramites_a_pagar_propietario %}
 <div class="table-responsive">
 
         <table class="table table-bordered table-striped table-hover table-condensed" style="background: white;">
@@ -16,7 +16,7 @@
             </thead>
             <tbody>
                 {% for tramite in tramites %}
-                    {% if tramite.saldo_restante_a_pagar >= 0.5 %}
+                    {%if tramite.saldo_restante_a_pagar >= 0.5 %}
                         <tr>
                             <td class="col-xs-1">{{ tramite.id }}</td>
                             <td class="col-xs-3">{{ tramite.domicilio }}</td>
@@ -25,7 +25,7 @@
                             <td class="col-xs-3">{{ tramite.monto_pagado }}</td>
 
                             <td>
-                                <a href="{% url 'elegir_tramite' tramite.id %}">
+                                <a href="{% url 'elegir_tramite_propietario' tramite.id %}">
                                     <button type="button" class="btn btn-primary brn-xs" name="RegistrarPago">
                                         <span class="glyphicon glyphicon-home" aria-hidden="true"> Seleccionar tramite </span>
                                     </button>
@@ -40,4 +40,3 @@
     </div>
 
 {% endblock %}
-

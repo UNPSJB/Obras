@@ -1,0 +1,155 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load crispy_forms_tags%}
+
+{% block barra %}
+<ul class="sidebar sidebar-1">
+    <font size="2">
+        <li><a href="{%url 'propietario'%}" class="current"><font color="white">Propietario</font> </a></li>
+    </font>
+</ul>
+{% endblock %}
+
+{% block contenido %}
+<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" >
+    <div class="panel">
+        <div class="panel-heading box" role="tab" id="headingOne">
+            <h5 class="panel-title">
+                <font color="#ffffff" size="2">Registrar el Pago de la Cuota </font>
+            </h5>
+        </div>
+        <div class="container-fluid">
+                                <form method="post" action="{% url 'pagar1_propietario' cuota.id %} ">
+
+            <div class="panel-body">
+                <div class="table-responsive">
+
+
+                        <table class="table table-bordered table-striped table-hover table-condensed" style="background: white;">
+                            <thead>
+                            <tr>
+                                <th>Id cuota</th>
+                                <th>Numero de Cuota</th>
+                                <th>Fecha Vencimiento</th>
+                                <th>Monto</th>
+                                <th>Seleccionar Forma de pago</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% if cuota %}
+
+                            <tr>
+                                <td class="col-xs-3">{{ cuota.id }}</td>
+                                <td class="col-xs-3">{{ cuota.numeroCuota }}</td>
+                                <td class="col-xs-3">{{ cuota.fechaVencimiento  }}</td>
+                                <td class="col-xs-3">{{ cuota.monto}}</td>
+                                <td>
+                                    <div class="controls ">
+                                        <select name="tipoPago" placeholder="Ingresar Tipo de Pago"
+                                                class="select form-control input-sm" id="tipoPago" required>
+                                            <option value="" selected="#">---------</option>
+                                            {% for p in tiposPagos %}
+                                            {% if p.activo == True %}
+                                            <option value="{{p}}">{{p}}</option>
+                                            {% endif %}
+                                            {% endfor %}
+                                        </select>
+                                    </div>
+
+                                </td>
+                            </tr>
+                            {% endif %}
+                            </tbody>
+                        </table>
+                </div>
+            </div>
+            <br>
+            <div class="form-group">
+                <div class="controls ">
+                    <div class="row">
+                        <div class="col-sm-10 col-md-10 col-xs-6" align="right">
+                            <button class="btn btn-primary btn-sm" type="submit" value="Guardar" name="Guardar">
+                                Aceptar
+                            </button>
+                        </div>
+                        <div class="col-sm-2 col-md-2 col-xs-6" >
+                            <a href="javascript:history.back(-1);">
+                                <button type="button" class="btn btn-primary" name="Volver">
+                                    Volver
+                                </button>
+                            </a>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+                    </form>
+
+        </div>
+    </div>
+
+</div>
+
+<style>
+
+  .switch {
+      position: relative;
+      display: inline-block;
+      width: 30px;
+      height: 17px;
+  }
+
+  /* Hide default HTML checkbox */
+  .switch input {display:none;}
+
+  /* The slider */
+  .slider {
+      position: absolute;
+      cursor: pointer;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: #ccc;
+      -webkit-transition: .4s;
+      transition: .4s;
+  }
+
+  .slider:before {
+      position: absolute;
+      content: "";
+      height: 13px;
+      width: 13px;
+      left: 2px;
+      bottom: 2px;
+      background-color: white;
+      -webkit-transition: .4s;
+      transition: .4s;
+  }
+
+  input:checked + .slider {
+      background-color: #2196F3;
+  }
+
+  input:focus + .slider {
+      box-shadow: 0 0 1px #2196F3;
+  }
+
+  input:checked + .slider:before {
+      -webkit-transform: translateX(13px);
+      -ms-transform: translateX(13px);
+      transform: translateX(13px);
+  }
+
+  /* Rounded sliders */
+  .slider.round {
+      border-radius: 17px;
+  }
+
+  .slider.round:before {
+      border-radius: 50%;
+  }
+</style>
+{% endblock %}
+
+

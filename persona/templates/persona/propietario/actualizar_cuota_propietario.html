@@ -1,0 +1,59 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load crispy_forms_tags%}
+
+{% block barra %}
+    <ul class="sidebar sidebar-1">
+        <font size="2">
+            <li><a class="current"><font color="white">Financiacion</font> </a></li>
+        </font>
+      </ul>
+{% endblock %}
+
+{% block contenido %}
+{% block tramites_para_financiar %}
+
+<div class="table-responsive">
+
+        <table class="table table-bordered table-striped table-hover table-condensed" style="background: white;">
+            <thead>
+                <tr>
+                    <th>Id</th>
+                    <th>FechaVencimiento</th>
+                    <th>Monto</th>
+                    <th>Numero de Cuota</th>
+                    <th>Generar Comprobante</th>
+                </tr>
+            </thead>
+                {% for cuota in cuota%}
+            <tbody>
+
+                    <tr>
+                        <td class="col-xs-1">{{ cuota.id }}</td>
+                        <td class="col-xs-3">{{ cuota.fechaVencimiento }}</td>
+                        <td class="col-xs-3">{{ cuota.monto }}</td>
+                        <td class="col-xs-3">{{ cuota.numeroCuota }}</td>
+
+                        <td>
+                            <a  href="{% url 'comprobante_pago_cuota_propietario' cuota.id %}">
+                                <button type="button"  class="btn btn-primary brn-xs" name="GenerarComprobante">
+                                    <span class="glyphicon glyphicon-home" aria-hidden="true"> Generar Comprobante </span>
+                                </button>
+                            </a>
+                        </td>
+                    </tr>
+            </tbody>
+{%endfor%}
+        </table>
+    <div class="col-xs-4 col-sm-4 col-md-12 col-lg-12" style="float: right; width: 20%; margin-top: -20px; ">
+        <br><form action='/persona/cajero'>
+            &nbsp;<Button class="btn btn-primary btn-md" type="submit" value="Atras">Volver</Button>
+        </form><br>
+    </div>
+    </div>
+{% endblock %}
+{% endblock %}
+{% block scripts %}
+
+
+{% endblock %}

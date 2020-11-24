@@ -1,0 +1,176 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load crispy_forms_tags%}
+
+{% block barra %}
+<ul class="sidebar sidebar-1">
+    <font size="2">
+        <li><a href="{%url 'propietario'%}" class="current"><font color="white">Propietario</font> </a></li>
+    </font>
+</ul>
+{% endblock %}
+{% block contenido %}
+<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" >
+    <div class="panel" id="panelprop">
+        <div class="panel-heading box" role="tab" id="headingFive">
+            <h5 class="panel-title">
+                <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+                    <label id="financiacion">Registrar Pago</label>
+                </a>
+            </h5>
+        </div>
+
+        <div id="collapseFive" class="panel-collapse" role="tabpanel" aria-labelledby="headingFive">
+            <div class="panel-body">
+                <div class="row" id="fila1">
+
+                    <div class="container-fluid">
+                        <div class="form-group" >
+                            <div class="row">
+                                <hr>
+                                <div class="row">
+                                    <div class="col-sm-6 col-md-6 col-lg-6 col-xs-6">
+                                        <label > &nbsp; Titular: &nbsp; Apellido - Nombre : {{ tramite.propietario.persona.apellido}}  -  {{ tramite.propietario.persona.nombre }}</label>
+                                        <label >  &nbsp;  &nbsp;DNI : {{tramite.propietario.persona.dni}}</label>
+                                    </div>
+                                    <div class="col-sm-6 col-md-6 col-lg-6 col-xs-6">
+
+                                        <label>Profesional : </label>
+                                        <label> {{tramite.profesion}} {{tramite.profesional}}</label>
+                                        <label>M.P: {{tramite.profesional.matricula}}</label><br>
+                                    </div>
+                                    <br>
+                                </div>
+                                <hr>
+                                <!--<label>Obra:</label><br>-->
+                                <div class="col-sm-6 col-md-6 col-lg-6 col-xs-6">
+
+                                    <label> Domicilio : {{tramite.domicilio}}</label><br>
+
+                                    <label>Tipo de Obra : {{ tramite.tipo_obra }}</label><br>
+
+                                </div>
+                                <div class="col-sm-6 col-md-6 col-lg-6 col-xs-6">
+
+                                    <label >  Sector:  {{tramite.sector}}</label><br>
+                                    <label >Parcela: {{tramite.parcela}}</label> <br>
+                                    <label >Circunscripción: {{tramite.circunscripcion}}</label> <br>
+                                    <label >Manzana: {{tramite.manzana}}</label> <br>
+                                </div>
+                                <hr>
+
+                                <!--<div class="col-sm-6 col-md-6">-->
+                                <!--<label> Numero de Tramite : {{ tramite.id }} </label>-->
+                                <!--<br><br><br>-->
+                                <!--<label>  Propietario : </label>-->
+                                <!--<label> {{ tramite.propietario }}</label><br>-->
+                                <!--<label>Dni : {{ tramite.propietario.persona.dni}}</label> <br>-->
+                                <!--<label> Obra : </label> <br>-->
+                                <!--<label> Domicilio : {{tramite.domicilio}}</label><br>-->
+                                <!--<label>Tipo de Obra : {{ tramite.tipo_obra }}</label><br>-->
+                                <!--</div>-->
+                                <!-- <div class="col-sm-6 col-md-6">
+                                     <!--<label> Cuotas :{{cuota.pago.cantidadCuotas}}</label><br>-->
+                                <!--<label> Fecha de Vencimiento : {{ cuota.fechaVencimiento }}</label>-->
+                                <!--<br><br>-->
+                                <!--<label>Profesional : </label>-->
+                                <!--<label> {{tramite.profesion}} {{tramite.profesional}}</label>-->
+                                <!--<label>M.P: {{tramite.profesional.matricula}}</label><br>-->
+                                <!--<br> <br>-->
+                                <!--<label> Forma de pago  : {{ cuota.pago.tipoPago}} </label><br>-->
+                                <!--&lt;!&ndash;<label> Total : {{tramite.monto_a_pagar}}</label>&ndash;&gt;
+                            </div> -->
+                                <hr>
+                                <br>
+                                <div class="container-fluid">
+
+                                    <table class="table table-bordered table-striped table-hover table-condensed" style="background: white;">
+                                        <thead>
+                                        <tr>
+                                            <th>Numero de Cuota  </th>
+                                            <th>Fecha de Vencimiento</th>
+                                            <th>Subtotal</th>
+                                            <th>Forma de Pago</th>
+                                            <th></th>
+                                        </tr>
+                                        </thead>
+
+                                        <tbody>
+                                        <tr>
+                                            <td> {{ cuota.numeroCuota }}</td>
+                                            <td>{{ cuota.fechaVencimiento }}</td>
+                                            <td>{{cuota.monto}}</td>
+                                            <td>{{cuota.tipoPago.nombre}}</td>
+                                            <td>
+                                                <a  href="{% url 'comprobante_pago_cuota_propietario' cuota.id %}" target="_blank">
+                                                    <button type="button"  class="btn btn-primary brn-xs" name="GenerarComprobante">
+                                                        <span class="glyphicon glyphicon-home" aria-hidden="true"> Generar Comprobante </span>
+                                                    </button>
+                                                </a>
+                                            </td>
+                                        </tr>
+
+                                        </tbody>
+
+
+                                    </table>
+                                    <br>
+                                    <div align="right">
+                                        <label >Total: {{tramite.monto_pagado}} </label>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <br>
+                            <div class="form-group">
+                                <div class="controls ">
+                                    <div class="row">
+                                        <div class="col-sm-6 col-md-6 col-xs-6" align="right" >
+                                            <a href="javascript:history.back(-1);">
+                                                <button type="button" class="btn btn-primary" name="Volver"> Volver </button>
+                                            </a>
+                                        </div>
+                                        <div class="col-sm-6 col-md-6 col-xs-6" >
+                                            <!--<a href="{ url 'elegir_cuota' cuota.id }">-->
+                                            <!--<a href="{ url 'elegir_cuota'}">-->
+                                            <!--<button type="button" onclick="return confirm('Desea registrar el pago de la cuota?')" class="btn btn-primary brn-xs" name="Guardar">-->
+                                            <!--Aceptar-->
+                                            <!--</button>-->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+
+    .dataTables_length, .dataTables_filter, .dataTables_info,.dataTables_wrapper .dataTables_paginate .paginate_button.disabled, .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:hover, .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:active {
+          display: none !important;
+       }
+
+
+    input, button, select, textarea {
+            display: none;
+        }
+
+        .dataTables_wrapper .dataTables_paginate .paginate_button.current, .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
+            display: none;
+        }
+        #tabla_length{
+        display:none;
+        }
+        #tabla_filter{
+        display:none;
+        }
+
+
+
+
+</style>
+{% endblock %}

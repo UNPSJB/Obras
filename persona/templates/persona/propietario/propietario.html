@@ -32,9 +32,9 @@
                 <input type="hidden" name="Aceptar" value="Aceptar">
                <div class="controls ">
                    <select alt="seleccione un estilo de pagina" placeholder="seleccione estilo" class="select form-control input-sm " id="estilo" name="estilo"  onchange="this.form.submit();" required>
-                       <option alt="selector de tema de alto contraste" value="" selected="">Selector de tema</option>
-                       <option alt="blanco y negro" value="estilo3">Negro</option>
-                       <option alt="violeta y blano " value="estilo4">Violeta</option>
+                       <option alt="selector de tema de alto contraste" value="" selected="">Elegir Modo</option>
+                       <option alt="blanco y negro" value="estilo3">Modo Nocturno</option>
+                       <option alt="violeta y blano " value="estilo4">Alto Constraste</option>
                        <option alt="azul y blanco" value="estilo5">Azul</option>
                        <option alt="por defecto" value="base">Por defecto</option>
                    </select>
@@ -58,7 +58,11 @@
     <ul class="sidebar sidebar-1">
         <li><a href="#" class="current"><label id="propietario">Propietario</label></a></li>
         <li><a data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour"><label id="i">Consultar estado de mis tramites</label></a></li>
-        <li><a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseOne"><label id="k">Seleccionar forma de financiacion</label></a></li>
+        <li><a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseOne"><label id="k">Elegir forma de pago</label></a></li>
+		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false"aria-controls="collapseThree"><label id="L">Realizar Pago de Tramite</label></a></li>
+		<!--<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="false"aria-controls="collapseFive"><label id="P">Resumen de Pago de Tramite</label></a></li>-->
+		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseSix" aria-expanded="false"aria-controls="collapseSix"><label id="R">Comprobantes de Pago del Tramite de Pago</label></a></li>
+
 
     </ul>
 <br>
@@ -108,29 +112,107 @@
                 </div>
             </div>
         </div>
-
-        <div class="panel panel-custom">
+		<div class="panel panel-custom">
             <div class="panel-heading panel-heading-custom box" role="tab" id="headingTwo">
                 <a class="panel-title">
                     <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                        <label id="g">Seleccionar forma de financiacion</label>
+                        <label id="g">Elegir forma de pago</label>
                     </a>
                 </a>
             </div>
-            <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+	    <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
                 <div class="panel-body">
                     <div class="container-fluid">
                         <div class="row">
-                            <div id="columna2" class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                                {% block contenido_mis_tramites_para_financiar %}
-                                    {% include "persona/propietario/financiar.html" with tramites=ctxmis_tramites_para_financiar %}
-                                {% endblock %}
-                            </div>
-                        </div>
-                    </div>
-                </div>
+                            <div id="columna2" class="col-xs-12 col-sm-12 col-md-12 col-lg-12" id="pagos">
+
+								{% block tramites_para_financiar_propietario %}
+									{% include "persona/propietario/tramites_para_financiar_propietario.html" with tramites=ctxtramites_para_financiar_propietario.tramites %}
+								{% endblock %}
+						    </div>
+					    </div>
+				    </div>
+			    </div>
+		    </div>
+		</div>
+		<div class="panel panel-custom">
+			<div class="panel-heading panel-heading-custom box" role="tab" id="headingThree">
+                <a class="panel-title">
+                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                        <label id="g">Realizar Pago de Tramite</label>
+                    </a>
+                </a>
             </div>
-        </div>
+			<div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+                <div class="panel-body">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div id="columna3" class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+
+								{% block listado_tramites_a_pagar %}
+									{% include "persona/propietario/listado_tramites_a_pagar_propietario.html" with tramites=ctxcuotas.tramites %}
+								{% endblock %}
+
+						</div>
+						</div>
+					</div>
+			  	</div>
+			  </div>
+			</div>
+
+		<!--<div class="panel panel-custom">
+			<div class="panel-heading panel-heading-custom box" role="tab" id="headingFive">
+                <a class="panel-title">
+                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+                        <label id="g">Resumen de Pago de Tramite</label>
+                    </a>
+                </a>
+            </div>
+			<div id="collapseFive" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFive">
+                <div class="panel-body">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div id="columna4" class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+
+								{% block listado_tramites_propietario %}
+									{% include "persona/propietario/listado_tramites_propietario.html" with tramites=ctxlistado.tramites %}
+								{% endblock %}
+
+						</div>
+						</div>
+					</div>
+			  	</div>
+			  </div>
+			</div>-->
+		<div class="panel panel-custom">
+			<div class="panel-heading panel-heading-custom box" role="tab" id="headingSix">
+                <a class="panel-title">
+                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseSix" aria-expanded="false" aria-controls="collapseSix">
+                        <label id="g">Comprobantes de Pago del Tramite</label>
+                    </a>
+                </a>
+            </div>
+			<div id="collapseSix" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingSix">
+                <div class="panel-body">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div id="columna5" class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+
+								{% block listado_tramites_comprobantes_propietario %}
+									{% include "persona/propietario/listado_tramites_comprobantes.html" with tramites=ctxlistado.tramites %}
+								{% endblock %}
+
+						</div>
+						</div>
+					</div>
+			  	</div>
+			  </div>
+			</div>
+
+		</div>
+
+
+    </div>
 
     </div>
 {% endblock %}
