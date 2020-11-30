@@ -3,21 +3,18 @@
 {% load crispy_forms_tags%}
 
 {% block barra %}
-<ul class="sidebar sidebar-1">
-    <font size="2">
-        <li><a href="{%url 'propietario'%}" class="current"><font color="white">Propietario</font> </a></li>
-    </font>
-</ul>
+    <ul class="sidebar sidebar-1">
+        <li><a href="{%url 'propietario'%}" class="current"><label id="propietario">Propietario</label></a></li>
+        </font>
+      </ul>
 {% endblock %}
 
 {% block contenido %}
 <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" >
     <div class="panel">
-        <div class="panel-heading box" role="tab" id="headingOne">
-            <h5 class="panel-title">
-                <font color="#ffffff" size="2">Registrar el Pago de la Cuota </font>
-            </h5>
-        </div>
+         <div class="panel-heading box" role="tab" id="headingOne">
+                <font color="#ffffff" class="current"><label id="propietario1">Registrar el Pago de la Cuota</label></font>
+            </div>
         <div class="container-fluid">
                                 <form method="post" action="{% url 'pagar1_propietario' cuota.id %} ">
 
@@ -153,3 +150,16 @@
 {% endblock %}
 
 
+{% block scripts %}
+
+<script>
+	$(document).ready(function() {
+	var font=0;
+	if (Cookies.get("fs")){
+			font=Cookies.get("fs");
+		    document.body.style.fontSize = font + "em";
+
+	}
+});
+</script>
+{% endblock %}

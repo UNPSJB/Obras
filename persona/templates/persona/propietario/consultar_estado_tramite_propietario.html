@@ -24,22 +24,22 @@
           {% if tramites_de_propietario %}
               {% for tramite in tramites_de_propietario %}
                 <tr>
-                  <td class="col-xs-1">{{tramite.id}}</td>
-                  <td class="col-xs-3">{{tramite.profesional}}</td>
-                  <td class="col-xs-1">{{tramite.estado}}</td>
+                    <td>{{tramite.id}}</td>
+                  <td>{{tramite.profesional}}</td>
+                  <td>{{tramite.estado}}</td>
                     {%if tramite.estado.tipo == 5 %}
-                    <td class="col-xs-1"> {{tramite.estado.timestamp}} </td>
+                   <td>{{tramite.estado.timestamp}} </td>
                                         {%endif%}
                     {% if tramite.estado.tipo != 5 %}
-                    <td class="col-xs-1">------</td>
+                    <td>------</td>
                     {%endif%}
 
 
-                  <td class="col-xs-1">{{tramite.medidas}}</td>
-                  <td class="col-xs-1">{{tramite.tipo_obra}}</td>
-                  <td class="col-xs-1">{{tramite.monto_a_pagar}}</td>
-                  <td class="col-xs-1">{{tramite.monto_pagado}}</td>
-                  <td class="col-xs-1">{{ tramite.saldo_restante_a_pagar}}</td>
+                    <td>{{tramite.medidas}}</td>
+                    <td>{{tramite.tipo_obra}}</td>
+                    <td>{{tramite.monto_a_pagar}}</td>
+                    <td>{{tramite.monto_pagado}}</td>
+                    <td>{{ tramite.saldo_restante_a_pagar}}</td>
                   <td align="center" class="col-xs-1">
                         <a href="{% url 'propietario_solicita_final_obra' pk_tramite=tramite.id %}">
                           <button type="button" class="btn btn-primary btn-xs" name="ver-certificado">

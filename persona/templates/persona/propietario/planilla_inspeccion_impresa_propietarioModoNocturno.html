@@ -3,11 +3,11 @@
 
 {% block barra %}
 <ul class="sidebar sidebar-1">
-    <font size="2">
-        <li><a href="{% url 'propietario'  %}" class="current"><font color="white">Propietario</font></a></li>
+        <li><a href="{%url 'propietario'%}" class="current"><label id="propietario">Propietario</label></a></li>
     </font>
 </ul>
 {% endblock %}
+
 {%block contenido %}
 <div id="printReady">
     <div class="container-fluid" id="planillaInspeccionContainer" style="background-color:white;">
@@ -56,7 +56,7 @@
                                     <div class=" col-xs-12 col-sm-12 col-md-12 col-lg-12" >
                                             <hr style="border-width:">
                                             <h5 align="left">
-                                                DATOS CATASTRALES&nbsp;  &nbsp;
+                                                <font color="white">DATOS CATASTRALES&nbsp;  &nbsp;</font>
                                             </h5>
                                             <div class="table-responsive">
                                                 <table align="center" style="text-align:center;">
@@ -72,12 +72,12 @@
                                                     </thead>
                                                     <tbody>
                                                     <tr>
-                                                        <td class="col-xs-1" align="center">{{tramite.medidas}}</td>
-                                                        <td class="col-xs-2" align="center">{{tramite.domicilio}}</td>
-                                                        <td class="col-xs-3" align="center">{{tramite.parcela}}</td>
-                                                        <td class="col-xs-4" align="center">{{tramite.circunscripcion}}</td>
-                                                        <td class="col-xs-5" align="center">{{tramite.manzana}}</td>
-                                                        <td class="col-xs-6" align="center">{{tramite.sector}}</td>
+                                                        <td class="col-xs-1" align="center" bgcolor="black"><font color="white">{{tramite.medidas}}</td>
+                                                        <td class="col-xs-2" align="center"bgcolor="black"><font color="white">{{tramite.domicilio}}</td>
+                                                        <td class="col-xs-3" align="center"bgcolor="black"><font color="white">{{tramite.parcela}}</td>
+                                                        <td class="col-xs-4" align="center"bgcolor="black"><font color="white">{{tramite.circunscripcion}}</td>
+                                                        <td class="col-xs-5" align="center"bgcolor="black"><font color="white">{{tramite.manzana}}</td>
+                                                        <td class="col-xs-6" align="center"bgcolor="black"><font color="white">{{tramite.sector}}</td>
                                                     </tr>
                                                     </tbody>
                                                 </table>
@@ -86,6 +86,7 @@
                                 </div>
                         </div>
                     </div>
+                    <br>
                     <table class="table table-bordered table-striped table-hover table-condensed " id="tabla">
                         <thead>
                         <tr  style="text-align:center;">
@@ -101,10 +102,10 @@
                         {% for categoria in categorias %}
                         {% if categoria.activo == True %}
                         <tr>
-                            <td class="col-xs-1">{{ categoria.nombre }}</td>
+                            <td class="col-xs-1" bgcolor="black"><font color="white">{{ categoria.nombre }}</font></td>
                             {% for item in items %}
                             {% if item.activo == True %}
-                            <td class="col-sm-4">&nbsp;
+                            <td class="col-sm-4" bgcolor="black"><font color="white">&nbsp;
                                 {% for detalle in detalles %}
                                 {% if detalle.activo == True %}
                                 {% if categoria.nombre == detalle.categoria_inspeccion.nombre and item.nombre == detalle.item_inspeccion.nombre %}
@@ -113,7 +114,7 @@
                                 {% endif %}
                                 {% endif %}
                                 {% endfor %}
-                            </td>
+                            </font></td>
                             {% endif %}
                             {% endfor %}
                         </tr>
@@ -121,7 +122,8 @@
                         {% endfor %}
                         </tbody>
                     </table>
-                    <table  class="table-bordered table-striped table-hover">
+                    <table class="table table-bordered table-striped table-hover table-condensed " id="tabla2">
+
                         <thead>
                         <tr>
                             <th>categoria</th>
@@ -132,9 +134,9 @@
                         {% for categoria in categorias %}
                         {% if categoria.activo == True %}
                         <tr>
-                            <td id="nombre{{categoria.id}}" class="col-xs-1" align="center">{{categoria.nombre}}</td>
-                            <td id="tipo{{categoria.id}}" class="col-xs-1" align="center">{{categoria.tipo}}</td>
-                            <td id="descripcion{{categoria.id}}" class="col-xs-2">{{categoria.descripcion}}</td>
+                            <td id="nombre{{categoria.id}}" class="col-xs-1" align="center"bgcolor="black"><font color="white">{{categoria.nombre}}</font></td>
+                            <td id="tipo{{categoria.id}}" class="col-xs-1" align="center" bgcolor="black"><font color="white">{{categoria.tipo}}</font></td>
+                            <td id="descripcion{{categoria.id}}" class="col-xs-2" bgcolor="black"><font color="white">{{categoria.descripcion}}</font></td>
                         </tr>
                         {% endif %}
                         {% endfor %}
@@ -204,3 +206,15 @@
 </script>
 
 {%endblock%}
+
+{% block scripts %}
+<script>
+	$(document).ready(function() {
+	var font=0;
+	if (Cookies.get("fs")){
+		font=Cookies.get("fs");
+	    document.body.style.fontSize = font + "em";
+	}
+});
+</script>
+{% endblock %}

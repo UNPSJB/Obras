@@ -11,19 +11,20 @@
                           <img src="/media/imagenes/Escudobanner.png"
                                class="img-responsive" alt="escudo municipalidad" width="100" height="100"/>
                     </div>
-                       <div align="justify" style="font-size:9px; text-align:left;">
-                      <br>  &nbsp; MUNICIPALIDAD DE TRELEW
+                       <div align="justify" style="color:black font-size:9px; text-align:left;">
+                      <br>&nbsp;<label style="color:black;">MUNICIPALIDAD DE TRELEW
                       <br>
-                      &nbsp; Rivadavia 390 <br>
-                      &nbsp; 9100 TRELEW- Provincia del Chubut
+
+                      &nbsp;<label style="color:black;"> Rivadavia 390 <br>
+                      &nbsp;9100 TRELEW- Provincia del Chubut
                        </div>
-                      <h3 align="center">
+                      <h3 align="center" style="color:black">
                           FACTURA DE PAGO &nbsp;  &nbsp;
                       </h3>
                       <hr>
                            &nbsp;<label style="color:black;"> PAGO EFECTUADO </label>
-                            <h5 align="right"> Fecha de Vencimiento {{ cuota.fechaVencimiento }} &nbsp; &nbsp;</h5>
-                            <h5 align="right"> Fecha de Pago {{ cuota.fechaPago }} &nbsp; &nbsp; </h5>
+                            <h5 align="right" style="color:black;"> Fecha de Vencimiento {{ cuota.fechaVencimiento }} &nbsp; &nbsp;</h5>
+                            <h5 align="right" style="color:black;"> Fecha de Pago {{ cuota.fechaPago }} &nbsp; &nbsp; </h5>
                       <hr>
                     <div class="row">
                                        <div class="col-sm-6 col-md-6 col-lg-6 col-xs-6">
@@ -153,3 +154,15 @@ var tc = {{cuota.monto}}
 
 
 {%endblock%}
+
+{% block scripts %}
+<script>
+	$(document).ready(function() {
+	var font=0;
+	if (Cookies.get("fs")){
+		font=Cookies.get("fs");
+	    document.body.style.fontSize = font + "em";
+	}
+});
+</script>
+{% endblock %}

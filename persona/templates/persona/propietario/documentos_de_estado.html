@@ -1,10 +1,10 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
+{% load crispy_forms_tags%}
 
 {% block barra %}
 <ul class="sidebar sidebar-1">
-    <font size="2">
-        <li><a href="{% url 'propietario'  %}" class="current"><font color="white">Propietario</font></a></li>
+        <li><a href="{%url 'propietario'%}" class="current"><label id="propietario">Propietario</label></a></li>
     </font>
 </ul>
 {% endblock %}
@@ -15,7 +15,10 @@
     <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" >
         <div class="panel">
             <div class="panel-heading box" role="tab" id="headingFive">
-                <font color="#ffffff" size="3">Documentos del estado del tramite</font>
+               <!-- <font color="#ffffff" size="3">Documentos del estado del tramite</font>-->
+                <div class="panel-heading box" role="tab" id="headingOne">
+                    <font color="#ffffff" class="current"><label id="propietario1">Documentos del estado del tramite</label></font>
+            </div>
                 <h5 class="panel-title">
                     <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
                         <label id="documentos"></label>

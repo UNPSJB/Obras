@@ -37,3 +37,17 @@
     </div>
 
 {% endblock %}
+
+{% block scripts %}
+
+<script>
+	$(document).ready(function() {
+	var font=0;
+	if (Cookies.get("fs")){
+			font=Cookies.get("fs");
+		    document.body.style.fontSize = font + "em";
+
+	}
+});
+</script>
+{% endblock %}

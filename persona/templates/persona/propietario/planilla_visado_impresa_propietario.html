@@ -4,11 +4,11 @@
 
 {% block barra %}
 <ul class="sidebar sidebar-1">
-    <font size="2">
-        <li><a href="{% url 'propietario'  %}" class="current"><font color="white">Propietario</font></a></li>
+        <li><a href="{%url 'propietario'%}" class="current"><label id="propietario">Propietario</label></a></li>
     </font>
 </ul>
 {% endblock %}
+
 {%block contenido%}
 <div id="printReady">
     <div class="container-fluid" style="background:white;">
@@ -19,17 +19,45 @@
                         <img src="/media/imagenes/Escudobanner.png" class="img-responsive" alt="Escudo banner" width="100" height="100">
                     </div>
                     <br>
-                    <div align="justify" id="municipalidadVisado" style="color: black font-size:9px; text-align:left;">
-                     <div align="left"  style="color:black;">
+                   <div id="municipalidadVisado" align="justify" style="font-size:9px; text-align:left;">
+                         <align="left"  style="color:black;">
                           &nbsp; MUNICIPALIDAD DE TRELEW
                         <br>
                         &nbsp; Rivadavia 390 <br>
                         &nbsp; 9100 TRELEW- Provincia del Chubut
 
+
                     <h3 id="planillaVisado" align="center" style="color: black">
                         PLANILLA DE VISADO &nbsp;  &nbsp;
                     </h3>
-                    <hr style="border-width:">
+
+
+                         <br>
+<br>
+                         <hr style="border-width:">
+                        <br>
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                <div class="row">
+                                    <div class=" col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                            <h5 align="left" style="color:black">
+                                                NRO TRAMITE: {{tramite.id}} &nbsp;  &nbsp;
+                                            </h5>
+                                            <h5 align="left" style="color:black">
+                                                PROPIETARIO: {{tramite.propietario.persona}} &nbsp;  &nbsp;
+                                            </h5>
+                                            <h5 align="left" style="color:black">
+                                                    PROFESIONAL: {{tramite.profesional.persona}} &nbsp;  &nbsp;
+                                            </h5>
+                                            <h5 align="left" style="color:black">
+                                                    TIPO DE OBRA: {{tramite.tipo_obra}} &nbsp;  &nbsp;
+                                            </h5>
+                                    </div>
+                                </div>
+                        </div>
+                    </div>
+                                                <br>
+                   <!-- <hr style="border-width:">
                     <div class="row">
                         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                                 <div class="row">
@@ -52,7 +80,7 @@
                                     </div>
                                 </div>
                         </div>
-                    </div>
+                    </div>--->
                     <!--<div id="rowVisado" class="row">
                         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                             <form action="" >
@@ -93,9 +121,13 @@
                                 <td class="col-sm-1">&nbsp;
                                     {% for item in planilla.items.all %}
                                     {% if fila == item.fila_de_visado and columna == item.columna_de_visado %}
-                                    <label class="switch">
+                                    <!--<label class="switch">
                                         <input type="checkbox" disabled="disabled" checked="checked" name="{{fila}}" value="{{fila}}" checked><span class="slider round"></span>
-                                    </label>
+                                    </label>-->
+
+                                    <input type="checkbox" id="activar"disabled="disabled" checked="checked" name="{{fila}}" value="{{fila}}">
+                                    <label for="activar"></label>
+
                                     {% endif %}
                                     {% endfor %}
                                 </td>
@@ -121,9 +153,12 @@
                                 <tr id="filasBalance">
                                     <td class="col-xs-1">{{ elemento }}</td>
                                     <td class="col-sm-4">
-                                        <label class="switch">
+                                        <!--<label class="switch">
                                             <input type="checkbox" disabled="disabled" checked="checked" name="{{elemento}}" value="{{elemento}}" checked><span class="slider round"></span>
-                                        </label>
+                                        </label>-->
+                                        <input type="checkbox" id="activar1"disabled="disabled" checked="checked" name="{{elemento}}" value="{{elemento}}" >
+                                    <label for="activar"></label>
+
                                     </td>
                                 </tr>
                                 {% endif %}
@@ -150,7 +185,16 @@
 </div>
     </div>
 </div>
-
+                    </div>
+                     </div>
+                          </div>
+                     </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
 <br>
 <div class="container-fluid" id="botones_visado" >
 
@@ -259,3 +303,15 @@
 
         </script>
 {%endblock%}
+
+{% block scripts %}
+<script>
+	$(document).ready(function() {
+	var font=0;
+	if (Cookies.get("fs")){
+		font=Cookies.get("fs");
+	    document.body.style.fontSize = font + "em";
+	}
+});
+</script>
+{% endblock %}
