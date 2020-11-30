@@ -812,12 +812,14 @@ def ver_documentos_corregidos(request, pk_tramite):
             planilla = get_object_or_404(PlanillaDeVisado,
                                          id=plan.id)  # PlanillaDeVisado.objects.filter(tramite_id=tramite.id)# busca las planillas que tengan el id del tramite
         else:
-            planilla = get_object_or_404(PlanillaDeVisado,
-                                         tramite_id=pk_tramite)  # PlanillaDeVisado.objects.filter(tramite_id=tramite.id)# busca las planillas que tengan el id del tramite
+            try:
+                planilla = PlanillaDeVisado.objects.get(tramite_id=pk_tramite)  # PlanillaDeVisado.objects.filter(tramite_id=tramite.id)# busca las planillas que tengan el id del tramite
+            except:
+                planilla="No hay planilla para mostrar"
         filas = FilaDeVisado.objects.all()
         columnas = ColumnaDeVisado.objects.all()
-        obs = planilla.observacion
         try:
+            obs = planilla.observacion
             elementos = planilla.elementos.all()
             items = planilla.items.all()
             contexto = {
@@ -829,15 +831,17 @@ def ver_documentos_corregidos(request, pk_tramite):
                 'elementos': elementos,
                 'obs': obs,
             }
-            return render(request, 'persona/profesional/ver_documentos_corregidos.html', contexto, {'tramite': tramite})
+            return render(request, 'persona/profesional/ver_documentos_corregidos.html', contexto)
         except:
             contexto = {
                 'tramite': tramite,
-                'planilla': planilla,
-                'filas': filas,
-                'columnas': columnas,
-                'obs': obs,
+                'mensaje': planilla,
+               # 'filas': filas,
+                #'columnas': columnas,
+               # 'obs': obs,
             }
+            return render(request, 'persona/profesional/ver_documentos_corregidos.html', contexto)
+
 
     return redirect('profesional')
 
@@ -866,16 +870,58 @@ def enviar_correcciones(request, pk_tramite):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
     documento = Documento(file=request.FILES['documento'])
     documento.tramite = tramite
-    print documento
     documento.save()
     tramite.hacer(tramite.CORREGIR, request.user, observacion)
     messages.add_message(request, messages.SUCCESS, 'Tramite con documentos corregidos y enviados')
     return redirect('profesional')
 
+# def documento_de_estado(request, pk_estado):
+#     estado = get_object_or_404(Estado, pk=pk_estado)
+#     documentos = estado.tramite.documentacion_para_estado(estado)
+#     return render(request, 'persona/profesional/documento_de_estado.html', documentos)
+
 def documento_de_estado(request, pk_estado):
     estado = get_object_or_404(Estado, pk=pk_estado)
-    documentos = estado.tramite.documentacion_para_estado(estado)
-    return render(request, 'persona/profesional/documento_de_estado.html', documentos)
+    fecha = estado.timestamp
+    fecha_str = date.strftime(fecha, '%d/%m/%Y %H:%M')
+    documentos = estado.tramite.documentos.all()
+    documentos_fecha = filter(lambda e: (date.strftime(e.fecha, '%d/%m/%Y %H:%M') == fecha_str), documentos)
+    contexto = {'documentos_de_fecha': documentos_fecha}
+    planillas = []
+    inspecciones = []
+    documento = estado.tramite.documentacion_para_estado(estado)
+    if (estado.tipo == 1 or estado.tipo == 2):
+        contexto = {'documentos': documentos}
+    if (estado.tipo > 2 and estado.tipo < 5):
+        for p in PlanillaDeVisado.objects.all():
+            if (p.tramite.pk == estado.tramite.pk):
+                planillas.append(p)
+        # items = planilla.items.all()
+        filas = FilaDeVisado.objects.all()
+        columnas = ColumnaDeVisado.objects.all()
+        # elementos = planilla.elementos.all()
+        contexto = {
+            'documentos_de_fecha': documentos_fecha,
+            'planillas': planillas,
+            'filas': filas,
+            'columnas': columnas,
+            # 'items': items,
+            # 'elementos': elementos,
+        }
+    if (estado.tipo > 5 and estado.tipo < 8):
+        for p in PlanillaDeInspeccion.objects.all():
+            if (p.tramite.pk == estado.tramite.pk):
+                inspecciones.append(p)
+        items = ItemInspeccion.objects.all()
+        categorias = CategoriaInspeccion.objects.all()
+        # detalles = inspeccion.detalles.all()
+        contexto = {
+            'inspecciones': inspecciones,
+            'items': items,
+            'categorias': categorias,
+            # 'detalles': detalles,
+        }
+    return render(request, 'persona/profesional/documento_de_estado.html', contexto)
 
 # def visados_profesional(request):
 #     usuario = request.user
@@ -1821,8 +1867,11 @@ def cargar_planilla_visado(request,pk_tramite):
                         el.append(b)
     filas = FilaDeVisado.objects.all()
     columnas = ColumnaDeVisado.objects.all()
-    return render(request, 'persona/visador/planilla_visado.html', {'tramite': tramite, 'items':items, 'filas':filas, 'columnas':columnas, 'elementos':elementos,'planilla':p, 'elementosPlanilla':el})
-    #raise Exception("excepcion")#
+    try:
+        monto="{0:.2f}".format(tramite.monto_a_pagar)
+    except:
+        monto=None
+    return render(request, 'persona/visador/planilla_visado.html', {'tramite': tramite, 'items':items, 'filas':filas, 'columnas':columnas, 'elementos':elementos,'planilla':p, 'elementosPlanilla':el, "monto":monto})
 
 def planilla_visado(request, pk_tramite):
     if request.method == "POST":
@@ -3037,38 +3086,21 @@ def ver_categorias_mas_frecuentes(request):
     return render(request, 'persona/director/categorias_mas_frecuentes.html', contexto)
 
 def ver_profesionales_mas_requeridos(request):
-    planillas = PlanillaDeInspeccion.objects.all()
     tramites_inspeccionados = Tramite.objects.en_estado(ConInspeccion) #aca deberia ir estado Finalizado
-   # tramites = Tramite.objects.all()                #puse con inspeccion solo para fines de mostrar algo
     profesionales = Profesional.objects.all()
     list = []
     list_profesionales = []
-    # for p in profesionales:
-    #     m = [p,0]
-    #     list.append(m)
-    #for t in tramites:
-    #     for p in profesionales:
-    #         if t.profesional.id == p.id:
-    #             list_profesionales.append(p)
     datos=[]
     nombres=[]
     for p in profesionales:
         cant=Tramite.objects.filter(profesional_id=p.id).exclude(profesional_id__isnull=True).count()
         m=[p,cant]
-        list.append(m)
+        if (m[1]!=0):
+            list.append(m)
         if cant!=0:
             datos.append(cant)
             nombres.append(str(p.id)+" "+p.persona.nombre+" "+p.persona.apellido)
         cant=None
-    # for name,value in list:
-    #     aux = 0
-    #     for p in list_profesionales:
-    #         if name.id == p.id:
-    #             m = [name,aux]
-    #             i = list.index(m)
-    #             aux +=1
-    #             m = [name,aux]
-    #             list[i] = m
     titulo = "Profesionales mas requeridos"
     grafico = pie_chart_with_legend(datos, nombres, titulo)
     imagen = base64.b64encode(grafico.asString("png"))
@@ -3125,18 +3157,7 @@ def detalle_de_tramite(request, pk_tramite):
         fechas_del_estado.append(est.timestamp.strftime("%d/%m/%Y"));
     return render(request, 'persona/director/detalle_de_tramite.html', {"tramite": contexto0, "estados": contexto1, "fecha": fechas_del_estado})
 
-#def documentos_del_estado(request, pk_estado):
- #   estado = get_object_or_404(Estado, pk=pk_estado)
-  #  fecha = estado.timestamp
-   # fecha_str = date.strftime(fecha, '%d/%m/%Y %H:%M')
-    #documentos = estado.tramite.documentos.all()
-   # documentos_fecha = filter(lambda e:(date.strftime(e.fecha, '%d/%m/%Y %H:%M') == fecha_str), documentos)
-   # contexto= {'documentos_de_fecha': documentos_fecha}
-    #return render(request, 'persona/director/documentos_del_estado.html', contexto)
-
-'''
 def documentos_del_estado(request, pk_estado):
-    #print documentos
     estado = get_object_or_404(Estado, pk=pk_estado)
     fecha = estado.timestamp
     fecha_str = date.strftime(fecha, '%d/%m/%Y %H:%M')
@@ -3180,12 +3201,6 @@ def documentos_del_estado(request, pk_estado):
             #'detalles': detalles,
         }
     return render(request, 'persona/director/documentos_del_estado.html', contexto)
-'''
-def documentos_del_estado(request, pk_estado):
-    estado = get_object_or_404(Estado, pk=pk_estado)
-    documentos = estado.tramite.documentacion_para_estado(estado)
-    return render(request, 'persona/director/documentos_del_estado.html', documentos)
-
 
 def generar_planilla_visado(request):
     filas = FilaDeVisado.objects.all()
@@ -3366,7 +3381,7 @@ def grafico_de_barras_v(datos,nombres, titulo,series):
     lista=list(chain.from_iterable(datos))
     print(lista)
     tope=max(lista)
-    if math.log10(tope)>1:
+    if tope > 0 and math.log10(tope)>1:
         bc.valueAxis.valueMax = tope+(tope/10)
         bc.groupSpacing = tope/10
     else:
@@ -3511,8 +3526,8 @@ def tramites_iniciados_finalizados(request):
                 totalFinalizados=totalF+totalFinalizados
                 finalizados.append(totalF)
                 nombreMes=devolverNombreMes(m)
-                lista1.append([nombreMes,totalI])
-                lista2.append([nombreMes,totalF])
+                aux = {"id": m,"mes": nombreMes, "iniciado":totalI, "finalizado":totalF}
+                lista1.append(aux)
             i = tuple(iniciados)
             f = tuple(finalizados)
             datos.append(i)
@@ -3535,7 +3550,7 @@ def tramites_iniciados_finalizados(request):
             if len(datos) > 0:
                 grafico = grafico_de_barras_v(datos, nombres, titulo, series)
                 imagen = base64.b64encode(grafico.asString("png"))
-                contexto = {"grafico": imagen, "lista": lista, "lista1":lista1, "lista2":lista2}  # "tipos_obras": list}
+                contexto = {"grafico": imagen, "lista": lista, "lista1":lista1}  # "tipos_obras": list}
             return render(request, 'persona/director/listado_tramites_iniciados_finalizados.html', contexto)
         else:
             tipos_obras=TipoObra.objects.filter(activo=1)
@@ -3544,12 +3559,17 @@ def tramites_iniciados_finalizados(request):
 
 def recaudacion_tipo_obra_tipo_pago(request):
         datos = []
-        iniciados = []
-        finalizados = []
-        listadoMes = []
-        finalizadosXMes = []
-        series = []
         lista = []
+        totalIniciados = 0
+        totalFinalizados = 0
+        tramites = []
+        totalAnual = 0
+        pagos = []
+        cuotas = []
+        totales = []
+        tipoP = ""
+        nombreP=""
+        tipoO = ""
         nombres = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre",
                    "Noviembre", "Diciembre"]
         if "Guardar" in request.POST:
@@ -3560,13 +3580,6 @@ def recaudacion_tipo_obra_tipo_pago(request):
                     tipoObra = int(value)
                 if name.startswith('tipoPago'):
                     tipoPago = int(value)
-            totalIniciados = 0
-            totalFinalizados = 0
-            tramites=[]
-            totalAnual=0
-            pagos=[]
-            cuotas=[]
-            totales=[]
             tramites=Tramite.objects.filter(tipo_obra=tipoObra).values_list('pago_id', flat="True").distinct() #filtrar por tipo
             for mes in range(12):
                 m = mes + 1
@@ -3580,14 +3593,18 @@ def recaudacion_tipo_obra_tipo_pago(request):
                     total=float(c.monto)+total
                 totales.append(total)
                 totalAnual=total+totalAnual
-                aux={"id":mes,"mes":nombres[mes],"total":total}
+                aux={"id":m,"mes":nombres[mes],"total":total}
                 lista.append(aux)
             datos.append(totales)
             series = ["Recaudacion"]
+            tipoO=TipoObra.objects.get(id=tipoObra)
+            if tipoPago > -1:
+                tipoP = Tipo_Pago.objects.get(id=tipoPago)
+                nombreP=tipoP.nombre
             if len(datos) > 0:
                 grafico = grafico_de_barras_v(datos, nombres, "", series)
                 imagen = base64.b64encode(grafico.asString("png"))
-                contexto = {"grafico": imagen,"lista":lista, "totalAnual":totalAnual}
+                contexto = {"grafico": imagen,"lista":lista, "totalAnual":totalAnual,"tipoP":nombreP,"tipoO":tipoO.nombre}
             return render(request, 'persona/director/recaudacion_tipo_obra_tipo_pago.html', contexto)
         else:
             tipos_obras = TipoObra.objects.filter(activo=1)
@@ -3692,69 +3709,6 @@ def ver_listado_usuarios(request):
 
     contexto = {'listados':listados, 'grupossistema':grupossistema}
     return render(request, 'persona/director/listado_de_usuarios_segun_grupo.html', contexto)
-
-def tiempo_aprobacion_visado(request):
-    datos = []
-    series = []
-    visados = []
-    aprobados = []
-    list_tramites = []
-    list_planillas = []
-    tram = 0
-    cant = 0
-    cantV = 0
-    cantA = 0
-    lista = []
-    nombres = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre",
-              "Noviembre", "Diciembre"]
-    #year = date.today().year
-    if "Guardar" in request.POST:
-        for name, value in request.POST.items():
-            if name.startswith('fecha'):
-                year = int(value)
-        totalAprobados = 0
-        totalVisados = 0
-        tramites = Tramite.objects.en_estado(Aceptado)
-        for mes in range(12):
-            m = mes + 1
-            cant = 0
-
-            diaFinal = monthrange(year, m)
-            listPlanillas = PlanillaDeVisado.objects.all()
-            fechas = []
-            list = []
-
-            tEstado=Estado.objects.filter(timestamp__range=(datetime.date(year, m, 01), datetime.date(year, m, diaFinal[1])), tipo=(5)).count()
-
-            #for t in tramites:
-            #    cant += Estado.objects.filter(timestamp__range=(datetime.date(year, m, 01), datetime.date(year, m, diaFinal[1])), tipo=(5), tramite_id= t.id).count()
-# aceptados finalizados siguiente estado y aceptados finalizados  promedio de
-            #if tEstado is None:
-              #  datos.append(0)
-            lista.append(cant)
-            # for t in tramites:
-            #     planilla = PlanillaDeVisado.objects.filter(tramite_id=t.id)#.count()  # ultima planilla de visado
-            #     cant = PlanillaDeVisado.objects.filter(tramite_id=t.id).count()
-            #     list_planillas.append(planilla)
-            #     lista.append([t.id, cant])
-            #     primerPlanilla = PlanillaDeVisado.objects.filter(tramite_id=t.id).first()
-            #     ultimaPlanilla = PlanillaDeVisado.objects.filter(tramite_id=t.id).last()
-            #     visados.append(primerPlanilla)
-        datos.append(lista)
-
-        #raise Exception(datos)
-        titulo = "Tiempo aprobacion visados"
-        if len(datos) > 0:
-                #raise Exception(lista)
-              grafico = grafico_de_barras_v(datos, nombres, titulo,["aceptados"])
-              imagen = base64.b64encode(grafico.asString("png"))
-              contexto = {"grafico": imagen, "lista": datos}
-#             except:
-  #              return redirect('director')
-        return render(request, 'persona/director/tiempo_aprobacion_visados.html',contexto)
-
-    else:
-        return render(request, 'persona/director/seleccionar_fecha_visados_aprobados.html')
 
 def tiempo_aprobacion_visados(request):
     datos = []

@@ -41,10 +41,12 @@
                                     </select>
                                 </div>
                               </div>-->
-                                 <label> Seleccione el tipo de obra </label>
                             <form action="" method="post" enctype="multipart/form-data">
-                                 <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-                                <div class="controls ">
+
+                                <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                                                                 <label> Seleccione el tipo de obra </label>
+
+                                    <div class="controls ">
                                     <select name="obra" placeholder="Ingresar el Item"  class="form-control input-sm" id="id_item1" required>
                                         <option value="" selected="#">---------</option>
                                         {%for obra in tipos_obras%}
@@ -54,9 +56,8 @@
                                         {%endfor%}
                                     </select>
                                 </div>
-                              </div>
-                                <br><br>
-                                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="left">
+                                     <br>
+                                    <div align="center">
                                         <button class="btn btn-primary btn-md" type="submit" name="Guardar">
                                             Aceptar
                                         </button>
@@ -67,6 +68,8 @@
                                         </a>
 
                                     </div>
+                                                                   </div>
+
                             </form>
                         </div>
                     </div>

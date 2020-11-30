@@ -26,288 +26,293 @@
 
             <div class="row">
                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                    <form action="" >
-                        <div class="row" style="color:#fff;">
-                            <div class=" col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                    <div class="row">
-                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                            <form action="" >
-                                <div class="row" style="color:#fff;">
-                                    <div class=" col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                                        <ol>
-                                            <label>NRO TRAMITE:</label>
-                                            <li> {{tramite.id}}</li>
-                                            <label>PROPIETARIO:</label>
-                                            <li> {{tramite.propietario.persona}}</li>
-                                            <label>PROFESIONAL:</label>
-                                            <li> {{tramite.profesional}}</li>
-                                            <label>TIPO DE OBRA:</label>
-                                            <li> {{tramite.tipo_obra}}</li>
+                    <div class="row" style="color:#fff;">
+                        <div class=" col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                            <ol>
+                                <label>NRO TRAMITE:</label>
+                                <li> {{tramite.id}}</li>
+                                <label>PROPIETARIO:</label>
+                                <li> {{tramite.propietario.persona}}</li>
+                                <label>PROFESIONAL:</label>
+                                <li> {{tramite.profesional}}</li>
+                                <label>TIPO DE OBRA:</label>
+                                <li> {{tramite.tipo_obra}}</li>
 
-                                        </ol>
-                                    </div>
-                                </div>
-                            </form>
+                            </ol>
                         </div>
                     </div>
 
-                                </ol>
+                    {% if planilla %}
+                    <form action="{%url 'planilla_visado' tramite.id %}" method="post" enctype="multipart/form-data">
+                        <div class="container-fluid">
+                            <div class="table-responsive">
+                                <table class="table table-bordered table-striped table-hover table-condensed" style="text-align:center;">
+                                    <thead>
+                                    <tr>
+                                        <th></th>
+                                        {% for columna in columnas %}
+                                        {% if columna.activo == True %}
+                                        <th>{{columna}}</th>
+                                        {% endif %}
+                                        {% endfor %}
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for fila in filas %}
+                                    {% if fila.activo == True %}
+                                    <tr>
+                                        <td class="col-xs-1">{{ fila }}</td>
+                                        {% for columna in columnas %}
+                                        {% if columna.activo == True %}
+                                        <td class="col-sm-1">&nbsp;
+
+                                            {% for item in items %}
+
+                                            {% if fila == item.fila_de_visado and columna == item.columna_de_visado %}
+                                            {% for name,value in planilla %}
+
+
+                                            {% if fila == name.fila_de_visado and columna == name.columna_de_visado and value == 1 %}
+
+                                            <label class="switch">
+                                                <input name="item-{{item.pk}}" checked="checked" type="checkbox"><span class="slider round"></span>
+                                            </label>
+                                            {% elif fila == name.fila_de_visado and columna == name.columna_de_visado and value == 0 %}
+
+                                            <label class="switch">
+                                                <input name="item-{{item.pk}}" type="checkbox"><span class="slider round"></span>
+                                            </label>
+                                            {% endif %}
+                                            {% endfor %}
+
+                                            {% endif %}
+
+                                            {% endfor %}
+                                        </td>
+                                        {% endif %}
+                                        {% endfor %}
+                                    </tr>
+                                    {% endif %}
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="container-fluid">
+
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered table-striped table-hover table-condensed" style="text-align:center;">
+                                            <thead>
+                                            <tr>
+                                                <th></th>
+                                                <th>BALANCE DE SUPERFICIE</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+
+                                            {% for elemento in elementos %}
+                                            {% if elemento.activo == True %}
+                                            <tr>
+                                                <td class="col-xs-1">{{ elemento }}</td>
+                                                <td class="col-sm-4">
+
+                                                    {% for name,value in elementosPlanilla %}
+
+                                                    {%if elemento.nombre == name.nombre %}
+                                                    {% if value == 1 %}
+                                                    <label class="switch">
+                                                        <input name="elemento-{{elemento.id}}" checked="checked"  type="checkbox"><span class="slider round"></span>
+                                                    </label>
+                                                    {% elif value == 0 %}
+                                                    <label class="switch">
+                                                        <input name="elemento-{{elemento.id}}" type="checkbox"><span class="slider round"></span>
+                                                    </label>
+                                                    {% endif %}
+                                                    {% endif %}
+                                                    {% endfor %}
+
+                                                </td>
+                                            </tr>
+                                            {% endif %}
+                                            {% endfor %}
+
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="panel-body">
+                            <div class="container-fluid">
+                                <div class="form-group">
+                                    <div class="col-sm-8 col-md-8 col-xs-8 col-lg-8">
+                                        <input class="form-control input-sm" id="id_monto_a_pagar" name="monto" type="number" step="any" placeholder="Ingresar monto" title="Monto" min=0 maxlength="15"  value="{{monto|default_if_none:'Ingresar monto'}}" required/>
+                                    </div>
+                                    <div class="col-sm-4 col-md-4 col-xs-4 col-lg-4">
+                                        <input type="hidden" id="id_tram" value="{{tramite.id}}">
+                                        <button class="btn btn-primary btn-sm" type="submit" title="Aprobar el visado" name="Aprobar el visado">
+                                            Aprobar visado
+                                        </button>
+                                    </div>
+                                    <div class="col-sm-8 col-md-8 col-xs-8 col-lg-8">
+                                        <br>
+                                        <label>Observaciones:</label>
+                                        <input type="hidden" id="1" value="{{tramite.id}}" name="tram">
+                                        <input class="form-control input-sm" id="id_observaciones1" name="observaciones" type="text" placeholder="Ingresar observaciones" title="Observaciones" maxlength="100" />
+                                    </div>
+                                    <div class="col-sm-4 col-md-4 col-xs-4 col-lg-4">
+                                        <br>
+                                        <br>
+                                        <button class="btn btn-danger btn-sm" type="submit" title="Envia Planilla de visado" name="Envia Planilla de visado">
+                                            Enviar correcciones
+                                        </button>
+                                        <br><br>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </form>
-                </div>
-            </div>
-        </div>
-        {% if planilla %}
-        <form action="{%url 'planilla_visado' tramite.id %}" method="post" enctype="multipart/form-data">
-            <div class="container-fluid">
-                <div class="table-responsive">
-                    <table class="table table-bordered table-striped table-hover table-condensed" style="text-align:center;">
-                        <thead>
-                        <tr>
-                            <th></th>
-                            {% for columna in columnas %}
-                            {% if columna.activo == True %}
-                            <th>{{columna}}</th>
-                            {% endif %}
-                            {% endfor %}
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {% for fila in filas %}
-                        {% if fila.activo == True %}
-                        <tr>
-                            <td class="col-xs-1">{{ fila }}</td>
-                            {% for columna in columnas %}
-                            {% if columna.activo == True %}
-                            <td class="col-sm-1">&nbsp;
-
-                                {% for item in items %}
-
-                                {% if fila == item.fila_de_visado and columna == item.columna_de_visado %}
-                                {% for name,value in planilla %}
-
-
-                                {% if fila == name.fila_de_visado and columna == name.columna_de_visado and value == 1 %}
-
-                                <label class="switch">
-                                    <input name="item-{{item.pk}}" checked="checked" type="checkbox"><span class="slider round"></span>
-                                </label>
-                                {% elif fila == name.fila_de_visado and columna == name.columna_de_visado and value == 0 %}
-
-                                <label class="switch">
-                                    <input name="item-{{item.pk}}" type="checkbox"><span class="slider round"></span>
-                                </label>
-                                {% endif %}
-                                {% endfor %}
-
-                                {% endif %}
-
-                                {% endfor %}
-                            </td>
-                            {% endif %}
-                            {% endfor %}
-                        </tr>
-                        {% endif %}
-                        {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            <br>
-            <div class="container-fluid">
-
-                <div class="row">
-                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                        <div class="table-responsive">
-                            <table class="table table-bordered table-striped table-hover table-condensed" style="text-align:center;">
-                                <thead>
-                                <tr>
-                                    <th></th>
-                                    <th>BALANCE DE SUPERFICIE</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-
-                                {% for elemento in elementos %}
-                                {% if elemento.activo == True %}
-                                <tr>
-                                    <td class="col-xs-1">{{ elemento }}</td>
-                                    <td class="col-sm-4">
-
-                                        {% for name,value in elementosPlanilla %}
-
-                                        {%if elemento.nombre == name.nombre %}
-                                        {% if value == 1 %}
-                                        <label class="switch">
-                                            <input name="elemento-{{elemento.id}}" checked="checked"  type="checkbox"><span class="slider round"></span>
-                                        </label>
-                                        {% elif value == 0 %}
-                                        <label class="switch">
-                                            <input name="elemento-{{elemento.id}}" type="checkbox"><span class="slider round"></span>
-                                        </label>
-                                        {% endif %}
+                    {%else%}
+                    <form action="{%url 'planilla_visado' tramite.id %}" method="post" enctype="multipart/form-data">
+                        <div class="container-fluid">
+                            <div class="table-responsive">
+                                <table class="table table-bordered table-striped table-hover table-condensed" style="text-align:center;">
+                                    <thead>
+                                    <tr>
+                                        <th></th>
+                                        {% for columna in columnas %}
+                                        {% if columna.activo == True %}
+                                        <th>{{columna}}</th>
                                         {% endif %}
                                         {% endfor %}
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for fila in filas %}
+                                    {% if fila.activo == True %}
+                                    <tr>
+                                        <td class="col-xs-1">{{ fila }}</td>
+                                        {% for columna in columnas %}
+                                        {% if columna.activo == True %}
+                                        <td class="col-sm-1">&nbsp;
+                                            {% for item in items %}
+                                            {% if fila == item.fila_de_visado and columna == item.columna_de_visado %}
 
-                                    </td>
-                                </tr>
-                                {% endif %}
-                                {% endfor %}
+                                            <label class="switch">
+                                                <input name="item-{{item.pk}}" type="checkbox"><span class="slider round"></span>
+                                            </label>
 
-                                </tbody>
-                            </table>
+
+
+                                            {% endif %}
+
+                                            {% endfor %}
+                                        </td>
+                                        {% endif %}
+                                        {% endfor %}
+                                    </tr>
+                                    {% endif %}
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
+                        <br>
+                        <div class="container-fluid">
+
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                    <div class="table-responsive">
+                                        <table class="table table-bordered table-striped table-hover table-condensed" style="text-align:center;">
+                                            <thead>
+                                            <tr>
+                                                <th></th>
+                                                <th>BALANCE DE SUPERFICIE</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            {% for elemento in elementos %}
+                                            {% if elemento.activo == True %}
+                                            <tr>
+                                                <td class="col-xs-1">{{ elemento }}</td>
+                                                <td class="col-sm-4">
+                                                    <label class="switch">
+                                                        <input name="elemento-{{elemento.id}}" type="checkbox"><span class="slider round"></span>
+                                                    </label>
+                                                </td>
+                                            </tr>
+                                            {% endif %}
+                                            {% endfor %}
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+
+                        </div>
+                        <div class="panel-body">
+                            <div class="container-fluid">
+                                <div class="row">
+                                    <div class="form-group">
+                                        <label for="id_monto_a_pagar">Monto:</label>
+
+                                        <div class="row">
+                                            <div class="col-sm-8 col-md-8 col-xs-8 col-lg-8">
+                                                <input class="form-control input-sm" id="id_monto_a_pagar" name="monto" type="number" step="any" placeholder="Ingresar monto" title="Monto" min=0 maxlength="15"  value="{{monto|default_if_none:'Ingresar monto'}}" required/>
+                                            </div>
+                                            <div class="col-sm-4 col-md-4 col-xs-4 col-lg-4">
+                                                <input type="hidden" id="id_tram" value="{{tramite.id}}">
+                                                <button class="btn btn-primary btn-sm" type="submit" title="Aprobar el visado" name="Aprobar el visado">
+                                                    Aprobar visado
+                                                </button>
+                                            </div>
+
+                                            <div class="form-group">
+
+                                                <div class="col-sm-8 col-md-8 col-xs-8 col-lg-8">
+                                                    <br>
+                                                    <label>Observaciones:</label>
+                                                    <input type="hidden" id="1" value="{{tramite.id}}" name="tram">
+                                                    <input class="form-control input-sm" id="id_observaciones1" name="observaciones" type="text" placeholder="Ingresar observaciones" title="Observaciones" maxlength="100" />
+                                                </div>
+                                                <div class="col-sm-4 col-md-4 col-xs-4 col-lg-4">
+                                                    <br>
+                                                    <br>
+                                                    <button class="btn btn-danger btn-sm" type="submit" title="Envia Planilla de visado" name="Envia Planilla de visado">
+                                                        Enviar correcciones
+                                                    </button>
+                                                    <br><br>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+
+                    {%endif%}
+
+                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="center">
+                        <a href="javascript:history.back(-1);">
+                            <button type="button" class="btn btn-primary" name="Volver">
+                                Volver
+                            </button>
+                        </a>
                     </div>
                 </div>
-
-            </div>
-            <div class="panel-body">
-                <div class="container-fluid">
-                    <div class="row">
-                        <div class="form-group">
-                            <label for="id_monto_a_pagar">Monto:</label>
-                            <input type="hidden" id="id_tram" value="{{tramite.id}}">
-                            <input class="form-control input-sm" id="id_monto_a_pagar" name="monto" type="number" step="any" placeholder="Ingresar monto" title="Monto" min=0 maxlength="15" value="{{tramite.monto_a_pagar|default_if_none:'Ingresar monto'}}" required/>
-                        </div>
-                        <button class="btn btn-primary btn-sm" type="submit" title="Aprobar el visado" name="Aprobar el visado">
-                            Aprobar visado
-                        </button>
-                        <div class="form-group">
-                            <br>
-                            <label>Observaciones:</label>
-                            <input type="hidden" id="id_tramite" value="{{tramite.id}}" name="tram">
-                            <input class="form-control input-sm" id="id_observaciones" name="observaciones" type="text" placeholder="Ingresar observaciones" title="Observaciones" maxlength="100" />
-                        </div>
-                        <button class="btn btn-danger btn-sm" type="submit" title="Envia Planilla de visado" name="Envia Planilla de visado">
-                            Enviar correcciones
-                        </button>
-
-                        <br><br>
-                    </div>
-                </div>
-            </div>
-        </form>
-        {%else%}
-        <form action="{%url 'planilla_visado' tramite.id %}" method="post" enctype="multipart/form-data">
-            <div class="container-fluid">
-                <div class="table-responsive">
-                    <table class="table table-bordered table-striped table-hover table-condensed" style="text-align:center;">
-                        <thead>
-                        <tr>
-                            <th></th>
-                            {% for columna in columnas %}
-                            {% if columna.activo == True %}
-                            <th>{{columna}}</th>
-                            {% endif %}
-                            {% endfor %}
-                        </tr>
-                        </thead>
-                        <tbody>
-                        {% for fila in filas %}
-                        {% if fila.activo == True %}
-                        <tr>
-                            <td class="col-xs-1">{{ fila }}</td>
-                            {% for columna in columnas %}
-                            {% if columna.activo == True %}
-                            <td class="col-sm-1">&nbsp;
-                                {% for item in items %}
-                                {% if fila == item.fila_de_visado and columna == item.columna_de_visado %}
-
-                                <label class="switch">
-                                    <input name="item-{{item.pk}}" type="checkbox"><span class="slider round"></span>
-                                </label>
-
-
-
-                                {% endif %}
-
-                                {% endfor %}
-                            </td>
-                            {% endif %}
-                            {% endfor %}
-                        </tr>
-                        {% endif %}
-                        {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
-            </div>
-            <br>
-            <div class="container-fluid">
-
-                <div class="row">
-                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                        <div class="table-responsive">
-                            <table class="table table-bordered table-striped table-hover table-condensed" style="text-align:center;">
-                                <thead>
-                                <tr>
-                                    <th></th>
-                                    <th>BALANCE DE SUPERFICIE</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                {% for elemento in elementos %}
-                                {% if elemento.activo == True %}
-                                <tr>
-                                    <td class="col-xs-1">{{ elemento }}</td>
-                                    <td class="col-sm-4">
-                                        <label class="switch">
-                                            <input name="elemento-{{elemento.id}}" type="checkbox"><span class="slider round"></span>
-                                        </label>
-                                    </td>
-                                </tr>
-                                {% endif %}
-                                {% endfor %}
-                                </tbody>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-
-            </div>
-            <div class="panel-body">
-                <div class="container-fluid">
-                    <div class="row">
-                        <div class="form-group">
-                            <label for="id_monto_a_pagar">Monto:</label>
-                            <input type="hidden" id="id_tram1" value="{{tramite.id}}">
-                            <input class="form-control input-sm" id="id_monto_a_pagar1" name="monto" type="number" step="any" placeholder="Ingresar monto" title="Monto" min=0 maxlength="10" value="{{tramite.monto_a_pagar|default_if_none:'Ingresar monto'}}" required/>
-                        </div>
-                        <button class="btn btn-primary btn-sm" type="submit" title="Aprobar el visado" name="Aprobar el visado">
-                            Aprobar visado
-                        </button>
-                        <div class="form-group">
-                            <br>
-                            <label>Observaciones:</label>
-                            <input type="hidden" id="1" value="{{tramite.id}}" name="tram">
-                            <input class="form-control input-sm" id="id_observaciones1" name="observaciones" type="text" placeholder="Ingresar observaciones" title="Observaciones" maxlength="100" />
-                        </div>
-                        <button class="btn btn-danger btn-sm" type="submit" title="Envia Planilla de visado" name="Envia Planilla de visado">
-                            Enviar correcciones
-                        </button>
-
-                        <br><br>
-                    </div>
-                </div>
-            </div>
-        </form>
-
-        {%endif%}
-
-        <div class="row">
-            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="left">
-                <a href="javascript:history.back(-1);">
-                    <button type="button" class="btn btn-primary" name="Volver">
-                        Volver
-                    </button>
-                </a>
             </div>
         </div>
-        <br>
-
     </div>
 </div>
+
+
+
+
 
 <style>
 
@@ -384,5 +389,6 @@
 </style>
 
 {% endblock %}
-{% block scrip %}
+{% block script %}
+
 {% endblock %}
