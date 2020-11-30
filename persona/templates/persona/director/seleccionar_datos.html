@@ -27,11 +27,15 @@
         <div id="collapseFive" class="panel-collapse" role="tabpanel" aria-labelledby="headingFive">
             <div class="panel-body">
                 <div class="container-fluid">
-                    <div class="row">
-                            <label> Seleccione un año </label>
+                    <div class="row" align="center">
                             <form action="" method="post" enctype="multipart/form-data">
-                              <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-                                <div class="controls ">
+                              <br>
+                                <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4" align="center">
+                                    <div align="left">
+                                    <label > Seleccione un año </label>
+                                    </div>
+
+                                    <div class="controls ">
                                     <select name="item" placeholder="Ingresar el Item" class="select form-control input-sm" id="id_item" required>
                                         <option value="" selected="#">---------</option>
                                         <option value="2017">2017</option>
@@ -40,9 +44,10 @@
                                         <option value="2020">2020</option>
                                     </select>
                                 </div>
-                              </div>
+                                <br>                                    <div align="left">
+
                                  <label> Seleccione el tipo de obra </label>
-                                 <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                                </div>
                                 <div class="controls ">
                                     <select name="obra" placeholder="Ingresar el Item"  class="form-control input-sm" id="id_item1" required>
                                         <option value="" selected="#">---------</option>
@@ -50,11 +55,13 @@
                                         <option value="{{obra.pk}}">{{obra.nombre}}</option>
                                         {%endfor%}
                                     </select>
-                                </div>
                               </div>
-                                <label> Seleccione el tipo de pago </label>
-                                 <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-                                <div class="controls ">
+                                <br>
+                                    <div align="left">
+
+                                                                <label> Seleccione el tipo de pago </label>
+                                    </div>
+                                     <div class="controls ">
                                     <select name="tipoPago" placeholder="Ingresar el Item"  class="form-control input-sm" id="id_item2" >
                                         <option value="-1" selected="#">---------</option>
                                         {%for pago in tipo_pago%}
@@ -62,9 +69,9 @@
                                         {%endfor%}
                                     </select>
                                 </div>
-                              </div>
-                                <br><br>
-                                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="left">
+
+                                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="center">
+                                       <br>
                                         <button class="btn btn-primary btn-md" type="submit" name="Guardar">
                                             Aceptar
                                         </button>
@@ -75,6 +82,7 @@
                                         </a>
 
                                     </div>
+                                     </div>
                             </form>
                         </div>
                     </div>
