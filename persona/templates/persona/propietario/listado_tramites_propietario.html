@@ -20,7 +20,11 @@
                         <td class="col-xs-1">{{ tramite.id }}</td>
                         <td class="col-xs-3">{{ tramite.domicilio }}</td>
                         <td class="col-xs-3">{{ tramite.monto_a_pagar }}</td>
-                        <td class="col-xs-3">{{ tramite.saldo_restante_a_pagar }}</td>
+                        {% if tramite.saldo_restante_a_pagar >= 0.09 %}
+                            <td class="col-xs-3">{{ tramite.saldo_restante_a_pagar }}</td>
+                        {% else %}
+                            <td class="col-xs-3">Tramite Pagado</td>
+                        {% endif %}
                         <td class="col-xs-3">{{ tramite.monto_pagado }}</td>
                         <td>
                             <a href="{% url 'listado_comprobantes_propietario' tramite.id %}">
