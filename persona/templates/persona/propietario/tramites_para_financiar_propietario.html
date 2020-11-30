@@ -16,7 +16,7 @@
                     <tr>
                         <td class="col-xs-1">{{ tramite.id }}</td>
                         <td class="col-xs-3">{{ tramite.propietario }},  DNI: {{ tramite.propietario.persona.dni}}</td>
-                        <td class="col-xs-4">{{ tramite.profesional }} </td>
+                        <td class="col-xs-4">{{ tramite.profesional }}</td>
                         <td>
                             <a href="{% url 'financiar_propietario' tramite.id%}">
                                 <button type="button" class="btn btn-primary brn-xs" name="ver-financiacion">
@@ -30,4 +30,18 @@
         </table>
 </div>
 
+{% endblock %}
+
+{% block scripts %}
+
+<script>
+	$(document).ready(function() {
+	var font=0;
+	if (Cookies.get("fs")){
+			font=Cookies.get("fs");
+		    document.body.style.fontSize = font + "em";
+
+	}
+});
+</script>
 {% endblock %}

@@ -1,12 +1,15 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
 
+{% block estilos %}
+
+{% endblock %}
+
 {% block barra %}
-<ul class="sidebar sidebar-1">
-    <font size="2">
-        <li><a href="{% url 'propietario'  %}" class="current"><font color="white">Propietario</font></a></li>
-    </font>
-</ul>
+    <ul class="sidebar sidebar-1">
+        <li><a href="{%url 'propietario'%}" class="current"><label id="propietario">Propietario</label></a></li>
+        </font>
+      </ul>
 {% endblock %}
 
 
@@ -14,24 +17,14 @@
 <div class="container-fluid" id="a">
     <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" >
         <div class="panel">
-            <div class="panel-heading box" role="tab" id="headingFive">
-                <font color="#ffffff" size="3">Registrar el Pago de la Cuota</font>
-                <h5 class="panel-title">
-                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                        <label id="documentos"></label>
-                    </a>
-                </h5>
+            <div class="panel-heading box" role="tab" id="headingOne">
+                <font color="#ffffff" class="current"><label id="propietario1">Pagar Cuota</label></font>
             </div>
             <div id="collapseFive" class="panel-collapse" role="tabpanel" aria-labelledby="headingThree">
                 <div class="panel-body">
                     <div class="container-fluid">
                         <div class="row">
                             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="color: white;">
-
-            <!--<div class="panel-body">
-                <form method="post" action="">
-                    <div class="container-fluid">
-                        <div class="row" id="fila1">-->
                             <div class="form-group">
                                 <div class="row">
                                     <div class="col-sm-6 col-md-6">
@@ -138,62 +131,17 @@
   }
 </style>
 {% endblock %}
-<!--    </tbody>
-                        </table>
-                        <br>
-                       <!-- <div class="container-fluid " id="botones_cajero">
-                            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6" align="right">
-                                <button type="submit" onclick="return confirm('Desea registrar el pago de la/s cuota/s?')" class="btn btn-primary brn-xs" name="RegistrarPago">
-                                    Aceptar
-                                </button>
-                            </div>
-                            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-                                <a href="javascript:history.back(-1);">
-                                    <button class="btn btn-primary btn-md " type="button" value="Atras">Volver</button>
-                                </a>
-                            </div>
-                        </div>-->
 
+{% block scripts %}
 
-<!--<a href="{% url 'registrar_pago_tramite' %}">-->
-<!--<button type="button"  class="btn btn-primary brn-xs" name="RegistrarPago">-->
-<!--Seleccionar-->
-<!--</button>-->
-<!--</a>-->
-<!--<div class="container-fluid">
-<div class="table-responsive">
+<script>
+	$(document).ready(function() {
+	var font=0;
+	if (Cookies.get("fs")){
+			font=Cookies.get("fs");
+		    document.body.style.fontSize = font + "em";
 
-        <table class="table table-bordered table-striped table-hover table-condensed" style="background: white;">
-            <thead>
-                <tr>
-                    <th>FechaVencimiento</th>
-                    <th>Monto</th>
-                    <th>Numero de Cuota</th>
-                    <th>Registrar Pago</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for cuota in cuotas %}
-                    <tr>
-                        <td class="col-xs-3">{{ cuota.fechaVencimiento }}</td>
-                        <td class="col-xs-3">{{ cuota.monto }}</td>
-                        <td class="col-xs-3">{{ cuota.numeroCuota }}</td>
-                        <td>
-                            <a href="{ url 'elegir_cuota' cuota.id }">
-                                <button type="button" onclick="return confirm('Desea registrar el pago de la cuota?')" class="btn btn-primary brn-xs" name="RegistrarPago">
-                                    <span class="glyphicon glyphicon-home" aria-hidden="true"> Registrar Pago </span>
-                                </button>
-                            </a>
-                        </td>
-                    </tr>
-                {% endfor %}
-
-            </tbody>
-        </table>
-    <div class="col-xs-4 col-sm-4 col-md-12 col-lg-12" style="float: right; width: 20%; margin-top: -20px; ">
-        <br><form action='/persona/cajero'>
-            &nbsp;<Button class="btn btn-primary btn-sm" type="submit" value="Atras">Atras</Button>
-        </form><br>
-    </div>
-    </div>
-</div>-->
+	}
+});
+</script>
+{% endblock %}

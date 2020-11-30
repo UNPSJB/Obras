@@ -6,23 +6,19 @@
 {% endblock %}
 
 {% block barra %}
-<ul class="sidebar sidebar-1">
-    <font size="2">
-        <li><a href="{% url 'propietario'  %}" class="current"><font color="white">Propietario</font></a></li>
-    </font>
-</ul>
+    <ul class="sidebar sidebar-1">
+        <li><a href="{%url 'propietario'%}" class="current"><label id="propietario">Propietario</label></a></li>
+
+        </font>
+      </ul>
 {% endblock %}
 
 {% block contenido %}
 <div class="container-fluid" id="a">
     <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" >
         <div class="panel" id="panelprop">
-            <div class="panel-heading box" role="tab" id="headingFive">
-                <h5 class="panel-title">
-                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
-                        <label id="s">Historial del tramite</label>
-                    </a>
-                </h5>
+             <div class="panel-heading box" role="tab" id="headingOne">
+                 <font color="#ffffff" class="current"><label id="propietario1">Comprobante de Cuota</label></font>
             </div>
             <div id="collapseFive" class="panel-collapse" role="tabpanel" aria-labelledby="headingFive">
                 <div class="panel-body">
@@ -90,10 +86,10 @@
                                         {% if estadosp %}
                                         {% for estado in estadosp.estados_del_tramite %}
                                         <tr>
-                                            <td class="col-xs-1" align="center">{{estado.tipo}}</td>
+                                            <td align="center">{{estado.tipo}}</td>
                                             <td class="col-xs-2">{{estado.usuario}}</td>
                                             <td class="col-xs-2">{{estado.timestamp}}</td>
-                                            <td class="col-xs-6" >
+                                            <td class="col-xs-6">
                                                 <div class="progress">
                                                     <div id="{{estado.tipo}} - {{estado.timestamp}}" class="progress-bar progress-bar-success"  role="progressbar" style="width:0%;">
                                                         <span>%</span>

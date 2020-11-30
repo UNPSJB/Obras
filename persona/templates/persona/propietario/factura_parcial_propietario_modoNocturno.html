@@ -11,43 +11,43 @@
                           <img src="/media/imagenes/Escudobanner.png"
                                class="img-responsive" alt="Imagen responsive" width="100" height="100"/>
                     </div>
-                       <div align="justify" style="font-size:9px; text-align:left;">
+                       <div align="justify" style="color:white;font-size:9px; text-align:left;">
                       <br>  &nbsp; MUNICIPALIDAD DE TRELEW
                       <br>
                       &nbsp; Rivadavia 390 <br>
                       &nbsp; 9100 TRELEW- Provincia del Chubut
                        </div>
-                      <h3 align="center"><style color="white"></style>
+                      <h3 align="center" style="color:white;">
                           RESUMEN DE PAGO &nbsp;  &nbsp;
                       </h3>
                       <hr>
-                    <label style="color:black;"> Tramite: {{ tramite.id }} &nbsp; &nbsp;</label><br>
-                    <label style="color:black;"> Cantidad de Cuotas: {{ pago.cantidadCuotas }} &nbsp; &nbsp; </label>
+                    <label style="color:white;"> Tramite: {{ tramite.id }} &nbsp; &nbsp;</label><br>
+                    <label style="color:white;"> Cantidad de Cuotas: {{ pago.cantidadCuotas }} &nbsp; &nbsp; </label>
                       <hr>
 
                     <div class="row">
                                        <div class="col-sm-6 col-md-6 col-lg-6 col-xs-6">
-                            <label style="color:black;" > &nbsp; Titular: &nbsp;{{ tramite.propietario.persona.apellido}} {{ tramite.propietario.persona.nombre }}</label>
-                            <br><label style="color:black;">  &nbsp;  &nbsp;DNI : {{tramite.propietario.persona.dni}}</label>
+                            <label style="color:white;" > &nbsp; Titular: &nbsp;{{ tramite.propietario.persona.apellido}} {{ tramite.propietario.persona.nombre }}</label>
+                            <br><label style="color:white;">  &nbsp;  &nbsp;DNI : {{tramite.propietario.persona.dni}}</label>
                                        </div>
                                                                              <div class="col-sm-6 col-md-6 col-lg-6 col-xs-6">
 
-                        <h5 align="right" style="color:black;">Profesional : {{tramite.profesion}} {{tramite.profesional}}</h5>
-                            <h5 align="right" style="color:black;">M.P: {{tramite.profesional.matricula}}</h5><br>
+                        <h5 align="right" style="color:white;">Profesional : {{tramite.profesion}} {{tramite.profesional}}</h5>
+                            <h5 align="right" style="color:white;">M.P: {{tramite.profesional.matricula}}</h5><br>
                         </div>
                                         <br>
                                 </div>
                                     <hr>
-                <label style="color:black;"> Domicilio : {{tramite.domicilio}}</label><br>
-                    <label style="color:black;">Tipo de Obra : {{ tramite.tipo_obra }}</label><br>
+                <label style="color:white;"> Domicilio : {{tramite.domicilio}}</label><br>
+                    <label style="color:white;">Tipo de Obra : {{ tramite.tipo_obra }}</label><br>
                 <hr>
-                    <label style="color:black;"> Datos Catastrales: </label><br>
-                <label style="color:black;">  Sector : {{tramite.sector}}  -  </label> &nbsp;
-                <label style="color:black;">Parcela : &nbsp; {{tramite.parcela}}  -  </label> &nbsp;
-                <label style="color:black;">Circunscripción : &nbsp;{{tramite.circunscripcion}}  - </label> &nbsp;
-                <label style="color:black;">Manzana : &nbsp; {{tramite.manzana}}  </label>
-                    <h5 align="right"  style="color:black;">Costo Total del Tramite:<td> {{tramite.monto_a_pagar}}</td></h5>
-                    <h5 align="right" style="color:black;">Total Pagado a la Fecha: {{tramite.monto_pagado}}</h5>
+                    <label style="color:white;"> Datos Catastrales: </label><br>
+                <label style="color:white;">  Sector : {{tramite.sector}}  -  </label> &nbsp;
+                <label style="color:white;">Parcela : &nbsp; {{tramite.parcela}}  -  </label> &nbsp;
+                <label style="color:white;">Circunscripción : &nbsp;{{tramite.circunscripcion}}  - </label> &nbsp;
+                <label style="color:white;">Manzana : &nbsp; {{tramite.manzana}}  </label>
+                    <h5 align="right"  style="color:white;">Costo Total del Tramite:<td> {{tramite.monto_a_pagar}}</td></h5>
+                    <h5 align="right" style="color:white;">Total Pagado a la Fecha: {{tramite.monto_pagado}}</h5>
                      <hr>
 
                 <div class="table-responsive">
@@ -81,7 +81,7 @@
 
 
                 </div>
-                    <h5 align="right" style="color:black;">Resta Pagar: <a style="color:black;" id="totalRestante"> </a>
+                    <h5 align="right" style="color:white;">Resta Pagar: <a style="color:white;" id="totalRestante"> </a>
 <hr>
 
             </div>

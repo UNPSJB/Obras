@@ -46,11 +46,11 @@ header.sticky {
     margin-right: auto;
     margin-left: auto;
     font-weight: bold;
-    background-color:  	#ad4a34!important;
+    background-color:  #63e363!important; /* #c8f83a limon */
 }
 #rowlogo.row,#et1.col-xs-12.col-sm-2.col-md-2{
 /* encabezado*/
-    background-color: #ed8a73!important;
+    background-color: #ffbf00 !important;
 }
 
 }
@@ -98,6 +98,7 @@ color:white;
     border-color: #2e6da4;
     margin-left:3px;
 }
+
 
 .btn {
     display: inline-block;
@@ -361,7 +362,7 @@ b, strong {
 .sidebar {
     width: 200px;
     margin-right: 35px;
-    background-color: #730707;/*#ffff00; /*2c3e50* panel de costado*/
+    background-color: #247719;/*#730707;/*#ffff00; /*2c3e50* panel de costado*/
     list-style-type: none;
     padding-left: 0;
 }
@@ -447,7 +448,7 @@ background-color:transparent!important;
     border-bottom: 0;
 }
 .box:hover {
-    background-color:  	 	 	#f80000!important; /* panel del medio*/
+    background-color:  	 #00ff00! important;	 	/*#f80000!important; /* panel del medio*/
 }
 .panel-heading {
     padding: 10px 15px;
@@ -480,7 +481,7 @@ h5 {
     cursor: pointer;
 }
  .panel-custom > .panel-heading-custom {
-    background: #730707;/*  2c3e50;*//*panel fijo del medio*/
+    background: #247719;/*  2c3e50;*//*panel fijo del medio*/
     border-radius: 0px;
 }
 .panel-group .panel-heading {
@@ -492,7 +493,7 @@ h5 {
 }
 .panel-body {
     padding: 15px;
-    background: #2d1106; /*e0ceed;*//*panel central fondo de tabla table responsive*/
+    background: #247719; /*e0ceed;*//*panel central fondo de tabla table responsive*/
 }
 .table-responsive {
     min-height: .01%;
@@ -544,8 +545,8 @@ table thead tr th {
 
 /**  PARTE DE LA TABLA COLOR DE ARRIBA TABLA TABLE RESPONSIVE **/
 th {
-    background: #231a24!important;
-    border-color:white!important;
+    background: #004700!important;
+    border-color:#14ff14!important;
     font-weight: bold;
     text-align: -internal-center;
     vertical-align:middle;
@@ -554,7 +555,6 @@ th {
 td, th {
     display: table-cell;
     vertical-align: inherit;
-    background-color: #FFFFFF; /* parte de abajo de la tabla responsive */
 }
 
 tbody {
@@ -793,8 +793,8 @@ html {
    background-color: black;
 }
 .sidebar-1 li a:hover, .sidebar-1 li a.current { /*panel lateral cuando paso el cursor cambio de color*/
-    background-color:  	 	#f80000;
-    border-left: 5px solid   	#f80000;
+    background-color:  	 	#00ff00;
+    border-left: 5px solid   	#00ff00;
 }
 .switch {
         position: relative;
@@ -864,27 +864,4 @@ ol li {
 }
 .table-bordered > thead > tr > th, .table-bordered > tbody > tr > th, .table-bordered > tfoot > tr > th, .table-bordered > thead > tr > td, .table-bordered > tbody > tr > td, .table-bordered > tfoot > tr > td {
     font-weight: bold;
-}
-
-#pswd2_info {
-	position:relative;
-	background:#fefefe;
-	font-size:.875em;
-	border-radius:1px;
-	box-shadow:0 1px 3px #ccc;
-	border:1px solid #ddd;
-	float: center;
-}
-
-#pswd2_info::before {
-	content: "\25B2";
-	position:absolute;
-	top:-12px;
-	left:45%;
-	color:#ddd;
-	display:block;
-}
-
-#pswd2_info {
-	display:none;
 }

@@ -574,17 +574,22 @@ def listado_comprobantes_propietario(request,pk_tramite):
     propietario = get_object_or_404(Propietario, pk=usuario.persona.propietario.pk)
     if propietario.estilo:
         estilos = propietario.estilo
-    tramite=get_object_or_404(Tramite,pk=pk_tramite)
-    if tramite.propietario_id == propietario:
-        pago=tramite.pago
-        canceladas=[]
-        cuotas=Cuota.objects.en_estado(Cancelada)
-        for cuota in cuotas:
-            if cuota.pago==pago:
-                canceladas.append(cuota)
-        if canceladas is None:
-            messages.add_message(request, messages.WARNING, 'No hay pagos registrados para el tramite seleccionado.')
-        return render (request, 'persona/propietario/factura_parcial.html', {'cuotas':canceladas,'tramite':tramite,'pago':pago, 'estilos':estilos})
+    tramite = get_object_or_404(Tramite, pk=pk_tramite)
+    pago = tramite.pago
+    canceladas = []
+    cuotas = Cuota.objects.en_estado(Cancelada)
+    value = "estilo3"
+    for cuota in cuotas:
+        if cuota.pago == pago:
+            canceladas.append(cuota)
+    if canceladas is None:
+        messages.add_message(request, messages.WARNING, 'No hay pagos registrados para el tramite seleccionado.')
+    if estilos == value:
+        return render(request, 'persona/propietario/factura_parcial_propietario_modoNocturno.html',
+                      {'cuotas': canceladas, 'tramite': tramite, 'pago': pago, 'estilos': estilos})
+    return render(request, 'persona/propietario/factura_parcial_propietario.html',
+                  {'cuotas': canceladas, 'tramite': tramite, 'pago': pago, 'estilos': estilos})
+
 
 def planilla_visado_impresa_propietario(request, pk_tramite):
     estilos = ''

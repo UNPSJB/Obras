@@ -4,11 +4,11 @@
 
 {% block barra %}
 <ul class="sidebar sidebar-1">
-    <font size="2">
-        <li><a href="{% url 'propietario'  %}" class="current"><font color="white">Propietario</font></a></li>
+        <li><a href="{%url 'propietario'%}" class="current"><label id="propietario">Propietario</label></a></li>
     </font>
 </ul>
 {% endblock %}
+
 {%block contenido%}
 <div id="printReady">
     <div class="container-fluid" style="background:white;">
@@ -51,24 +51,7 @@
                                 </div>
                         </div>
                     </div>
-                    <!--<div id="rowVisado" class="row">
-                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                            <form action="" >
-                                <div class="row" >
-                                    <div class=" col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                                        <ol>
-                                            <label>PADRON:</h2></label>
-                                            <li> {{tramite.parcela}}</li>
-                                            <label>DATOS PROPIETARIO:</label>
-                                            <li> {{tramite.propietario.persona}}</li>
-                                            <label>DATOS PROFESIONAL:</label>
-                                            <li> {{tramite.profesional}}</li>
-                                        </ol>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                    </div>-->
+
                     <div class="table-responsive">
                         <table align="center" class="table table-bordered table-striped table-hover table-condensed" style="text-align:center;">
                             <thead>
@@ -85,15 +68,16 @@
                             {% for fila in filas %}
                             {% if fila.activo == True %}
                             <tr id="filasVisado">
-                                <td class="col-xs-1">{{ fila }}</td>
+                                <td class="col-xs-1" bgcolor="black"><font color="white">{{ fila }}</font></td>
                                 {% for columna in columnas %}
                                 {% if columna.activo == True %}
-                                <td class="col-sm-1">&nbsp;
+                                <td class="col-sm-1" bgcolor="black">&nbsp;
                                     {% for item in planilla.items.all %}
                                     {% if fila == item.fila_de_visado and columna == item.columna_de_visado %}
-                                    <label class="switch">
-                                        <input type="checkbox" disabled="disabled" checked="checked" name="{{fila}}" value="{{fila}}" checked><span class="slider round"></span>
-                                    </label>
+
+                                    <input type="checkbox" id="activar"disabled="disabled" checked="checked" name="{{fila}}" value="{{fila}}">
+                                    <label for="activar"></label>
+
                                     {% endif %}
                                     {% endfor %}
                                 </td>
@@ -106,7 +90,7 @@
                         </table>
                         <br>
                         <div class="table-responsive">
-                            <table class="table-bordered table-striped table-hover table-condensed" style="text-align:center;">
+                            <table align="center" class="table table-bordered table-striped table-hover table-condensed" style="text-align:center;">
                                 <thead>
                                 <tr id="columnaBalance">
                                     <th></th>
@@ -117,16 +101,21 @@
                                 {% for elemento in planilla.elementos.all %}
                                 {% if elemento.activo == True %}
                                 <tr id="filasBalance">
-                                    <td class="col-xs-1">{{ elemento }}</td>
-                                    <td class="col-sm-4">
-                                        <label class="switch">
+                                    <td class="col-xs-1" bgcolor="black"><font color="white">{{ elemento }}</td>
+                                    <td class="col-sm-4" bgcolor="black">
+                                        <!--<label class="switch">
                                             <input type="checkbox" disabled="disabled" checked="checked" name="{{elemento}}" value="{{elemento}}" checked><span class="slider round"></span>
-                                        </label>
+                                        </label>-->
+                                        <input type="checkbox" id="activar1"disabled="disabled" checked="checked" name="{{elemento}}" value="{{elemento}}">
+                                    <label for="activar"></label>
                                     </td>
                                 </tr>
                                 {% endif %}
                                 {% endfor %}
                                 </tbody>
+                            </table>
+                            </div>
+                             <div class="table-responsive">
                                 <table class="table table-bordered table-striped table-hover table-condensed" style="text-align:center;">
                                     <thead>
                                     <tr>
@@ -134,16 +123,15 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <td class="col-xs-1">{{ obs }}</td>
+                                    <td class="col-xs-1" bgcolor="black"><font color="white">{{ obs }}</font></td>
                                     </tbody>
                                 </table>
-                            </table>
                         </div>
-                    </div>
+
                 </div>
             </div>
         </div>
-        <hr>
+        </div>
     </div>
 </div>
 <br>
@@ -253,4 +241,64 @@
         }
 
         </script>
+<script>
+
+  $('#okk').change(function () {
+
+    if ($(this).is(':checked')) {
+
+        $('#startthis').css('background-color','blue').prop('disabled', false);
+
+
+
+    } else {
+
+        $('#startthis').css('background-color','#ccc').prop('disabled', true);
+
+    }
+
+});
+
+</script>
+
+</head>
+
+<style>
+
+.styled-button-8 {
+
+    filter:progid:DXImageTransform.Microsoft.gradient(startColorstr='#25A6E1', endColorstr='#188BC0', GradientType=0);
+
+    padding:8px 13px;
+
+    color:#fff;
+
+    font-family:'Helvetica Neue', sans-serif;
+
+    font-size:17px;
+
+    border-radius:4px;
+
+    -moz-border-radius:4px;
+
+    -webkit-border-radius:4px;
+
+    border:1px solid #1A87B9
+
+}
+
+</style>
+
 {%endblock%}
+
+{% block scripts %}
+<script>
+	$(document).ready(function() {
+	var font=0;
+	if (Cookies.get("fs")){
+		font=Cookies.get("fs");
+	    document.body.style.fontSize = font + "em";
+	}
+});
+</script>
+{% endblock %}

@@ -1,26 +1,36 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
-{% load crispy_forms_tags%}
+
+{% block estilos %}
+
+{% endblock %}
 
 {% block barra %}
+
     <ul class="sidebar sidebar-1">
-        <font size="2">
-            <li><a href="{%url 'propietario'%}" class="current"><font color="white">Propietario</font> </a></li>
+        <li><a href="{%url 'propietario'%}" class="current"><label id="propietario">Propietario</label></a></li>
+
         </font>
       </ul>
 {% endblock %}
 
+
 {% block contenido %}
+
 {% block listado_comprobantes %}
 <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
     <div class="panel">
-        <div class="panel-heading box" role="tab" id="headingOne">
+        <!--<div class="panel-heading box" role="tab" id="headingOne">
             <h5 class="panel-title">
-                <font color="#ffffff" size="2">Mostrar el Comprobante de una Cuota</font>
+                <font color="#ffffff">Mostrar el Comprobante de una Cuota</font>
             </h5>
+        </div>-->
+        <div class="panel-heading box" role="tab" id="headingOne">
+            <font color="#ffffff" class="current"><label id="propietario1">Comprobante de Cuota</label></font>
         </div>
         <div class="container-fluid">
             <div class="panel-body">
+
                 <div class="table-responsive">
 
                     <table class="table table-bordered table-striped table-hover table-condensed"
@@ -70,4 +80,20 @@
     </div>
 </div>
 {% endblock %}
+
+
+{% endblock %}
+
+{% block scripts %}
+
+<script>
+	$(document).ready(function() {
+	var font=0;
+	if (Cookies.get("fs")){
+			font=Cookies.get("fs");
+		    document.body.style.fontSize = font + "em";
+
+	}
+});
+</script>
 {% endblock %}

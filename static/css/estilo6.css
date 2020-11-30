@@ -5,7 +5,7 @@ body {
     xoverflow: hidden;
     padding-top: 140px;
     color: black!important;
-    background: white!important;
+    background: #eb00eb!important;
     font-size: 14px;
     line-height: 1.42857143;
 }
@@ -46,16 +46,16 @@ header.sticky {
     margin-right: auto;
     margin-left: auto;
     font-weight: bold;
-    background-color:  	#ad4a34!important;
+    background-color:   #850085!important;
 }
 #rowlogo.row,#et1.col-xs-12.col-sm-2.col-md-2{
 /* encabezado*/
-    background-color: #ed8a73!important;
+    background-color: #570057!important;
 }
 
 }
 strong{
-	font-size: 13px;
+    font-size: 13px;
 }
 
 .form {
@@ -361,7 +361,7 @@ b, strong {
 .sidebar {
     width: 200px;
     margin-right: 35px;
-    background-color: #730707;/*#ffff00; /*2c3e50* panel de costado*/
+    background-color: #660066;/*#ffff00; /*2c3e50* panel de costado*/
     list-style-type: none;
     padding-left: 0;
 }
@@ -447,7 +447,7 @@ background-color:transparent!important;
     border-bottom: 0;
 }
 .box:hover {
-    background-color:  	 	 	#f80000!important; /* panel del medio*/
+    background-color:           #e0e015!important; /* panel del medio aca cambia de color*/
 }
 .panel-heading {
     padding: 10px 15px;
@@ -480,7 +480,7 @@ h5 {
     cursor: pointer;
 }
  .panel-custom > .panel-heading-custom {
-    background: #730707;/*  2c3e50;*//*panel fijo del medio*/
+    background: #660066;/*  2c3e50;*//*panel fijo del medio*/
     border-radius: 0px;
 }
 .panel-group .panel-heading {
@@ -488,11 +488,11 @@ h5 {
 }
 
 .panel-group .panel-heading + .panel-collapse > .panel-body, .panel-group .panel-heading + .panel-collapse > .list-group {
-    border-top: 1px solid  	#00FFFF;
+    border-top: 1px solid   #00FFFF;
 }
 .panel-body {
     padding: 15px;
-    background: #2d1106; /*e0ceed;*//*panel central fondo de tabla table responsive*/
+    background: #857000; /*e0ceed;*//*panel central fondo de tabla table responsive*/
 }
 .table-responsive {
     min-height: .01%;
@@ -544,7 +544,7 @@ table thead tr th {
 
 /**  PARTE DE LA TABLA COLOR DE ARRIBA TABLA TABLE RESPONSIVE **/
 th {
-    background: #231a24!important;
+    background: #750075!important;
     border-color:white!important;
     font-weight: bold;
     text-align: -internal-center;
@@ -554,7 +554,7 @@ th {
 td, th {
     display: table-cell;
     vertical-align: inherit;
-    background-color: #FFFFFF; /* parte de abajo de la tabla responsive */
+    background-color: white; /* parte de abajo de la tabla responsive */
 }
 
 tbody {
@@ -792,9 +792,11 @@ html {
 .btn-primary:active, .btn-primary:hover, .btn-primary:focus{
    background-color: black;
 }
+
+/* VOLVER ACA */
 .sidebar-1 li a:hover, .sidebar-1 li a.current { /*panel lateral cuando paso el cursor cambio de color*/
-    background-color:  	 	#f80000;
-    border-left: 5px solid   	#f80000;
+    background-color:       #e0e015;
+    border-left: 5px solid      #e0e015;
 }
 .switch {
         position: relative;
@@ -832,11 +834,11 @@ html {
     }
 
     input:checked + .slider {
-        background-color:  	black;
+        background-color:   black;
     }
 
     input:focus + .slider {
-        box-shadow: 0 0 1px  	#FF00FF;
+        box-shadow: 0 0 1px     #FF00FF;
     }
 
     input:checked + .slider:before {
@@ -864,27 +866,4 @@ ol li {
 }
 .table-bordered > thead > tr > th, .table-bordered > tbody > tr > th, .table-bordered > tfoot > tr > th, .table-bordered > thead > tr > td, .table-bordered > tbody > tr > td, .table-bordered > tfoot > tr > td {
     font-weight: bold;
-}
-
-#pswd2_info {
-	position:relative;
-	background:#fefefe;
-	font-size:.875em;
-	border-radius:1px;
-	box-shadow:0 1px 3px #ccc;
-	border:1px solid #ddd;
-	float: center;
-}
-
-#pswd2_info::before {
-	content: "\25B2";
-	position:absolute;
-	top:-12px;
-	left:45%;
-	color:#ddd;
-	display:block;
-}
-
-#pswd2_info {
-	display:none;
 }
