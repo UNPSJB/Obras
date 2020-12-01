@@ -125,8 +125,18 @@ $( document ).ready(function() {
 {% localize off %}
 var totalTramite = {{tramite.monto_a_pagar}}
 var tc = {{cuota.monto}}
+var montoPagado = {{tramite.monto_pagado}}
 {% endlocalize %}
+    var valor = 0.09
     $("#restoPagar").text(((totalTramite - tc *{{cuota.numeroCuota}})).toFixed(2))
+    resto = totalTramite - tc *{{cuota.numeroCuota}}
+    if (resto <= valor){
+        $("#total").text((montoPagado + resto).toFixed(2))
+        $("#restoPagar").text((total - {{tramite.monto_a_pagar}}).toFixed(2))
+     }
+     else{
+        $("#restoPagar").text(((totalTramite - tc *{{cuota.numeroCuota}})).toFixed(2))
+     }
 });
 
     function printDiv(div) {

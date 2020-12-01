@@ -46,9 +46,14 @@
                 <label style="color:black;">Parcela : &nbsp; {{tramite.parcela}}  -  </label> &nbsp;
                 <label style="color:black;">Circunscripción : &nbsp;{{tramite.circunscripcion}}  - </label> &nbsp;
                 <label style="color:black;">Manzana : &nbsp; {{tramite.manzana}}  </label>
-                    <h5 align="right"  style="color:black;">Costo Total del Tramite:<td> {{tramite.monto_a_pagar}}</td></h5>
+                    <h5 align="right"  style="color:white;">Costo Total del Tramite:<td> {{tramite.monto_a_pagar}}</td></h5>
+                    {% if tramite.saldo_restante_a_pagar <= 0.09 %}
+                    <h5 align="right" style="color:black;">Total Pagado a la Fecha: {{tramite.monto_a_pagar}}</h5>
+
+                    {% else %}
                     <h5 align="right" style="color:black;">Total Pagado a la Fecha: {{tramite.monto_pagado}}</h5>
-                     <hr>
+                     {% endif %}
+                    <hr>
 
                 <div class="table-responsive">
                     <table align="center" class="table table-bordered table-striped table-hover">
@@ -81,7 +86,13 @@
 
 
                 </div>
-                    <h5 align="right" style="color:black;">Resta Pagar: <a style="color:black;" id="totalRestante"> </a>
+                    {% if tramite.saldo_restante_a_pagar <= 0.09 %}
+                    <h5 align="right" style="color:white;">Resta Pagar: 0,00 </a></h5>
+                    {% else %}
+
+                        <hr>
+                    <h5 align="right" style="color:white;">Resta Pagar: <a style="color:black;" id="totalRestante"> </a>
+<hr>                {% endif %}
 <hr>
 
             </div>
