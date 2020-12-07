@@ -418,3 +418,10 @@ background:0925c4!important;
 ol li {
     font-weight: bold;
 }
+
+
+
+.dataTables_wrapper .dataTables_length label,.dataTables_filter label{
+    color: black!important; /* filtrar por tiene que estar negro aca*/
+
+}

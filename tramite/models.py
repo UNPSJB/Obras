@@ -54,6 +54,7 @@ class Tramite(models.Model):
     tipo_obra = models.ForeignKey(TipoObra)
     domicilio = models.CharField(max_length=50)
     pago = models.OneToOneField(Pago, default=True, blank=True, null=True)
+    mactivo = models.IntegerField(blank=True, null=True)
     # -------------------------------------------------------------------------------------
     # DATOS CATASTRALES
     parcela = models.IntegerField() #models.CharField(max_length=20)

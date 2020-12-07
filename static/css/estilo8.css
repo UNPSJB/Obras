@@ -422,6 +422,11 @@ ul, menu, dir {
     border: 2px solid #6bbfb0;
 }
 
+.dataTables_wrapper .dataTables_length label,.dataTables_filter label{
+    color: black!important; /* filtrar por tiene que estar negro aca*/
+
+}
+
  .sidebar-1 li a {
     display: block;
     padding: 10px 20px;

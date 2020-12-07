@@ -17,7 +17,7 @@
                     <label id="financiacion">Registrar Pago</label>
                 </a>-->
                 <div class="panel-heading box" role="tab" id="headingOne">
-                    <font color="#ffffff" class="current"><label id="propietario1">Comprobante de Pago</label></font>
+                    <font color="#ffffff" class="current"><label id="propietario1">Factura Electronica</label></font>
             </div>
             </h5>
         </div>
@@ -60,28 +60,6 @@
                                     <label >Manzana: {{tramite.manzana}}</label> <br>
                                 </div>
                                 <hr>
-
-                                <!--<div class="col-sm-6 col-md-6">-->
-                                <!--<label> Numero de Tramite : {{ tramite.id }} </label>-->
-                                <!--<br><br><br>-->
-                                <!--<label>  Propietario : </label>-->
-                                <!--<label> {{ tramite.propietario }}</label><br>-->
-                                <!--<label>Dni : {{ tramite.propietario.persona.dni}}</label> <br>-->
-                                <!--<label> Obra : </label> <br>-->
-                                <!--<label> Domicilio : {{tramite.domicilio}}</label><br>-->
-                                <!--<label>Tipo de Obra : {{ tramite.tipo_obra }}</label><br>-->
-                                <!--</div>-->
-                                <!-- <div class="col-sm-6 col-md-6">
-                                     <!--<label> Cuotas :{{cuota.pago.cantidadCuotas}}</label><br>-->
-                                <!--<label> Fecha de Vencimiento : {{ cuota.fechaVencimiento }}</label>-->
-                                <!--<br><br>-->
-                                <!--<label>Profesional : </label>-->
-                                <!--<label> {{tramite.profesion}} {{tramite.profesional}}</label>-->
-                                <!--<label>M.P: {{tramite.profesional.matricula}}</label><br>-->
-                                <!--<br> <br>-->
-                                <!--<label> Forma de pago  : {{ cuota.pago.tipoPago}} </label><br>-->
-                                <!--&lt;!&ndash;<label> Total : {{tramite.monto_a_pagar}}</label>&ndash;&gt;
-                            </div> -->
                                 <hr>
                                 <br>
                                 <div class="container-fluid">
@@ -92,7 +70,6 @@
                                             <th>Numero de Cuota  </th>
                                             <th>Fecha de Vencimiento</th>
                                             <th>Subtotal</th>
-                                            <th>Forma de Pago</th>
                                             <th></th>
                                         </tr>
                                         </thead>
@@ -101,14 +78,14 @@
                                         <tr>
                                             <td>{{ cuota.numeroCuota }}</td>
                                             <td>{{ cuota.fechaVencimiento }}</td>
-                                            <td><font color="black" >{{cuota.monto}}</td>
-                                            <td><font color="black" >{{cuota.tipoPago.nombre}}</font></td>
+                                            <td>{{cuota.monto}}</td>
                                             <td>
-                                                <a  href="{% url 'comprobante_pago_cuota_propietario' cuota.id %}" target="_blank">
-                                                    <button type="button"  class="btn btn-primary brn-xs" name="GenerarComprobante">
-                                                        <span class="glyphicon glyphicon-home" aria-hidden="true"> Generar Comprobante </span>
+                                                <a  href="{% url 'factura_electronica_a_pagar' cuota.id %}" target="_blank">
+                                                    <button type="button"  class="btn btn-primary brn-xs" name="GenerarFactura">
+                                                        <span class="glyphicon glyphicon-home" aria-hidden="true"> Generar Factura </span>
                                                     </button>
                                                 </a>
+
                                             </td>
                                         </tr>
 
