@@ -2996,15 +2996,9 @@ def ver_todos_tramites(request):
 def ver_tipos_de_obras_mas_frecuentes(request):
     tramites = Tramite.objects.all()
     tipos_obras = TipoObra.objects.filter(activo=1)
+    total=tramites.count()
     list = []
-    list_obras = []
-    # for o in tipos_obras:
-    #     l = [o,0]
-    #     list.append(l)
-    # for t in tramites:
-    #     for o in tipos_obras:
-    #         if t.tipo_obra.id == o.id:
-    #             list_obras.append(o)
+    porcentaje = []
     datos=[]
     nombres=[]
     for t in tipos_obras:
@@ -3014,18 +3008,11 @@ def ver_tipos_de_obras_mas_frecuentes(request):
         if cant!=0:
             datos.append(cant)
             nombres.append(t.nombre)
+            porcentaje.append("{0:.2f}".format((cant / float(total)) * 100))
         cant=None
-    # for name,value in list:
-    #     aux = 0
-    #     for o in list_obras:
-    #         if name.id == o.id:
-    #             l = [name,aux]
-    #             i = list.index(l)
-    #             aux += 1
-    #             l = [name,aux]
-    #             list[i] = l
+    aux = [nombres[i] + " " + porcentaje[i] + "%" for i in range(0, len(nombres))]
     titulo = "Tipos de obras mas frecuentes"
-    grafico = pie_chart_with_legend(datos, nombres, titulo)
+    grafico = pie_chart_with_legend(datos, aux, titulo)
     imagen = base64.b64encode(grafico.asString("png"))
     contexto = {"tipos_obras": list, "grafico":imagen}
     return render(request,'persona/director/tipos_de_obras_mas_frecuentes.html',contexto)
@@ -3040,7 +3027,7 @@ def add_legend(draw_obj, chart, data):
 
 def pie_chart_with_legend(datos, nombres,titulo):
     drawing = Drawing(width=600, height=300)
-    my_title = String(280, 280, titulo, fontSize=18)
+  #  my_title = String(280, 280, titulo, fontSize=18)
     pie = Pie()
     pie.sideLabels = True
     pie.x = 300
@@ -3054,17 +3041,17 @@ def pie_chart_with_legend(datos, nombres,titulo):
     pie.labels = [cat for cat in nombres]
     pie.slices.strokeWidth = 0.5
     pie.slices.popout = 5
-    drawing.add(my_title)
+   # drawing.add(my_title)
     drawing.add(pie)
     add_legend(drawing, pie, datos)
     return drawing
 
 def ver_categorias_mas_frecuentes(request):
     planillas = PlanillaDeInspeccion.objects.all()
-    # tramites_inspeccionados = Tramite.objects.en_estado(Inspeccionado)
     tramites = Tramite.objects.all()
     tipos_categorias = CategoriaInspeccion.objects.filter(activo=1)
     detalles = DetalleDeItemInspeccion.objects.filter(activo=1)
+    total=detalles.count()
     list = []
     datos = []
     for p in planillas:
@@ -3078,10 +3065,13 @@ def ver_categorias_mas_frecuentes(request):
     for l in list:
         list_categorias = l.detalles.values_list('categoria_inspeccion_id', flat="True")
     categorias = dict(collections.Counter(list_categorias))
+    porcentaje=[]
     for i in categorias:
         datos.append(categorias[i])
+        porcentaje.append("{0:.2f}".format((categorias[i]/float(total))*100))
+    aux=[nombres[i]+" "+porcentaje[i]+"%" for i in range( 0, len(nombres))]
     titulo = "Categorias mas frecuentes"
-    grafico = pie_chart_with_legend(datos, nombres, titulo)
+    grafico = pie_chart_with_legend(datos, aux, titulo)
     imagen = base64.b64encode(grafico.asString("png"))
     contexto = {
         "tipos_categorias": tipos_categorias,
@@ -3097,6 +3087,9 @@ def ver_profesionales_mas_requeridos(request):
     list_profesionales = []
     datos=[]
     nombres=[]
+    total=0
+    porcentaje=[]
+    print(profesionales)
     for p in profesionales:
         cant=Tramite.objects.filter(profesional_id=p.id).exclude(profesional_id__isnull=True).count()
         m=[p,cant]
@@ -3104,10 +3097,15 @@ def ver_profesionales_mas_requeridos(request):
             list.append(m)
         if cant!=0:
             datos.append(cant)
-            nombres.append(str(p.id)+" "+p.persona.nombre+" "+p.persona.apellido)
+            nombres.append(p.persona.nombre+" "+p.persona.apellido)
+        total+=cant
         cant=None
+
+    for d in datos:
+        porcentaje.append("{0:.2f}".format((d / float(total)) * 100))
+    aux = [nombres[i] + " " + porcentaje[i] + "%" for i in range(0, len(nombres))]
     titulo = "Profesionales mas requeridos"
-    grafico = pie_chart_with_legend(datos, nombres, titulo)
+    grafico = pie_chart_with_legend(datos, aux , titulo)
     imagen = base64.b64encode(grafico.asString("png"))
     contexto = {
         "profesionales": list,
@@ -3138,16 +3136,23 @@ def __busco_item__(item):
     list = []
     nombres=[]
     datos=[]
+    porcentaje=[]
+    total=0
     e=DetalleDeItemInspeccion.objects.filter(item_inspeccion_id=i.id, activo=True)
     f=PlanillaDeInspeccion.objects.filter(detalles__in=e).values_list('detalles__nombre',flat="True")
     for i in range(0,len(e)):
         nombres.append(e[i].nombre)
     for n in range(0,len(nombres)):
         cant=len(filter(lambda s:(s==nombres[n]),f))
+        total+=cant
         m=[nombres[n],cant]
         list.append(m)
         datos.append(cant)
-    contexto={'datos':datos,'nombres':nombres,'detalles':list}
+    for d in datos:
+        porcentaje.append("{0:.2f}".format((d / float(total)) * 100))
+    aux = [nombres[i] + " " + porcentaje[i] + "%" for i in range(0, len(nombres))]
+    titulo = "Profesionales mas requeridos"
+    contexto={'datos':datos,'nombres':aux,'detalles':list}
     return contexto
 
 def detalle_de_tramite(request, pk_tramite):
@@ -3282,6 +3287,8 @@ def planilla_inspeccion_impresa_director(request, pk_tramite):
 def ver_filtro_obra_fechas(request):
     listado_tramites = []
     list_estados_fechas = []
+    porcentaje=[]
+    total=0
     if "Guardar" in request.POST:
         tipos = TipoObra.objects.filter(activo=1)
         tramites = Tramite.objects.all()
@@ -3305,41 +3312,24 @@ def ver_filtro_obra_fechas(request):
             e = Estado.objects.all()
         for c in tipos:
                 estado = e.values_list('tramite', flat="True").distinct()  # filter(lambda r:(r.tramite.tipo_obra_id==3),e)
-                tramites = Tramite.objects.filter(id__in=estado, tipo_obra_id=c.id)
+                tramites = Tramite.objects.filter(id__in=estado, tipo_obra_id=c.id, tipo_obra__activo=True)
+
                 cant = len(tramites)
-                if cant == 0:
-                    l = [c.nombre, "-"]
-                else:
+                if cant != 0:
                     datos.append(cant)
                     l = [c.nombre, cant]
-                list.append(l)
+                    nombres.append(c.nombre)
+                    total+=cant
+                    list.append(l)
                 estados = None
                 tramites = None
-        nombres=tipos.values_list("nombre",flat=True).all()
-        #  for t in tramites_en_rango:
-        # for t in tramites:
-        #     if (str(t.estado().timestamp) >= fechaInicial) and (str(t.estado().timestamp) <= fechaFinal):
-        #         list_estados_fechas.append(t)
-        #
-        # for o in tipos:
-        #     l = [o, 0]
-        #     list.append(l)
-        # for t in tramites:
-        #     for o in tipos:
-        #         if t.tipo_obra.id == o.id:
-        #             list_obras.append(o)
-        # for name, value in list:
-        #     aux = 0
-        #     for o in list_obras:
-        #         if name.id == o.id:
-        #             l = [name, aux]
-        #             i = list.index(l)
-        #             aux += 1
-        #             l = [name, aux]
-        #             list[i] = l
+       # nombres=tipos.values_list("nombre",flat=True).all()
+        for d in datos:
+            porcentaje.append("{0:.2f}".format((d / float(total)) * 100))
+        aux = [nombres[i] + " " + porcentaje[i] + "%" for i in range(0, len(nombres))]
         titulo = "Tipos de obras en rango seleccionado"
         if len(datos)>0:
-         grafico = pie_chart_with_legend(datos, nombres, titulo)
+         grafico = pie_chart_with_legend(datos, aux, titulo)
          imagen = base64.b64encode(grafico.asString("png"))
          contexto = {"tipos_obras":list,"grafico":imagen}#"tipos_obras": list}
         else:
@@ -3384,7 +3374,6 @@ def grafico_de_barras_v(datos,nombres, titulo,series):
     bc.height=90
     bc.valueAxis.valueMin = 0
     lista=list(chain.from_iterable(datos))
-    print(lista)
     tope=max(lista)
     if tope > 0 and math.log10(tope)>1:
         bc.valueAxis.valueMax = tope+(tope/10)
@@ -3679,7 +3668,7 @@ def seleccionar_tipoObra_sector(request):
                 for t in tramites:
                     if t.sector == name:
                         v += 1
-                        s = str(t.sector)
+                        s = "Sector "+ str(t.sector)
                 list_sectores.append([name, v])
                 listaSectores.append(v)
                 series.append(s)

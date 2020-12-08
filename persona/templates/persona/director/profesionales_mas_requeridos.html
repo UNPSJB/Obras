@@ -41,7 +41,6 @@
                                     <table align="center" class="table table-bordered table-striped table-hover" data-paging='false'>
                                         <thead>
                                         <tr>
-                                            <th p style="color:#FFFFFF"bgcolor="#2c3e50">Id</th>
                                             <th p style="color:#FFFFFF"bgcolor="#2c3e50">Nombre</th>
                                             <th p style="color:#FFFFFF"bgcolor="#2c3e50">Apellido</th>
                                             <th p style="color:#FFFFFF"bgcolor="#2c3e50">Cantidad de tramites</th>
@@ -50,7 +49,6 @@
                                         <tbody>
                                         {% for name,value in profesionales %}
                                         <tr>
-                                            <td class="col-xs-1">{{ name.id }}</td>
                                             <td class="col-xs-1">{{ name.persona.nombre }}</td>
                                             <td class="col-xs-1">{{ name.persona.apellido }} </td>
                                             <td class="col-xs-1">{{ value }} </td>

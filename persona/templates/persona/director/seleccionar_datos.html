@@ -62,8 +62,9 @@
                                                                 <label> Seleccione el tipo de pago </label>
                                     </div>
                                      <div class="controls ">
-                                    <select name="tipoPago" placeholder="Ingresar el Item"  class="form-control input-sm" id="id_item2" >
-                                        <option value="-1" selected="#">---------</option>
+                                    <select name="tipoPago" placeholder="Ingresar el Item"  class="form-control input-sm" id="id_item2" required >
+                                        <option value="" selected="#">---------</option>
+                                        <option value="-1">Sin pago</option>
                                         {%for pago in tipo_pago%}
                                         <option value="{{pago.pk}}">{{pago.nombre}}</option>
                                         {%endfor%}
