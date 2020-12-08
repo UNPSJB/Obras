@@ -39,7 +39,11 @@
                     <td>{{tramite.tipo_obra}}</td>
                     <td>{{tramite.monto_a_pagar}}</td>
                     <td>{{tramite.monto_pagado}}</td>
+                    {% if tramite.saldo_restante_a_pagar >= 0.09 %}
                     <td>{{ tramite.saldo_restante_a_pagar}}</td>
+                    {% else %}
+                            <td class="col-xs-3">0,00</td>
+                    {% endif %}
                   <td align="center" class="col-xs-1">
                      {%if tramite.estado.tipo >= 5 and tramite.estado.tipo <=  7%}
                         <a href="{% url 'propietario_solicita_final_obra' pk_tramite=tramite.id %}">
