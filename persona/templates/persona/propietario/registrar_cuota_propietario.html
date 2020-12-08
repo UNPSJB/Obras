@@ -18,7 +18,7 @@
     <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" >
         <div class="panel">
             <div class="panel-heading box" role="tab" id="headingOne">
-                <font color="#ffffff" class="current"><label id="propietario1">Pagar Cuota</label></font>
+                <font color="#ffffff" class="current"><label id="propietario1">Generar Factura Electronica</label></font>
             </div>
             <div id="collapseFive" class="panel-collapse" role="tabpanel" aria-labelledby="headingThree">
                 <div class="panel-body">
@@ -52,9 +52,9 @@
                         </div>
                     </div>
 
-                    <a href="{% url 'pagar_cuota_propietario' cuotas.id %}">
+                    <a href="{% url 'generar_factura_electronica' cuotas.id %}">
                         <button type="button" class="btn btn-primary brn-xs" name="pagar_cuota">
-                            <span aria-hidden="true"> Pagar cuota </span>
+                            <span aria-hidden="true"> Generar </span>
                         </button>
                     </a>
 

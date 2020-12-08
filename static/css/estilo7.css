@@ -18,6 +18,12 @@ background-color:white!important;
 #municipalidadVisado,#planillaVisado, #planillaInspeccion, #municipalidadInspeccion,#documentos,#tituloVisado{
 color:white;
 }
+
+label#propietario{
+  color:black;
+
+}
+
 header {
     /* background: #04142b; */
     transition: 0.5s;

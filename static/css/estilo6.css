@@ -12,6 +12,10 @@ body {
 body {
     margin: 0;
 }
+label#propietario{
+  color:black;
+
+}
 div#container-visado, div#container-inspeccion{
 background-color:white!important;
 }

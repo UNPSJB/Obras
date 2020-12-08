@@ -110,7 +110,7 @@
    function subtotal(){
       var cantCuotas = parseInt($("#id_cantidadCuotas").val(),10);
       var total=parseInt($("#total").val(),10);
-      var subtotal=total/cantCuotas;
+      var subtotal=(total/cantCuotas).toFixed(2);
       $("#subtotal").html(subtotal);
    }
 </script>

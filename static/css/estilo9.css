@@ -611,9 +611,15 @@ input[type="hidden" i], input[type="image" i], input[type="file" i] {
 input[type="hidden" i] {
     display: none;
 }
+
+/* para cambiar a negro el filtrador de numeros en tabla responsive */
+select{
+color:black!important;
+}
+
 input {
     -webkit-appearance: textfield;
-    background-color: white;
+    background-color: black;
     -webkit-rtl-ordering: logical;
     cursor: auto;
     padding: 1px;
@@ -622,7 +628,10 @@ input {
     border-color: initial;
     border-image: initial;
 }
+.dataTables_wrapper .dataTables_length label,.dataTables_filter label{
+    color: black!important; /* filtrar por tiene que estar negro aca*/
 
+}
 .file-input-new .file-preview, .file-input-new .close, .file-input-new .glyphicon-file, .file-input-new .fileinput-remove-button, .file-input-new .fileinput-upload-button {
     display: none;
 }

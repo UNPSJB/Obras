@@ -33,14 +33,14 @@ urlpatterns = [
     url(r'^propietario/registrar_pago_tramite_propietario$', views.registrar_el_pago_tramite_propietario, name="registrar_pago_tramite_propietario"),
     url(r'^propietario/registrar_pago_tramite_propietario.html(?P<pk_cuota>\d+)$', views.registrar_el_pago_tramite_propietario,
         name="registrar_pago_tramite_propietario"),
-    url(r'^propietario/relizar_pago_propietario.html/(?P<pk_cuota>\d+)/$', views.pagar1_propietario, name="pagar1_propietario"),
+    #url(r'^propietario/relizar_pago_propietario.html/(?P<pk_cuota>\d+)/$', views.pagar1_propietario, name="pagar1_propietario"),
     url(r'^propietario/registrar_pago_propietario.html/(?P<pk_cuota>\d+)/$', views.comprobante_pago_cuota_propietario,  name="comprobante_pago_cuota_propietario"),
     url(r'^propietario/listado_de_comprobantes_propietario/(?P<pk_tramite>\d+)$', views.listado_de_comprobantes_propietario,
         name="listado_de_comprobantes_propietario"),
     url(r'^propietario/listado_tramites_propietario$', views.listado_tramites_propietario, name="listado_tramites_propietario"),
     url(r'^propietario/listado_tramites_comprobantes_propietario$', views.listado_tramites_propietario, name="listado_tramites_propietario"),
     url(r'^propietario/listado_comprobantes_propietario/(?P<pk_tramite>\d+)$', views.listado_comprobantes_propietario, name="listado_comprobantes_propietario"),
-    url(r'^propietario/pagar_cuota_propietario.html/(?P<pk_cuota>\d+)/$', views.pagar_cuota_propietario, name="pagar_cuota_propietario"),
+    url(r'^propietario/generar_factura_electronica/(?P<pk_cuota>\d+)/$', views.generar_factura_electronica, name="generar_factura_electronica"),
 
     #url(r'^propietario_solicita_final_obraDos/(?P<pk_tramite>\d+)/$', views.propietario_solicita_final_obraDos,
      #   name="propietario_solicita_final_obraDos"),
@@ -48,6 +48,11 @@ urlpatterns = [
     url(r'^planilla_inspeccion_impresa_propietario/(?P<pk_tramite>\d+)/$', views.planilla_inspeccion_impresa_propietario, name="planilla_inspeccion_impresa_propietario"),
     url(r'^planilla_visado_impresa_propietario/(?P<pk_tramite>\d+)/$', views.planilla_visado_impresa_propietario, name="planilla_visado_impresa_propietario"),
 
+    url(r'^propietario/seleccionar_modo_pago/(?P<pk_tramite>\d+)$', views.seleccionar_modo_pago,
+        name="seleccionar_modo_pago"),
+    url(r'^propietario/relizar_pago_propietario.html/(?P<pk_cuota>\d+)/$', views.generar_electronica, name="generar_electronica"),
+    url(r'^propietario/registrar_pago_propietario.html/(?P<pk_cuota>\d+)/$', views.factura_electronica_a_pagar,
+        name="factura_electronica_a_pagar"),
 
     # profesional ---------------------------------------------------------------------------------------------------
     url(r'^profesional$', views.mostrar_profesional, name="profesional"),

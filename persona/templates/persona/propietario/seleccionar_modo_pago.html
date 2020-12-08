@@ -1,0 +1,84 @@
+{% extends 'base.html' %}
+{% load staticfiles %}
+{% load crispy_forms_tags%}
+
+{% block barra %}
+<ul class="sidebar sidebar-1">
+        <li><a href="{%url 'propietario'%}" class="current"><label id="propietario">Propietario</label></a></li>
+    </font>
+</ul>
+{% endblock %}
+
+{% block contenido %}
+<div class="container-fluid" id="a">
+    <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" >
+        <div class="panel" id="panelprop">
+             <div class="panel-heading box" role="tab" id="headingOne">
+                 <font color="#ffffff" class="current"><label id="propietario2">¿Confirma cantidad de cuotas seleccionada?</label></font>
+
+
+            </div>
+            <div id="collapseFive" class="panel-collapse" role="tabpanel" aria-labelledby="headingFive">
+                <div class="panel-body">
+                    <div class="container-fluid">
+                        <div class="row" id="fila1">
+                             <form action="{% url 'seleccionar_modo_pago' tramite.pk %}" method="post" enctype="multipart/form-data">
+                                            <input name="guardar_financiacion" type="hidden">
+
+                                            <div id="div_id_cantidadCuotas" class="form-group">
+                                                <label for="id_cantidadCuotas" class="control-label ">
+                                                    Cantidad de cuotas
+                                                </label>
+                                                <div class="controls ">
+                                                    <div class="col-sm-2 col-md-2 col-xs-2" align="left">
+                                                    <select name="cantidadCuotas-" placeholder="Seleccione la cantidad de cuotas" class="select form-control input-sm" id="id_cantidadCuotas" value="" onclick="javascript:subtotal()"required>
+                                                        <option value="1">{{tramite.mactivo}}</option>
+                                                    </select>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                 <br>
+
+                                            <input type="hidden" id="total" value="{{tramite.monto_a_pagar}}">
+                                            <br>
+                                            <div class="form-group">
+                                                <div class="controls ">
+                                                    <div class="row">
+                                                        <div class="col-sm-4 col-md-4 col-xs-2" align="left">
+                                                           <button class="btn btn-danger" type="submit" name="Guardar">Si, Confirmar</button>
+                                                              <a href="{%url 'propietario'%}">
+                                                                <button type="button" class="btn btn-primary" name="Volver">
+                                                                    Cancelar
+                                                                </button>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </form>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+    <br>
+</div>
+     </div>
+ </div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+	$(document).ready(function() {
+	var font=0;
+	if (Cookies.get("fs")){
+		font=Cookies.get("fs");
+	    document.body.style.fontSize = font + "em";
+	}
+});
+</script>
+{% endblock %}

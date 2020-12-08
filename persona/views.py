@@ -89,41 +89,6 @@ def mostrar_propietario(request):
     }
     return render(request, 'persona/propietario/propietario.html', contexto)
 
-def elegir_financiacion_propietario(request,pk_tramite):
-    estilos = ''
-    usuario = request.user
-    propietario = get_object_or_404(Propietario, pk=usuario.persona.propietario.pk)
-    if propietario.estilo:
-        estilos = propietario.estilo
-    tramite = get_object_or_404(Tramite, pk=pk_tramite)        
-    if request.method == "POST":
-        if "Guardar" in request.POST: 
-            pago = Pago()  
-            contador = 31
-            fms = "%A"              
-            for name, value in request.POST.items():
-                if name.startswith('cantidadCuotas'):                                        
-                    pago.cantidadCuotas=value                                 
-            total = tramite.monto_a_pagar/int(pago.cantidadCuotas)
-            pago.save()
-            for i in range(1, int(pago.cantidadCuotas)+1):
-                cuota = Cuota(monto=total, numeroCuota=i, pago=pago)                
-                cuota.fechaVencimiento=date.today() + timedelta(days=contador)
-                dia=cuota.fechaVencimiento.strftime(fms)
-                if dia=="Sunday":
-                    cuota.fechaVencimiento==date.today() + timedelta(days=contador+1)
-                else:
-                    if dia=="Saturday":
-                        cuota.fechaVencimiento = date.today() + timedelta(days=contador +2)
-                contador=contador+31
-                cuota.save()
-                cuota.hacer("Cancelacion")
-            messages.add_message(request, messages.SUCCESS, 'Financiacion registrada')
-            tramite.pago = pago
-            tramite.save()
-        return redirect('propietario')                              
-    return render(request, 'persona/propietario/elegir_financiacion_propietario.html',{'tramite': tramite, 'ctxpago':registrar_pago(request,tramite.id),'estilos':estilos})
-
 def tramites_para_financiar(request):
     tramites = Tramite.objects.all()
     personas = Persona.objects.all()
@@ -312,30 +277,53 @@ def elegir_financiacion_propietario(request,pk_tramite):
     if request.method == "POST":
         if "Guardar" in request.POST:
             pago = Pago()
-            contador = 31
-            fms = "%A"
+            #contador = 31
+            #fms = "%A"
             for name, value in request.POST.items():
                 if name.startswith('cantidadCuotas'):
                     pago.cantidadCuotas=value
-            total = tramite.monto_a_pagar/int(pago.cantidadCuotas)
             pago.save()
-            for i in range(1, int(pago.cantidadCuotas)+1):
+            cantidad = pago.cantidadCuotas
+            tramite.mactivo = cantidad
+            tramite.save()
+        return render(request, "persona/propietario/seleccionar_modo_pago.html",
+                      {'tramite': tramite,'estilos': estilos})
+
+    return render(request, 'persona/propietario/elegir_financiacion_propietario.html',{'tramite': tramite,'estilos':estilos})
+
+def seleccionar_modo_pago(request, pk_tramite):
+    estilos = ''
+    usuario = request.user
+    propietario = get_object_or_404(Propietario, pk=usuario.persona.propietario.pk)
+    if propietario.estilo:
+        estilos = propietario.estilo
+    tramite = get_object_or_404(Tramite, pk=pk_tramite)
+    if request.method == "POST":
+        if "Guardar" in request.POST:
+            pago = Pago()
+            contador = 31
+            fms = "%A"
+            pago.cantidadCuotas = tramite.mactivo
+            total = tramite.monto_a_pagar / int(pago.cantidadCuotas)
+            pago.save()
+            for i in range(1, int(pago.cantidadCuotas) + 1):
                 cuota = Cuota(monto=total, numeroCuota=i, pago=pago)
-                cuota.fechaVencimiento=date.today() + timedelta(days=contador)
-                dia=cuota.fechaVencimiento.strftime(fms)
-                if dia=="Sunday":
-                    cuota.fechaVencimiento==date.today() + timedelta(days=contador+1)
+                cuota.fechaVencimiento = date.today() + timedelta(days=contador)
+                dia = cuota.fechaVencimiento.strftime(fms)
+                if dia == "Sunday":
+                    cuota.fechaVencimiento == date.today() + timedelta(days=contador + 1)
                 else:
-                    if dia=="Saturday":
-                        cuota.fechaVencimiento = date.today() + timedelta(days=contador +2)
-                contador=contador+31
+                    if dia == "Saturday":
+                        cuota.fechaVencimiento = date.today() + timedelta(days=contador + 2)
+                contador = contador + 31
                 cuota.save()
                 cuota.hacer("Cancelacion")
-            messages.add_message(request, messages.SUCCESS, 'Todo bien =)')
+            messages.add_message(request, messages.SUCCESS, 'Financiacion registrada')
             tramite.pago = pago
             tramite.save()
         return redirect('propietario')
-    return render(request, 'persona/propietario/elegir_financiacion_propietario.html',{'tramite': tramite, 'estilos':estilos})
+    return render(request, "persona/propietario/seleccionar_modo_pago.html",{'tramite': tramite, 'ctxpago': registrar_pago_propietario(request, tramite.id),
+                       'estilos': estilos})
 
 def registrar_pago_propietario(request,pk_tramite):
     estilos = ''
@@ -437,7 +425,7 @@ def pagarCuota_propietario(cuota):
     contexto = {'tramite':tramite, 'estilos':estilos}
     return tramite
 
-def pagar_cuota_propietario(request,pk_cuota):
+def generar_factura_electronica(request,pk_cuota):
     estilos = ''
     usuario = request.user
     propietario = get_object_or_404(Propietario, pk=usuario.persona.propietario.pk)
@@ -445,8 +433,22 @@ def pagar_cuota_propietario(request,pk_cuota):
         estilos = propietario.estilo
     cuota = get_object_or_404(Cuota, pk=pk_cuota)
     tiposPagos = Tipo_Pago.objects.all()
-    return render(request, 'persona/propietario/pagar_cuota_propietario.html', {'cuota':cuota, 'tiposPagos':tiposPagos, 'estilos':estilos})
+    return render(request, 'persona/propietario/generar_factura_electronica.html', {'cuota':cuota, 'tiposPagos':tiposPagos, 'estilos':estilos})
 
+
+def generar_electronica(request, pk_cuota):
+    estilos = ''
+    usuario = request.user
+    propietario = get_object_or_404(Propietario, pk=usuario.persona.propietario.pk)
+    if propietario.estilo:
+        estilos = propietario.estilo
+    cuota = get_object_or_404(Cuota, pk=pk_cuota)
+    pago = cuota.pago
+    tramite = get_object_or_404(Tramite, pago=pago)
+    #raise Exception(tramite)
+    contexto = {'tramite': tramite, 'cuota': cuota, 'estilos':estilos}
+    return render(request, 'persona/propietario/registrar_pago_tramite_propietario.html', contexto)
+'''
 def pagar1_propietario(request, pk_cuota):
     estilos = ''
     usuario = request.user
@@ -472,7 +474,7 @@ def pagar1_propietario(request, pk_cuota):
     messages.add_message(request, messages.SUCCESS, 'Pago Registrado.')
     contexto = {'tramite': tramite, 'pago': pago, 'cuota': cuota, 'estilos':estilos}
     return render(request, 'persona/propietario/registrar_pago_tramite_propietario.html', contexto)
-
+'''
 def pagar_propietario(request):
     estilos = ''
     usuario = request.user
@@ -512,6 +514,20 @@ def elegir_cuota_propietario(request,pk_cuota):
     messages.add_message(request, messages.SUCCESS, 'Pago Registrado.')
     return render(request, 'persona/propietario/actualizar_cuota_propietario.html',{'cuota':cuota, 'estilos':estilos})
 
+def factura_electronica_a_pagar(request,pk_cuota):
+    estilos = ''
+    usuario = request.user
+    propietario = get_object_or_404(Propietario, pk=usuario.persona.propietario.pk)
+    if propietario.estilo:
+        estilos = propietario.estilo
+    cuota = get_object_or_404(Cuota, pk=pk_cuota)
+    value = "estilo3"
+    pago = cuota.pago
+    tramite = get_object_or_404(Tramite, pago=pago)
+    if estilos == value:
+        return render(request, 'persona/propietario/electronica_propietario_modoNocturno.html',{'cuota': cuota, 'tramite':tramite,'estilos':estilos})
+    return render(request, 'persona/propietario/electronica_propietario.html',{'cuota': cuota, 'tramite':tramite,'estilos':estilos})
+
 def comprobante_pago_cuota_propietario(request,pk_cuota):
     estilos = ''
     usuario = request.user
@@ -523,7 +539,7 @@ def comprobante_pago_cuota_propietario(request,pk_cuota):
     pago = cuota.pago
     tramite = get_object_or_404(Tramite, pago=pago)
     if estilos == value:
-        return render(request, 'persona/propietario/comprobante_propietario_modoNocturno.html',{'cuota': cuota, 'pago':pago,'tramite':tramite,'estilos':estilos})
+        return render(request, 'persona/propietario/electronica_propietario_modoNocturno.html',{'cuota': cuota, 'pago':pago,'tramite':tramite,'estilos':estilos})
     return render(request, 'persona/propietario/comprobante_propietario.html',{'cuota': cuota, 'pago':pago,'tramite':tramite,'estilos':estilos})
 
 def registrar_el_pago_tramite_propietario(request):
@@ -2884,7 +2900,7 @@ def edit_categoria_inspeccion(request, pk_categoria):
         else:
             messages.add_message(request, messages.ERROR, "La categoria de inspeccion no pudo ser modificada (nombre existente)")
         return redirect('director')
-    return render(request, "persona/director/edit_elemento_visado.html", {'form':form})
+    return render(request, "persona/director/edit_categoria_inspeccion.html", {'form':form})
 
 def delete_categoria_inspeccion(request, pk_categoria):
     categoria = CategoriaInspeccion.objects.get(id=pk_categoria)
