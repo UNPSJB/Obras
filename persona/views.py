@@ -1178,6 +1178,56 @@ def ver_documentos_tramite_administrativo(request, pk_tramite):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
     return render(request, 'persona/administrativo/vista_de_documentos_administrativo.html', {'tramite': tramite})
 
+def documentos_administrativo(request, pk_tramite):
+    tramite = get_object_or_404(Tramite, pk=pk_tramite)
+    contexto0 = {'tramite': tramite}
+    pk = int(pk_tramite)
+    estados = Estado.objects.all()
+    estados_de_tramite = filter(lambda e: (e.tramite.pk == pk), estados)
+    contexto1 = {'estados_del_tramite': estados_de_tramite}
+    fechas_del_estado = [];
+    for est in estados_de_tramite:
+        fechas_del_estado.append(est.timestamp.strftime("%d/%m/%Y"));
+    return render(request, 'persona/administrativo/documentos_administrativo.html', {"tramite": contexto0, "estadosp": contexto1, "fecha":fechas_del_estado})
+
+def documento_de_estado_administrativo(request, pk_estado):
+    estado = get_object_or_404(Estado, pk=pk_estado)
+    fecha = estado.timestamp
+    fecha_str = date.strftime(fecha, '%d/%m/%Y %H:%M')
+    documentos = estado.tramite.documentos.all()
+    documentos_fecha = filter(lambda e: (date.strftime(e.fecha, '%d/%m/%Y %H:%M') == fecha_str), documentos)
+    contexto = {'documentos_de_fecha': documentos_fecha}
+    planillas = []
+    inspecciones = []
+    documento = estado.tramite.documentacion_para_estado(estado)
+    if (estado.tipo == 1 or estado.tipo == 2):
+        contexto = {'documentos': documentos}
+    if (estado.tipo > 2 and estado.tipo < 5):
+        for p in PlanillaDeVisado.objects.all():
+            if (p.tramite.pk == estado.tramite.pk):
+                planillas.append(p)
+        filas = FilaDeVisado.objects.all()
+        columnas = ColumnaDeVisado.objects.all()
+
+        contexto = {
+            'documentos_de_fecha': documentos_fecha,
+            'planillas': planillas,
+            'filas': filas,
+            'columnas': columnas,
+        }
+    if (estado.tipo > 5 and estado.tipo < 8):
+        for p in PlanillaDeInspeccion.objects.all():
+            if (p.tramite.pk == estado.tramite.pk):
+                inspecciones.append(p)
+        items = ItemInspeccion.objects.all()
+        categorias = CategoriaInspeccion.objects.all()
+        contexto = {
+            'inspecciones': inspecciones,
+            'items': items,
+            'categorias': categorias,
+        }
+    return render(request, 'persona/administrativo/documento_de_estado_administrativo.html', contexto)
+
 def listado_profesionales(request):
     tramites = Tramite.objects.all()  # puse con inspeccion solo para fines de mostrar algo
     profesionales = Profesional.objects.all()

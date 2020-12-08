@@ -72,6 +72,10 @@ urlpatterns = [
     url(r'^crearusuario/(?P<pk_propietario>\d+)/$', views.crear_usuario, name="crear_usuario"),
     url(r'^administrativo/tramite_listar$', views.listado_de_tramites_iniciados, name="tramite_listar"),
     url(r'^ver_certificado/(?P<pk>\d+)/$', ver_un_certificado.as_view(), name="ver_certificado"),
+    url(r'^documentos_administrativo/(?P<pk_tramite>\d+)/$', views.documentos_administrativo,
+        name="documentos_administrativo"),
+    url(r'^documento_de_estado_administrativo/(?P<pk_estado>\d+)/$', views.documento_de_estado_administrativo, name="documento_de_estado_administrativo"),
+
     url(r'^documentos_tramite_administrativo/(?P<pk_tramite>\d+)/$', views.ver_documentos_tramite_administrativo, name="ver_documentos_tramite_administrativo"),
     url(r'^rechazar_tramite/(?P<pk_tramite>\d+)/$', views.rechazar_tramite, name="rechazar_tramite"),
     url(r'^aceptar_tramite/(?P<pk_tramite>\d+)/$', views.aceptar_tramite, name="aceptar_tramite"),
