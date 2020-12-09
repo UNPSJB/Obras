@@ -33,18 +33,25 @@
                   </td>
                   <td class="col-xs-2">{{ tramite.propietario.persona}}</td>
                   <td class="col-xs-1">
-                    <a href="">
+                    <a href="{% url 'documentos_administrativo' pk_tramite=tramite.id %}">
                       <button type="button" class="btn btn-primary btn-xs" name="ver-certificado">
                         <span class="glyphicon glyphicon-search" aria-hidden="true"> Ver</span>
                       </button>
                     </a>
                   </td>
                   <td class="col-xs-1">
-                    <a href="{% url 'habilitar_final_obra' pk_tramite=tramite.id %}">
-                      <button type="button" class="btn btn-primary btn-xs" name="habilitar">
-                        <span class="glyphicon glyphicon-ok" aria-hidden="true"> Habilitar</span>
-                      </button>
+                      {%if tramite.estado.tipo ==  8%}
+                       <a href="{% url 'habilitar_final_obra' pk_tramite=tramite.id %}">
+                          <button type="button" class="btn btn-primary btn-xs" name="habilitar">
+                            <span class="glyphicon glyphicon-home" aria-hidden="true"> Habilitar</span>
+                          </button>
+                        </a>
                     </a>
+                     {%else%}
+                          <button class="btn btn-primary btn-xs" name="" disabled>
+                            <span class="glyphicon glyphicon-home"> Habilitar</span>
+                          </button>
+                     {%endif%}
                   </td>
                 </tr>
               {% endfor %}
