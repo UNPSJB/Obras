@@ -3,11 +3,11 @@
 {% load crispy_forms_tags%}
 
 {% block barra %}
-<ul class="sidebar sidebar-1">
-    <font size="2">
-        <li><a class="current"><font color="white">Planilla de visado</font> </a></li>
-    </font>
-</ul>
+	<ul class="sidebar sidebar-1">
+		<font size="2">
+			<li><a href="{% url 'visador'  %}" class="current"><font color="white">Planilla de visado</font></a></li>
+		</font>
+	</ul>
 {% endblock %}
 
 {% block contenido %}
@@ -150,7 +150,7 @@
                             <div class="container-fluid">
                                 <div class="form-group">
                                     <div class="col-sm-8 col-md-8 col-xs-8 col-lg-8">
-                                        <input class="form-control input-sm" id="id_monto_a_pagar" name="monto" type="number" step="any" placeholder="Ingresar monto" title="Monto" min=0 maxlength="15"  value="{{monto|default_if_none:'Ingresar monto'}}" required/>
+                                        <input class="form-control input-sm" id="id_monto_a_pagar" name="monto" type="number" step="any" placeholder="Ingresar monto" title="Monto" min="1000" max="9999999999"  value="{{monto|default_if_none:'Ingresar monto'}}" required/>
                                     </div>
                                     <div class="col-sm-4 col-md-4 col-xs-4 col-lg-4">
                                         <input type="hidden" id="id_tram" value="{{tramite.id}}">
@@ -262,7 +262,7 @@
 
                                         <div class="row">
                                             <div class="col-sm-8 col-md-8 col-xs-8 col-lg-8">
-                                                <input class="form-control input-sm" id="id_monto_a_pagar" name="monto" type="number" step="any" placeholder="Ingresar monto" title="Monto" min=0 maxlength="15"  value="{{monto|default_if_none:'Ingresar monto'}}" required/>
+                                                <input class="form-control input-sm" id="id_monto_a_pagar" name="monto" type="number" step="any" placeholder="Ingresar monto" title="Monto" min="1000" max="9999999999"  value="{{monto|default_if_none:'Ingresar monto'}}" required/>
                                             </div>
                                             <div class="col-sm-4 col-md-4 col-xs-4 col-lg-4">
                                                 <input type="hidden" id="id_tram" value="{{tramite.id}}">

@@ -20,39 +20,20 @@ urlpatterns = [
     url(r'^propietario/documentos_de_estado/(?P<pk_estado>\d+)/$', views.documentos_de_estado, name="documentos_de_estado"),
     url(r'^propietario/financiar', views.tramites_para_financiar, name="financiar"),
     url(r'^propietario/elegir_financiacion_propietario/(?P<pk_tramite>\d+)/$', views.elegir_financiacion_propietario, name="financiar_propietario"),
-
     url(r'^propietario/tramites_para_financiar_propietario$', views.listado_tramites_para_financiar_propietario,
         name="tramites_para_financiar_propietario$"),
-
-    #url(r'^cajero/tramites_para_financiar$', views.listado_tramites_para_financiar, name="tramites_para_financiar"),
     url(r'^propietario/elegir_financiacion_propietario/(?P<pk_tramite>\d+)/$', views.elegir_financiacion_propietario, name="financiar_propietario"),
-    url(r'^propietario/listado_tramites_a_pagar_propietario', views.listado_tramites_a_pagar_propietario, name="listado_tramites_a_pagar_propietario"),
-    url(r'^propietario/registrar_pago_propietario$', views.pagar_propietario, name="pagar_propietario"),
-    url(r'^propietario/actualizar_cuota_propietario/(?P<pk_cuota>\d+)$', views.elegir_cuota_propietario, name="elegir_cuota_propietario"),
     url(r'^propietario/elegir_tramite_propietario/(?P<pk_tramite>\d+)$', views.elegir_tramite_propietario, name="elegir_tramite_propietario"),
-    url(r'^propietario/registrar_pago_tramite_propietario$', views.registrar_el_pago_tramite_propietario, name="registrar_pago_tramite_propietario"),
-    url(r'^propietario/registrar_pago_tramite_propietario.html(?P<pk_cuota>\d+)$', views.registrar_el_pago_tramite_propietario,
-        name="registrar_pago_tramite_propietario"),
-    #url(r'^propietario/relizar_pago_propietario.html/(?P<pk_cuota>\d+)/$', views.pagar1_propietario, name="pagar1_propietario"),
-    url(r'^propietario/registrar_pago_propietario.html/(?P<pk_cuota>\d+)/$', views.comprobante_pago_cuota_propietario,  name="comprobante_pago_cuota_propietario"),
-    url(r'^propietario/listado_de_comprobantes_propietario/(?P<pk_tramite>\d+)$', views.listado_de_comprobantes_propietario,
+        url(r'^propietario/listado_de_comprobantes_propietario/(?P<pk_tramite>\d+)$', views.listado_de_comprobantes_propietario,
         name="listado_de_comprobantes_propietario"),
     url(r'^propietario/listado_tramites_propietario$', views.listado_tramites_propietario, name="listado_tramites_propietario"),
     url(r'^propietario/listado_tramites_comprobantes_propietario$', views.listado_tramites_propietario, name="listado_tramites_propietario"),
     url(r'^propietario/listado_comprobantes_propietario/(?P<pk_tramite>\d+)$', views.listado_comprobantes_propietario, name="listado_comprobantes_propietario"),
-    url(r'^propietario/generar_factura_electronica/(?P<pk_cuota>\d+)/$', views.generar_factura_electronica, name="generar_factura_electronica"),
-
-    #url(r'^propietario_solicita_final_obraDos/(?P<pk_tramite>\d+)/$', views.propietario_solicita_final_obraDos,
-     #   name="propietario_solicita_final_obraDos"),
-
     url(r'^planilla_inspeccion_impresa_propietario/(?P<pk_tramite>\d+)/$', views.planilla_inspeccion_impresa_propietario, name="planilla_inspeccion_impresa_propietario"),
     url(r'^planilla_visado_impresa_propietario/(?P<pk_tramite>\d+)/$', views.planilla_visado_impresa_propietario, name="planilla_visado_impresa_propietario"),
-
     url(r'^propietario/seleccionar_modo_pago/(?P<pk_tramite>\d+)$', views.seleccionar_modo_pago,
         name="seleccionar_modo_pago"),
-    url(r'^propietario/relizar_pago_propietario.html/(?P<pk_cuota>\d+)/$', views.generar_electronica, name="generar_electronica"),
-    url(r'^propietario/registrar_pago_propietario.html/(?P<pk_cuota>\d+)/$', views.factura_electronica_a_pagar,
-        name="factura_electronica_a_pagar"),
+    url(r'^propietario/registrar_pago_propietario.html/(?P<pk_cuota>\d+)/$', views.comprobante_pago_cuota_propietario,  name="comprobante_pago_cuota_propietario"),
 
     # profesional ---------------------------------------------------------------------------------------------------
     url(r'^profesional$', views.mostrar_profesional, name="profesional"),
@@ -62,7 +43,6 @@ urlpatterns = [
     url(r'^enviar_correcciones/(?P<pk_tramite>\d+)/$', views.enviar_correcciones, name="enviar_correcciones"),
     url(r'^profesional/estado_tramite$', views.listado_tramites_de_profesional, name="estado_tramite"),
     url(r'^documento_de_estado/(?P<pk_estado>\d+)/$', views.documento_de_estado, name="documento_de_estado"),
-    #url(r'^obtener_documentos_de_estado/(?P<pk_estado>\d+)/$', views.obtener_documentos_de_estado, name="obtener_documentos_de_estado"),
     url(r'^reporte_tramites_profesional_pdf/$', login_required(ReporteTramitesProfesionalPdf.as_view()), name="reporte_tramites_profesional_pdf"),
     url(r'^planilla_inspeccion_impresa/(?P<pk_tramite>\d+)/$', views.planilla_inspeccion_impresa, name="planilla_inspeccion_impresa"),
     url(r'^planilla_visado_impresa/(?P<pk_tramite>\d+)/$', views.planilla_visado_impresa, name="planilla_visado_impresa"),
@@ -79,22 +59,18 @@ urlpatterns = [
     url(r'^listado_profesionales$', views.listado_profesionales, name="listado_profesionales"),
     url(r'^reporte_listado_profesional_pdf/$', login_required(ReporteProfesionalesPdf.as_view()), name="reporte_listado_profesional_pdf"),
     url(r'^lista_profesionales_imprimible', views.lista_profesionales_imprimible, name="lista_profesionales_imprimible"),
-
     url(r'^reporte_tramites_corregidos_excel/', ReporteTramitesCorregidosExcel.as_view(),
         name="reporte_tramites_corregidos_excel"),
     url(r'^reporte_tramites_corregidos_pdf/$', login_required(ReporteTramitesCorregidosPdf.as_view()),
         name="reporte_tramites_corregidos_pdf"),
-
     url(r'^reporte_tramites_iniciados_excel/', ReporteTramitesIniciadosExcel.as_view(),
         name="reporte_tramites_iniciados_excel"),
     url(r'^reporte_tramites_iniciados_pdf/$', login_required(ReporteTramitesIniciadosPdf.as_view()),
         name="reporte_tramites_iniciados_pdf"),
-
     url(r'^reporte_profesionales_activos_excel/', ReporteProfesionalesActivosExcel.as_view(),
         name="reporte_profesionales_activos_excel"),
     url(r'^reporte_profesionales_activos_pdf/$', login_required(ReporteProfesionalesActivosPdf.as_view()),
         name="reporte_profesionales_activos_pdf"),
-
     url(r'^reporte_solicitud_final_obra_excel/', ReporteSolicitudFinalObraExcel.as_view(),
         name="reporte_solicitud_final_obra_excel"),
     url(r'^reporte_solicitud_final_obra_pdf/$', login_required(ReporteSolicitudFinalObraPdf.as_view()),
@@ -111,9 +87,7 @@ urlpatterns = [
     url(r'^visador/cargar_planilla_visado/(?P<pk_tramite>\d+)/$', views.cargar_planilla_visado, name="cargar_planilla_visado"),
     url(r'^visador/planilla_visado/(?P<pk_tramite>\d+)/$', views.planilla_visado, name="planilla_visado"),
     url(r'^generar_planilla_impresa/(?P<pk_tramite>\d+)/$', views.generar_planilla_impresa, name="generar_planilla_impresa"),
-
     url(r'^tramites_visados_imprimible', views.tramites_visados_imprimible, name="tramites_visados_imprimible"),
-
     url(r'^reporte_tramites_visados_excel/', ReporteTramitesVisadosExcel.as_view(),
         name="reporte_tramites_visados_excel"),
     url(r'^reporte_tramites_visados_pdf/$', login_required(ReporteTramitesVisadosPdf.as_view()),
@@ -130,19 +104,20 @@ urlpatterns = [
     url(r'^documentos_tramite_inspector/(?P<pk_tramite>\d+)/$', views.ver_documentos_tramite_inspector, name="documentos_tramite_inspector"),
     url(r'^inspector/documentos_del_estado_inspector/(?P<pk_estado>\d+)/$', views.documentos_inspector_estado, name="documentos_del_estado_inspector"),
     url(r'^generar_planilla_impresa_inspeccion/(?P<pk_tramite>\d+)/$', views.generar_planilla_impresa_inspeccion, name="generar_planilla_impresa_inspeccion"),
-
     url(r'^reporte_tramites_agendar_excel/', ReporteTramitesAgendarInspeccionExcel.as_view(),
         name="reporte_tramites_agendar_excel"),
     url(r'^reporte_tramites_agendar_pdf/$', login_required(ReporteTramitesAgendarInspeccionPdf.as_view()),
         name="reporte_tramites_agendar_pdf"),
+
     #jefeinspector --------------------------------------------------------------------------------------------------
-    url(r'^jefeinspector$', views.mostrar_jefe_inspector, name="jefeinspector"),
+    url(r'^jefeinspector$', views.mostrar_jefe_inspector, name="jefe_inspector"),
     url(r'^inspeccion_final/(?P<pk_tramite>\d+)/$', views.inspeccion_final, name="inspeccion_final"),
     url(r'^agendar_inspeccion_final/(?P<pk_tramite>\d+)/$', views.agendar_inspeccion_final, name="agendar_inspeccion_final"),
     url(r'^aceptar_inspeccion_final/(?P<pk_tramite>\d+)/$', views.aceptar_inspeccion_final, name="aceptar_inspeccion_final"),
     url(r'^listados_inspecciones/$', views.listado_inspecciones, name="listado_inspecciones"),
     url(r'^completar_inspeccion_final/(?P<pk_tramite>\d+)/$', views.completar_inspeccion_final, name="completar_inspeccion_final"),
     url(r'^ver_inspecciones/(?P<pk_tramite>\d+)/$', views.ver_inspecciones, name="todas_las_inspecciones"),
+    url(r'^planilla_inspeccion_impresa_jefeinspector/(?P<pk_tramite>\d+)/$', views.planilla_inspeccion_impresa_jefeinspector, name="planilla_inspeccion_impresa_jefeinspector"),
 
     #director -------------------------------------------------------------------------------------------------------
     url(r'^director$', views.mostrar_director, name="director"),
@@ -166,7 +141,6 @@ urlpatterns = [
     url(r'^reporte_inspeccionesDirector_pdf/', ReporteInspeccionesDirectorPdf.as_view(), name="reporte_inspeccionesDirector_pdf"),
     url(r'^ver_filtro_obra_fechas', views.ver_filtro_obra_fechas, name="ver_filtro_obra_fechas"),
     url(r'^ver_sectores_con_mas_obras', views.ver_sectores_con_mas_obras, name="ver_sectores_con_mas_obras"),
-#    url(r'^tipos_obras_periodo_fechas', views.ver_filtro_obra_fechas, name="tipos_obras_periodo_fechas"),
     url(r'^director/inspecciones_realizadas_durante_el_anio', views.inspecciones_realizadas_durante_el_anio, name="inspecciones_realizadas_durante_el_anio"),
     url(r'^vista_de_todos_tramites$', views.ver_todos_tramites, name="vista_de_todos_tramites"),
     url(r'^listado_de_usuarios_segun_grupo', views.ver_listado_usuarios, name="listado_de_usuarios_segun_grupo"),
@@ -175,7 +149,6 @@ urlpatterns = [
     url(r'^delete_tipoObra/(?P<pk_tipoObra>\d+)$', views.delete_tipoObra, name="delete_tipoObra"),
     url(r'^edit_fila_visado/(?P<pk_fila>\d+)$', views.edit_fila_visado, name="edit_fila_visado"),
     url(r'^delete_fila_visado/(?P<pk_fila>\d+)$', views.delete_fila_visado, name="delete_fila_visado"),
-    #url(r'^listado_tiposPago', views.listado_tiposPago, name="listado_tiposPago"),
     url(r'^editar_tipoPago/(?P<pk_tipoPago>\d+)$', views.editar_tipoPago, name="editar_tipoPago"),
     url(r'^delete_tipo_pago/(?P<pk_tipoPago>\d+)$', views.delete_tipo_pago, name="delete_tipo_pago"),
     url(r'^edit_columna_visado/(?P<pk_columna>\d+)$', views.edit_columna_visado, name="edit_columna_visado"),
@@ -205,22 +178,19 @@ urlpatterns = [
         name="registrar_pago_tramite"),
     url(r'^cajero/relizar_pago.html/(?P<pk_cuota>\d+)/$', views.pagar1, name="pagar1"),
     url(r'^cajero/registrar_pago.html/(?P<pk_cuota>\d+)/$', views.comprobante_pago_cuota,  name="comprobante_pago_cuota"),
-    # url(r'^cajero/registrar_pago.html/$', views.comprobante_pago_cuota, name="comprobante_pago_cuota"),
     url(r'^cajero/listado_de_comprobantes/(?P<pk_tramite>\d+)$', views.listado_de_comprobantes,
         name="listado_de_comprobantes"),
     url(r'^cajero/listado_tramites$', views.listado_tramites, name="listado_tramites"),
     url(r'^cajero/listado_tramites_comprobantes$', views.listado_tramites, name="listado_tramites"),
     url(r'^cajero/listado_comprobantes/(?P<pk_tramite>\d+)$', views.listado_comprobantes, name="listado_comprobantes"),
     url(r'^cajero/pagar_cuota.html/(?P<pk_cuota>\d+)/$', views.pagar_cuota, name="pagar_cuota"),
+
     #movil -------------------------------------------------------------------------------------------------------
     url(r'^movil$', views.mostrar_inspector_movil_jefe, name="movil_jefe"),
-
     url(r'^movil$', views.mostrar_inspector_movil, name="movil_"),
-
-    #url(r'^movil$', views.movil_inspector, name="movil_inspector"),
     url(r'^inspector_movil$', views.mostrar_inspector_movil, name="inspector_movil"),
     url(r'^listado_inspector_movil$', views.listado_inspector_movil, name="listado_inspector_movil"),
     url(r'^planilla_inspeccion/(?P<pk_tramite>\d+)$', views.planilla_inspeccion_movil, name="planilla_inspeccion_movil"),
-    #url(r'^vista_de_inspecciones/(?P<pk_tramite>\d+)/$', views.ver_inspecciones_movil, name="ver_inspecciones_movil"),
+
 
 ]

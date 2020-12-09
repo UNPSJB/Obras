@@ -6,7 +6,7 @@
 <div id="noImprimir">
     <ul class="sidebar sidebar-1">
         <font size="2">
-            <li><a href="{%url 'jefeinspector' %}" class="current"><font color="white">Jefe Inspector</font></a></li>
+            <li><a href="{%url 'jefe_inspector' %}" class="current"><font color="white">Jefe Inspector</font></a></li>
         </font>
     </ul>
 </div>
@@ -46,7 +46,7 @@
                                         <td>
                                             <div>
                                                 <div class="col-md-4 col-sm-5 col-xs-4 text-center">
-                                                    <a target="_blank" href="{% url 'planilla_inspeccion_impresa' inspeccion.id %}">
+                                                    <a target="_blank" href="{% url 'planilla_inspeccion_impresa_jefeinspector' inspeccion.id %}">
                                                         <button type="button" class="btn btn-primary btn-md">
                                                             <span class="glyphicon glyphicon-search" aria-hidden="true"> Ver</span>
                                                         </button>
@@ -68,7 +68,7 @@
             <div class="container-fluid " id="botones_inspeccion">
                 <div class="row">
                     <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-center">
-                        <button type="button" class="btn btn-primary btn-md" onclick="printDiv('printReady')">Imprimir</button>
+                        <!--<button type="button" class="btn btn-primary btn-md" onclick="printDiv('printReady')">Imprimir</button>-->
                         <a href="{%url 'jefe_inspector'%}">
                             <button class="btn btn-primary btn-md" type="submit" value="Atras">Volver</button>
                         </a>
