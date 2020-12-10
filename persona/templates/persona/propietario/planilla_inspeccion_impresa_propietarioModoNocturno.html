@@ -3,7 +3,7 @@
 
 {% block barra %}
 <ul class="sidebar sidebar-1">
-        <li><a href="{%url 'propietario'%}" class="current"><label id="propietario">Propietario</label></a></li>
+    <li><a href="{%url 'propietario'%}" class="current"><label id="propietario">Propietario</label></a></li>
     </font>
 </ul>
 {% endblock %}
@@ -23,22 +23,24 @@
                         &nbsp; Rivadavia 390 <br>
                         &nbsp; 9100 TRELEW- Provincia del Chubut
 
-                        <h3 id="planillaInspeccion" align="center">
+                        <h3 id="planillaInspeccion" style="color:white " align="center">
                             PLANILLA DE INSPECCION &nbsp;  &nbsp;
                         </h3>
                         <hr style="color=white border-width:">
                         <br>
                         <div class="row">
                             <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6" >
-
-                                <h5 align="left">
-                                    &nbsp; PROPIETARIO:  {{tramite.propietario.persona}} &nbsp;  &nbsp;
-                                </h5>
                                 <h5 align="left">
                                     &nbsp; NRO TRAMITE:  {{tramite.pk}} &nbsp;
                                 </h5>
                                 <h5 align="left">
-                                    &nbsp; DOMICILIO:  {{tramite.domicilio}} &nbsp;  &nbsp;
+                                    &nbsp; PROPIETARIO:  {{tramite.propietario.persona}} &nbsp;  &nbsp;
+                                </h5>
+                                <h5 align="left">
+                                    &nbsp; PROFESIONAL: {{tramite.profesional.persona}}
+                                </h5>
+                                <h5 align="left">
+                                    &nbsp; TIPO DE OBRA: {{tramite.tipo_obra}}
                                 </h5>
                             </div>
                             <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6" >
@@ -52,38 +54,38 @@
 
                     <div class="row">
                         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" >
-                                <div class="row">
-                                    <div class=" col-xs-12 col-sm-12 col-md-12 col-lg-12" >
-                                            <hr style="border-width:">
-                                            <h5 align="left">
-                                                <font color="white">DATOS CATASTRALES&nbsp;  &nbsp;</font>
-                                            </h5>
-                                            <div class="table-responsive">
-                                                <table align="center" style="text-align:center;">
-                                                    <thead>
-                                                    <tr>
-                                                        <th>Medidas</th>
-                                                        <th>Domicilio</th>
-                                                        <th>Parcela</th>
-                                                        <th>Circunscripcion</th>
-                                                        <th>Manzana</th>
-                                                        <th>Sector</th>
-                                                    </tr>
-                                                    </thead>
-                                                    <tbody>
-                                                    <tr>
-                                                        <td class="col-xs-1" align="center" bgcolor="black"><font color="white">{{tramite.medidas}}</td>
-                                                        <td class="col-xs-2" align="center"bgcolor="black"><font color="white">{{tramite.domicilio}}</td>
-                                                        <td class="col-xs-3" align="center"bgcolor="black"><font color="white">{{tramite.parcela}}</td>
-                                                        <td class="col-xs-4" align="center"bgcolor="black"><font color="white">{{tramite.circunscripcion}}</td>
-                                                        <td class="col-xs-5" align="center"bgcolor="black"><font color="white">{{tramite.manzana}}</td>
-                                                        <td class="col-xs-6" align="center"bgcolor="black"><font color="white">{{tramite.sector}}</td>
-                                                    </tr>
-                                                    </tbody>
-                                                </table>
-                                            </div>
+                            <div class="row">
+                                <div class=" col-xs-12 col-sm-12 col-md-12 col-lg-12" >
+                                    <hr style="border-width:">
+                                    <h5 align="left">
+                                        <font color="white">DATOS CATASTRALES&nbsp;  &nbsp;</font>
+                                    </h5>
+                                    <div class="table-responsive">
+                                        <table align="center" style="text-align:center;">
+                                            <thead>
+                                            <tr>
+                                                <th>Medidas</th>
+                                                <th>Domicilio</th>
+                                                <th>Parcela</th>
+                                                <th>Circunscripcion</th>
+                                                <th>Manzana</th>
+                                                <th>Sector</th>
+                                            </tr>
+                                            </thead>
+                                            <tbody>
+                                            <tr>
+                                                <td class="col-xs-1" align="center" bgcolor="black"><font color="white">{{tramite.medidas}}</td>
+                                                <td class="col-xs-2" align="center"bgcolor="black"><font color="white">{{tramite.domicilio}}</td>
+                                                <td class="col-xs-3" align="center"bgcolor="black"><font color="white">{{tramite.parcela}}</td>
+                                                <td class="col-xs-4" align="center"bgcolor="black"><font color="white">{{tramite.circunscripcion}}</td>
+                                                <td class="col-xs-5" align="center"bgcolor="black"><font color="white">{{tramite.manzana}}</td>
+                                                <td class="col-xs-6" align="center"bgcolor="black"><font color="white">{{tramite.sector}}</td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
                                     </div>
                                 </div>
+                            </div>
                         </div>
                     </div>
                     <br>

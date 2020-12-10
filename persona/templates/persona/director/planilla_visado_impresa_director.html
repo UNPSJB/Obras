@@ -15,7 +15,7 @@
         <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" >
             <div class="row">
                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                    <div style="background-color:2c3e50;">
+                    <div style="background-color:#2c3e50;">
                         <img src="/media/imagenes/Escudobanner.png" class="img-responsive" alt="Escudo banner" width="100" height="100">
                     </div>
                     <div align="justify" id="municipalidadVisado" style="font-size:9px; text-align:left;">
@@ -23,52 +23,60 @@
                         <br>
                         &nbsp; Rivadavia 390 <br>
                         &nbsp; 9100 TRELEW- Provincia del Chubut
+                        <h3 id="planillaVisado" align="center">
+                            PLANILLA DE VISADO &nbsp;  &nbsp;
+                        </h3>
+                        <hr style="border-width:">
+                        <div class="row">
+                            <div class=" col-xs-12 col-sm-12 col-md-12 col-lg-12">
+
+                                <h5 align="left">
+                                    NRO TRAMITE: {{tramite.id}} &nbsp;  &nbsp;
+                                </h5>
+                                <h5 align="left">
+                                    PROPIETARIO: {{tramite.propietario.persona}} &nbsp;  &nbsp;
+                                </h5>
+                                <h5 align="left">
+                                    PROFESIONAL: {{tramite.profesional.persona}} &nbsp;  &nbsp;
+                                </h5>
+                                <h5 align="left">
+                                    TIPO DE OBRA: {{tramite.tipo_obra}} &nbsp;  &nbsp;
+                                </h5>
+                            </div>
+                        </div>
                     </div>
-                    <h3 id="planillaVisado" align="center">
-                        PLANILLA DE VISADO &nbsp;  &nbsp;
-                    </h3>
-                    <hr style="border-width:">
                     <div class="row">
-                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                                <div class="row">
-                                    <div class=" col-xs-12 col-sm-12 col-md-12 col-lg-12">
-
-                                            <h5 align="left">
-                                                NRO TRAMITE: {{tramite.id}} &nbsp;  &nbsp;
-                                            </h5>
-                                            <h5 align="left">
-                                                PROPIETARIO: {{tramite.propietario.persona}} &nbsp;  &nbsp;
-                                            </h5>
-                                            <h5 align="left">
-                                                    PROFESIONAL: {{tramite.profesional.persona}} &nbsp;  &nbsp;
-                                            </h5>
-                                            <h5 align="left">
-                                                    TIPO DE OBRA: {{tramite.tipo_obra}} &nbsp;  &nbsp;
-                                            </h5>
-
-
-                                    </div>
-                                </div>
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" >
+                            <hr style="border-width:">
+                            <h5 align="left">
+                                DATOS CATASTRALES&nbsp;  &nbsp;
+                            </h5>
+                            <div class="table-responsive">
+                                <table align="center" style="text-align:center;">
+                                    <thead>
+                                    <tr>
+                                        <th>Medidas</th>
+                                        <th>Domicilio</th>
+                                        <th>Parcela</th>
+                                        <th>Circunscripcion</th>
+                                        <th>Manzana</th>
+                                        <th>Sector</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <td class="col-xs-1" align="center">{{tramite.medidas}}</td>
+                                        <td class="col-xs-2" align="center">{{tramite.domicilio}}</td>
+                                        <td class="col-xs-3" align="center">{{tramite.parcela}}</td>
+                                        <td class="col-xs-4" align="center">{{tramite.circunscripcion}}</td>
+                                        <td class="col-xs-5" align="center">{{tramite.manzana}}</td>
+                                        <td class="col-xs-6" align="center">{{tramite.sector}}</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
                         </div>
                     </div>
-                    <!--<div id="rowVisado" class="row">
-                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                            <form action="" >
-                                <div class="row" >
-                                    <div class=" col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                                        <ol>
-                                            <label>PADRON:</h2></label>
-                                            <li> {{tramite.parcela}}</li>
-                                            <label>DATOS PROPIETARIO:</label>
-                                            <li> {{tramite.propietario.persona}}</li>
-                                            <label>DATOS PROFESIONAL:</label>
-                                            <li> {{tramite.profesional}}</li>
-                                        </ol>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                    </div>-->
                     <div class="table-responsive">
                         <table align="center" class="table table-bordered table-striped table-hover table-condensed" style="text-align:center;">
                             <thead>

@@ -31,144 +31,161 @@
                         <br>
                         &nbsp; Rivadavia 390 <br>
                         &nbsp; 9100 TRELEW- Provincia del Chubut
-                    </div>
-                    <h3 align="center">
-                        PLANILLA DE VISADO &nbsp;  &nbsp;
-                    </h3>
-                    <hr style="border-width:">
+                        <h3 align="center">
+                            PLANILLA DE VISADO &nbsp;  &nbsp;
+                        </h3>
+                        <hr style="border-width:">
 
-                    <div class="row">
-                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                            <div class="row">
-
-                                <h5 class=" col-xs-12 col-sm-12 col-md-12 col-lg-12">
-
-                                    <h5 align="left">
-                                     &nbsp;   NRO TRAMITE: {{tramite.id}} &nbsp;  &nbsp;
-                                    </h5>
-                                    <h5 align="left">
-                                      &nbsp;  PROPIETARIO: {{tramite.propietario.persona}} &nbsp;  &nbsp;
-                                    </h5>
-                                    <h5 align="left">
-                                      &nbsp;  PROFESIONAL: {{tramite.profesional.persona}} &nbsp;  &nbsp;
-                                    </h5>
-                                    <h5 align="left">
-                                     &nbsp;   TIPO DE OBRA: {{tramite.tipo_obra}} &nbsp;  &nbsp;
-                                    </h5>
-
+                        <div class="row">
+                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                <h5 align="left">
+                                    &nbsp;   NRO TRAMITE: {{tramite.id}} &nbsp;  &nbsp;
+                                </h5>
+                                <h5 align="left">
+                                    &nbsp;  PROPIETARIO: {{tramite.propietario.persona}} &nbsp;  &nbsp;
+                                </h5>
+                                <h5 align="left">
+                                    &nbsp;  PROFESIONAL: {{tramite.profesional.persona}} &nbsp;  &nbsp;
+                                </h5>
+                                <h5 align="left">
+                                    &nbsp;   TIPO DE OBRA: {{tramite.tipo_obra}} &nbsp;  &nbsp;
                                 </h5>
                             </div>
                         </div>
+                    <div class="row">
+                        <div class=" col-xs-12 col-sm-12 col-md-12 col-lg-12" >
+                            <hr style="border-width:">
+                            <h5 align="left">
+                                DATOS CATASTRALES&nbsp;  &nbsp;
+                            </h5>
+                            <div class="table-responsive">
+                                <table align="center" style="text-align:center;">
+                                    <thead>
+                                    <tr>
+                                        <th>Medidas</th>
+                                        <th>Domicilio</th>
+                                        <th>Parcela</th>
+                                        <th>Circunscripcion</th>
+                                        <th>Manzana</th>
+                                        <th>Sector</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <td class="col-xs-1" align="center">{{tramite.medidas}}</td>
+                                        <td class="col-xs-2" align="center">{{tramite.domicilio}}</td>
+                                        <td class="col-xs-3" align="center">{{tramite.parcela}}</td>
+                                        <td class="col-xs-4" align="center">{{tramite.circunscripcion}}</td>
+                                        <td class="col-xs-5" align="center">{{tramite.manzana}}</td>
+                                        <td class="col-xs-6" align="center">{{tramite.sector}}</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
                     </div>
-                    <div class="table-responsive">
-                        <table align="center" class="table table-bordered table-striped table-hover table-condensed table-responsive" style="text-align:center;">
 
-                            <tr>
-                                <th></th>
-                                {% for columna in columnas %}
-                                {% if columna.activo == True %}
-                                <th>{{columna}}</th>
-                                {% endif %}
-                                {% endfor %}
-                            </tr>
-                            <tbody>
-                            {% for fila in filas %}
-                            {% if fila.activo == True %}
-                            <tr>
-                                <td class="col-xs-1">{{ fila }}</td>
-                                {% for columna in columnas %}
-                                {% if columna.activo == True %}
-                                <td class="col-sm-1">&nbsp;
-                                    {% for item in items %}
-                                    {% if fila == item.fila_de_visado and columna == item.columna_de_visado %}
-                                    <label class="switch">
-                                        <input name="item-{{item.pk}}" type="checkbox" disabled="disabled" checked="checked"><span class="slider round"></span>
-                                    </label>
-                                    {% endif %}
-                                    {% endfor %}
-                                </td>
-                                {% endif %}
-                                {% endfor %}
-                            </tr>
-                            {% endif %}
-                            {% endfor %}
-                            </tbody>
-                            <br>
-                            <table class="table table-bordered table-striped table-hover table-condensed" style="text-align:center;">
-                                <thead>
+                        <div class="table-responsive">
+                            <table align="center" class="table table-bordered table-striped table-hover table-condensed table-responsive" style="text-align:center;">
+
                                 <tr>
                                     <th></th>
-                                    <th>BALANCE DE SUPERFICIE</th>
+                                    {% for columna in columnas %}
+                                    {% if columna.activo == True %}
+                                    <th>{{columna}}</th>
+                                    {% endif %}
+                                    {% endfor %}
                                 </tr>
-                                </thead>
                                 <tbody>
-                                {% for elemento in elementos %}
-                                {% if elemento.activo == True %}
+                                {% for fila in filas %}
+                                {% if fila.activo == True %}
                                 <tr>
-                                    <td class="col-xs-1">{{ elemento }}</td>
-                                    <td class="col-sm-4">
-                                        {%for b in balance%}
-                                        {%if elemento.id == b.id %}
+                                    <td class="col-xs-1">{{ fila }}</td>
+                                    {% for columna in columnas %}
+                                    {% if columna.activo == True %}
+                                    <td class="col-sm-1">&nbsp;
+                                        {% for item in items %}
+                                        {% if fila == item.fila_de_visado and columna == item.columna_de_visado %}
                                         <label class="switch">
-                                            <input name="elemento-{{elemento.id}}" type="checkbox" disabled="disabled" checked="checked"><span class="slider round"></span>
+                                            <input name="item-{{item.pk}}" type="checkbox" disabled="disabled" checked="checked"><span class="slider round"></span>
                                         </label>
-                                        {%endif%}
-                                        {%endfor%}
-
+                                        {% endif %}
+                                        {% endfor %}
                                     </td>
+                                    {% endif %}
+                                    {% endfor %}
                                 </tr>
                                 {% endif %}
                                 {% endfor %}
                                 </tbody>
-                            </table>
-                            {%if obs%}
-                            <table class="table table-bordered table-striped table-hover table-condensed" style="text-align:center;">
-                                <thead>
-                                <tr>
-                                    <th>OBSERVACION</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <tr>
-                                    <td class="col-xs-1">{{ obs }}</td>
-                                </tr>
-                                </tbody>
-                            </table>
-                            {%endif%}
-                        </table>
-                    </div>
+                                <br>
+                                <table class="table table-bordered table-striped table-hover table-condensed" style="text-align:center;">
+                                    <thead>
+                                    <tr>
+                                        <th></th>
+                                        <th>BALANCE DE SUPERFICIE</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for elemento in elementos %}
+                                    {% if elemento.activo == True %}
+                                    <tr>
+                                        <td class="col-xs-1">{{ elemento }}</td>
+                                        <td class="col-sm-4">
+                                            {%for b in balance%}
+                                            {%if elemento.id == b.id %}
+                                            <label class="switch">
+                                                <input name="elemento-{{elemento.id}}" type="checkbox" disabled="disabled" checked="checked"><span class="slider round"></span>
+                                            </label>
+                                            {%endif%}
+                                            {%endfor%}
 
+                                        </td>
+                                    </tr>
+                                    {% endif %}
+                                    {% endfor %}
+                                    </tbody>
+                                </table>
+                                {%if obs%}
+                                <table class="table table-bordered table-striped table-hover table-condensed" style="text-align:center;">
+                                    <thead>
+                                    <tr>
+                                        <th>OBSERVACION</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr>
+                                        <td class="col-xs-1">{{ obs }}</td>
+                                    </tr>
+                                    </tbody>
+                                </table>
+                                {%endif%}
+                            </table>
+                        </div>
+
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
         <div class="container-fluid " id="botones_visado">
-        <div class="row">
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-center">
-                <button type="button" class="btn btn-primary btn-md" onclick="printDiv('printReady')">Imprimir</button>
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-center">
+                    <button type="button" class="btn btn-primary btn-md" onclick="printDiv('printReady')">Imprimir</button>
                     <a href="{% url 'visador' %}">
                         <button class="btn btn-primary btn-md " type="submit" value="Atras">Volver</button>
                     </a>
-                <!--<a href="javascript:history.back(-1);">
-                    <button class="btn btn-primary btn-md" type="submit" value="Atras">Volver</button>
-                </a>-->
+                    <!--<a href="javascript:history.back(-1);">
+                        <button class="btn btn-primary btn-md" type="submit" value="Atras">Volver</button>
+                    </a>-->
+                </div>
             </div>
         </div>
-    </div>
-   <!-- <div class="container-fluid" id="botones_visado" >
-        <div class="row">
-            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-center">
-                <button type="button" class="btn btn-primary btn-md" onclick="printDiv('printReady')">Imprimir</button>
-                <a href="javascript:history.back(-1);">
-                    <button class="btn btn-primary btn-md" type="submit" value="Atras">Volver</button>
-                </a>
-            </div>
-        </div>
-    </div>-->
 
-    <br>
+
+        <br>
+    </div>
 </div>
-<style>
+    <style>
        .dataTables_length, .dataTables_filter, .dataTables_info,.dataTables_wrapper .dataTables_paginate .paginate_button.disabled, .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:hover, .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:active {
           display: none !important;
        }
@@ -187,7 +204,7 @@
        }
     </style>
 
-<script>
+    <script>
     function printDiv(div) {
     // Create and insert new print section
 
@@ -211,65 +228,65 @@
 
 </script>
 
-<!--<style>-->
-<!--.switch {-->
-<!--position: relative;-->
-<!--display: inline-block;-->
-<!--width: 60px;-->
-<!--height: 34px;-->
-<!--}-->
+    <!--<style>-->
+    <!--.switch {-->
+    <!--position: relative;-->
+    <!--display: inline-block;-->
+    <!--width: 60px;-->
+    <!--height: 34px;-->
+    <!--}-->
 
-<!--/* Hide default HTML checkbox */-->
-<!--.switch input {display:none;}-->
+    <!--/* Hide default HTML checkbox */-->
+    <!--.switch input {display:none;}-->
 
-<!--/* The slider */-->
-<!--.slider {-->
-<!--position: absolute;-->
-<!--cursor: pointer;-->
-<!--top: 0;-->
-<!--left: 0;-->
-<!--right: 0;-->
-<!--bottom: 0;-->
-<!--background-color: #ccc;-->
-<!-- -webkit-transition: .4s;-->
-<!--transition: .4s;-->
-<!--}-->
+    <!--/* The slider */-->
+    <!--.slider {-->
+    <!--position: absolute;-->
+    <!--cursor: pointer;-->
+    <!--top: 0;-->
+    <!--left: 0;-->
+    <!--right: 0;-->
+    <!--bottom: 0;-->
+    <!--background-color: #ccc;-->
+    <!-- -webkit-transition: .4s;-->
+    <!--transition: .4s;-->
+    <!--}-->
 
-<!--.slider:before {-->
-<!--position: absolute;-->
-<!--content: "";-->
-<!--height: 26px;-->
-<!--width: 26px;-->
-<!--left: 4px;-->
-<!--bottom: 4px;-->
-<!--background-color: white;-->
-<!-- -webkit-transition: .4s;-->
-<!--transition: .4s;-->
-<!--}-->
+    <!--.slider:before {-->
+    <!--position: absolute;-->
+    <!--content: "";-->
+    <!--height: 26px;-->
+    <!--width: 26px;-->
+    <!--left: 4px;-->
+    <!--bottom: 4px;-->
+    <!--background-color: white;-->
+    <!-- -webkit-transition: .4s;-->
+    <!--transition: .4s;-->
+    <!--}-->
 
-<!--input:checked + .slider {-->
-<!--background-color: #2196F3;-->
-<!--}-->
+    <!--input:checked + .slider {-->
+    <!--background-color: #2196F3;-->
+    <!--}-->
 
-<!--input:focus + .slider {-->
-<!--box-shadow: 0 0 1px #2196F3;-->
-<!--}-->
+    <!--input:focus + .slider {-->
+    <!--box-shadow: 0 0 1px #2196F3;-->
+    <!--}-->
 
-<!--input:checked + .slider:before {-->
-<!-- -webkit-transform: translateX(26px);-->
-<!-- -ms-transform: translateX(26px);-->
-<!--transform: translateX(26px);-->
-<!--}-->
+    <!--input:checked + .slider:before {-->
+    <!-- -webkit-transform: translateX(26px);-->
+    <!-- -ms-transform: translateX(26px);-->
+    <!--transform: translateX(26px);-->
+    <!--}-->
 
-<!--/* Rounded sliders */-->
-<!--.slider.round {-->
-<!--border-radius: 34px;-->
-<!--}-->
+    <!--/* Rounded sliders */-->
+    <!--.slider.round {-->
+    <!--border-radius: 34px;-->
+    <!--}-->
 
-<!--.slider.round:before {-->
-<!--border-radius: 50%;-->
-<!--}-->
-<!--</style>-->
+    <!--.slider.round:before {-->
+    <!--border-radius: 50%;-->
+    <!--}-->
+    <!--</style>-->
 
 
-{% endblock %}
+    {% endblock %}

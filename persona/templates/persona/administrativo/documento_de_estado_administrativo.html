@@ -3,335 +3,142 @@
 
 {% block estilos %}
 
-    <style>
+<style>
 
-    </style>
+</style>
 
 {% endblock %}
 
 {% block barra %}
-	<ul class="sidebar sidebar-1">
-		<font size="2">
-			<li><a href="{% url 'administrativo'  %}" class="current"><font color="white">Administrativo</font></a></li>
-		</font>
-	</ul>
+<ul class="sidebar sidebar-1">
+    <font size="2">
+        <li><a href="{% url 'administrativo'  %}" class="current"><font color="white">Administrativo</font></a></li>
+    </font>
+</ul>
 {% endblock %}
 
 
 {% block contenido %}
-	<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" >
-	  <div class="panel">
-		<div class="panel-heading box" role="tab" id="headingFive">
-		  <h5 class="panel-title">
-			<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
-			  <font color="#ffffff" size="2">Documentos del estado del tramite</font>
-			</a>
-		  </h5>
-		</div>
-		<div id="collapseFive" class="panel-collapse" role="tabpanel" aria-labelledby="headingFive">
-		  <div class="panel-body">
-			<div class="container-fluid">
-				<div class="row">
-                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="...">
+<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" >
+    <div class="panel">
+        <div class="panel-heading box" role="tab" id="headingFive">
+            <h5 class="panel-title">
+                <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+                    <font color="#ffffff" size="2">Documentos del estado del tramite</font>
+                </a>
+            </h5>
+        </div>
+        <div id="collapseFive" class="panel-collapse" role="tabpanel" aria-labelledby="headingFive">
+            <div class="panel-body">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="...">
 
-                        {% for documento in documentos %}
-                                <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+                            {% for documento in documentos %}
+                            <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
                                 <div class="thumbnail ">
-                                        <a id="single_image" href="/media/{{documento.file}}" data-fancybox="images" data-caption="{{documento.tipo_documento}}">
-                                            <img src="/media/{{documento.file}}" width=300 height=300>
-                                        </a>
-                                        <br>
-                                        <p style="color: #17202a; font-style: oblique; text-align: center;">{{documento.tipo_documento}} - {{documento.fecha | date:"c"}} </p>
-                                        <form action="">
-                                            <p align="right" >
+                                    <a id="single_image" href="/media/{{documento.file}}" data-fancybox="images" data-caption="{{documento.tipo_documento}}">
+                                        <img src="/media/{{documento.file}}" width=300 height=300>
+                                    </a>
+                                    <br>
+                                    <p style="color: #17202a; font-style: oblique; text-align: center;">{{documento.tipo_documento}} - {{documento.fecha | date:"c"}} </p>
+                                    <form action="">
+                                        <p align="right" >
                                             <a href="#" class="btn btn-primary btn-collapsible"><i class="glyphicon glyphicon-open"></i><span>  Ampliar</span></a>
-                                            </p>
-                                        </form>
-                                    </div>
+                                        </p>
+                                    </form>
                                 </div>
-                        {% endfor %}
-                     </div>
+                            </div>
+                            {% endfor %}
+                        </div>
                     </div>
 
                     {% if planillas %}
-                        <table class="table-bordered table-striped table-hover table-condensed">
-                            <thead>
-                                <tr>
-                                    <th> Numero de Visado</th>
-                                    <th> Numero de tramite</th>
-                                    <th> </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for planilla in planillas %}
-                                    <tr>
-                                    {% if planilla %}
-                                          <td  class="col-xs-1" align="center">{{planilla.id}}</td>
-                                          <td  class="col-xs-1" align="center">{{planilla.tramite_id}}</td>
-                                          <td>
-                                              <div>
-                                                <div class="col-md-4 col-sm-5 col-xs-4 text-center">
-                                                     <a target="_blank" href="{% url 'planilla_visado_impresa' planilla.id %}">
+                    <table class="table-bordered table-striped table-hover table-condensed">
+                        <thead>
+                        <tr>
+                            <th> Numero de Visado</th>
+                            <th> Numero de tramite</th>
+                            <th> </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for planilla in planillas %}
+                        <tr>
+                            {% if planilla %}
+                            <td  class="col-xs-1" align="center">{{planilla.id}}</td>
+                            <td  class="col-xs-1" align="center">{{planilla.tramite_id}}</td>
+                            <td>
+                                <div>
+                                    <div class="col-md-4 col-sm-5 col-xs-4 text-center">
+                                        <a target="_blank" href="{% url 'planilla_visado_impresa_administrativo' planilla.id %}">
+                                            <button type="button" class="btn btn-primary btn-md">
+                                                <span class="glyphicon glyphicon-search" aria-hidden="true"> Ver</span>
 
-                                                    <button type="button" class="btn btn-primary btn-md">
-                                                        <span class="glyphicon glyphicon-search" aria-hidden="true"> Ver</span>
-
-                                                    </button>
-
-                            </a>
-                                                       <!--<a href="javascript:history.back(-1);">-->
-                                                       <!--<button  class="btn btn-primary" type="submit" value="Atras">Volver</button>-->
-                                                        <!--</a>-->
-                                                </div>
-                                                  <!--<div class="col-md-4 col-sm-5 col-xs-4 text-center">
-                                                                                                        <a href="javascript:history.back(-1);">
-                                                       <button  class="btn btn-primary" type="submit" value="Atras">Volver</button>
-                                                        </a>
-                                                </div>
-                                                <div class="modal" id="{{planilla.id}}" role="document">
-                                                    <div class="modal-dialog">
-                                                        <div class="modal-content">
-                                                            <div class="modal-header">
-                                                              <button type="button" class="close" data-dismiss="modal">X</button>
-                                                              <h4 class="modal-title">Planillita de Visado</h4>
-                                                            </div>
-                                                            <div class="modal-body">
-                                                                <div id="modalContainer1" class="container-fluid">
-                                                                    <div id="container-visado">
-                                                                    block contenido_tramites_visados
-                                                                         include "persona/profesional/planilla_visado_impresa.html" with tramites=ctxvisadosprofesional.visados_del_profesional
-                                                                     endblock
-                                                                    </div>
-                                                                    <br>
-                                                                </div>
-                                                            </div>
-                                                        </div>
-                                                    </div>
-                                                </div>-->
-                                              </div>
-                                          </td>
-                                    {% endif %}
-                                     </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
+                                            </button>
+                                        </a>
+                                    </div>
+                                </div>
+                            </td>
+                            {% endif %}
+                        </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
 
                     {%endif%}
 
                     {%if inspecciones %}
-                        <table class="table-bordered table-striped table-hover table-condensed">
-                            <thead>
-                                <tr>
-                                    <th> Numero de inspeccion</th>
-                                    <th> Numero de tramite</th>
-                                    <th> </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                {% for inspeccion in inspecciones %}
-                                    <tr>
-                                    {% if inspeccion %}
-                                          <td  class="col-xs-1" align="center">{{inspeccion.id}}</td>
-                                          <td  class="col-xs-1" align="center">{{inspeccion.tramite_id}}</td>
-                                          <td>
-                                              <div>
-                                                    <div class="col-md-4 col-sm-5 col-xs-4 text-center">
-                                                        <a target="_blank" href="{% url 'planilla_inspeccion_impresa' inspeccion.id %}">
-                                                            <button type="button" class="btn btn-primary btn-md">
-                                                                <span class="glyphicon glyphicon-search" aria-hidden="true"> Ver</span>
-                                                            </button>
-                                                         </a>
-                                                    </div>
+                    <table class="table-bordered table-striped table-hover table-condensed">
+                        <thead>
+                        <tr>
+                            <th> Numero de inspeccion</th>
+                            <th> Numero de tramite</th>
+                            <th> </th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for inspeccion in inspecciones %}
+                        <tr>
+                            {% if inspeccion %}
+                            <td  class="col-xs-1" align="center">{{inspeccion.id}}</td>
+                            <td  class="col-xs-1" align="center">{{inspeccion.tramite_id}}</td>
+                            <td>
+                                <div>
+                                    <div class="col-md-4 col-sm-5 col-xs-4 text-center">
+                                        <a target="_blank" href="{% url 'planilla_inspeccion_impresa_administrativo' inspeccion.id %}">
+                                            <button type="button" class="btn btn-primary btn-md">
+                                                <span class="glyphicon glyphicon-search" aria-hidden="true"> Ver</span>
+                                            </button>
+                                        </a>
+                                    </div>
 
-                                                <!--<div class="modal" id="{{inspeccion.id}}" role="document">
-                                                    <div class="modal-dialog">
-                                                        <div class="modal-content">
-                                                            <div class="modal-header">
-                                                                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                                                                <h4 class="modal-title">Planilla de Inspeccion</h4>
-                                                            </div>
-                                                            <div class="modal-body">
-                                                                <div id="modalContainer" class="container-fluid">
-                                                                    <div id="container-inspeccion">
-                                                                        contenido_tramites_inspeccionados
-                                                                             include 'persona/profesional/planilla_inspeccion_impresa.html'
-                                                                         endblock
-                                                                    </div>
-                                                                    <br>
-
-                                                                </div>
-                                                            </div>
-                                                            <br>
-                                                        </div>
-                                                    </div>
-                                                </div>-->
-
-                                              </div>
-                                          </td>
-                                    {% endif %}
-                                    </tr>
-                                {% endfor %}
-                            </tbody>
-                        </table>
+                                </div>
+                            </td>
+                            {% endif %}
+                        </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
                     {%endif%}
 
-                    <!-- sin modal
-                    for planilla in planillas
-                     if planilla
-					     block contenido_tramites_visados
-							 include "persona/profesional/planilla_visado_impresa.html" with tramites=ctxvisadosprofesional.visados_del_profesional
-						 endblock
-                     endif
-                     endfor
-                     for inspeccion in inspecciones
-                     if inspeccion
-                         block contenido_tramites_inspeccionados
-							 include "persona/profesional/planilla_inspeccion_impresa.html"
-						 endblock
-                     endif
-                     endfor -->
-                    <!---->
-                    <!--{% for planilla in planillas %}-->
-                    <!--{% if planilla %}-->
-                    <!--<table class="table table-bordered table-striped table-hover table-condensed" style="text-align:center;">-->
-                        <!--<thead>-->
-                            <!--<tr>-->
-                                <!--<th></th>-->
-                                <!--{% for columna in columnas %}-->
-                                    <!--<th>{{columna}}</th>-->
-                                <!--{% endfor %}-->
-                            <!--</tr>-->
-                        <!--</thead>-->
-                        <!--<tbody>-->
-                            <!--{% for fila in filas %}-->
-                                <!--<tr>-->
-                                    <!--<td class="col-xs-1">{{ fila }}</td>-->
-                                        <!--{% for columna in columnas %}-->
-                                                <!--<td class="col-sm-1">&nbsp;-->
-                                                <!--{% for item in planilla.items.all %}-->
-                                                <!--{% if fila == item.fila_de_visado and columna == item.columna_de_visado %}-->
-                                                    <!--<label class="switch">-->
-                                                        <!--<input type="checkbox" disabled="disabled" checked="checked" name="{{fila}}" value="{{fila}}" checked><span class="slider round"></span>-->
-                                                    <!--</label>-->
-                                                <!--{% endif %}-->
-                                            <!--{% endfor %}-->
-                                        <!--</td>-->
-                                    <!--{% endfor %}-->
-                                <!--</tr>-->
-                        <!--{% endfor %}-->
-                        <!--</tbody>-->
-                    <!--</table>-->
-                <!--<br>-->
-                    <!--<div class="table-responsive">-->
-                        <!--<table class="table-bordered table-striped table-hover table-condensed" style="text-align:center;">-->
-                            <!--<thead>-->
-                                <!--<tr>-->
-                                    <!--<th></th>-->
-                                    <!--<th>BALANCE DE SUPERFICIE</th>-->
-                                <!--</tr>-->
-                            <!--</thead>-->
-                            <!--<tbody>-->
-                                <!--{% for elemento in planilla.elementos.all %}-->
-                                    <!--<tr>-->
-                                        <!--<td class="col-xs-1">{{ elemento }}</td>-->
-                                        <!--<td class="col-sm-4">-->
-                                                <!--<label class="switch">-->
-                                                    <!--<input type="checkbox" disabled="disabled" checked="checked" name="{{elemento}}" value="{{elemento}}" checked><span class="slider round"></span>-->
-                                                <!--</label>-->
-                                        <!--</td>-->
-                                    <!--</tr>-->
-                                    <!--{% endfor %}-->
-                            <!--</tbody>-->
-                        <!--</table>-->
-                    <!--</div>-->
-                <!--{% endif %}-->
-                <!--<hr><br>-->
-                <!--{% endfor %}-->
 
-
-                <!--{% for inspeccion in inspecciones %}-->
-                    <!--{% if inspeccion %}-->
-                       <!--<table class="table table-bordered table-striped table-hover table-condensed" style="text-align:center;">-->
-                           <!--<thead>-->
-                               <!--<tr>-->
-                                   <!--<th></th>-->
-                                   <!--{% for item in items %}-->
-                                       <!--<th>{{item.nombre}}</th>-->
-                                   <!--{% endfor %}-->
-                               <!--</tr>-->
-                           <!--</thead>-->
-                           <!--<tbody>-->
-                               <!--{% for categoria in categorias %}-->
-                                   <!--<tr>-->
-                                       <!--<td class="col-xs-1">{{ categoria.nombre }}</td>-->
-                                       <!--{% for item in items %}-->
-                                           <!--<td class="col-sm-4">&nbsp;-->
-                                               <!--{% for detalle in inspeccion.detalles.all %}-->
-                                                   <!--{% if categoria.nombre == detalle.categoria_inspeccion.nombre and item.nombre == detalle.item_inspeccion.nombre %}-->
-                                                       <!--{{ detalle.nombre }}-->
-                                               <!--<br>-->
-                                                   <!--{% endif %}-->
-                                               <!--{% endfor %}-->
-                                           <!--</td>-->
-                                       <!--{% endfor %}-->
-                                   <!--</tr>-->
-                               <!--{% endfor %}-->
-                           <!--</tbody>-->
-                       <!--</table>-->
-
-
-                                           <!--<div class="row">-->
-                                           <!--<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">-->
-                                               <!--<form action="" >-->
-                                               <!--<div class="row" style="color:#fff;">-->
-                                                   <!--<div class=" col-xs-12 col-sm-12 col-md-12 col-lg-12">-->
-                                                   <!--<ol>-->
-                                                       <!--<label>Descripcion de categorias:</h2></label>-->
-                                                       <!--&lt;!&ndash;{% for categoria in categorias %}&ndash;&gt;-->
-                                                       <!--&lt;!&ndash;<li> {{categoria.tipo}}</li>&ndash;&gt;-->
-                                                       <!--&lt;!&ndash;<li> {{categoria.descripcion}}</li>&ndash;&gt;-->
-                                                       <!--&lt;!&ndash;{% endfor %}&ndash;&gt;-->
-                                                       <!--<table  class="table-bordered table-striped table-hover">-->
-                                                       <!--<thead>-->
-                                                           <!--<tr>-->
-                                                               <!--<th>categoria</th>-->
-                                                               <!--<th>tipo</th>-->
-                                                               <!--<th>descripcion</th>-->
-                                                           <!--</tr>-->
-                                                       <!--</thead>-->
-                                                       <!--{% for categoria in categorias %}-->
-                                                       <!--<tr>-->
-                                                           <!--<td id="nombre{{categoria.id}}" class="col-xs-1" align="center">{{categoria.nombre}}</td>-->
-                                                           <!--<td id="tipo{{categoria.id}}" class="col-xs-1" align="center">{{categoria.tipo}}</td>-->
-                                                           <!--<td id="descripcion{{categoria.id}}" class="col-xs-2">{{categoria.descripcion}}</td>-->
-                                                       <!--</tr>-->
-                                                       <!--{% endfor %}-->
-                                                       <!--</table>-->
-                                                   <!--</ol>-->
-                                                   <!--</div>-->
-                                               <!--</div>-->
-                                               <!--</form>-->
-                                           <!--</div>-->
-                                           <!--</div>-->
-                               <!--{% endif %}-->
-                           <!--{% endfor %}-->
-
-                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="right">
-                       <div class="row">
-                           <br>
-                    <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-center">
-                        <a href="javascript:history.back(-1);">
-                              <button class="btn btn-primary " type="submit" value="Atras">Volver</button>
-                          </a>
+                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="right">
+                        <div class="row">
+                            <br>
+                            <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-center">
+                                <a href="javascript:history.back(-1);">
+                                    <button class="btn btn-primary " type="submit" value="Atras">Volver</button>
+                                </a>
+                            </div>
+                        </div>
                     </div>
+                </div>
             </div>
-                     </div>
-			    </div>
-			</div>
-          </div>
         </div>
-      </div>
     </div>
+</div>
+</div>
 
 
 <style>

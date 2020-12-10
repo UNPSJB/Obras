@@ -6,32 +6,32 @@
 {% endblock %}
 
 {% block barra %}
-	<ul class="sidebar sidebar-1">
-		<font size="2">
-			<li><a href="javascript:history.back(-1);" class="current"><font color="white">Administrativo</font></a></li>
-		</font>
-	</ul>
+<ul class="sidebar sidebar-1">
+    <font size="2">
+        <li><a href="javascript:history.back(-1);" class="current"><font color="white">Administrativo</font></a></li>
+    </font>
+</ul>
 {% endblock %}
 
 
 {% block contenido %}
 
-	<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" >
-	  <div class="panel">
-		<div class="panel-heading box" role="tab" id="headingFive">
-		  <h5 class="panel-title">
-			<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
-			  <font color="#ffffff" size="2">Documentacion del tramite</font>
-			</a>
-		  </h5>
-		</div>
-		<div id="collapseFive" class="panel-collapse" role="tabpanel" aria-labelledby="headingFive">
-		  <div class="panel-body">
-			<div class="container-fluid">
-                <div class="row">
-                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="color: white;">
-                         <div class="container-fluid">
-                  <div class=" col-xs-4 col-sm-4 col-md-4 col-lg-4">
+<div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" >
+    <div class="panel">
+        <div class="panel-heading box" role="tab" id="headingFive">
+            <h5 class="panel-title">
+                <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+                    <font color="#ffffff" size="2">Documentacion del tramite</font>
+                </a>
+            </h5>
+        </div>
+        <div id="collapseFive" class="panel-collapse" role="tabpanel" aria-labelledby="headingFive">
+            <div class="panel-body">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="color: white;">
+                            <div class="container-fluid">
+                                <div class=" col-xs-4 col-sm-4 col-md-4 col-lg-4">
                                     <ol>
                                         <label>Datos catastrales:</h2></label><br>
                                         <label>Parcela:</label>
@@ -45,8 +45,8 @@
                                     </ol>
                                 </div>
 
-              </div>
-                        {% for documento in tramite.documentos.all %}
+                            </div>
+                            {% for documento in tramite.documentos.all %}
                             <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
                                 <div class="thumbnail ">
                                     <a id="single_image" href="/media/{{documento.file}}" data-fancybox="images"  data-caption="{{documento.tipo_documento}}">
@@ -56,28 +56,28 @@
                                     <p style="color: #17202a; font-style: oblique; text-align: center;">{{documento.tipo_documento}} - {{documento.fecha}} </p>
                                     <form action="">
                                         <p align="right" >
-                                        <a href="/media/{{documento.file}}" download="documento" class="btn btn-primary btn-collapsible"><i class="glyphicon glyphicon-save"></i><span>  Descargar</span></a>
+                                            <a href="/media/{{documento.file}}" download="documento" class="btn btn-primary btn-collapsible"><i class="glyphicon glyphicon-save"></i><span>  Descargar</span></a>
                                         </p>
                                     </form>
-                                 </div>
+                                </div>
                             </div>
-                        {% endfor %}
-                    </div>
-                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                        <hr>
-                        <div class="form-group">
-                            <label for="id_observaciones">Observaciones:</label>
-                            <input type="hidden" id="id_tramite" value="{{tramite.id}}">
-                            <input class="form-control input-sm" id="id_observaciones" name="" type="text" placeholder="Ingresar observaciones" title="Observaciones" maxlength="100" />
+                            {% endfor %}
                         </div>
-                    </div>
-                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="right">
-                        <a href="{% url 'aceptar_tramite' pk_tramite=tramite.id  %}">
-                            <button type="button" class="btn btn-primary" name="Aceptar">
-                                Aceptar
-                            </button>
-                        </a>
-                        <script>
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                            <hr>
+                            <div class="form-group">
+                                <label for="id_observaciones">Observaciones:</label>
+                                <input type="hidden" id="id_tramite" value="{{tramite.id}}">
+                                <input class="form-control input-sm" id="id_observaciones" name="" type="text" placeholder="Ingresar observaciones" title="Observaciones" maxlength="100" />
+                            </div>
+                        </div>
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="right">
+                            <a href="{% url 'aceptar_tramite' pk_tramite=tramite.id  %}">
+                                <button type="button" class="btn btn-primary" name="Aceptar">
+                                    Aceptar
+                                </button>
+                            </a>
+                            <script>
                             function prueba(){
                                 obs = $("#id_observaciones").val();
                                 id_tramite = $("#id_tramite").val();
@@ -85,19 +85,19 @@
                                 location.href = url;
                             }
                         </script>
-                        <a href="javascript:prueba();">
-                            <button type="button" class="btn btn-primary" name="Aceptar">
-                                  Rechazar
-                            </button>
-                        </a>
-                        <br>
+                            <a href="javascript:prueba();">
+                                <button type="button" class="btn btn-primary" name="Aceptar">
+                                    Rechazar
+                                </button>
+                            </a>
+                            <br>
+                        </div>
                     </div>
                 </div>
-		    </div>
-          </div>
+            </div>
         </div>
-      </div>
     </div>
+</div>
 
 {% endblock %}
 

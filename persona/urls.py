@@ -63,6 +63,9 @@ urlpatterns = [
     url(r'^listado_profesionales$', views.listado_profesionales, name="listado_profesionales"),
     url(r'^reporte_listado_profesional_pdf/$', login_required(ReporteProfesionalesPdf.as_view()), name="reporte_listado_profesional_pdf"),
     url(r'^lista_profesionales_imprimible', views.lista_profesionales_imprimible, name="lista_profesionales_imprimible"),
+    url(r'^planilla_inspeccion_impresa_administrativo/(?P<pk_tramite>\d+)/$', views.planilla_inspeccion_impresa, name="planilla_inspeccion_impresa"),
+    url(r'^planilla_visado_impresa_administrativo/(?P<pk_tramite>\d+)/$', views.planilla_visado_impresa, name="planilla_visado_impresa"),
+
     url(r'^reporte_tramites_corregidos_excel/', ReporteTramitesCorregidosExcel.as_view(),
         name="reporte_tramites_corregidos_excel"),
     url(r'^reporte_tramites_corregidos_pdf/$', login_required(ReporteTramitesCorregidosPdf.as_view()),
@@ -114,7 +117,7 @@ urlpatterns = [
         name="reporte_tramites_agendar_pdf"),
 
     #jefeinspector --------------------------------------------------------------------------------------------------
-    url(r'^jefeinspector$', views.mostrar_jefe_inspector, name="jefe_inspector"),
+    url(r'^jefeinspector$', views.mostrar_jefe_inspector, name="jefeinspector"),
     url(r'^inspeccion_final/(?P<pk_tramite>\d+)/$', views.inspeccion_final, name="inspeccion_final"),
     url(r'^agendar_inspeccion_final/(?P<pk_tramite>\d+)/$', views.agendar_inspeccion_final, name="agendar_inspeccion_final"),
     url(r'^aceptar_inspeccion_final/(?P<pk_tramite>\d+)/$', views.aceptar_inspeccion_final, name="aceptar_inspeccion_final"),

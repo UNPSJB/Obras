@@ -160,23 +160,23 @@ def documentos_de_estado(request, pk_estado):
     documentos = estado.tramite.documentacion_para_estado(estado)
     documentosF = estado.tramite.documentos.all()
     documentos = filter(lambda e:(date.strftime(e.fecha, '%d/%m/%Y %H:%M') <= fecha_str), documentosF)
-    contexto = {'documentos': documentos,'estilos':estilos}
     planillas = []
     inspecciones = []
-    if (estado.tipo >2 and estado.tipo <5):
+    if (estado.tipo == 1 or estado.tipo == 2):
+        contexto = {'documentos': documentos, 'estilos': estilos}
+    if (estado.tipo >2 and estado.tipo < 5):
         for p in PlanillaDeVisado.objects.all():
             if (p.tramite.pk == estado.tramite.pk):
                 planillas.append(p)
         filas = FilaDeVisado.objects.all()
         columnas = ColumnaDeVisado.objects.all()
         contexto = {
-            'documentos': documentos,
             'planillas':planillas,
             'filas': filas,
             'columnas': columnas,
             'estilos':estilos
         }
-    if (estado.tipo >5 and estado.tipo <8):
+    if (estado.tipo >= 5 and estado.tipo <8):
         for p in PlanillaDeInspeccion.objects.all():
             if (p.tramite.pk == estado.tramite.pk):
                 inspecciones.append(p)
@@ -295,7 +295,6 @@ def seleccionar_modo_pago(request, pk_tramite):
     return render(request, "persona/propietario/seleccionar_modo_pago.html",{'tramite': tramite, 'ctxpago': registrar_pago_propietario(request, tramite.id),
                        'estilos': estilos})
 
-
 def listado_cuotas_propietario(request):
     estilos = ''
     usuario = request.user
@@ -400,7 +399,6 @@ def listado_comprobantes_propietario(request,pk_tramite):
                       {'cuotas': canceladas, 'tramite': tramite, 'pago': pago, 'estilos': estilos})
     return render(request, 'persona/propietario/factura_parcial_propietario.html',
                   {'cuotas': canceladas, 'tramite': tramite, 'pago': pago, 'estilos': estilos})
-
 
 def planilla_visado_impresa_propietario(request, pk_tramite):
     estilos = ''
@@ -704,7 +702,6 @@ def documento_de_estado(request, pk_estado):
         filas = FilaDeVisado.objects.all()
         columnas = ColumnaDeVisado.objects.all()
         contexto = {
-            'documentos_de_fecha': documentos_fecha,
             'planillas': planillas,
             'filas': filas,
             'columnas': columnas,
@@ -971,14 +968,12 @@ def documento_de_estado_administrativo(request, pk_estado):
                 planillas.append(p)
         filas = FilaDeVisado.objects.all()
         columnas = ColumnaDeVisado.objects.all()
-
         contexto = {
-            'documentos_de_fecha': documentos_fecha,
             'planillas': planillas,
             'filas': filas,
             'columnas': columnas,
         }
-    if (estado.tipo > 5 and estado.tipo < 8):
+    if (estado.tipo >= 5 and estado.tipo < 8):
         for p in PlanillaDeInspeccion.objects.all():
             if (p.tramite.pk == estado.tramite.pk):
                 inspecciones.append(p)
@@ -1471,6 +1466,62 @@ class ReporteSolicitudFinalObraPdf(View):
         Story.append(detalle_orden)
         doc.build(Story)
         return response
+
+def planilla_visado_impresa_administrativo(request, pk_tramite):
+    planilla = get_object_or_404(PlanillaDeVisado, id=pk_tramite)
+    tramite = get_object_or_404(Tramite, pk=planilla.tramite_id)
+    filas = FilaDeVisado.objects.all()
+    columnas = ColumnaDeVisado.objects.all()
+    try:
+        elementos = planilla.elementos.all()
+        items = planilla.items.all()
+        obs = planilla.observacion
+        contexto = {'tramite': tramite,
+                    'planilla': planilla,
+                    'filas': filas,
+                    'columnas': columnas,
+                    'elementos': elementos,
+                    'items': items,
+                    'obs': obs,
+                    }
+        return render(request, 'persona/director/planilla_visado_impresa_administrativo.html', contexto)
+    except:
+        contexto = {
+            'tramite': tramite,
+            'planilla': planilla,
+            'filas': filas,
+            'columnas': columnas,
+            'obs': obs,
+        }
+        return render(request, 'persona/director/planilla_visado_impresa_administrativo.html', contexto)
+
+
+def planilla_inspeccion_impresa_administrativo(request, pk_tramite):
+    planilla = get_object_or_404(PlanillaDeInspeccion, id=pk_tramite)
+    tramite = get_object_or_404(Tramite, id=planilla.tramite_id)
+    items = ItemInspeccion.objects.all()
+    categorias = CategoriaInspeccion.objects.all()
+    try:
+        detalles = planilla.detalles.all()
+        contexto = {
+            'tramite': tramite,
+            'planilla': planilla,
+            'items': items,
+            'categorias': categorias,
+            'detalles': detalles,
+        }
+        return render(request, 'persona/director/planilla_inspeccion_impresa_administrativo.html', contexto)
+
+    except:
+        contexto = {
+            'tramite': tramite,
+            'planilla': planilla,
+            'items': items,
+            'categorias': categorias,
+        }
+        return render(request, 'persona/director/planilla_inspeccion_impresa_administrativo.html', contexto)
+
+
 #-------------------------------------------------------------------------------------------------------------------
 #visador -----------------------------------------------------------------------------------------------------------
 from planilla_visado import forms as pforms
@@ -2269,7 +2320,7 @@ def agendar_inspeccion_final(request,pk_tramite):
     fecha = convertidor_de_fechas(request.GET["msg"])
     tramite.hacer(Tramite.AGENDAR, usuario=request.user, fecha_inspeccion=fecha, inspector=request.user,rol=1) #para agendar jefe inspector rol=1
     messages.add_message(request, messages.SUCCESS, "Inspeccion agendada")
-    return redirect('jefe_inspector')
+    return redirect('jefeinspector')
 
 def inspeccion_final(request,pk_tramite):
    tramite = get_object_or_404(Tramite, pk=pk_tramite)
@@ -2322,7 +2373,7 @@ def completar_inspeccion_final(request,pk_tramite):
             messages.add_message(request, messages.SUCCESS, 'Inspeccion Finalizada')
         except:
             messages.add_message(request, messages.WARNING, "La inspeccion ya fue cargada")
-    return redirect('jefe_inspector')
+    return redirect('jefeinspector')
 
 def aceptar_inspeccion_final(request,pk_tramite):
     u = request.user
@@ -2992,12 +3043,11 @@ def documentos_del_estado(request, pk_estado):
         filas = FilaDeVisado.objects.all()
         columnas = ColumnaDeVisado.objects.all()
         contexto = {
-            'documentos_de_fecha': documentos_fecha,
             'planillas': planillas,
             'filas': filas,
             'columnas': columnas,
         }
-    if (estado.tipo >5 and estado.tipo <8):
+    if (estado.tipo >= 5 and estado.tipo <8):
         for p in PlanillaDeInspeccion.objects.all():
             if (p.tramite.pk == estado.tramite.pk):
                 inspecciones.append(p)
