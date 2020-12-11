@@ -47,154 +47,180 @@
                                 </div>
                             </div>
                             {% endfor %}
-                        </div>
-                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                            <ol>
-                                <label>NRO TRAMITE:</label>
-                                <li> {{tramite.id}}</li>
-                                <label>PROPIETARIO:</label>
-                                <li> {{tramite.propietario.persona}}</li>
-                                <label>PROFESIONAL:</label>
-                                <li> {{tramite.profesional}}</li>
-                                <label>TIPO DE OBRA:</label>
-                                <li> {{tramite.tipo_obra}}</li>
-                                <label>DATOS CATASTRALES:</label>
-                                <li>
-                                    <table align="center" >
-                                        <thead>
-                                        <th>Parcela</th>
-                                        <th>Circunscripcion</th>
-                                        <th>Manzana</th>
-                                        <th>Sector</th>
-                                        </thead>
-                                        <tbody>
-                                        <tr>
-                                            <td class="col-xs-3" align="center">{{tramite.parcela}}</td>
-                                            <td class="col-xs-4" align="center">{{tramite.circunscripcion}}</td>
-                                            <td class="col-xs-5" align="center">{{tramite.manzana}}</td>
-                                            <td class="col-xs-6" align="center">{{tramite.sector}}</td>
-                                        </tr>
-                                        </tbody>
-                                    </table>
-                                </li>
-                            </ol>
-                        </div>
-                    </div>
-
-                    <div class="table-responsive">
-                        <table align="center" class="table table-bordered table-striped table-hover table-condensed table-responsive" style="text-align:center;">
-
-                            <thead>
-
-                            <tr>
-                                <th>  PLANILLA VISADO</th>
-
-                                {% for columna in columnas %}
-                                {% if columna.activo == True %}
-                                <th>{{columna}}</th>
-                                {% endif %}
-                                {% endfor %}
-                            </tr>
-                            </thead>
-                            <tbody>
-                            {% for fila in filas %}
-                            {% if fila.activo == True %}
-                            <tr>
-                                <td class="col-xs-1">{{ fila }}</td>
-                                {% for columna in columnas %}
-                                {% if columna.activo == True %}
-                                <td class="col-sm-1">&nbsp;
-                                    {% for item in items %}
-                                    {% if fila == item.fila_de_visado and columna == item.columna_de_visado %}
-                                    <label class="switch">
-                                        <input name="item-{{item.pk}}" type="checkbox"  disabled="disabled" checked="checked"><span class="slider round"></span>
-                                    </label>
+                            <div class="row">
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                    <ol>
+                                        <label>NRO TRAMITE:</label>
+                                        <li> {{tramite.id}}</li>
+                                        <label>PROPIETARIO:</label>
+                                        <li> {{tramite.propietario.persona}}</li>
+                                        <label>PROFESIONAL:</label>
+                                        <li> {{tramite.profesional}}</li>
+                                        <label>TIPO DE OBRA:</label>
+                                        <li> {{tramite.tipo_obra}}</li>
+                                        <label>DATOS CATASTRALES:</label>
+                                        <li>
+                                            <table align="center" >
+                                                <thead>
+                                                <th>Parcela</th>
+                                                <th>Circunscripcion</th>
+                                                <th>Manzana</th>
+                                                <th>Sector</th>
+                                                </thead>
+                                                <tbody>
+                                                <tr>
+                                                    <td class="col-xs-3" align="center">{{tramite.parcela}}</td>
+                                                    <td class="col-xs-4" align="center">{{tramite.circunscripcion}}</td>
+                                                    <td class="col-xs-5" align="center">{{tramite.manzana}}</td>
+                                                    <td class="col-xs-6" align="center">{{tramite.sector}}</td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </li>
+                                    </ol>
+                                </div>
+                            </div>
+                            <div class="table-responsive">
+                                <table align="center" class="table table-bordered table-striped table-hover table-condensed table-responsive" style="text-align:center;">
+                                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                        <div class="form-group">
+                                            <label for="">PLANILLA VISADO</label>
+                                        </div>
+                                    </div>
+                                    <thead>
+                                    <tr>
+                                        <th></th>
+                                        {% for columna in columnas %}
+                                        {% if columna.activo == True %}
+                                        <th>{{columna}}</th>
+                                        {% endif %}
+                                        {% endfor %}
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    {% for fila in filas %}
+                                    {% if fila.activo == True %}
+                                    <tr>
+                                        <td class="col-xs-1">{{ fila }}</td>
+                                        {% for columna in columnas %}
+                                        {% if columna.activo == True %}
+                                        <td class="col-sm-1">&nbsp;
+                                            {% for item in items %}
+                                            {% if fila == item.fila_de_visado and columna == item.columna_de_visado %}
+                                            <label class="switch">
+                                                <input name="item-{{item.pk}}" type="checkbox"  disabled="disabled" checked="checked"><span class="slider round"></span>
+                                            </label>
+                                            {% endif %}
+                                            {% endfor %}
+                                        </td>
+                                        {% endif %}
+                                        {% endfor %}
+                                    </tr>
                                     {% endif %}
                                     {% endfor %}
-                                </td>
-                                {% endif %}
-                                {% endfor %}
-                            </tr>
-                            {% endif %}
-                            {% endfor %}
-                            </tbody>
-                            <br>
-                            <table class="table table-bordered table-striped table-hover table-condensed" style="text-align:center;">
-                                <thead>
-                                <tr>
-                                    <th></th>
-                                    <th>BALANCE DE SUPERFICIE</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                {% for elemento in elementos %}
-                                {% if elemento.activo == True %}
-                                <tr>
-                                    <td class="col-xs-1">{{ elemento }}</td>
-                                    <td class="col-sm-4">
-                                        <label class="switch">
-                                            <input name="elemento-{{elemento.id}}" type="checkbox" disabled="disabled" checked="checked"><span class="slider round"></span>
-                                        </label>
-                                    </td>
-                                </tr>
-                                {% endif %}
-                                {% endfor %}
-                                </tbody>
-                            </table>
-                            <table class="table table-bordered table-striped table-hover table-condensed" style="text-align:center;">
-                                <thead>
-                                <tr>
-                                    <th>OBSERVACION</th>
-                                </tr>
-                                </thead>
-                                <tbody>
-                                <td class="col-xs-1">{{ obs }}</td>
-                                </tbody>
-                            </table>
-                        </table>
-                    </div>
-                </div>
-                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                    <div class="container-fluid">
-                        <div class="row">
+                                    </tbody>
+                                    <br>
+                                    <table class="table table-bordered table-striped table-hover table-condensed" style="text-align:center;">
+                                        <thead>
+                                        <tr>
+                                            <th></th>
+                                            <th>BALANCE DE SUPERFICIE</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        {% for elemento in elementos %}
+                                        {% if elemento.activo == True %}
+                                        <tr>
+                                            <td class="col-xs-1">{{ elemento }}</td>
+                                            <td class="col-sm-4">
+                                                <label class="switch">
+                                                    <input name="elemento-{{elemento.id}}" type="checkbox" disabled="disabled" checked="checked"><span class="slider round"></span>
+                                                </label>
+                                            </td>
+                                        </tr>
+                                        {% endif %}
+                                        {% endfor %}
+                                        </tbody>
+                                    </table>
+                                    <table class="table table-bordered table-striped table-hover table-condensed" style="text-align:center;">
+                                        <thead>
+                                        <tr>
+                                            <th>OBSERVACION</th>
+                                        </tr>
+                                        </thead>
+                                        <tbody>
+                                        <td class="col-xs-1">{{ obs }}</td>
+                                        </tbody>
+                                    </table>
+                                </table>
+                            </div>
+
                             <hr>
                             <form action="" method="post" enctype="multipart/form-data" id="tipo_documento_id">
-                                <input type="hidden" name="csrfmiddlewaretoken" value="0Q6LaIPpYWi372VbxTCHfXyisBRQ0sQyMSlecIpHCOsziGglsRzNGN2a5dBCOpKo">
                                 {% csrf_token %}
                                 {{ FormularioDocumento }}
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                                     <div class="form-group">
                                         <label for="">Cargar Documentos corregidos:</label>
-                                        <input type="hidden" id="id_tramite" value="23">
-                                        <div class="file-input file-input-new">
-                                            <div class="file-input file-input-new"><input type="hidden"><div class="file-preview ">
-                                                <div class="file-preview-status text-center text-success"></div>
-                                                <div class="close fileinput-remove text-right">×</div>
-                                                <div class="file-preview-thumbnails"></div>
-                                                <div class="clearfix"></div></div>
-                                                <div class="input-group ">
-                                                    <div class="form-control file-caption ">
-                                                        <span class="glyphicon glyphicon-file"></span> <span class="file-caption-name"></span>
-                                                    </div>
-                                                    <div class="input-group-btn">
-                                                        <button type="button" class="btn btn-default fileinput-remove fileinput-remove-button"><i class="glyphicon glyphicon-ban-circle"></i> Remover</button>
-                                                        <button type="submit" class="btn btn-default"><i class="glyphicon glyphicon-upload"></i> Subir documento</button>
-                                                        <div class="btn btn-primary btn-file"> <i class="glyphicon glyphicon-folder-open"></i> &nbsp;Seleccionar documento <input name="documento" id="tipo_documento.id" type="file" data-preview-file-type="any" title="Cargar documentos corregidos" required=""></div>
-                                                    </div>
-                                                </div></div>
-                                        </div>
+                                        <input type="hidden" id="id_tramite" value="{{tramite.id}}">
+                                        <input name="documento" class="file" id="tipo_documento.id"  type="file" data-preview-file-type="any" title="Cargar documentos corregidos" required />
                                     </div>
-                                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align=center>
-                                        <a href="javascript:history.back(-1);">
-                                            <button type="button" class="btn btn-primary btn-md" name="Volver">
-                                                Volver
-                                            </button>
-                                        </a>
-                                    </div>
-                                    <br>
-                                    <br>
                                 </div>
+                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="right">
+                                    <button class="btn btn-primary btn-sm" type="submit" title="Envia Planilla de visado">
+                                        Enviar correcciones
+                                    </button>
+                                    <a href="javascript:history.back(-1);">
+                                        <button type="button" class="btn btn-primary" name="Volver">
+                                            Volver
+                                        </button>
+                                    </a>
+                                </div>
+                                <br>
+                                <br>
                             </form>
+                            <!--<form action="" method="post" enctype="multipart/form-data" id="tipo_documento_id">-->
+                            <!--<input type="hidden" name="csrfmiddlewaretoken" value="0Q6LaIPpYWi372VbxTCHfXyisBRQ0sQyMSlecIpHCOsziGglsRzNGN2a5dBCOpKo">-->
+                            <!--{% csrf_token %}-->
+                            <!--{{ FormularioDocumento }}-->
+                            <!--<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">-->
+                            <!--<div class="form-group">-->
+                            <!--<label for="">Cargar Documentos corregidos:</label>-->
+                            <!--<input type="hidden" id="id_tramite" >-->
+                            <!--<div class="file-input file-input-new">-->
+                            <!--<div class="file-input file-input-new"><input type="hidden"><div class="file-preview ">-->
+                            <!--<div class="file-preview-status text-center text-success"></div>-->
+                            <!--<div class="close fileinput-remove text-right">×</div>-->
+                            <!--<div class="file-preview-thumbnails"></div>-->
+                            <!--<div class="clearfix"></div></div>-->
+                            <!--<div class="input-group ">-->
+                            <!--<div class="form-control file-caption ">-->
+                            <!--<span class="glyphicon glyphicon-file"></span> <span class="file-caption-name"></span>-->
+                            <!--</div>-->
+                            <!--<div class="input-group-btn">-->
+                            <!--<button type="button" class="btn btn-default fileinput-remove fileinput-remove-button"><i class="glyphicon glyphicon-ban-circle"></i> Remover</button>-->
+                            <!--<button type="submit" class="btn btn-default"><i class="glyphicon glyphicon-upload"></i> Subir documento</button>-->
+                            <!--<div class="btn btn-primary btn-file"> <i class="glyphicon glyphicon-folder-open"></i> &nbsp;Seleccionar documento <input name="documento" id="tipo_documento.id" type="file" data-preview-file-type="any" title="Cargar documentos corregidos" required=""></div>-->
+                            <!--</div>-->
+                            <!--</div>-->
+                            <!--</div>-->
+                            <!--</div>-->
+                            <!--</div>-->
+                            <!--<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="right">-->
+                            <!--&lt;!&ndash; <button class="btn btn-primary btn-sm" type="submit" title="Envia Planilla de visado">-->
+                            <!--Enviar correcciones-->
+                            <!--</button>&ndash;&gt;-->
+                            <!--<a href="javascript:history.back(-1);">-->
+                            <!--<button type="button" class="btn btn-primary" name="Volver">-->
+                            <!--Volver-->
+                            <!--</button>-->
+                            <!--</a>-->
+                            <!--</div>-->
+                            <!--<br>-->
+                            <!--<br>-->
+                            <!--</div>-->
+                            <!--</form>-->
+
                         </div>
                     </div>
                 </div>
@@ -202,6 +228,9 @@
         </div>
     </div>
 </div>
+
+
+
 {% endblock %}
 
 {% block scripts %}
@@ -216,7 +245,7 @@
 			showUpload: false,
 			showRemove: false
 		});
-</script>
+	</script>
 
 
 
