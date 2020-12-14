@@ -51,7 +51,7 @@ class TipoDocumento(models.Model):
 
 
 class TipoObra(models.Model):
-    nombre = models.CharField(max_length=50, unique=True)
+    nombre = models.CharField(max_length=50)
     descripcion = models.CharField(max_length=100)
     categorias = models.CharField(max_length=100, blank=True, null=True)
     activo = models.BooleanField(default=True)

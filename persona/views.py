@@ -2510,6 +2510,8 @@ def mostrar_director(request):
                     elif isinstance(resultado, TipoObra):
                             tipoObra = TipoObra.objects.get(nombre=resultado.nombre)
                             tipoObra.activo = 1
+                            tipoObra.descripcion=resultado.descripcion
+                            tipoObra.categorias=resultado.categorias
                             tipoObra.save()
                     elif isinstance(resultado, CategoriaInspeccion):
                             categoria = CategoriaInspeccion.objects.get(nombre=resultado.nombre)
