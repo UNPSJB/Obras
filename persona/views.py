@@ -97,7 +97,7 @@ def tramites_para_financiar(request):
     )
     persona = lista_de_persona_que_esta_logueada.pop()  # Saco de la lista la persona porque no puedo seguir trabajando con una lista
     propietario = persona.get_propietario()  # Me quedo con el atributo propietario de la persona        
-    tramites_propietario = Tramite.objects.en_estado(Visado) 
+    tramites_propietario = Tramite.objects.en_estado(Visado)
     tramites = filter(lambda tramite: (tramite.propietario == propietario and tramite.pago is  None), tramites_propietario)
     return tramites
 
@@ -2723,7 +2723,7 @@ def delete_item_inspeccion(request, pk_item):
         item.activo = False
         item.save()
         for d in detalles:
-            if d.item_inspeccion == item_inspeccion:
+            if d.item_inspeccion == item:
                 d.activo = False
                 d.save()
         messages.add_message(request, messages.SUCCESS, "El item de inspeccion ha sido eliminado correctamente")
@@ -3024,6 +3024,8 @@ def detalle_de_tramite(request, pk_tramite):
         fechas_del_estado.append(est.timestamp.strftime("%d/%m/%Y"));
     return render(request, 'persona/director/detalle_de_tramite.html', {"tramite": contexto0, "estados": contexto1, "fecha": fechas_del_estado})
 
+
+'''
 def documentos_del_estado(request, pk_estado):
     estado = get_object_or_404(Estado, pk=pk_estado)
     fecha = estado.timestamp
@@ -3059,6 +3061,12 @@ def documentos_del_estado(request, pk_estado):
             'categorias': categorias,
         }
     return render(request, 'persona/director/documentos_del_estado.html', contexto)
+'''
+
+def documentos_del_estado(request, pk_estado):
+    estado = get_object_or_404(Estado, pk=pk_estado)
+    documentos = estado.tramite.documentacion_para_estado(estado)
+    return render(request, 'persona/director/documentos_del_estado.html', documentos)
 
 def generar_planilla_visado(request):
     filas = FilaDeVisado.objects.all()
