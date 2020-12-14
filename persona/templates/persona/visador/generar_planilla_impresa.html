@@ -62,22 +62,22 @@
                                 <table align="center" style="text-align:center;">
                                     <thead>
                                     <tr>
-                                        <th>Medidas</th>
-                                        <th>Domicilio</th>
-                                        <th>Parcela</th>
-                                        <th>Circunscripcion</th>
-                                        <th>Manzana</th>
-                                        <th>Sector</th>
+                                        <th><font size="2">Medidas</font></th>
+                                        <th><font size="2">Domicilio</font></th>
+                                        <th><font size="2">Parcela</font></th>
+                                        <th><font size="2">Circunscripcion</font></th>
+                                        <th><font size="2">Manzana</font></th>
+                                        <th><font size="2">Sector</font></th>
                                     </tr>
                                     </thead>
                                     <tbody>
                                     <tr>
-                                        <td class="col-xs-1" align="center">{{tramite.medidas}}</td>
-                                        <td class="col-xs-2" align="center">{{tramite.domicilio}}</td>
-                                        <td class="col-xs-3" align="center">{{tramite.parcela}}</td>
-                                        <td class="col-xs-4" align="center">{{tramite.circunscripcion}}</td>
-                                        <td class="col-xs-5" align="center">{{tramite.manzana}}</td>
-                                        <td class="col-xs-6" align="center">{{tramite.sector}}</td>
+                                        <td class="col-xs-1" align="center"><font size="2">{{tramite.medidas}}</font></td>
+                                        <td class="col-xs-2" align="center"><font size="2">{{tramite.domicilio}}</font></td>
+                                        <td class="col-xs-3" align="center"><font size="2">{{tramite.parcela}}</font></td>
+                                        <td class="col-xs-4" align="center"><font size="2">{{tramite.circunscripcion}}</font></td>
+                                        <td class="col-xs-5" align="center"><font size="2">{{tramite.manzana}}</font></td>
+                                        <td class="col-xs-6" align="center"><font size="2">{{tramite.sector}}</font></td>
                                     </tr>
                                     </tbody>
                                 </table>
@@ -92,7 +92,7 @@
                                     <th></th>
                                     {% for columna in columnas %}
                                     {% if columna.activo == True %}
-                                    <th>{{columna}}</th>
+                                    <th><font size="2">{{columna}}</font></th>
                                     {% endif %}
                                     {% endfor %}
                                 </tr>
@@ -100,7 +100,7 @@
                                 {% for fila in filas %}
                                 {% if fila.activo == True %}
                                 <tr>
-                                    <td class="col-xs-1">{{ fila }}</td>
+                                    <td class="col-xs-1"><font size="2">{{ fila }}</font></td>
                                     {% for columna in columnas %}
                                     {% if columna.activo == True %}
                                     <td class="col-sm-1">&nbsp;
@@ -123,14 +123,14 @@
                                     <thead>
                                     <tr>
                                         <th></th>
-                                        <th>BALANCE DE SUPERFICIE</th>
+                                        <th><font size="2">BALANCE DE SUPERFICIE</font></th>
                                     </tr>
                                     </thead>
                                     <tbody>
                                     {% for elemento in elementos %}
                                     {% if elemento.activo == True %}
                                     <tr>
-                                        <td class="col-xs-1">{{ elemento }}</td>
+                                        <td class="col-xs-1"><font size="2">{{ elemento }}</font></td>
                                         <td class="col-sm-4">
                                             {%for b in balance%}
                                             {%if elemento.id == b.id %}
@@ -150,12 +150,12 @@
                                 <table class="table table-bordered table-striped table-hover table-condensed" style="text-align:center;">
                                     <thead>
                                     <tr>
-                                        <th>OBSERVACION</th>
+                                        <th><font size="2">OBSERVACION</font></th>
                                     </tr>
                                     </thead>
                                     <tbody>
                                     <tr>
-                                        <td class="col-xs-1">{{ obs }}</td>
+                                        <td class="col-xs-1"><font size="2">{{ obs }}</font></td>
                                     </tr>
                                     </tbody>
                                 </table>

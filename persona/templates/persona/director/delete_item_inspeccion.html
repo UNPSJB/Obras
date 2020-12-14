@@ -16,7 +16,7 @@
 			  <font color="#ffffff" size="2">
                   <form method="POST">
                     {% csrf_token %}
-                    <h4>¿Desea eliminar el item de inspeccion: < {{item.nombre}} > ?</h4>
+                    <h4>¿Desea eliminar el item de inspeccion: {{item.nombre}} ?</h4>
                       <br>
                         <br>
                     <button class="btn btn-danger" type="submit">Si, eliminar</button>
