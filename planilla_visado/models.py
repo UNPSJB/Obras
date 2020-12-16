@@ -93,19 +93,19 @@ class FilaDeVisado(models.Model):
         for i in range(0, len(lista)):
             try:
                 item=lista[i]["item"]
-                if item.activo==0:
-                    if  lista[i]["cantidad"]==1:
+                if item.activo==0 and lista[i]["cantidad"]==1:
                             self.relacionar_con_columna(lista[i]["item"])
-                else:
-                    if lista[i]["cantidad"]==0 :
-                        if item.activo==1:
+                elif lista[i]["cantidad"]==0 and  item.activo==1:
                             self.quitar_columna(lista[i]["item"])
+                else:
+                    if lista[i]["cantidad"]==1:
+                            self.relacionar_con_columna(lista[i]["item"])
             except:
                 pass
         return
 
     def relacionar_con_columnas(self,lista):
-        items=ItemDeVisado.objects.all()
+        items=ItemDeVisado.objects.all().distinct()
         sigue=True
         listaEncontrados=[]
         for it in items:
@@ -118,12 +118,11 @@ class FilaDeVisado(models.Model):
                         item=ItemDeVisado.objects.get(columna_de_visado=lista[i]['columna'],fila_de_visado=lista[i]['fila'])
                         if it.columna_de_visado==item.columna_de_visado and  it.fila_de_visado==item.fila_de_visado:
                             aux={"item":it,"cantidad":1}
-                            break;
 
                 except ObjectDoesNotExist:
                         item = self.crearItem(lista[i]['columna'], lista[i]['fila'])
                         aux={'item':item, 'cantidad':1}
-                        break;
+                        break; #ver si al crear no impide que agregue los demas items
             listaEncontrados.append(aux)
         self.guardarItems(listaEncontrados)
         return
@@ -135,7 +134,7 @@ class FilaDeVisado(models.Model):
             return item
         except ItemDeVisado.DoesNotExist as ex:
             pass
-       #     return ItemDeVisado.objects.create(columna_de_visado=columna, fila_de_visado=self)
+       #  return ItemDeVisado.objects.create(columna_de_visado=item, fila_de_visado=self)
 
     def quitar_columna(self, item):
         try:

@@ -58,7 +58,7 @@ class FormularioElementoBalanceSuperficie(forms.ModelForm):
         return nombre
 
 class FormularioElementoBalanceSuperficieModificado(forms.ModelForm):
-    NAME = 'elemento_balance_form'
+    NAME = 'elemento_balance_form_modificado'
     SUBMIT = 'elemento_balance_submit'
 
     class Meta:
@@ -100,7 +100,7 @@ class FormularioColumnaVisado(forms.ModelForm):
         return nombre
 
 class FormularioColumnaVisadoModificada(forms.ModelForm):
-    NAME = 'columna_visado_form'
+    NAME = 'columna_visado_form_modificada'
     SUBMIT = 'columna_visado_submit'
 
     class Meta:
@@ -140,7 +140,7 @@ class FormularioFilaVisado(forms.ModelForm):
         return nombre
 
 class FormularioFilaVisadoModificada(forms.ModelForm):
-    NAME = 'fila_visado_form'
+    NAME = 'fila_visado_form_modificada'
     SUBMIT = 'fila_visado_submit'
 
     class Meta:
