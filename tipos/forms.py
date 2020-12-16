@@ -68,6 +68,9 @@ class FormularioTipoObra(forms.ModelForm):
         nombre = self.cleaned_data['nombre']
         cargados = TipoObra.objects.filter(nombre__icontains=nombre)
         if cargados.exists():
+            for i in cargados:
+                if nombre == i.nombre and i.activo == 0:
+                    return nombre
             raise ValidationError("Ya existe {}".format(cargados.first().nombre))
         return nombre
 
@@ -100,7 +103,7 @@ class FormularioTipoPago(forms.ModelForm):
         return tipoPago
 
 class FormularioTipoObraModificada(forms.ModelForm):
-    NAME = 'tipo_obra_form'
+    NAME = 'tipo_obra_form_modificada'
     SUBMIT = 'tipo_obra_submit'
     class Meta:
         model = TipoObra
