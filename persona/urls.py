@@ -63,8 +63,8 @@ urlpatterns = [
     url(r'^listado_profesionales$', views.listado_profesionales, name="listado_profesionales"),
     url(r'^reporte_listado_profesional_pdf/$', login_required(ReporteProfesionalesPdf.as_view()), name="reporte_listado_profesional_pdf"),
     url(r'^lista_profesionales_imprimible', views.lista_profesionales_imprimible, name="lista_profesionales_imprimible"),
-    url(r'^planilla_de_inspeccion_impresa_administrativo/(?P<pk_tramite>\d+)/$', views.planilla_inspeccion_impresa, name="planilla_de_inspeccion_impresa_administrativo"),
-    url(r'^planilla_visado_impresa_administrativo/(?P<pk_tramite>\d+)/$', views.planilla_visado_impresa, name="planilla_visado_impresa"),
+    url(r'^planilla_de_inspeccion_impresa_administrativo/(?P<pk_tramite>\d+)/$', views.planilla_inspeccion_impresa_administrativo, name="planilla_de_inspeccion_impresa_administrativo"),
+    url(r'^planilla_visado_impresa/(?P<pk_tramite>\d+)/$', views.planilla_visado_impresa_administrativo, name="planilla_visado_impresa_administrativo"),
 
     url(r'^reporte_tramites_corregidos_excel/', ReporteTramitesCorregidosExcel.as_view(),
         name="reporte_tramites_corregidos_excel"),
