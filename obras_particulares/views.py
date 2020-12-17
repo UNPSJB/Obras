@@ -28,7 +28,7 @@ def login_view(request):
             user = authenticate(username=request.POST['username'], password=request.POST['password'])
             movil=es_movil(request)
             if user is not None and user.is_active :
-                if not movil or (movil and user.groups.filter(name='inspector' or 'jefeinspector').exists()):
+                if not movil or (movil and user.groups.filter(name='inspector').exists() or  user.groups.filter(name='jefeinspector').exists()):
                     login(request, user)
                     return redirect(user.get_view_name())
                 else:
