@@ -18,7 +18,7 @@
     <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" >
         <div class="panel" id="panelprop">
              <div class="panel-heading box" role="tab" id="headingOne">
-                 <font color="#ffffff" class="current"><label id="propietario1">Comprobante de Cuota</label></font>
+                 <font color="#ffffff" class="current"><label id="propietario1">Historial del tramite</label></font>
             </div>
             <div id="collapseFive" class="panel-collapse" role="tabpanel" aria-labelledby="headingFive">
                 <div class="panel-body">
@@ -86,7 +86,7 @@
                                         {% if estadosp %}
                                         {% for estado in estadosp.estados_del_tramite %}
                                         <tr>
-                                            <td align="center">{{estado.tipo}}</td>
+                                            <td align="center">{{estado}}</td>
                                             <td class="col-xs-2">{{estado.usuario}}</td>
                                             <td class="col-xs-2">{{estado.timestamp}}</td>
                                             <td class="col-xs-6">
@@ -111,7 +111,7 @@
                                     <br>
                                 </div>
                             </div>
-                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="right">
+                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="center">
                                 <a href="javascript:history.back(-1);">
                                     <button type="button" class="btn btn-primary" name="Volver">
                                         Volver
