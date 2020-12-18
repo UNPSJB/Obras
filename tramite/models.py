@@ -62,8 +62,8 @@ class Tramite(models.Model):
     manzana = models.IntegerField()#models.CharField(max_length=20)
     sector = models.IntegerField()#models.CharField(max_length=20)
     # -------------------------------------------------------------------------------------
-    monto_a_pagar = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
-    monto_pagado = models.DecimalField(max_digits=10, decimal_places=2, null=True, blank=True)
+    monto_a_pagar = models.DecimalField(max_digits=20, decimal_places=2, null=True, blank=True)
+    monto_pagado = models.DecimalField(max_digits=20, decimal_places=2, null=True, blank=True)
     objects = TramiteManager()
 
     def __str__(self):
