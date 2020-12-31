@@ -76,7 +76,9 @@ class Cuota(models.Model):
 class Estado(models.Model):
     TIPO = 0
     TIPOS = [
-        (0, "Estado")
+        (0, "Estado"),
+        (1, "Cancelacion"),
+        (2, "Cancelada"),
     ]
     cuota = models.ForeignKey(Cuota, related_name='estado_cuota')  # FK related_name=estados
     tipo = models.PositiveSmallIntegerField(choices=TIPOS)

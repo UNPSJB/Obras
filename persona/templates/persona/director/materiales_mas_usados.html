@@ -46,17 +46,17 @@
                                                 <thead>
                                                 <tr>
                                                     <th p style="color:#FFFFFF"bgcolor="#2c3e50">Material</th>
+                                                    <th p style="color:#FFFFFF"bgcolor="#2c3e50">Categoria</th>
                                                     <th p style="color:#FFFFFF"bgcolor="#2c3e50">Cantidad de obras que lo utilizan</th>
                                                 </tr>
                                                 </thead>
                                                 <tbody>
-                                                {% for name,value in datos.detalles %}
-                                                    {% if value != 0 %}
+                                                {% for l in datos.detalles %}
                                                     <tr>
-                                                        <td class="col-xs-1">{{ name }}</td>
-                                                        <td class="col-xs-1">{{ value }}</td>
+                                                        <td class="col-xs-1">{{ l.nombre }}</td>
+                                                        <td class="col-xs-1">{{ l.categoria }}</td>
+                                                        <td class="col-xs-1">{{ l.cantidad }}</td>
                                                     </tr>
-                                                    {% endif %}
                                                 {% endfor %}
                                                 </tbody>
                                             </table>

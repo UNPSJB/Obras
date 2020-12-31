@@ -16,45 +16,36 @@
 {%endblock%}
 
 {%block barrapropietario%}
-    <div class="container">
-   <a href="#accesibilidad" class="btn btn-info btn-lg" style="color:black; font-weight:bolder;"data-toggle="collapse">Accesibilidad</a>
-  <div id="accesibilidad" class="collapse">
-
-            <div class="col-sm-2 ">
-				<input alt="acercar" type=image src="/media/imagenes/zoom_in.ico" onclick="zoomIn()" style="width:35px; height:35px;"></input>
-			</div>
-			<div class=" col-sm-2 ">
-				<input alt="alejar" type=image src="/media/imagenes/zoom_out.ico" style="width:35px; height:35px;" onclick="zoomOut()">
-			</div>
-            <div class=" col-sm-6">
-            <br>
-            <form action="propietario" method="post" enctype="multipart/form-data">
-                <input type="hidden" name="Aceptar" value="Aceptar">
-               <div class="controls ">
-                   <select alt="seleccione un estilo de pagina" placeholder="seleccione estilo" class="select form-control input-sm " id="estilo" name="estilo"  onchange="this.form.submit();" required>
-                       <option alt="selector de tema de alto contraste" value="" selected="">Elegir Modo</option>
-                       <option alt="por defecto" value="base">Por defecto</option>
-                       <option alt="modo nocturno" value="estilo3">Modo Nocturno</option>
-                       <option alt="tierra y rojo" value="estilo4">Alto Constraste Rojo</option>
-                       <option alt="azul" value="estilo5">Contraste Azul</option>
-                       <option alt="violeta y amarillo" value="estilo6">Contraste Violeta</option>
-                       <option alt="verde" value="estilo7">Alto Constraste Verde</option>
-                       <option alt="blanconegro" value="estilo8">Alto contraste Blanco y negro</option>
-                       <option alt="altocontrastevioleta" value="estilo9">Alto contraste Violeta</option>
-                       <option alt="altocontrasteazul" value="estilo10">Alto contraste azul</option>
-
-
-                   </select>
-               </div>
-            </form>
-
+<div class="container">
+    <a alt="accesibilidad" name="boton de acccesibilidad web" id="botonAccesibilidad" href="#accesibilidad" class="btn btn-info btn-lg" style="color:black; font-weight:bolder;"data-toggle="collapse">Accesibilidad</a>
+    <div id="accesibilidad" class="collapse">
+        <div class="col-sm-2 ">
+            <input id="acercar" alt="boton de aumento de zoom" type=image src="/media/imagenes/zoom_in.ico" onclick="zoomIn()" style="width:35px; height:35px;">
         </div>
-
-
-
-
-
-  </div>
+        <div class=" col-sm-2 ">
+            <input id= "alejar" alt="boton de disminucion de zoom" type=image src="/media/imagenes/zoom_out.ico" style="width:35px; height:35px;" onclick="zoomOut()">
+        </div>
+        <div class=" col-sm-6">
+            <br>
+            <form alt="seleccione un estilo de pagina" action="propietario" method="post" enctype="multipart/form-data">
+                <input type="hidden" name="Aceptar" value="Aceptar">
+                <div class="controls ">
+                    <select title="seleccione un modo para visualizar la pagina" placeholder="seleccione estilo" class="select form-control input-sm " id="estilo" name="estilo"  onchange="this.form.submit();" required>
+                        <option aria-labelledby="selector de tema de alto contraste" value="" selected="">Elegir Modo</option>
+                        <option aria-labelledby="por defecto" value="base">Por defecto</option>
+                        <option aria-labelledby="modo nocturno" value="estilo3">Modo Nocturno</option>
+                        <option aria-labelledby="contraste tierra y rojo" value="estilo4">Alto Constraste Rojo</option>
+                        <option aria-labelledby="contraste azul" value="estilo5">Contraste Azul</option>
+                        <option aria-labelledby="contraste violeta y amarillo" value="estilo6">Contraste Violeta</option>
+                        <option aria-labelledby="alto contraste verde" value="estilo7">Alto Constraste Verde</option>
+                        <option aria-labelledby="alto contraste en blanco y negro" value="estilo8">Alto contraste Blanco y negro</option>
+                        <option aria-labelledby="alto contraste violeta" value="estilo9">Alto contraste Violeta</option>
+                        <option aria-labelledby="alto contraste azul" value="estilo10">Alto contraste azul</option>
+                    </select>
+                </div>
+            </form>
+        </div>
+    </div>
 </div>
 
 {% endblock %}
@@ -62,15 +53,13 @@
 {% block barra %}
 
 <br>
-    <ul class="sidebar sidebar-1">
-        <li><a href="#" class="current"><label id="propietario">Propietario</label></a></li>
-        <li><a data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour"><label id="i">Consultar estado de mis tramites</label></a></li>
-        <li><a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseOne"><label id="k">Elegir forma de pago</label></a></li>
-		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="false"aria-controls="collapseFive"><label id="P">Resumen de Pago del Tramite</label></a></li>
-		<li><a data-toggle="collapse" data-parent="#accordion" href="#collapseSix" aria-expanded="false"aria-controls="collapseSix"><label id="R">Comprobantes de Pago del Tramite</label></a></li>
-
-
-    </ul>
+<ul class="sidebar sidebar-1">
+    <li><a href="#" class="current"><label id="propietario">Propietario</label></a></li>
+    <li><a data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour" alt="consultar estado de mis tramites"><label id="i">Consultar estado de mis tramites</label></a></li>
+    <li><a data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseOne" alt="elegir forma de pago"><label id="k">Elegir forma de pago</label></a></li>
+    <li><a data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="false"aria-controls="collapseFive" alt="resumen de pago del tramite"><label id="P">Resumen de Pago del Tramite</label></a></li>
+    <li><a data-toggle="collapse" data-parent="#accordion" href="#collapseSix" aria-expanded="false"aria-controls="collapseSix" alt="comprobantes de pago del tramite"><label id="R">Comprobantes de Pago del Tramite</label></a></li>
+</ul>
 <br>
 <br>
 <br>
@@ -78,228 +67,163 @@
 <br>
 <br>
 <div id="boton_ayuda" class="col-xs-4 col-sm-4 col-md-12 col-lg-12">
-	<div class="dropdown" style="float:left;">
-		<button class="btn btn-primary btn-md" type="button"  id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-			<span class="glyphicon glyphicon-list-alt" aria-hidden="true">    Ayuda    <br> <br/></span>
- 			<span class="caret"></span>
-		</button>
-		<ul class="dropdown-menu">
-			<li><li><a target="_blank"  href="{% static "documentacion/_build/html/propietario.html" %}" target="_blank">Ayuda</a></li>
-			<li role="separator" class="divider"></li>
-			<li><a target="_blank" id="boton_ayuda1" href="{% static "documentacion/Propietario.pdf" %}" target="_blank">Ayuda PDF</a></li>
-		</ul>
-	</div>
+    <div  value="desplegable de ayuda" class="dropdown" style="float:left;">
+        <button class="btn btn-primary btn-md" type="button" value="ayuda"title="Desplegable de ayuda" name="desplegable"  id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+            <span aria-label="boton ayuda" class="glyphicon glyphicon-list-alt" aria-hidden="true">    Ayuda    <br> <br/></span>
+            <span class="caret"></span>
+        </button>
+        <ul class="dropdown-menu" value=" menu de ayuda">
+            <li><a  role="link" tabindex="0" style="cursor:pointer;"  value="ayuda online" href="{% static 'documentacion/_build/html/propietario.html' %}" target="_blank">Ayuda</a></li>
+            <li role="separator" class="divider"></li>
+            <li><a  value="ayuda en archivo pdf" id="boton_ayuda1" href="{% static 'documentacion/Propietario.pdf' %}" target="_blank">Ayuda PDF</a></li>
+        </ul>
+    </div>
 </div>
 
 {% endblock %}
 
 {% block contenido %}
 <br>
-    <div class="panel-group" id="#accordion" role="tablist" aria-multiselectable="true">
-        <div class="panel panel-custom">
-            <div class="panel-heading panel-heading-custom box" role="tab" id="headingFour">
-                <a class="panel-title">
-                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+<div  alt="consultar estado de mis tramites"  class="panel-group" id="#accordion" role="tablist" aria-multiselectable="true">
+    <div class="panel panel-custom"  >
+        <div  class="panel-heading panel-heading-custom box" role="tab" id="headingFour">
+            <div alt="consultar estado de mis tramites" class="panel-title"  >
+                    <a  class="collapsed" tabindex="0" style="cursor:pointer;"  aria-label="Consultar estado de mis tramites" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="true" aria-controls="collapseFour">
                         <label id="a">Consultar estado de mis Tramites</label>
                     </a>
-                </a>
             </div>
-            <div id="collapseFour" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFour">
-                <div class="panel-body">
-                    <div class="container-fluid">
-                        <div class="row">
-                            <div id="columna" class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                                {% block contenido_tramite_estado %}
-                                    {% include "persona/propietario/consultar_estado_tramite_propietario.html" with tramites_de_propietario=ctxtramitespropietario %}
-                                {% endblock %}
-                            </div>
+        </div>
+        <div id="collapseFour" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFour">
+            <div class="panel-body">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div id="columna" class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                            {% block contenido_tramite_estado %}
+                            {% include "persona/propietario/consultar_estado_tramite_propietario.html" with tramites_de_propietario=ctxtramitespropietario %}
+                            {% endblock %}
                         </div>
                     </div>
                 </div>
             </div>
         </div>
-		<div class="panel panel-custom">
-            <div class="panel-heading panel-heading-custom box" role="tab" id="headingTwo">
-                <a class="panel-title">
-                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                        <label id="g">Elegir forma de pago</label>
-                    </a>
+    </div>
+    <div class="panel panel-custom">
+        <div class="panel-heading panel-heading-custom box" role="tab" id="headingTwo">
+            <div class="panel-title">
+                <a class="collapsed" role="button" tabindex="0" style="cursor:pointer;"  aria-label="Elegir forma de pago" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                    <label id="pago">Elegir forma de pago</label>
                 </a>
             </div>
-	    <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
-                <div class="panel-body">
-                    <div class="container-fluid">
-                        <div class="row">
-                            <div id="columna2" class="col-xs-12 col-sm-12 col-md-12 col-lg-12" id="pagos">
+        </div>
+        <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+            <div class="panel-body">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div id="columna2" class="col-xs-12 col-sm-12 col-md-12 col-lg-12" id="pagos">
 
-								{% block tramites_para_financiar_propietario %}
-									{% include "persona/propietario/tramites_para_financiar_propietario.html" with tramites=ctxtramites_para_financiar_propietario.tramites %}
-								{% endblock %}
-						    </div>
-					    </div>
-				    </div>
-			    </div>
-		    </div>
-		</div>
-		<div class="panel panel-custom">
-			<div class="panel-heading panel-heading-custom box" role="tab" id="headingFive">
-                <a class="panel-title">
-                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
-                        <label id="g">Resumen de Pago de Tramite</label>
-                    </a>
+                            {% block tramites_para_financiar_propietario %}
+                            {% include "persona/propietario/tramites_para_financiar_propietario.html" with tramites=ctxtramites_para_financiar_propietario.tramites %}
+                            {% endblock %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="panel panel-custom">
+        <div class="panel-heading panel-heading-custom box" role="tab" id="headingFive">
+            <div class="panel-title">
+                <a class="collapsed" role="button" tabindex="0" style="cursor:pointer;"  aria-label="Resumen de pago de tramite" data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+                    <label id="g">Resumen de Pago de Tramite</label>
                 </a>
             </div>
-			<div id="collapseFive" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFive">
-                <div class="panel-body">
-                    <div class="container-fluid">
-                        <div class="row">
-                            <div id="columna4" class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        </div>
+        <div id="collapseFive" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFive">
+            <div class="panel-body">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div id="columna4" class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 
-								{% block listado_tramites_propietario %}
-									{% include "persona/propietario/listado_tramites_propietario.html" with tramites=ctxlistado.tramites %}
-								{% endblock %}
-
-						</div>
-						</div>
-					</div>
-			  	</div>
-			  </div>
-			</div>
-		<div class="panel panel-custom">
-			<div class="panel-heading panel-heading-custom box" role="tab" id="headingSix">
-                <a class="panel-title">
-                    <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseSix" aria-expanded="false" aria-controls="collapseSix">
-                        <label id="g">Comprobantes de Pago del Tramite</label>
-                    </a>
+                            {% block listado_tramites_propietario %}
+                            {% include "persona/propietario/listado_tramites_propietario.html" with tramites=ctxlistado.tramites %}
+                            {% endblock %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="panel panel-custom">
+        <div class="panel-heading panel-heading-custom box" role="tab" id="headingSix">
+            <div class="panel-title">
+                <a class="collapsed" role="button" tabindex="0" style="cursor:pointer;"  aria-label="Comprobantes de pago del tramite" data-toggle="collapse" data-parent="#accordion" href="#collapseSix" aria-expanded="false" aria-controls="collapseSix">
+                    <label id="comprobantes">Comprobantes de Pago del Tramite</label>
                 </a>
             </div>
-			<div id="collapseSix" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingSix">
-                <div class="panel-body">
-                    <div class="container-fluid">
-                        <div class="row">
-                            <div id="columna5" class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+        </div>
+        <div id="collapseSix" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingSix">
+            <div class="panel-body">
+                <div class="container-fluid">
+                    <div class="row">
+                        <div id="columna5" class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 
-								{% block listado_tramites_comprobantes_propietario %}
-									{% include "persona/propietario/listado_tramites_comprobantes.html" with tramites=ctxlistado.tramites %}
-								{% endblock %}
+                            {% block listado_tramites_comprobantes_propietario %}
+                            {% include "persona/propietario/listado_tramites_comprobantes.html" with tramites=ctxlistado.tramites %}
+                            {% endblock %}
 
-						</div>
-						</div>
-					</div>
-			  	</div>
-			  </div>
-			</div>
-
-		</div>
-
-
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
 
-    </div>
+</div>
+
+
 {% endblock %}
 
 
 
 {% block scripts %}
 
-<script type="text/javascript">
-$(document).ready(function() {
-
-
-return new Promise( function( resolve, reject ) {
- var font=0;
-     if (Cookies.get("fs")){
-            font=Cookies.get("fs");
-            document.body.style.fontSize = font + "em";
-      }
-if(Cookies.get("temporal")) {
-		$("#estilo").attr("href",Cookies.get("temporal"));
-		if (Cookies.get("fs")){
-			font=Cookies.get("fs");
-		    document.body.style.fontSize = font + "em";
-		}
-	}
-	$("#nav li a").click(function() {
-		$("#estilo").attr("href",$(this).attr('rel'));
-		Cookies.set("temporal",$(this).attr('rel'), {expires: 365, path: '/'});
-		return false;
-	});
-});
-    });
-
-
-
-</script>
-
-<script>
-        $("#perfil").fileinput({
-            showCaption: false,
-            browseClass: "btn btn-primary btn-sm",
-            fileType: "any",
-            maxFileCount: 1,
-            browseLabel: 'Cargar nueva foto de perfil',
-            showUpload: false,
-            showRemove: false
-        });
-    </script>
-
-    <script>
-        $("#final").fileinput({
-            showCaption: false,
-            browseClass: "btn btn-primary btn-sm",
-            fileType: "any",
-            maxFileCount: 1,
-            browseLabel: 'Cargar constancia de CACH',
-            showUpload: false,
-            showRemove: false
-        });
-    </script>
-    <script>
-
+    <script async>
         var fontSize = 1;
         // funcion para aumentar la fuente
         function zoomIn() {
             fontSize += 0.1;
             document.body.style.fontSize = fontSize + "em";
-            Cookies.set("fs",fontSize, {expires: 365, path: '/'});
+            var x=document.getElementsByClassName('panel-title');
+            var i;
+            for (i = 0; i < x.length; i++) {
+                  x[i].style.fontSize = fontSize + "em";
+            }            Cookies.set("fs",fontSize, {expires: 365, path: '/', SameSite: 'none',secure: true});
         }
         // funcion para disminuir la fuente
         function zoomOut() {
             fontSize -= 0.1;
             document.body.style.fontSize = fontSize + "em";
-            Cookies.set("fs",fontSize, {expires: 365, path: '/'});
-
+            var x=document.getElementsByClassName('panel-title');
+            var i;
+            for (i = 0; i < x.length; i++) {
+                  x[i].style.fontSize = fontSize + "em";
+            }
+            Cookies.set("fs",fontSize, {expires: 365, path: '/', SameSite:'None', Secure:'true'});
         }
     </script>
+    <script async>
+        $(document).ready(function() {
+            var font=0;
+            if (Cookies.get("fs")){
+                    font=Cookies.get("fs");
+                    document.body.style.fontSize = font + "em";
+                    var x=document.getElementsByClassName('panel-title');
+                    var i;
+                    for (i = 0; i < x.length; i++) {
+                          x[i].style.fontSize = font + "em";
+                    }
+            }
+        });
+    </script>
 
-
-<script type="text/javascript">
-  $(function() {
-   $('input').filter('.datepicker').datepicker({
-    changeMonth: true,
-    changeYear: true,
-    showOn: 'button',
-    buttonImage:'/media/imagenes/icon-calendar.png',
-    buttonImageOnly: true,
-    minDate:0,
-    maxDate: new Date(2020, 12, 30),
-    // Formato de la fecha
-    dateFormat: "dd/mm/yy",
-    // Primer dia de la semana El lunes
-    firstDay: 1,
-    // Dias Largo en castellano
-    dayNames: [ "Domingo", "Lunes", "Martes", "Miercoles", "Jueves", "Viernes", "Sabado" ],
-    // Dias cortos en castellano
-    dayNamesMin: [ "Do", "Lu", "Ma", "Mi", "Ju", "Vi", "Sa" ],
-    // Nombres largos de los meses en castellano
-    monthNames: [ "Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre" ],
-    // Nombres de los meses en formato corto
-    monthNamesShort: [ "Ene", "Feb", "Mar", "Abr", "May", "Jun", "Jul", "Ago", "Sep", "Oct", "Nov", "Dec" ],
-    // Cuando seleccionamos la fecha esta se pone en el campo Input
-    onSelect: function(dateText) {
-          $('#fecha').val(dateText);
-      }
-   });
-  });
- </script>
 {% endblock %}

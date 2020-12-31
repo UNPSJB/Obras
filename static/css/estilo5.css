@@ -63,12 +63,9 @@ strong{
     font-size: 13px;
 }
 
-.form {
-    background: burlywood!important;
-    display: block!important;
-    margin-top: 0em!important;
+*:focus{
+    outline: 3px solid #66dde9;
 }
-
 label {
     color:white;
     display: inline-block;
@@ -179,7 +176,34 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
     left: 0;
     z-index: 1030;
 }
+div#tablaOl{
+    color:black;
+    font-weight:bolder;
+    font-size:larger;
+}
+#datosCatastrales{
+    color:black;
+    font-weight:bolder;
+    font-size:revert!important;
+}
+.progress-bar-success {
+    background-color: #044f04!important;
+}
+.progress-bar-danger {
+    background-color: #d20903!important;
+}
+dataTables_wrapper .dataTables_length label, .dataTables_wrapper  .dataTables_filter label{
+    color:white;
+}
 
+.dataTables_wrapper .dataTables_filter input {
+    margin-left: 0.5em;
+    color: black!important;
+}
+select,option{
+    color:black;
+    font-weight:bolder;
+}
 /*
 #headingFive.panel-heading.box{
 background-color:#f8f7f0!important;
@@ -395,10 +419,6 @@ li {
     border-left: 5px solid #5b6d80;
 }*/
 
-.dataTables_wrapper .dataTables_length label,.dataTables_filter label{
-    color: black!important; /* filtrar por tiene que estar negro aca*/
-
-}
  .sidebar-1 li a {
     display: block;
     padding: 10px 20px;
@@ -571,9 +591,7 @@ tbody {
 .panel-group .panel + .panel {
     margin-top: 5px;
 }
-.form-group {
-    margin-bottom: 15px;
-}
+
 .input-sm {
     height: 30px;
     padding: 5px 10px;
@@ -584,29 +602,17 @@ tbody {
     font-weight: 900;
 
 }
-.form-control {
-    display: block;
-    width: 100%;
-    /* height: 34px; */
-    padding: 6px 12px;
-    /* font-size: 14px; */
-    /* line-height: 1.42857143; */
-    color: #555;
-    background-color: #fff;
-    background-image: none;
-    border: 1px solid #ccc;
-    /* border-radius: 4px; */
-    /* -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075); */
-    box-shadow: inset 0 1px 1px rgba(0, 0, 0, .175);
-    /* -webkit-transition: border-color ease-in-out .15s, -webkit-box-shadow ease-in-out .15s; */
-    -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
-    transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
-}
+
 
 .form-control:focus {
-    border-color: #b8c6e6;
+    border-color: #66dde9;
     outline: 0;
-    box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 5px 4px rgba(110, 178, 234, 0.6);
+    box-shadow: inset 0 1px 1px rgb(80, 223, 247), 0 0 5px 4px rgb(15, 255, 232)!important;
+}
+
+select, option {
+    color:black!important;
+    font-weight:bolder!important;
 }
 
 input[type="hidden" i], input[type="image" i], input[type="file" i] {

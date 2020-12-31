@@ -40,7 +40,7 @@
                     </a>
                   </td>
                   <td class="col-xs-1">
-                      {%if tramite.estado.tipo ==  8%}
+                      {%if tramite.estado.tipo ==  8 or tramite.estado.tipo == 7 %}
                        <a href="{% url 'habilitar_final_obra' pk_tramite=tramite.id %}">
                           <button type="button" class="btn btn-primary btn-xs" name="habilitar">
                             <span class="glyphicon glyphicon-home" aria-hidden="true"> Habilitar</span>

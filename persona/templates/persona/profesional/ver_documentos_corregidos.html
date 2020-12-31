@@ -26,6 +26,7 @@
                 </a>
             </h5>
         </div>
+
         <div id="collapseFive" class="panel-collapse" role="tabpanel" aria-labelledby="headingFive">
             <div class="panel-body">
                 <div class="container-fluid">
@@ -80,8 +81,9 @@
                                     </ol>
                                 </div>
                             </div>
+                            {%if planilla %}
                             <div class="table-responsive">
-                                <table align="center" class="table table-bordered table-striped table-hover table-condensed table-responsive" style="text-align:center;">
+                                <table align="center" class="table table-bordered table-striped table-hover table-condensed table-responsive" style="text-align:center;" data-paging="false">
                                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                                         <div class="form-group">
                                             <label for="">PLANILLA VISADO</label>
@@ -154,7 +156,11 @@
                                     </table>
                                 </table>
                             </div>
+                            {%else%}
 
+                            <h4 style="color:white;">
+                                {{mensaje}}</h4>
+                            {%endif%}
                             <hr>
                             <form action="" method="post" enctype="multipart/form-data" id="tipo_documento_id">
                                 {% csrf_token %}
@@ -167,11 +173,11 @@
                                     </div>
                                 </div>
                                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="right">
-                                    <button class="btn btn-primary btn-sm" type="submit" title="Envia Planilla de visado">
+                                    <button class="btn btn-primary btn-sm" type="submit" value="Enviar correccion de administrativo" title="Enviar correccion de administrativo" name="Enviar correccion de administrativo">
                                         Enviar correcciones
                                     </button>
                                     <a href="javascript:history.back(-1);">
-                                        <button type="button" class="btn btn-primary" name="Volver">
+                                        <button type="button" class="btn btn-primary" value="Volver" name="Volver">
                                             Volver
                                         </button>
                                     </a>
@@ -229,7 +235,24 @@
 </div>
 
 
-
+<style>
+       .dataTables_length, .dataTables_filter, .dataTables_info,.dataTables_wrapper .dataTables_paginate .paginate_button.disabled, .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:hover, .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:active {
+          display: none !important;
+       }
+       th{
+          background-color:#2c3e50;
+          color:red;
+       }
+       .dataTables_wrapper .dataTables_paginate .paginate_button.current, .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
+          display: none;
+       }
+       #tabla_length{
+        display:none;
+       }
+       #tabla_filter{
+        display:none;
+       }
+</style>
 {% endblock %}
 
 {% block scripts %}

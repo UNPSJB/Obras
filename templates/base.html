@@ -6,7 +6,7 @@
 	<meta charset="UTF-8">
 	<title>SOP</title>
 	<link rel="icon" href="{% static 'images/Casa.ico' %}" type="image/x-icon">
-	<meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1, maximun-scale=1, minimun-scale=1">
+	<meta name="viewport" content="width=device-width, user-scalable=yes, initial-scale=1">
 	{% if estilos == 'estilo3' %}
 		<link rel="stylesheet" type="text/css" href="{% static 'css/estilo3.css' %}"  />
 	{% elif estilos == 'estilo4' %}
@@ -34,8 +34,7 @@
 
 	<link rel="stylesheet" type="text/css" href="{% static 'css/jquery.dataTables.min.css' %}"/>
 	<link rel="stylesheet" type="text/css" href="{% static 'css/jquery.fancybox.css' %}"/>
-	<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/ekko-lightbox/5.3.0/ekko-lightbox.css"/>
-	<link type="text/css" href="jquery/themes/base/ui.datepicker.css" rel="stylesheet"/>
+	<!--<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/ekko-lightbox/5.3.0/ekko-lightbox.css"/>-->
 	<script src="{% static 'js/jquery-3.1.0.min.js' %}"></script>
 	<script src="{% static 'js/fileinput.min.js' %}" type="text/javascript"></script>
 	<script src="{% static 'js/padding.js' %}" type="text/javascript"></script>
@@ -195,102 +194,99 @@
 </head>
 
 <body>
-	<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
-  	<footer>
-			<div class="container-fluid" id="encabezado">
-				<h6 align="right">Sistema de Obras Particulares</h6>
-			</div>
+<nav class="navbar navbar-default navbar-fixed-top" role="navigation">
+	<footer>
+		<div class="container-fluid" id="encabezado">
+			<h6 align="right">Sistema de Obras Particulares</h6>
+		</div>
 
 	</footer>
 
 
-		<header>
-			<div class="container-fluid">
-				<div class="row" id ="rowlogo">
-					<div id="et1" class=" col-xs-12 col-sm-2 col-md-2">
-						<div class="navbar-header">
-							<!--<div class="dropdown" style="float:right;">
-              <button class="btn btn-success btn-lg dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                <span class="glyphicon glyphicon-list-alt" aria-hidden="true">    Documentación    <br> <br/></span>
+	<header>
+		<div class="container-fluid">
+			<div class="row" id ="rowlogo">
+				<div id="et1" class=" col-xs-12 col-sm-2 col-md-2">
+					<div class="navbar-header">
+						<!--<div class="dropdown" style="float:right;">
+          <button class="btn btn-success btn-lg dropdown-toggle" type="button" id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+            <span class="glyphicon glyphicon-list-alt" aria-hidden="true">    Documentación    <br> <br/></span>
 
-                <span class="caret"></span>
+            <span class="caret"></span>
 
-                             </button>
-              <ul class="dropdown-menu">
-                <li><a href="javascript:abrirModalDocumentacion('{% static "documentacion/_build/html" %}')">Ayuda</a></li>
-                  <!--<li role="separator" class="divider"></li>
-                <li><a href="javascript:abrirModalDocumentacionMantenimiento('{% static "documentacion/_build/html" %}')">Documentación de Mantenimiento</a></li>
-                <li role="separator" class="divider"></li>
-                <li><a href="javascript:abrirModalDocumentacionProyecto('{% static "documentacion/_build/html" %}')">Documentación de Proyecto</a></li>
-
-
+                         </button>
+          <ul class="dropdown-menu">
+            <li><a href="javascript:abrirModalDocumentacion('{% static "documentacion/_build/html" %}')">Ayuda</a></li>
+              <!--<li role="separator" class="divider"></li>
+            <li><a href="javascript:abrirModalDocumentacionMantenimiento('{% static "documentacion/_build/html" %}')">Documentación de Mantenimiento</a></li>
             <li role="separator" class="divider"></li>
-                <li><a href="{% static "documentacion/Manual.pdf" %}" target="_blank">Ver Guia de Usuario</a></li>
+            <li><a href="javascript:abrirModalDocumentacionProyecto('{% static "documentacion/_build/html" %}')">Documentación de Proyecto</a></li>
+
+
+        <li role="separator" class="divider"></li>
+            <li><a href="{% static "documentacion/Manual.pdf" %}" target="_blank">Ver Guia de Usuario</a></li>
 
 
 
 
-              </ul>
-            </div>-->
+          </ul>
+        </div>-->
 
 
-							<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
-								<span class="sr-only">Desplegar navegación</span>
-								<span class="icon-bar"></span>
-								<span class="icon-bar"></span>
-								<span class="icon-bar"></span>
-							</button>
-							<img class="logo" src="{% static 'images/escudo.png' %}" align="left" hspace="10" vspace="10"/>
-						</div>
+						<button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-ex1-collapse">
+							<span class="sr-only">Desplegar navegación</span>
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+							<span class="icon-bar"></span>
+						</button>
+						<img alt="logo municpalidad" class="logo" src="{% static 'images/escudo.png' %}" align="left" hspace="10" vspace="10"/>
 					</div>
-					<div id="et2" class=" col-xs-12 col-sm-10 col-md-10">
-						<div class="collapse navbar-collapse navbar-ex1-collapse" align="right">
-							<div class="form-inline">
+				</div>
+				<div id="et2" class=" col-xs-12 col-sm-10 col-md-10">
+					<div class="collapse navbar-collapse navbar-ex1-collapse" align="right">
+						<div class="form-inline">
 							<br>
 							{% block login %}
-								{% if user.is_active%}
-									<div id="user-tools">
-										<form >
-											<label id="labelUsuario" style="margin-right: 3px; font-size: 13px;">Usuario:</label>
-											<strong style="color:white;">{% filter force_escape %}{% firstof user.first_name user.username %}{% endfilter %}</strong>
-											<a href="{%url 'logout'%}" class="btn btn-primary btn-sm" style="margin-left: 3px;">Salir</a>
+							{% if user.is_active%}
+							<div id="user-tools">
+								<form >
+									<label id="labelUsuario" style="margin-right: 3px;">Usuario:</label>
+									<strong style="color:white;">{% filter force_escape %}{% firstof user.first_name user.username %}{% endfilter %}</strong>
+									<a id="salir" value="salir" href="{%url 'logout'%}" class="btn btn-primary btn-sm" style="margin-left: 3px;">Salir</a>
 
+								</form>
 
-
-              </button>
-										</form>
-
-									</div>
-								{% else %}
-									{% include "login.html" with form=login_usuario_form %}
-								{% endif %}
+							</div>
+							{% else %}
+							{% include "login.html" with form=login_usuario_form %}
+							{% endif %}
 							{% endblock %}
 
-							</div>
-
-
 						</div>
-			  		</div>
 
-		        </div>
-            </div>
-				{% if messages %}
-					<div class="row">
-						<div class="col-xs-12">
-							{% for message in messages %}
-							<div class="alert {% if message.tags %} alert-{{ message.tags }} {% endif %} alert-dismissible" role="alert">
-								{{ message }}
-								<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
-							</div>
-							{% endfor %}
-						</div>
+
 					</div>
-				{% endif %}
-		</header>
-	</nav>
+				</div>
+
+			</div>
+		</div>
+		{% if messages %}
+		<div class="row">
+			<div class="col-xs-12">
+				{% for message in messages %}
+				<div class="alert {% if message.tags %} alert-{{ message.tags }} {% endif %} alert-dismissible" role="alert">
+					{{ message }}
+					<button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+				</div>
+				{% endfor %}
+			</div>
+		</div>
+		{% endif %}
+	</header>
+</nav>
 
 <div class="container-fluid">
-{% block comprobante %}
+	{% block comprobante %}
 	{% endblock %}
 	<div class="container-fluid">
 
@@ -306,41 +302,41 @@
 			<br>
 		</div>
 
-			<div id="columnab2" class="col-xs-12 col-sm-12 col-md-10 col-lg-10">
-				{% block contenido %}
+		<div id="columnab2" class="col-xs-12 col-sm-12 col-md-10 col-lg-10">
+			{% block contenido %}
 
-				{% endblock %}
-			</div>
+			{% endblock %}
+		</div>
 	</div>
 
-<!--<div id="boton_ayuda" class="col-xs-4 col-sm-4 col-md-12 col-lg-12">
-	<div class="dropdown" style="float:left;">
-              <button class="btn btn-primary btn-md" type="button"  id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
-                <span class="glyphicon glyphicon-list-alt" aria-hidden="true">    Ayuda    <br> <br/></span>
+	<!--<div id="boton_ayuda" class="col-xs-4 col-sm-4 col-md-12 col-lg-12">
+        <div class="dropdown" style="float:left;">
+                  <button class="btn btn-primary btn-md" type="button"  id="dropdownMenu1" data-toggle="dropdown" aria-haspopup="true" aria-expanded="true">
+                    <span class="glyphicon glyphicon-list-alt" aria-hidden="true">    Ayuda    <br> <br/></span>
 
-                <span class="caret"></span>
+                    <span class="caret"></span>
 
-                             </button>
-              <ul class="dropdown-menu">
-                <li><li><a target="_blank"  href="{% static "documentacion/_build/html/ayuda usuario.html" %}" target="_blank">Ayuda</a></li>
-                <li role="separator" class="divider"></li>
-                <li><a target="_blank" id="boton_ayuda1" href="{% static "documentacion/Manual.pdf" %}" target="_blank">Ayuda PDF</a></li>
-
-
+                                 </button>
+                  <ul class="dropdown-menu">
+                    <li><li><a target="_blank"  href="{ static "documentacion/_build/html/ayuda usuario.html" }" target="_blank">Ayuda</a></li>
+                    <li role="separator" class="divider"></li>
+                    <li><a target="_blank" id="boton_ayuda1" href="{ static "documentacion/Manual.pdf" }" target="_blank">Ayuda PDF</a></li>
 
 
-              </ul>
-            </div>
-           <!-- <a href="javascript:abrirModalDocumentacion('{% static "documentacion/_build/html" %}')" class="btn btn-primary btn-md" role="button">Ayuda</a>-->
-	      <!--  <a id="boton_ayuda" href="{% static "documentacion/_build/html/ayuda usuario.html" %}" class="btn btn-primary btn-md" role="button">Ayuda</a>
-			<a id="boton_ayuda1" href="{% static "documentacion/Manual.pdf" %}" class="btn btn-primary btn-md" role="button">Ayuda PDF</a>
+
+
+                  </ul>
+                </div>
+               <!-- <a href="javascript:abrirModalDocumentacion('{ static "documentacion/_build/html" }')" class="btn btn-primary btn-md" role="button">Ayuda</a>-->
+	<!--  <a id="boton_ayuda" href="{ static "documentacion/_build/html/ayuda usuario.html" }" class="btn btn-primary btn-md" role="button">Ayuda</a>
+      <a id="boton_ayuda1" href="{static "documentacion/Manual.pdf" }" class="btn btn-primary btn-md" role="button">Ayuda PDF</a>
 
 </div>-->
-<br>
-<br>
+	<br>
+	<br>
 	<br>
 
-<footer>
+	<footer>
 
 		<div class="container-fluid" id="pie">
 			<h6 align="left">Municipalidad de Trelew</h6>
@@ -349,13 +345,13 @@
 </body>
 
 
-	<!--script src="{% static 'js/dataTables.bootstrap.min.js' %}"></script-->
+<!--script src="{ static 'js/dataTables.bootstrap.min.js' }"></script-->
 
 
 
 
 
-	<script>
+<script>
 		window.setTimeout(function() {
 			$(".alert").fadeTo(250, 0).slideUp(250, function(){
 				$(this).remove();
@@ -363,23 +359,23 @@
 		}, 2000);
 	</script>
 
-	<script>
+<script>
 		$('.textinput').addClass('input-sm');
 	</script>
 
-	<script>
+<script>
 		$('.form-control').addClass('input-sm');
 	</script>
 
-	<script>
+<script>
 		$('.clearablefileinput').addClass('file');
 	</script>
 
-	<script>
+<script>
 		$('.btn').addClass('btn-sm');
 	</script>
 
-	<script>
+<script>
 		$(document).ready(function()
 		{
 		var table = $('.table').DataTable( {
@@ -405,7 +401,7 @@
 		});
 	</script>
 
-    <script>
+<script>
         $(document).ready(function() {
             $("a#single_image").fancybox({
             	protect: true
@@ -414,7 +410,7 @@
     </script>
 
 
-	<script>
+<script>
     function generarcolor()
     {
       long=6;
@@ -426,8 +422,8 @@
     }
 	</script>
 
-	{% block scripts %}
+{% block scripts %}
 
-	{% endblock %}
+{% endblock %}
 
 </html>

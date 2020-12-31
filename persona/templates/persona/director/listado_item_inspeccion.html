@@ -51,13 +51,13 @@
 
                                         {% for i in items %}
                                         {% if i.activo == True %}
-                                        {%for name,value in lista%}
-                                         {%if  name == i.nombre %}
+                                        {%for l in lista%}
+                                         {%if  l.nombre == i.nombre and l.categoria == i.categoria_inspeccion_id %}
                                         <tr>
                                             <td class="col-xs-1">{{ i.categoria_inspeccion.nombre }}</td>
                                             <td class="col-xs-1">{{ i.item_inspeccion.nombre }}</td>
                                             <td class="col-xs-1">{{ i.nombre }}</td>
-                                            <td class="col-xs-1">{{ value }}</td>
+                                            <td class="col-xs-1">{{ l.cantidad }}</td>
                                         </tr>
                                         {%endif%}
                                         {% endfor %}

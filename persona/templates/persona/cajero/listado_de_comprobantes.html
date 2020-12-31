@@ -22,15 +22,15 @@
         <div class="container-fluid">
             <div class="panel-body">
                 <div class="table-responsive">
-
+<label>kjkjkjkjjkkjjhhhh</label>
                     <table class="table table-bordered table-striped table-hover table-condensed"
                            style="background: white;">
                         <thead>
                         <tr>
-                            <th>Id cuota</th>
+                       <!--     <th>Id cuota</th>-->
+                            <th>Numero de Cuota</th>
                             <th>Fecha de Vencimiento</th>
                             <th>Monto</th>
-                            <th>Numero de Cuota</th>
                             <th>Fecha de Pago</th>
                             <th>Forma de Pago</th>
                             <th>Mostrar Comprobante</th>
@@ -39,10 +39,11 @@
                         <tbody>
                         {% for cuota in cuotas %}
                         <tr>
-                            <td class="col-xs-1">{{ cuota.id }}</td>
+
+                         <!--   <td class="col-xs-1">{{ cuota.id }}</td>-->
+                            <td class="col-xs-3">{{ cuota.numeroCuota }}</td>
                             <td class="col-xs-3">{{ cuota.fechaVencimiento }}</td>
                             <td class="col-xs-3">{{ cuota.monto }}</td>
-                            <td class="col-xs-3">{{ cuota.numeroCuota }}</td>
                             <td class="col-xs-3">{{ cuota.fechaPago }}</td>
                             <td class="col-xs-3">{{ cuota.tipoPago.nombre }}</td>
                             <td>
@@ -59,7 +60,7 @@
                     </table>
                     <div class="col-xs-4 col-sm-4 col-md-12 col-lg-12">
                         <br>
-                        <form action='/persona/cajero'>
+                        <form action="{% url 'cajero' %}">
                             &nbsp;<Button class="btn btn-primary btn-sm" type="submit" value="Atras">Volver</Button>
                         </form>
                         <br>

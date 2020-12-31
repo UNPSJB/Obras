@@ -6,12 +6,12 @@
         <table class="table table-bordered table-striped table-hover table-condensed" style="background: white;">
             <thead>
                 <tr>
-                    <th>Numero de tramite</th>
-                    <th>domicilio</th>
-                    <th>Monto a pagar</th>
-                    <th>Monto restante</th>
-                    <th>Monto pagado</th>
-                    <th>Seleccionar Tramite</th>
+                    <th style="vertical-align: middle;">Numero de tramite</th>
+                    <th style="vertical-align: middle;">Domicilio</th>
+                    <th style="vertical-align: middle;">Monto a pagar</th>
+                    <th style="vertical-align: middle;">Monto restante</th>
+                    <th style="vertical-align: middle;">Monto pagado</th>
+                    <th style="vertical-align: middle;">Seleccionar Tramite</th>
                 </tr>
             </thead>
             <tbody>
@@ -27,8 +27,8 @@
                         {% endif %}
                         <td class="col-xs-3">{{ tramite.monto_pagado }}</td>
                         <td>
-                            <a href="{% url 'listado_de_comprobantes_propietario' tramite.id %}">
-                                <button type="button" class="btn btn-primary btn-xs" name="lis">
+                            <a aria-label="Seleccionar tramite" href="{% url 'listado_de_comprobantes_propietario' tramite.id %}">
+                                <button title="boton para comprobantes de tramite seleccionado" type="button" class="btn btn-primary btn-xs" name="lis">
                                     <span class="glyphicon glyphicon-home" aria-hidden="true"> Seleccionar tramite </span>
                                 </button>
                             </a>

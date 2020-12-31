@@ -114,23 +114,15 @@ def tramites_de_propietario(request):
 def propietario_solicita_final_obra(request, pk_tramite):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
     try:
-        tramite.hacer(Tramite.SOLICITAR_FINAL_OBRA, request.user)
-        messages.add_message(request, messages.SUCCESS, 'final de obra solicitado.')
+        if tramite.estados.filter(tipo=8):
+            messages.add_message(request, messages.WARNING,"El final de obra ya fue otorgado anteriormente")
+        else:
+            tramite.hacer(Tramite.SOLICITAR_FINAL_OBRA, request.user)
+            messages.add_message(request, messages.SUCCESS, 'final de obra solicitado.')
     except:
         messages.add_message(request, messages.ERROR, 'No puede solicitar el final de obra para ese tramite.')
     finally:
         return redirect('propietario')
-
-def propietario_solicita_final_obraDos(request, pk_tramite):
-    tramite = get_object_or_404(Tramite, pk=pk_tramite)
-    try:
-        tramite.hacer(Tramite.SOLICITAR_FINAL_OBRA, request.user)
-        messages.add_message(request, messages.SUCCESS, 'final de obra solicitado.')
-    except:
-        messages.add_message(request, messages.ERROR, 'No puede solicitar el final de obra para ese tramite.')
-    finally:
-        return redirect('propietario')
-
 def ver_historial_tramite(request, pk_tramite):
     estilos = ''
     usuario = request.user
@@ -494,6 +486,7 @@ from planilla_inspeccion.models import PlanillaDeInspeccion
 @login_required(login_url="login")
 @grupo_requerido('profesional')
 def mostrar_profesional(request):
+    print("profesional")
     usuario = request.user
     tipos_de_documentos_requeridos = TipoDocumento.get_tipos_documentos_para_momento(TipoDocumento.INICIAR)
     FormularioDocumentoSet = FormularioDocumentoSetFactory(tipos_de_documentos_requeridos)
@@ -528,6 +521,7 @@ def mostrar_profesional(request):
                 request.POST['sector'],
                 lista
             )
+            print("new tramite")
             tramite_form = FormularioIniciarTramite(initial={'profesional':usuario.persona.profesional.pk})
             propietario_form = None
         else:
@@ -564,8 +558,11 @@ def tramites_corregidos(request):
     profesional = persona.get_profesional() #Me quedo con el atributo profesional de la persona
     tramites_de_profesional = filter(lambda tramite: (tramite.profesional == profesional), tramites)
     tipo = 4
-    tram_corregidos = filter(lambda tramite: (tramite.estado().tipo == tipo), tramites_de_profesional)
-    contexto = {'tramites': tram_corregidos}
+    try:
+        tram_corregidos = filter(lambda tramite: (tramite.estado().tipo == tipo), tramites_de_profesional)
+        contexto = {'tramites': tram_corregidos}
+    except:
+        contexto={'mensaje':"No hay datos para mostrar"}
     return contexto
 
 def tramites_corregidos_administrativo(request):
@@ -597,19 +594,29 @@ def ver_documentos_tramite_profesional(request, pk_tramite):
 def profesional_solicita_final_obra(request, pk_tramite):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
     try:
-        tramite.hacer(Tramite.SOLICITAR_FINAL_OBRA, request.user)
-        messages.add_message(request, messages.SUCCESS, 'final de obra solicitado.')
+        if tramite.estados.filter(tipo=8):
+            messages.add_message(request, messages.WARNING, "El final de obra ya fue otorgado anteriormente")
+        else:
+            tramite.hacer(Tramite.SOLICITAR_FINAL_OBRA, request.user)
+            messages.add_message(request, messages.SUCCESS, 'final de obra solicitado.')
     except:
         messages.add_message(request, messages.ERROR, 'No puede solicitar el final de obra para ese tramite.')
     finally:
         return redirect('profesional')
 
 def ver_documentos_corregidos(request, pk_tramite):
+    print("ver")
     if request.method == "POST":
-        print ("faltan documentos")
-        tipo= "correccion visado" #deberia venir por post en un input hidden
-        documentos = Documento.objects.filter(tramite_id=pk_tramite)
-        enviar_correccioness(request, pk_tramite,tipo)
+       print("post")
+
+
+       if  "Enviar correccion de administrativo" in request.POST:
+            print ("faltan documentos")
+            tipo= "correccion visado" #deberia venir por post en un input hidden
+            print(tipo)
+            documentos = Documento.objects.filter(tramite_id=pk_tramite)
+            print(documentos)
+            enviar_correccioness(request, pk_tramite,tipo)
     else:
         tramite = get_object_or_404(Tramite, pk=pk_tramite)
         planillas = PlanillaDeVisado.objects.filter(
@@ -626,32 +633,28 @@ def ver_documentos_corregidos(request, pk_tramite):
         else:
             try:
                 planilla = PlanillaDeVisado.objects.get(tramite_id=pk_tramite)  # PlanillaDeVisado.objects.filter(tramite_id=tramite.id)# busca las planillas que tengan el id del tramite
+
+                filas = FilaDeVisado.objects.all()
+                columnas = ColumnaDeVisado.objects.all()
+                obs = planilla.observacion
+                elementos = planilla.elementos.all()
+                items = planilla.items.all()
+                contexto = {
+                    'tramite': tramite,
+                    'planilla': planilla,
+                    'filas': filas,
+                    'columnas': columnas,
+                    'items': items,
+                    'elementos': elementos,
+                    'obs': obs,
+                }
+                return render(request, 'persona/profesional/ver_documentos_corregidos.html', contexto)
             except:
-                planilla="No hay planilla para mostrar"
-        filas = FilaDeVisado.objects.all()
-        columnas = ColumnaDeVisado.objects.all()
-        try:
-            obs = planilla.observacion
-            elementos = planilla.elementos.all()
-            items = planilla.items.all()
-            contexto = {
-                'tramite': tramite,
-                'planilla': planilla,
-                'filas': filas,
-                'columnas': columnas,
-                'items': items,
-                'elementos': elementos,
-                'obs': obs,
-            }
+                contexto = {
+                    'tramite': tramite,
+                    'mensaje': "No hay planilla/s para mostrar"  ,
+                }
             return render(request, 'persona/profesional/ver_documentos_corregidos.html', contexto)
-        except:
-            contexto = {
-                'tramite': tramite,
-                'mensaje': planilla,
-            }
-            return render(request, 'persona/profesional/ver_documentos_corregidos.html', contexto)
-
-
     return redirect('profesional')
 
 
@@ -873,8 +876,21 @@ def tramite_corregidos_list(request):
     return contexto
 
 def solicitud_final_obra_list(request):
-    tramites = Tramite.objects.en_estado(FinalObraSolicitado)
-    contexto = {'tramites': tramites}
+    estadosFinalObraSolicitado=Estado.objects.filter(tipo=8)
+    tramites_id = []
+    tramites=Tramite.objects.all()
+    tramitesHabilitados=[]
+    for e in estadosFinalObraSolicitado:
+        estado = e.tramite.estados.all()
+        encontrado=[True for i in estado if i.tipo==9]
+        inspeccionado=[True for i in estado if i.tipo==7]
+        if not encontrado and inspeccionado:
+            tramites_id.append(e.tramite_id)
+    for t in tramites:
+        for t_id in tramites_id:
+            if t_id ==t.id:
+                tramitesHabilitados.append(t)
+    contexto = {'tramites': tramitesHabilitados}
     return contexto
 
 def registrar_pago_tramite(request):
@@ -915,7 +931,6 @@ def habilitar_final_obra(request, pk_tramite):
         messages.add_message(request, messages.ERROR, 'No puede otorgar final de obra total para ese tramite.')
     finally:
         return redirect('administrativo')
-
 def aceptar_tramite(request, pk_tramite):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
     tramite.hacer(tramite.ACEPTAR, request.user)
@@ -1484,7 +1499,7 @@ def planilla_visado_impresa_administrativo(request, pk_tramite):
                     'items': items,
                     'obs': obs,
                     }
-        return render(request, 'persona/director/planilla_visado_impresa_administrativo.html', contexto)
+        return render(request, 'persona/administrativo/planilla_de_visado_impresa_administrativo.html', contexto)
     except:
         contexto = {
             'tramite': tramite,
@@ -1493,7 +1508,7 @@ def planilla_visado_impresa_administrativo(request, pk_tramite):
             'columnas': columnas,
             'obs': obs,
         }
-        return render(request, 'persona/director/planilla_visado_impresa_administrativo.html', contexto)
+        return render(request, 'persona/administrativo/planilla_de_visado_impresa_administrativo.html', contexto)
 
 
 def planilla_inspeccion_impresa_administrativo(request, pk_tramite):
@@ -1510,7 +1525,7 @@ def planilla_inspeccion_impresa_administrativo(request, pk_tramite):
             'categorias': categorias,
             'detalles': detalles,
         }
-        return render(request, 'persona/director/planilla_inspeccion_impresa_administrativo.html', contexto)
+        return render(request, 'persona/administrativo/planilla_de_inspeccion_impresa_administrativo.html', contexto)
 
     except:
         contexto = {
@@ -1519,7 +1534,7 @@ def planilla_inspeccion_impresa_administrativo(request, pk_tramite):
             'items': items,
             'categorias': categorias,
         }
-        return render(request, 'persona/director/planilla_inspeccion_impresa_administrativo.html', contexto)
+        return render(request, 'persona/administrativo/planilla_de_inspeccion_impresa_administrativo.html', contexto)
 
 
 #-------------------------------------------------------------------------------------------------------------------
@@ -2061,7 +2076,7 @@ def mis_inspecciones(request):
     return tramites
 
 def tramites_visados_y_con_inspeccion(request):
-    argumentos = [Visado, ConInspeccion]
+    argumentos = [Visado, ConInspeccion,FinalObraSolicitado]
     tramites = Tramite.objects.en_estado(argumentos)
     tram = []
     for t in tramites:
@@ -2306,7 +2321,8 @@ def mostrar_jefe_inspector(request):
     return render(request, 'persona/jefe_inspector/jefe_inspector.html', contexto)
 
 def tramite_con_inspecciones_list(request):
-    tramites = Tramite.objects.en_estado(ConInspeccion)
+    argumentos=[ConInspeccion, FinalObraSolicitado]
+    tramites = Tramite.objects.en_estado(argumentos)
     tram=[]
     for t in tramites:
         planillas = PlanillaDeInspeccion.objects.filter(tramite_id=t.id).count()
@@ -2881,8 +2897,11 @@ def ver_tipos_de_obras_mas_frecuentes(request):
 def add_legend(draw_obj, chart, data):
     legend = Legend()
     legend.alignment = 'right'
-    legend.x = 20
-    legend.y = 60
+    legend.x = 10
+    legend.y = 95
+    legend.deltax = 60
+    legend.dxTextSpace = 3
+    legend.columnMaximum = 6
     legend.colorNamePairs = Auto(obj=chart)
     draw_obj.add(legend)
 
@@ -2891,12 +2910,12 @@ def pie_chart_with_legend(datos, nombres,titulo):
     pie = Pie()
     pie.sideLabels = True
     pie.x = 300
-    pie.y = 120
+    pie.y = 170
     pie.data = datos
     longitud=len(datos)
     col=colores(longitud,10)
     if (col is not None):
-        for i in range(longitud): pie.slices[i].fillColor = colors[i]
+        for i in range(longitud): pie.slices[i].fillColor = col[i]
     pie.slices.popout = 8
     pie.labels = [cat for cat in nombres]
     pie.slices.strokeWidth = 0.5
@@ -2906,35 +2925,41 @@ def pie_chart_with_legend(datos, nombres,titulo):
     return drawing
 
 def ver_categorias_mas_frecuentes(request):
+    nombres=[]
+    porcentaje=[]
     planillas = PlanillaDeInspeccion.objects.all()
     tramites = Tramite.objects.all()
     tipos_categorias = CategoriaInspeccion.objects.filter(activo=1)
-    detalles = DetalleDeItemInspeccion.objects.filter(activo=1)
-    total=detalles.count()
+    d = DetalleDeItemInspeccion.objects.filter(activo=1)
+    #total=d.count()
+    
     list = []
+    list_categorias = []
     datos = []
-    for p in planillas:
-        for t in tramites:
-            if t.id == p.tramite.id:
-                list.append(p)
-    nombres = []
-    for cat in tipos_categorias:
-        if cat.activo == True:
-            nombres.append(cat.nombre)
+    total=0
+    for t in tipos_categorias:
+        cant = PlanillaDeInspeccion.objects.filter(detalles__categoria_inspeccion_id=t.id).exclude(detalles__categoria_inspeccion__activo=0).count()
+        total+=cant
+        l = [t, cant]
+        list.append(l)
+        if cant != 0:
+            datos.append(cant)
+            nombres.append(t.nombre)
+        cant = None
+
     for l in list:
-        list_categorias = l.detalles.values_list('categoria_inspeccion_id', flat="True")
-    categorias = dict(collections.Counter(list_categorias))
-    porcentaje=[]
-    for i in categorias:
-        datos.append(categorias[i])
-        porcentaje.append("{0:.2f}".format((categorias[i]/float(total))*100))
+        porcentaje.append("{0:.2f}".format((l[1] / float(total)) * 100))
+        # categorias = dict(collections.Counter(list_categorias))
+    for cat in tipos_categorias:
+         if cat.id in list:
+             nombres.append(cat.nombre)
     aux=[nombres[i]+" "+porcentaje[i]+"%" for i in range( 0, len(nombres))]
     titulo = "Categorias mas frecuentes"
     grafico = pie_chart_with_legend(datos, aux, titulo)
     imagen = base64.b64encode(grafico.asString("png"))
     contexto = {
         "tipos_categorias": tipos_categorias,
-        "detalles": detalles,
+        "detalles": d,
         "grafico": imagen,
     }
     return render(request, 'persona/director/categorias_mas_frecuentes.html', contexto)
@@ -2948,7 +2973,6 @@ def ver_profesionales_mas_requeridos(request):
     nombres=[]
     total=0
     porcentaje=[]
-    print(profesionales)
     for p in profesionales:
         cant=Tramite.objects.filter(profesional_id=p.id).exclude(profesional_id__isnull=True).count()
         m=[p,cant]
@@ -2993,25 +3017,34 @@ def ver_barra_materiales(request):
 def __busco_item__(item):
     i = get_object_or_404(ItemInspeccion, nombre=item)
     list = []
-    nombres=[]
+    detalles=[]
     datos=[]
+    nombres=[]
     porcentaje=[]
     total=0
-    e=DetalleDeItemInspeccion.objects.filter(item_inspeccion_id=i.id, activo=True)
-    f=PlanillaDeInspeccion.objects.filter(detalles__in=e).values_list('detalles__nombre',flat="True")
-    for i in range(0,len(e)):
-        nombres.append(e[i].nombre)
-    for n in range(0,len(nombres)):
-        cant=len(filter(lambda s:(s==nombres[n]),f))
+    detallesItems=DetalleDeItemInspeccion.objects.select_related().filter(item_inspeccion_id=i.id, activo=True)
+    for i in range(0,len(detallesItems)):
+        aux={'nombre':detallesItems[i].nombre,'categoria': detallesItems[i].categoria_inspeccion.nombre}
+        detalles.append(aux)
+
+    for n in range(0,len(detalles)):
+        planillas = PlanillaDeInspeccion.objects.filter(detalles__in=detallesItems, detalles__nombre=detalles[n]['nombre'],detalles__categoria_inspeccion__nombre=detalles[n]['categoria'])
+        cant=planillas.count()
         total+=cant
-        m=[nombres[n],cant]
+        m={'cantidad':cant,'nombre':detalles[n]['nombre'],'categoria':detalles[n]['categoria']}
         list.append(m)
-        datos.append(cant)
+    list.sort(reverse=True)
+    if len(list)>10:
+        tope=10
+    else:
+        tope=len(list)
+    for i in range (0,tope):
+        datos.append(list[i]['cantidad'])
+        nombres.append(list[i]['nombre'])
     for d in datos:
         porcentaje.append("{0:.2f}".format((d / float(total)) * 100))
     aux = [nombres[i] + " " + porcentaje[i] + "%" for i in range(0, len(nombres))]
-    titulo = "Profesionales mas requeridos"
-    contexto={'datos':datos,'nombres':aux,'detalles':list}
+    contexto={'datos':datos,'nombres':aux,'detalles':list[0:10]}
     return contexto
 
 def detalle_de_tramite(request, pk_tramite):
@@ -3218,14 +3251,14 @@ def colores(longitud,tope):
         return colores
 
 def grafico_de_barras_v(datos,nombres, titulo,series):
-    drawing = Drawing(width=500, height=200)
+    drawing = Drawing(width=530, height=230)
     my_title = String(280, 280, titulo, fontSize=18)
     bc = VerticalBarChart()
     longitud=len(series)
     col=colores(longitud,3)
     bc.data=datos
     bc.x = 50
-    bc.y = 100
+    bc.y = 130
     bc.width=410
     bc.height=90
     bc.valueAxis.valueMin = 0
@@ -3281,7 +3314,8 @@ def seleccionar_fecha_item_inspeccion(request):
         totalItems=0
         subtotales=[]
         for l in listaItems:
-            i=DetalleDeItemInspeccion.objects.get(nombre=l)
+            nombre, categoria=l.split('_')
+            i=DetalleDeItemInspeccion.objects.get(nombre=nombre, categoria_inspeccion_id=categoria)
             item.append(i)
         for name, value in request.POST.items():
             if (name == 'fecha'):
@@ -3296,8 +3330,9 @@ def seleccionar_fecha_item_inspeccion(request):
                 subtotal=0
                 for t in tramites:
                     try:
+
                         resultado=PlanillaDeInspeccion.objects.filter(fecha=t['fecha__max'],tramite_id=t['tramite_id'], fecha__range=(
-                        datetime.date(year, m, 01), datetime.date(year, m, diaFinal[1])), detalles__nombre=i.nombre)
+                        datetime.date(year, m, 01), datetime.date(year, m, diaFinal[1])), detalles__nombre=i.nombre, detalles__categoria_inspeccion_id=i.categoria_inspeccion_id)
                         if resultado:
                            subtotal+=1
                     except:
@@ -3307,14 +3342,14 @@ def seleccionar_fecha_item_inspeccion(request):
             datos.append(tuple(cant))
             nombre=str(i.nombre)
             series.append(nombre)
-            totalItems=PlanillaDeInspeccion.objects.filter(detalles__nombre=i.nombre).values('tramite_id').distinct().order_by('tramite_id').annotate(Max('fecha')).count()
-            if (totalItems==0):
-                porcentaje=0
-                porcentaje1=0
-            else:
-                porcentaje1= (totalI/float(totalItems))*100
-                porcentaje = "{0:.2f}".format(porcentaje1)
-            aux = [nombre, porcentaje]
+            totalItems=PlanillaDeInspeccion.objects.filter(detalles__nombre=i.nombre, detalles__categoria_inspeccion_id=i.categoria_inspeccion_id, fecha__range=(datetime.date(year,01, 01), datetime.date(year, 12, 31))).values('tramite_id').distinct().order_by('tramite_id').annotate(Max('fecha')).count()
+            # if (totalItems==0):
+            #      porcentaje=0
+            #      porcentaje1=0
+            # else:
+            #      porcentaje1= (totalI/float(totalItems))*100
+            #      porcentaje = "{0:.2f}".format(porcentaje1)
+            aux = {'nombre':nombre,'categoria':i.categoria_inspeccion_id, 'cantidad': totalItems}
             lista.append(aux)
             cant = []
         titulo = "Items de inspeccion por mes"
@@ -3486,7 +3521,6 @@ def ver_sectores_con_mas_obras(request):
 
 def seleccionar_tipoObra_sector(request):
     datos = []
-    dato = []
     iniciados = []
     series = []
     lista = []
@@ -3503,34 +3537,37 @@ def seleccionar_tipoObra_sector(request):
         sectores = []
         list = []
         tramite = Tramite.objects.filter(tipo_obra_id=tipoObra)
-        try:
-            for t in tramite:
+        for t in tramite:
                 if not t.sector in sectores:
                     sectores.append(t.sector)
-            for s in sectores:
-                list.append([s, 0])
-            sectores = list
-            list_sectores = []
-            listaSectores = []
-            for name, value in sectores:
+        for s in sectores:
+               list.append([s, 0])
+        sectores = list
+        list_sectores = []
+        listaSectores = []
+        for name, value in sectores:
                 v = 0
                 for t in tramites:
                     if t.sector == name:
                         v += 1
-                        s = "Sector "+ str(t.sector)
-                list_sectores.append([name, v])
-                listaSectores.append(v)
-                series.append(s)
-                datos.append([v])
-            titulo = "Sectores con mas obras segun obra seleccionada"
-            if len(datos) > 0:
+                list_sectores.append([v,name])
+             #   listaSectores.append(v)
+        list_sectores.sort(reverse=True)
+        for l in list_sectores[0:30]:
+            datos.append([l[0]])
+            nombre="Sector "+ str(l[1])
+            nombres.append(nombre)
+            series.append(nombre)
+        print(list_sectores[0:30])
+        titulo = "Sectores con mas obras segun obra seleccionada"
+        if len(datos) > 0:
                 grafico = grafico_de_barras_v(datos, nombres, titulo,series)
                 imagen = base64.b64encode(grafico.asString("png"))
-                contexto = {"grafico": imagen, "lista": list_sectores, "tipo_obra":tipo_obra}
-            return render(request, 'persona/director/sectores_con_mas_obras.html', contexto)
-        except:
-            contexto={"respuesta":"No hay datos para mostrar"}
-            return render(request, 'persona/director/sectores_con_mas_obras.html', contexto)
+                contexto = {"grafico": imagen, "lista": list_sectores[0:30], "tipo_obra":tipo_obra}
+        return render(request, 'persona/director/sectores_con_mas_obras.html', contexto)
+        #except:
+        #   contexto={"respuesta":"No hay datos para mostrar"}
+         #   return render(request, 'persona/director/sectores_con_mas_obras.html', contexto)
 
     else:
         tipos_obras = TipoObra.objects.filter(activo=1)
@@ -4078,7 +4115,8 @@ def listado_comprobantes(request,pk_tramite):
     cuotas=Cuota.objects.en_estado(Cancelada)
     for cuota in cuotas:
         if cuota.pago==pago:
-                canceladas.append(cuota)
+            print(type(cuota.fechaVencimiento))
+            canceladas.append(cuota)
     if canceladas is None:
         messages.add_message(request, messages.WARNING, 'No hay pagos registrados para el tramite seleccionado.')
     return render (request, 'persona/cajero/factura_parcial.html', {'cuotas':canceladas,'tramite':tramite,'pago':pago})

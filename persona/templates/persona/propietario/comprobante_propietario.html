@@ -8,31 +8,31 @@
             <div class="row" style="background:white;" >
                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
                     <div style="background-color:#2c3e50;">
-                          <img src="/media/imagenes/Escudobanner.png"
-                               class="img-responsive" alt="escudo municipalidad" width="100" height="100"/>
+                        <img src="/media/imagenes/Escudobanner.png"
+                             class="img-responsive" alt="escudo municipalidad" width="100" height="100"/>
                     </div>
-                       <div align="justify" style="color:black font-size:9px; text-align:left;">
-                      <br>&nbsp;<label style="color:black;">MUNICIPALIDAD DE TRELEW
-                      <br>
+                    <div align="justify" style="color:black font-size:9px; text-align:left;">
+                        <br>&nbsp;MUNICIPALIDAD DE TRELEW
+                        <br>
 
-                      &nbsp;<label style="color:black;"> Rivadavia 390 <br>
-                      &nbsp;9100 TRELEW- Provincia del Chubut
-                       </div>
-                      <h3 align="center" style="color:black">
-                          FACTURA DE PAGO &nbsp;  &nbsp;
-                      </h3>
-                      <hr>
-                           &nbsp;<label style="color:black;"> PAGO EFECTUADO </label>
-                            <h5 align="right" style="color:black;"> Fecha de Vencimiento {{ cuota.fechaVencimiento }} &nbsp; &nbsp;</h5>
-                            <h5 align="right" style="color:black;"> Fecha de Pago {{ cuota.fechaPago }} &nbsp; &nbsp; </h5>
-                      <hr>
+                        &nbsp;Rivadavia 390 <br>
+                        &nbsp;9100 TRELEW- Provincia del Chubut
+                    </div>
+                    <h3 align="center" style="color:black">
+                        FACTURA DE PAGO &nbsp;  &nbsp;
+                    </h3>
+                    <hr>
+                    &nbsp;<label style="color:black;"> PAGO EFECTUADO </label>
+                    <h5 align="right" style="color:black;"> Fecha de Vencimiento {{ cuota.fechaVencimiento }} &nbsp; &nbsp;</h5>
+                    <h5 align="right" style="color:black;"> Fecha de Pago {{ cuota.fechaPago }} &nbsp; &nbsp; </h5>
+                    <hr>
                     <div class="row">
-                                       <div class="col-sm-6 col-md-6 col-lg-6 col-xs-6">
+                        <div class="col-sm-6 col-md-6 col-lg-6 col-xs-6">
                             <label style="color:black;">  Titular : &nbsp {{ tramite.propietario.persona.apellido}}  {{ tramite.propietario.persona.nombre }}</label>
-                        <br><label style="color:black;">  &nbsp;  &nbsp;DNI : {{tramite.propietario.persona.dni}}</label>
-                                       </div>
-                <div class="col-sm-6 col-md-6 col-lg-6 col-xs-6">
-                        <h5 align="right" style="color:black;">Profesional : {{tramite.profesion}} {{tramite.profesional}}</h5>
+                            <br><label style="color:black;">  &nbsp;  &nbsp;DNI : {{tramite.propietario.persona.dni}}</label>
+                        </div>
+                        <div class="col-sm-6 col-md-6 col-lg-6 col-xs-6">
+                            <h5 align="right" style="color:black;">Profesional : {{tramite.profesion}} {{tramite.profesional}}</h5>
                             <h5 align="right" style="color:black;">M.P: {{tramite.profesional.matricula}}</h5><br>
                         </div>
                     </div>
@@ -40,57 +40,57 @@
                     <label style="color:black;"> Domicilio : {{tramite.domicilio}}</label><br>
                     <hr>
                     <label style="color:black;"> Datos Catastrales: </label><br>
-                <label style="color:black;">  Sector : {{tramite.sector}}  -  </label> &nbsp;
-                <label style="color:black;">Parcela : &nbsp; {{tramite.parcela}}  -  </label> &nbsp;
-                <label style="color:black;">Circunscripción : &nbsp;{{tramite.circunscripcion}}  - </label> &nbsp;
-                <label style="color:black;">Manzana : &nbsp; {{tramite.manzana}}  </label>
-                    <h5 align="right"  style="color:black;">Costo Total del Tramite:<td> {{tramite.monto_a_pagar}}</td></h5>
-                    <h5 align="right"  style="color:black;">Total Pagado a la Fecha: <a style="color:black;" id="total"></a>
-                    <h5 align="right"  style="color:black;">Resta Pagar: <a style="color:black;" id="restoPagar"> </a>
-                        <hr>
-                <div class="table-responsive">
-                    <table  align="center" class="table table-bordered table-striped table-hover">
-                        <thead>
+                    <label style="color:black;">  Sector : {{tramite.sector}}  -  </label> &nbsp;
+                    <label style="color:black;">Parcela : &nbsp; {{tramite.parcela}}  -  </label> &nbsp;
+                    <label style="color:black;">Circunscripción : &nbsp;{{tramite.circunscripcion}}  - </label> &nbsp;
+                    <label style="color:black;">Manzana : &nbsp; {{tramite.manzana}}  </label>
+                    <h5 align="right"  style="color:black!important;">Costo Total del Tramite:{{tramite.monto_a_pagar}}</h5>
+                    <h5 align="right"  style="color:black!important;">Total Pagado a la Fecha: <div style="color:black!important;" id="total"></div></h5>
+                    <h5 align="right"  style="color:black!important;">Resta Pagar: <div style="color:black!imortant;" id="restoPagar"> </div></h5>
+                    <hr>
+                    <div class="table-responsive">
+                        <table  align="center" class="table table-bordered table-striped table-hover">
+                            <thead>
                             <tr>
-                                        <th p style="color:#FFFFFF"bgcolor="#2c3e50">Numero de Tramite</th>
-                                        <th p style="color:#FFFFFF"bgcolor="#2c3e50">Tipo de Obra  </th>
-                                        <th p style="color:#FFFFFF"bgcolor="#2c3e50">Numero de Cuota</th>
-                                        <th p style="color:#FFFFFF"bgcolor="#2c3e50">Importe</th>
-                                        <th p style="color:#FFFFFF"bgcolor="#2c3e50">Forma de Pago</th>
+                                <th style="color:#FFFFFF"bgcolor="#2c3e50">Numero de Tramite</th>
+                                <th style="color:#FFFFFF"bgcolor="#2c3e50">Tipo de Obra  </th>
+                                <th style="color:#FFFFFF"bgcolor="#2c3e50">Numero de Cuota</th>
+                                <th style="color:#FFFFFF"bgcolor="#2c3e50">Importe</th>
+                                <th style="color:#FFFFFF"bgcolor="#2c3e50">Forma de Pago</th>
 
                             </tr>
-                        </thead>
-                        <tbody style="text-align:center">
+                            </thead>
+                            <tbody style="text-align:center">
                             <tr>
-                                        <td>{{ tramite.id }}</td>
-                                        <td>{{ tramite.tipo_obra.nombre }}</td>
-                                        <td>{{ cuota.numeroCuota }}</td>
-                                        <td>{{ cuota.monto }} </td>
-                                        <td>{{ cuota.tipoPago.nombre }} </td>
+                                <td>{{ tramite.id }}</td>
+                                <td>{{ tramite.tipo_obra.nombre }}</td>
+                                <td>{{ cuota.numeroCuota }}</td>
+                                <td>{{ cuota.monto }} </td>
+                                <td>{{ cuota.tipoPago.nombre }} </td>
                             </tr>
-                        </tbody>
-                    </table>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <h5 align="right"  style="color:black;">Importe Cuota: <td> {{cuota.monto}}</td></h5>
+                    <hr>
+                    <!-- <label style="color:black;" align="center">&nbsp; ESTE RECIBO ES CONSTANCIA DE PAGO </label>-->
+
                 </div>
+            </div>
+        </div>
 
-                        <h5 align="right"  style="color:black;">Importe Cuota: <td> {{cuota.monto}}</td></h5>
-                  <hr>
-                   <!-- <label style="color:black;" align="center">&nbsp; ESTE RECIBO ES CONSTANCIA DE PAGO </label>-->
-
+        <div class="container-fluid " id="botones_cajero">
+            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6" align="right">
+                <button type="button" class="btn btn-primary btn-md" onclick="printDiv('printReady')">Imprimir</button>
+            </div>
+            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                <form action='/persona/propietario'>
+                    &nbsp;<Button class="btn btn-primary btn-md" type="submit" value="Atras">Volver</Button>
+                </form>
             </div>
         </div>
     </div>
-
-    <div class="container-fluid " id="botones_cajero">
-        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6" align="right">
-             <button type="button" class="btn btn-primary btn-md" onclick="printDiv('printReady')">Imprimir</button>
-        </div>
-        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-            <form action='/persona/propietario'>
-            &nbsp;<Button class="btn btn-primary btn-md" type="submit" value="Atras">Volver</Button>
-            </form>
-        </div>
-    </div>
-</div>
 </div>
 <style>
     body{
@@ -102,7 +102,7 @@
         background-color:#2c3e50;
         color:white;
     }
-         .dataTables_wrapper .dataTables_paginate .paginate_button.current, .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover, .dataTables_length, .dataTables_filter, .dataTables_info,.dataTables_wrapper .dataTables_paginate .paginate_button.disabled, .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:hover, .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:active {
+    .dataTables_wrapper .dataTables_paginate .paginate_button.current, .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover, .dataTables_length, .dataTables_filter, .dataTables_info,.dataTables_wrapper .dataTables_paginate .paginate_button.disabled, .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:hover, .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:active {
           display: none !important;
        }
     hr{

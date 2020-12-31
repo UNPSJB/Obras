@@ -3,6 +3,8 @@ from __future__ import unicode_literals
 from django.shortcuts import render
 from .models import *
 from .forms import *
+from tipos.forms import FormularioTipoPago
+
 
 # Create your views here.
 def mostrar_Pago(request):

@@ -38,19 +38,6 @@
                                         <br>
                                         <form action="" method="post" enctype="multipart/form-data">
                                             <input name="guardar_financiacion" type="hidden">
-                                            <!--<div id="div_id_tipoPago" class="form-group">
-                                                <label for="id_tipoPago" class="control-label ">
-                                                    Seleccione el tipo de pago
-                                                </label>
-
-                                                <div class="controls ">
-                                                    <select name="tipoPago" placeholder="Ingresar Tipo de Pago" class="select form-control input-sm" id="id_tipoPago" required>
-                                                        <option value="" selected="">---------</option>
-                                                        <option value="1">Debito</option>
-                                                        <option value="2">Tarjeta de credito</option>
-                                                    </select>
-                                                </div>
-                                            </div>-->
                                             <div id="div_id_cantidadCuotas" class="form-group">
                                                 <label for="id_cantidadCuotas" class="control-label ">
                                                     Seleccione la cantidad de cuotas
@@ -114,72 +101,6 @@
       $("#subtotal").html(subtotal);
    }
 </script>
-<!--div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" >
-	  <div class="panel" id="panelprop">
-		<div class="panel-heading box" role="tab" id="headingFive">
-		  <h5 class="panel-title">
-			<a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
-			  <label id="financiacion">Elegir Financiacion</label>
-			</a>
-		  </h5>
-		</div>
-
-        <div id="collapseFive" class="panel-collapse" role="tabpanel" aria-labelledby="headingFive">
-                <div class="panel-body">
-                    <div class="container-fluid">
-                        <div class="row" id="fila1">
-                            <div class="form-group">
-                                <br>
-                                <label>Total a Abonar:&nbsp;{{tramite.monto_a_pagar}}</label>
-                                    <br>
-                                    <form action="" method="post" enctype="multipart/form-data">
-                                        <input name="guardar_financiacion" type="hidden">
-                                        <div id="div_id_tipoPago" class="form-group">
-                                            <label for="id_tipoPago" class="control-label ">
-                                                TipoPago
-                                            </label>
-                                            <div class="controls ">
-                                                <select name="tipoPago" placeholder="Ingresar Tipo de Pago" class="select form-control input-sm" id="id_tipoPago" required>
-                                                    <option value="" selected="">-&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;</option>
-                                                    <option value="1">debito</option>
-                                                    <option value="2">tarjeta credito</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div id="div_id_cantidadCuotas" class="form-group">
-                                            <label for="id_cantidadCuotas" class="control-label ">
-                                                CantidadCuotas
-                                            </label>
-                                            <div class="controls ">
-                                                <select name="cantidadCuotas-" placeholder="Ingresar cantidad de cuotas" class="select form-control input-sm" id="id_cantidadCuotas" required>
-                                                    <option value="" selected="">-&#45;&#45;&#45;&#45;&#45;&#45;&#45;&#45;</option>
-                                                    <option value="1">Una Cuota</option>
-                                                    <option value="3">Tres Cuotas</option>
-                                                    <option value="6">Seis Cuotas</option>
-                                                    <option value="12">Doce Cuotas</option>
-                                                </select>
-                                            </div>
-                                        </div>
-                                        <div class="form-group">
-                                            <div class="controls ">
-                                                <button class="btn btn-primary btn-sm" type="submit" name="Guardar">
-                                                    Enviar
-                                                </button>
-                                                <a href="javascript:history.back(-1);">
-                                                    <button type="button" class="btn btn-primary" name="Volver">
-                                                        Volver
-                                                    </button>
-                                                </a>
-                                            </div>
-                                        </div>
-                                    </form>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-        </div>
-      </div>
-</div>-->
 {% endblock %}
 {% block estilos %}
 <style>

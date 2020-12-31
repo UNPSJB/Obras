@@ -106,28 +106,28 @@
         <div class="col-sm-12 col-xs-12 col-md-12 ">
             <form action="{% url 'cargar_inspeccion' tramite.id%}" method="post">
                 <div class="row">
-                    <table class="table-bordered table-striped table-hover table-condensed" style="text-align:center;">
+                    <table class="table-bordered table-striped table-hover table-condensed" style="text-align:center;" data-paging="false">
                         <thead>
                         <br>
                         <tr>
                             <th></th>
+ {% for categoria in categorias %}
+                        {% if categoria.activo == True %}
 
-                            {% for item in items %}
-                            {% if item.activo == True %}
-                            <th>{{item.nombre}}</th>
+                            <th>{{categoria.nombre}}</th>
                             {% endif %}
                             {% endfor %}
                         </tr>
                         </thead>
                         <tbody>
+  {% for item in items %}
+                            {% if item.activo == True %}
 
-                        {% for categoria in categorias %}
-                        {% if categoria.activo == True %}
                         <tr>
 
-                            <td class="col-xs-1">{{ categoria.nombre }}</td>
-                            {% for item in items %}
-                            {% if item.activo == True %}
+                            <td class="col-xs-1">{{ item.nombre }}</td>
+                            {% for categoria in categorias %}
+                        {% if categoria.activo == True %}
                             <td>&nbsp;
                                 {% for detalle in detalles %}
                                 {% if detalle.activo == True %}
@@ -259,24 +259,26 @@
         {%else%}
         <form action="{% url 'cargar_inspeccion' tramite.id%}" method="post">
             <div class="row">
-                <table class="table-bordered table-striped table-hover table-condensed" style="text-align:center;">
+                <table class="table-bordered table-striped table-hover table-condensed" style="text-align:center;" data-paging="false">
                     <thead>
                     <tr>
                         <th></th>
-                        {% for item in items %}
-                        {% if item.activo == True %}
-                        <th>{{item.nombre}}</th>
+                           {% for categoria in categorias %}
+                    {% if categoria.activo == True %}
+
+                        <th>{{categoria.nombre}}</th>
                         {% endif %}
                         {% endfor %}
                     </tr>
                     </thead>
                     <tbody>
-                    {% for categoria in categorias %}
-                    {% if categoria.activo == True %}
-                    <tr>
-                        <td class="col-xs-1">{{ categoria.nombre }}</td>
-                        {% for item in items %}
+                 {% for item in items %}
                         {% if item.activo == True %}
+                    <tr>
+                        <td class="col-xs-1">{{ item.nombre }}</td>
+                         {% for categoria in categorias %}
+                    {% if categoria.activo == True %}
+
                         <td>&nbsp;
                             {% for detalle in detalles %}
                             {% if detalle.activo == True %}

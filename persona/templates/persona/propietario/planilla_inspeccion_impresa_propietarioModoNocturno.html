@@ -2,10 +2,11 @@
 {% load staticfiles %}
 
 {% block barra %}
-<ul class="sidebar sidebar-1">
-    <li><a href="{%url 'propietario'%}" class="current"><label id="propietario">Propietario</label></a></li>
-    </font>
-</ul>
+<div id="noImprimir">
+    <ul class="sidebar sidebar-1">
+        <li><a href="{%url 'propietario'%}" class="current"><label id="propietario">Propietario</label></a></li>
+    </ul>
+</div>
 {% endblock %}
 
 {%block contenido %}
@@ -31,7 +32,7 @@
                         <div class="row">
                             <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6" >
                                 <h5 align="left">
-                                    &nbsp; NRO TRAMITE:  {{tramite.pk}} &nbsp;
+                                    &nbsp; NUMERO DE TRAMITE:  {{tramite.pk}} &nbsp;
                                 </h5>
                                 <h5 align="left">
                                     &nbsp; PROPIETARIO:  {{tramite.propietario.persona}} &nbsp;  &nbsp;
@@ -53,9 +54,7 @@
                     </div>
 
                     <div class="row">
-                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" >
-                            <div class="row">
-                                <div class=" col-xs-12 col-sm-12 col-md-12 col-lg-12" >
+                        <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" id="datosCatrastales">
                                     <hr style="border-width:">
                                     <h5 align="left">
                                         <font color="white">DATOS CATASTRALES&nbsp;  &nbsp;</font>
@@ -74,40 +73,40 @@
                                             </thead>
                                             <tbody>
                                             <tr>
-                                                <td class="col-xs-1" align="center" bgcolor="black"><font color="white">{{tramite.medidas}}</td>
-                                                <td class="col-xs-2" align="center"bgcolor="black"><font color="white">{{tramite.domicilio}}</td>
-                                                <td class="col-xs-3" align="center"bgcolor="black"><font color="white">{{tramite.parcela}}</td>
-                                                <td class="col-xs-4" align="center"bgcolor="black"><font color="white">{{tramite.circunscripcion}}</td>
-                                                <td class="col-xs-5" align="center"bgcolor="black"><font color="white">{{tramite.manzana}}</td>
-                                                <td class="col-xs-6" align="center"bgcolor="black"><font color="white">{{tramite.sector}}</td>
+                                                <td class="col-xs-1" align="center" >{{tramite.medidas}}</td>
+                                                <td class="col-xs-2" align="center">{{tramite.domicilio}}</td>
+                                                <td class="col-xs-3" align="center">{{tramite.parcela}}</td>
+                                                <td class="col-xs-4" align="center">{{tramite.circunscripcion}}</td>
+                                                <td class="col-xs-5" align="center">{{tramite.manzana}}</td>
+                                                <td class="col-xs-6" align="center">{{tramite.sector}}</td>
                                             </tr>
                                             </tbody>
                                         </table>
                                     </div>
-                                </div>
-                            </div>
+
                         </div>
                     </div>
                     <br>
-                    <table class="table table-bordered table-striped table-hover table-condensed " id="tabla">
+                    <table class="table table-bordered table-striped table-hover table-condensed " id="tabla" data-paging="false">
                         <thead>
                         <tr  style="text-align:center;">
                             <th></th>
-                            {% for item in items %}
-                            {% if item.activo == True %}
-                            <th>{{item.nombre}}</th>
+                            {% for categoria in categorias %}
+                        {% if categoria.activo == True %}
+                            <th>{{categoria.nombre}}</th>
                             {% endif %}
                             {% endfor %}
                         </tr>
                         </thead>
                         <tbody>
-                        {% for categoria in categorias %}
-                        {% if categoria.activo == True %}
-                        <tr>
-                            <td class="col-xs-1" bgcolor="black"><font color="white">{{ categoria.nombre }}</font></td>
-                            {% for item in items %}
+                         {% for item in items %}
                             {% if item.activo == True %}
-                            <td class="col-sm-4" bgcolor="black"><font color="white">&nbsp;
+
+                        <tr>
+                            <td class="col-xs-1" >{{ categoria.nombre }}</td>
+                            {% for categoria in categorias %}
+                        {% if categoria.activo == True %}
+                            <td class="col-sm-4">&nbsp;
                                 {% for detalle in detalles %}
                                 {% if detalle.activo == True %}
                                 {% if categoria.nombre == detalle.categoria_inspeccion.nombre and item.nombre == detalle.item_inspeccion.nombre %}
@@ -116,7 +115,7 @@
                                 {% endif %}
                                 {% endif %}
                                 {% endfor %}
-                            </font></td>
+                            </td>
                             {% endif %}
                             {% endfor %}
                         </tr>
@@ -133,13 +132,15 @@
                             <th>descripcion</th>
                         </tr>
                         </thead>
+                        <tbody>
                         {% for categoria in categorias %}
                         {% if categoria.activo == True %}
                         <tr>
-                            <td id="nombre{{categoria.id}}" class="col-xs-1" align="center"bgcolor="black"><font color="white">{{categoria.nombre}}</font></td>
-                            <td id="tipo{{categoria.id}}" class="col-xs-1" align="center" bgcolor="black"><font color="white">{{categoria.tipo}}</font></td>
-                            <td id="descripcion{{categoria.id}}" class="col-xs-2" bgcolor="black"><font color="white">{{categoria.descripcion}}</font></td>
+                            <td id="nombre{{categoria.id}}" class="col-xs-1" align="center">{{categoria.nombre}}</td>
+                            <td id="tipo{{categoria.id}}" class="col-xs-1" align="center" >{{categoria.tipo}}</td>
+                            <td id="descripcion{{categoria.id}}" class="col-xs-2">{{categoria.descripcion}}</td>
                         </tr>
+                        </tbody>
                         {% endif %}
                         {% endfor %}
                     </table>
@@ -192,7 +193,7 @@
     var $printSection = document.createElement("div");
     $printSection.id = "printSection";
     $printSection.appendChild(domClone);
-    $('head').append('<style> select{ display:none;}  #botones_inspeccion,#boton_ayuda,#botones_visado{display:none;} .dataTables_wrapper .dataTables_length, .dataTables_wrapper .dataTables_filter, .dataTables_wrapper .dataTables_info, .dataTables_wrapper .dataTables_processing, .dataTables_wrapper .dataTables_paginate label{display: none;} .dataTables_wrapper .dataTables_paginate .paginate_button.disabled, .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:hover, .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:active{display: none;} .dataTables_wrapper .dataTables_paginate .paginate_button{display: none!important;}</style>');
+    $('head').append('<style> select{ display:none;} div.#datosCatrastales{background-color:white; color:black;} td,th{ background-color:white!important; color:black!important;} col-xs-12 col-sm-12 col-md-12 col-lg-12{ background-color:white;} #columna.col-xs-12, .col-sm-12, .col-md-12, .col-lg-12, #columna1.col-xs-12, .col-sm-12, .col-md-12, .col-lg-12, #columna1a.col-xs-12, .col-sm-12, .col-md-12, .col-lg-12,#columna1b.col-xs-12, .col-sm-12, .col-md-12, .col-lg-12,#columna1c.col-xs-12, .col-sm-12, .col-md-12, .col-lg-12,#columna1d.col-xs-12, .col-sm-12, .col-md-12, .col-lg-12,#columna2.col-xs-12, .col-sm-12, .col-md-12, .col-lg-12,#columna2a.col-xs-12, .col-sm-12, .col-md-12, .col-lg-12,#columna2b.col-xs-12, .col-sm-12, .col-md-12, .col-lg-12, #columna2c.col-xs-12, .col-sm-12, .col-md-12, .col-lg-12, #columna2d.col-xs-12, .col-sm-12, .col-md-12, .col-lg-12, #columna2e.col-xs-12, .col-sm-12, .col-md-12, .col-lg-12, #contenedor1.container-fluid, #contenedor1a.container-fluid, #contenedor2.container-fluid, #contenedor2a.container-fluid{ background-color:white; color:black;}  #planillaInspeccion,#municipalidadInspeccion{color:black!important; background-color:white;}  #noImprimir{ display:none} #botones_inspeccion,#boton_ayuda,#botones_visado{display:none;} .dataTables_wrapper .dataTables_length, .dataTables_wrapper .dataTables_filter, .dataTables_wrapper .dataTables_info, .dataTables_wrapper .dataTables_processing, .dataTables_wrapper .dataTables_paginate label{display: none;} .dataTables_wrapper .dataTables_paginate .paginate_button.disabled, .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:hover, .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:active{display: none;} .dataTables_wrapper .dataTables_paginate .paginate_button{display: none!important;}</style>');
     //document.body.insertBefore($printSection, document.body.firstChild);
 
     window.print();
@@ -216,7 +217,12 @@
 	if (Cookies.get("fs")){
 		font=Cookies.get("fs");
 	    document.body.style.fontSize = font + "em";
-	}
+        var x=document.getElementsByClassName('panel-title');
+        var i;
+        for (i = 0; i < x.length; i++) {
+                x[i].style.fontSize = font + "em";
+        }
+    }
 });
 </script>
 {% endblock %}

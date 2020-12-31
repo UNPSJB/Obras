@@ -74,7 +74,7 @@ class Tramite(models.Model):
     @classmethod
     def new(cls, usuario, propietario, profesional, tipo_obra, medidas, domicilio, parcela, circunscripcion, manzana,
             sector, documentos):
-
+        print("nuevo tramite")
         if any(map(lambda d: d.tipo_documento.requerido != TipoDocumento.INICIAR, documentos)):
             raise Exception("Un documento no es de tipo iniciar")
         t = cls(
@@ -269,7 +269,7 @@ class Visado(Estado):
     TIPO = 3
 
     def agendar(self, tramite, fecha_inspeccion, inspector, rol):
-        return Agendado(tramite=tramite, fecha=fecha_inspeccion, inspector=None, rol=rol)
+        return Agendado(tramite=tramite, fecha=fecha_inspeccion, inspector=inspector, rol=rol)
 
 
 class Corregido(Estado):
@@ -302,7 +302,7 @@ class ConInspeccion(Estado):
         return FinalObraSolicitado(tramite=tramite, final_obra_total=False)
 
     def agendar(self, tramite, fecha_inspeccion, inspector, rol):
-        return Agendado(tramite=tramite, fecha=fecha_inspeccion, inspector=None, rol=rol)
+        return Agendado(tramite=tramite, fecha=fecha_inspeccion, inspector=inspector, rol=rol)
 
     def inspeccionar(self, tramite):
         return Inspeccionado(tramite=tramite)
@@ -323,6 +323,11 @@ class Inspeccionado(Estado):
         else:
             return FinalObraSolicitado(tramite=tramite, final_obra_total=False)
 
+    def finalizar(self, tramite):
+        if (tramite.monto_pagado >= tramite.monto_a_pagar):  # Tramite.objects.get(pk=tramite.pk).pago_completo
+            return Finalizado(tramite=tramite)
+        else:
+            raise Exception("Todavia no se puede otorgar el final de obra")
 
 class FinalObraSolicitado(Estado):
     TIPO = 8
@@ -330,10 +335,13 @@ class FinalObraSolicitado(Estado):
     final_obra_total = models.BooleanField(blank=True)
 
     def finalizar(self, tramite):
-        if (tramite.monto_pagado >= tramite.monto_a_pagar):  # Tramite.objects.get(pk=tramite.pk).pago_completo
+        if (tramite.monto_pagado >= tramite.monto_a_pagar) and tramite.estados.filter(tipo=7):  # Tramite.objects.get(pk=tramite.pk).pago_completo
             return Finalizado(tramite=tramite)
         else:
             raise Exception("Todavia no se puede otorgar el final de obra")
+
+    def agendar(self, tramite, fecha_inspeccion, inspector, rol):
+        return Agendado(tramite=tramite, fecha=fecha_inspeccion, inspector=inspector, rol=rol)
 
 
 class Finalizado(Estado):

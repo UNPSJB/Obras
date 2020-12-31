@@ -132,6 +132,20 @@ h4, .h4, h5, .h5, h6, .h6 {
     margin-bottom: 10px;
 
 }
+span.ellipsis {
+    color:black;
+}
+.dataTables_wrapper .dataTables_length label{
+    color:white;
+}
+
+.dataTables_wrapper .dataTables_filter input {
+    margin-left: 0.5em;
+    color: black!important;
+}
+.dataTables_filter label{
+    color: white!important;
+}
 h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
     font-family: inherit;
     line-height: 1.1;

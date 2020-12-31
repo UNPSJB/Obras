@@ -6,7 +6,7 @@
           <!-- Cabecera -->
           <thead>
               <tr>
-                  <th style="vertical-align: middle;">Nro</th>
+                  <th style="vertical-align: middle;">Numero de Tramite</th>
                   <th style="vertical-align: middle;">Profesional</th>
                   <th style="vertical-align: middle;">Estado</th>
                   <th style="vertical-align: middle;">Fecha de Inspeccion </th>
@@ -42,27 +42,29 @@
                     {% if tramite.saldo_restante_a_pagar >= 0.09 %}
                     <td>{{ tramite.saldo_restante_a_pagar}}</td>
                     {% else %}
-                            <td class="col-xs-3">0,00</td>
+                            <td class="col-xs-3">0.00</td>
                     {% endif %}
                   <td align="center" class="col-xs-1">
-                     {%if tramite.estado.tipo >= 5 and tramite.estado.tipo <=  7%}
-                        <a href="{% url 'propietario_solicita_final_obra' pk_tramite=tramite.id %}">
-                          <button type="button" class="btn btn-primary btn-xs" name="ver-certificado">
+                     {%if tramite.estado.tipo > 5 and tramite.estado.tipo <=  7%}
+                        <a aria-label="boton para solicitar final de obra" href="{% url 'propietario_solicita_final_obra' pk_tramite=tramite.id %}">
+                          <button  title="boton para solicitar final de obra"  type="button" class="btn btn-primary btn-xs" name="Solicitar final de obra">
                             <span class="glyphicon glyphicon-home" aria-hidden="true"> Final Obra</span>
                           </button>
                         </a>
                      {%else%}
-                          <button class="btn btn-primary btn-xs" name="ver-certificado" disabled>
+                        <a aria-label="boton para solicitar final de obra" href="{% url 'propietario_solicita_final_obra' pk_tramite=tramite.id %}">
+                          <button title="boton para solicitar final de obra" class="btn btn-primary btn-xs" name="Solicitar final de obra" disabled>
                             <span class="glyphicon glyphicon-home"> Final Obra</span>
                           </button>
+                        </a>
                      {%endif%}
                   </td>
 
 
 
                   <td align="center" class="col-xs-1">
-                    <a href="{% url 'ver_historial_tramite' tramite.id %}">
-                      <button type="button" class="btn btn-primary btn-xs" name="ver-historial">
+                    <a aria-label="boton para ver el historial del tramite" href="{% url 'ver_historial_tramite' tramite.id %}">
+                      <button title="boton para ver el historial del tramite" type="button" class="btn btn-primary btn-xs" name="ver-historial">
                          <span class="glyphicon glyphicon-search" aria-hidden="true"> Ver</span>
                       </button>
                     </a>

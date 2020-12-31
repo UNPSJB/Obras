@@ -7,6 +7,51 @@ body {
 	background:  #0925c4!important;
 		
 }
+*:focus{
+    outline: 3px solid #4adaf1!important;
+
+}
+b, strong {
+    font-weight: bold;
+ /*   font-size: 13px;*/
+    margin-right: 3px;
+}
+h5, .h5 {
+
+    font-weight: bold!important;
+}
+td{
+    color:black!important;
+    }
+
+div#tablaOl{
+    color:black;
+    font-weight:bolder;
+    font-size:larger;
+}
+#datosCatastrales{
+    color:black;
+    font-weight:bolder;
+    font-size:revert!important;
+}
+.progress-bar-success {
+    background-color: #044f04!important;
+}
+.progress-bar-danger {
+    background-color: #d20903!important;
+}
+select, option {
+    color:black!important;
+    font-weight:bolder!important;
+}
+.panel{
+    background-color:transparent;
+}
+.btn, .btn-primary{
+    background-color:#086edd!important;
+    font-weight:bolder;
+
+}
 img.logo {
 	height: 50px;
 
@@ -67,9 +112,11 @@ select.input-sm {
     height: 30px;
     line-height: 30px;
 }
+select{
+color:black!important
+}
 input, textarea, select, button {
     text-rendering: auto;
-    color: initial;
     letter-spacing: normal;
     word-spacing: normal;
     text-transform: none;
@@ -105,7 +152,8 @@ input, textarea, select, button {
     margin-right: auto;
     margin-left: auto;
     font-weight: bold;
-    background-color: #2ca1f5;
+    font-size: 100%;
+    background-color: #086edd;
     color:white;
 }
 #rowlogo.row{
@@ -158,7 +206,7 @@ color:transparent;
 background-color:transparent!important;
 }*/
 .sidebar-1 li a:hover, .sidebar-1 li a.current {
-      background-color: #418ee1;
+      background-color: #086edd;
     border-left: 5px solid #5b6d80;
   }
 
@@ -174,9 +222,7 @@ a:hover, a:focus {
     color: #23527c;
     text-decoration: underline;
 }
-a:active, a:hover {
-    outline: 0;
-}
+
 
 .navbar{
       /*  border-color: #2c3e50 !important;*/
@@ -353,7 +399,7 @@ color:white;
 
 table thead tr th {
     text-align: center;
-    background-color: #418ee1;
+    background-color: #086edd;
     color: #fff;
 }
 
@@ -385,6 +431,27 @@ footer {
 	background:#336699;
 	color:#fff;
 }
+.form-control {
+    display: block;
+    width: 100%;
+    /* height: 34px; */
+    padding: 6px 12px;
+    /* font-size: 14px; */
+    /* line-height: 1.42857143; */
+    background-color: #fff;
+    background-image: none;
+    /* border-radius: 4px; */
+    /* -webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .075); */
+    /* -webkit-transition: border-color ease-in-out .15s, -webkit-box-shadow ease-in-out .15s; */
+    -o-transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+    transition: border-color ease-in-out .15s, box-shadow ease-in-out .15s;
+}
+.form-control:focus {
+    border-color: #46eaf2;
+    outline: aqua;
+    box-shadow: inset 0 1px 1px rgba(58, 240, 240, 0.9), 0 0 5px 4px rgb(85, 249, 249) !important;
+}
+
 /*
 #columnab1.col-xs-12.col-sm-12.col-md-2.col-lg-2,#columnab2.col-xs-12.col-sm-12.col-md-10.col-lg-10{
 background-color:trasnparent!important;
@@ -419,9 +486,24 @@ ol li {
     font-weight: bold;
 }
 
+.dataTables_wrapper .dataTables_length label, .dataTables_filter label{
+    color: white!important;
 
+}
+.dataTables_wrapper .dataTables_filter input {
+    margin-left: 0.5em;
+    color: black!important;
+}
 
-.dataTables_wrapper .dataTables_length label,.dataTables_filter label{
-    color: black!important; /* filtrar por tiene que estar negro aca*/
-
+#alejar, #acercar{
+background-color:#086edd;
+}
+.box:hover {
+    background-color: #086edd!important;
+}
+#salir, #botonAccesibilidad{
+    background-color:#086edd!important;
+    font-size:100%;
+    font-weight: bold;
+    color:white!important;
 }

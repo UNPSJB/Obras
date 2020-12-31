@@ -19,20 +19,18 @@
             </h5>
         </div>
         <div class="container-fluid">
-                                <form method="post" action="{% url 'pagar1' cuota.id %} ">
+            <form method="post" action="{% url 'pagar1' cuota.id %} ">
 
-            <div class="panel-body">
-                <div class="table-responsive">
-
-
+                <div class="panel-body">
+                    <div class="table-responsive">
                         <table class="table table-bordered table-striped table-hover table-condensed" style="background: white;">
                             <thead>
                             <tr>
-                                <th>Id cuota</th>
-                                <th>Numero de Cuota</th>
-                                <th>Fecha Vencimiento</th>
-                                <th>Monto</th>
-                                <th>Seleccionar Forma de pago</th>
+                                <th style="vertical-align:middle">Id cuota</th>
+                                <th style="vertical-align:middle">Numero de Cuota</th>
+                                <th style="vertical-align:middle">Fecha Vencimiento</th>
+                                <th style="vertical-align:middle">Monto</th>
+                                <th style="vertical-align:middle">Seleccionar Forma de pago</th>
                             </tr>
                             </thead>
                             <tbody>
@@ -55,35 +53,34 @@
                                             {% endfor %}
                                         </select>
                                     </div>
-
                                 </td>
                             </tr>
                             {% endif %}
                             </tbody>
                         </table>
+                    </div>
                 </div>
-            </div>
-            <br>
-            <div class="form-group">
-                <div class="controls ">
-                    <div class="row">
-                        <div class="col-sm-10 col-md-10 col-xs-6" align="right">
-                            <button class="btn btn-primary btn-sm" type="submit" value="Guardar" name="Guardar">
-                                Aceptar
-                            </button>
-                        </div>
-                        <div class="col-sm-2 col-md-2 col-xs-6" >
-                            <a href="javascript:history.back(-1);">
-                                <button type="button" class="btn btn-primary" name="Volver">
-                                    Volver
+                <br>
+                <div class="form-group">
+                    <div class="controls ">
+                        <div class="row">
+                            <div class="col-sm-10 col-md-10 col-xs-6" align="right">
+                                <button class="btn btn-primary btn-sm" type="submit" value="Guardar" name="Guardar">
+                                    Aceptar
                                 </button>
-                            </a>
+                            </div>
+                            <div class="col-sm-2 col-md-2 col-xs-6" >
+                                <a href="javascript:history.back(-1);">
+                                    <button type="button" class="btn btn-primary" name="Volver">
+                                        Volver
+                                    </button>
+                                </a>
 
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-                    </form>
+            </form>
 
         </div>
     </div>
@@ -92,6 +89,22 @@
 
 <style>
 
+  .dataTables_length, .dataTables_filter, .dataTables_info,.dataTables_wrapper .dataTables_paginate .paginate_button.disabled, .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:hover, .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:active {
+      display: none !important;
+  }
+  th{
+      background-color:#2c3e50;
+      color:red;
+  }
+  .dataTables_wrapper .dataTables_paginate .paginate_button.current, .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
+      display: none;
+  }
+  #tabla_length{
+      display:none;
+  }
+  #tabla_filter{
+      display:none;
+  }
   .switch {
       position: relative;
       display: inline-block;

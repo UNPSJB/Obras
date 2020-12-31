@@ -84,24 +84,25 @@
 
                     <br>
                     <div class="table-responsive">
-                        <table align="center" class="table table-bordered table-striped table-hover table-condensed" style="text-align:center;">
+                        <table align="center" class="table table-bordered table-striped table-hover table-condensed" style="text-align:center;" data-paging="false">
                             <thead>
                             <tr>
                                 <th></th>
-                                {% for item in items %}
-                                {% if item.activo == True %}
-                                <th>{{item}}</th>
+                             {% for categoria in categorias %}
+                            {% if categoria.activo == True %}
+                                <th>{{categoria.nombre}}</th>
                                 {% endif %}
                                 {% endfor %}
                             </tr>
                             </thead>
                             <tbody>
-                            {% for categoria in categorias %}
-                            {% if categoria.activo == True %}
-                            <tr>
-                                <td class="col-xs-1">{{ categoria.nombre }}</td>
-                                {% for item in items %}
+                                  {% for item in items %}
                                 {% if item.activo == True %}
+
+                            <tr>
+                                <td class="col-xs-1">{{ item }}</td>
+                              {% for categoria in categorias %}
+                            {% if categoria.activo == True %}
                                 <td class="col-sm-4">
                                     {% for detalle in detalles %}
                                     {% if detalle.activo == True %}

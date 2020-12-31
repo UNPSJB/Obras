@@ -23,6 +23,18 @@ header {
     /* background: #04142b; */
     transition: 0.5s;
 }
+*:focus{
+    outline: 3px solid #bec1e1;
+}
+.form-control:focus {
+    border-color: black!important;
+   /* outline: gray!important;*/
+    box-shadow: inset 0 1px 1px rgb(210, 196, 196), 0 0 5px 4px rgb(198, 209, 217)!important;
+}
+select, option {
+    color:black!important;
+    font-weight:bolder!important;
+}
 
 header.sticky {
     position: fixed;
@@ -140,9 +152,8 @@ h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
 
 }
 
-
 #columna.col-xs-12, .col-sm-12, .col-md-12, .col-lg-12, #columna1.col-xs-12, .col-sm-12, .col-md-12, .col-lg-12, #columna1a.col-xs-12, .col-sm-12, .col-md-12, .col-lg-12,#columna1b.col-xs-12, .col-sm-12, .col-md-12, .col-lg-12,#columna1c.col-xs-12, .col-sm-12, .col-md-12, .col-lg-12,#columna1d.col-xs-12, .col-sm-12, .col-md-12, .col-lg-12,#columna2.col-xs-12, .col-sm-12, .col-md-12, .col-lg-12,#columna2a.col-xs-12, .col-sm-12, .col-md-12, .col-lg-12,#columna2b.col-xs-12, .col-sm-12, .col-md-12, .col-lg-12, #columna2c.col-xs-12, .col-sm-12, .col-md-12, .col-lg-12, #columna2d.col-xs-12, .col-sm-12, .col-md-12, .col-lg-12, #columna2e.col-xs-12, .col-sm-12, .col-md-12, .col-lg-12, #contenedor1.container-fluid,#contenedor1a.container-fluid,#contenedor2.container-fluid,#contenedor2a.container-fluid{
-    background-color:#000000!important;
+    background-color:#000000; /* sacar important para imprimir */
 }
 
  footer {
@@ -463,7 +474,7 @@ ul ul, ol ul, ul ol, ol ol {
 }
 
 #columnab1.col-xs-12.col-sm-12.col-md-2.col-lg-2,#columnab2.col-xs-12.col-sm-12.col-md-10.col-lg-10{
-background-color:transparent!important;
+background-color:transparent; /*sacar important para impresion */
 }
 
 .panel-group .panel {
@@ -576,7 +587,7 @@ tr {
 }
 .table-bordered > thead > tr > th, .table-bordered > thead > tr > td {
     border-bottom-width: 2px;
-        background-color: black!important;
+        background-color: black;
 
 }
 
@@ -617,7 +628,7 @@ tbody {
     font-weight: bold;
     text-align: -internal-center;
     vertical-align:middle;
-    font-color:white!important;
+    font-color:white;
 }
 
 .panel-group .panel + .panel {

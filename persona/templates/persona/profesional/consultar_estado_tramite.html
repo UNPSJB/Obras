@@ -5,7 +5,7 @@
       <table  class="table table-bordered table-striped table-hover" style="background: white;">
           <thead>
               <tr>
-                  <th>Nro</th>
+                  <th>Numero de Tramite</th>
                   <th>Propietario</th>
                   <th>Superficie</th>
                   <th>Tipo</th>
@@ -31,7 +31,7 @@
                         </a>
                     </td>
                     <td align="center" class="col-xs-1">
-                        {%if tramite.estado.tipo >= 5 and tramite.estado.tipo <=  7%}
+                        {%if tramite.estado.tipo > 5 and tramite.estado.tipo <=  7%}
                         <a href="{% url 'profesional_solicita_final_obra' pk_tramite=tramite.id %}">
                           <button style="display:block;" class="btn btn-primary btn-xs" name="ver-certificado">
                             <span class="glyphicon glyphicon-home" aria-hidden="true"> Final Obra</span>

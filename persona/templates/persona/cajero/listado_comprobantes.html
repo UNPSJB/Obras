@@ -25,10 +25,10 @@
         <table class="table table-bordered table-striped table-hover table-condensed" style="background: white;">
             <thead>
                 <tr>
-                    <th>Id</th>
+               <!--     <th>Id</th>-->
+                    <th>Numero de Cuota</th>
                     <th>Fecha Vencimiento</th>
                     <th>Monto</th>
-                    <th>Numero de Cuota</th>
                     <th>Fecha de Pago</th>
                     <th>Mostrar Comprobante</th>
                 </tr>
@@ -36,10 +36,10 @@
             <tbody>
                 {% for cuota in cuotas %}
                     <tr>
-                        <td class="col-xs-1">{{ cuota.id }}</td>
+                    <!--    <td class="col-xs-1">{{ cuota.id }}</td>-->
+                        <td class="col-xs-3">{{ cuota.numeroCuota }}</td>
                         <td class="col-xs-3">{{ cuota.fechaVencimiento }}</td>
                         <td class="col-xs-3">{{ cuota.monto }}</td>
-                        <td class="col-xs-3">{{ cuota.numeroCuota }}</td>
                         <td class="col-xs-3">{{ cuota.fechaPago }}</td>
 
                         <td>
@@ -56,7 +56,7 @@
 
 </form>
     <div class="col-xs-4 col-sm-4 col-md-12 col-lg-12">
-            <br><form action='/persona/cajero'>
+            <br><form action="{% url 'cajero' %}">
                 &nbsp;<Button class="btn btn-primary btn-md" type="submit" value="Atras">Volver</Button>
             </form>
         </div>

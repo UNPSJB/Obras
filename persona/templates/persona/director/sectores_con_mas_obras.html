@@ -47,14 +47,15 @@
                                         <thead>
                                         <tr>
                                             <th p style="color:#FFFFFF"bgcolor="#2c3e50">Sector</th>
-                                            <th p style="color:#FFFFFF"bgcolor="#2c3e50">Porcentaje</th>
+                                            <th p style="color:#FFFFFF"bgcolor="#2c3e50">Cantidad</th>
                                         </tr>
                                         </thead>
                                         <tbody>
                                         {% for name,value in lista %}
                                         <tr>
+                                            <td class="col-xs-1">{{ value }} </td>
                                             <td class="col-xs-1">{{ name }} </td>
-                                            <td class="col-xs-1">{{ value }} %</td>
+
                                         </tr>
                                         {% endfor %}
                                         </tbody>

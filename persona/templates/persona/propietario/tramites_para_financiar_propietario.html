@@ -18,9 +18,9 @@
                         <td class="col-xs-3">{{ tramite.propietario }},  DNI: {{ tramite.propietario.persona.dni}}</td>
                         <td class="col-xs-4">{{ tramite.profesional }}</td>
                         <td>
-                            <a href="{% url 'financiar_propietario' tramite.id%}">
-                                <button type="button" class="btn btn-primary brn-xs" name="ver-financiacion">
-                                    <span class="glyphicon glyphicon-home" aria-hidden="true"> Seleccionar Forma </span>
+                            <a aria-label="boton" href="{% url 'financiar_propietario' tramite.id%}">
+                                <button title="Boton para seleccionar forma de pago" type="button" class="btn btn-primary brn-xs" name="seleccionar forma de pago">
+                                    <span class="glyphicon glyphicon-home" aria-hidden="false"> Seleccionar Forma </span>
                                 </button>
                             </a>
                         </td>

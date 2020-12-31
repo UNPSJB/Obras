@@ -83,7 +83,7 @@
 
 
                     <div class="table-responsive">
-                        <table align="center" class="table table-bordered table-striped table-hover table-condensed" style="text-align:center;">
+                        <table align="center" class="table table-bordered table-striped table-hover table-condensed" style="text-align:center;" data-paging='false'>
                             <thead>
                             <tr id="columnasVisado">
                                 <th> </th>
@@ -140,6 +140,7 @@
                                 {% endif %}
                                 {% endfor %}
                                 </tbody>
+                               {%if obs%}
                                 <table class="table table-bordered table-striped table-hover table-condensed" style="text-align:center;">
                                     <thead>
                                     <tr>
@@ -150,6 +151,7 @@
                                     <td class="col-xs-1">{{ obs }}</td>
                                     </tbody>
                                 </table>
+                                {%endif%}
                             </table>
                         </div>
                     </div>
