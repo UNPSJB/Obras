@@ -38,7 +38,7 @@ class Pago(models.Model):
 class Cuota(models.Model):
     fechaVencimiento = models.DateField(null=True, blank=True)
     fechaPago = models.DateField(blank=True, null=True) #false sino se llena cuando se crea el pago
-    monto = models.DecimalField(max_digits=10, decimal_places=2, null=True,blank=True)
+    monto = models.DecimalField(max_digits=20, decimal_places=2, null=True,blank=True)
     numeroCuota=models.IntegerField(null=True, blank=True)
     tipoPago = models.ForeignKey(Tipo_Pago, null=True)
     pago=models.ForeignKey(Pago, related_name='pago', blank=True, null=True)

@@ -84,23 +84,23 @@
                                     {% if estados %}
                                     {% for estado in estados.estados_del_tramite %}
                                     <tr>
-                                        <td class="col-xs-1" align="center">{{estado.tipo}}</td>
-                                        <td class="col-xs-2">{{estado.usuario}}</td>
-                                        <td class="col-xs-2">{{estado.timestamp}}</td>
-                                        <td class="col-xs-6" >
-                                            <div class="progress">
-                                                <div id="{{estado.tipo}} - {{estado.timestamp}}" class="progress-bar progress-bar-success"  role="progressbar" style="width:0%;">
-                                                    <span>%</span>
-                                                </div>
-                                            </div>
-                                        </td>
-                                        <td align="center" class="col-xs-1">
-                                            <a href="{% url 'documentos_del_estado' estado.id%}">
-                                                <button type="button" class="btn btn-primary btn-xs" name="detalle">
-                                                    <span class="glyphicon glyphicon-search" aria-hidden="true"> Documentos</span>
-                                                </button>
-                                            </a>
-                                        </td>
+                                            <td class="col-xs-1" align="center">{{estado}}</td>
+                                            <td class="col-xs-2">{{estado.usuario}}</td>
+                                            <td class="col-xs-2">{{estado.timestamp}}</td>
+                                            <td class="col-xs-6" >
+                                               <div class="progress">
+                                                   <div id="{{estado.tipo}} - {{estado.timestamp}}" class="progress-bar progress-bar-success"  role="progressbar" style="width:0%;">
+                                                       <span>%</span>
+                                                   </div>
+                                               </div>
+                                            </td>
+                                            <td align="center" class="col-xs-1">
+                                                <a href="{% url 'documentos_del_estado' estado.id%}">
+                                                    <button type="button" class="btn btn-primary btn-xs" name="detalle">
+                                                        <span class="glyphicon glyphicon-search" aria-hidden="true"> Documentos</span>
+                                                    </button>
+                                                </a>
+                                            </td>
                                     </tr>
                                     {% endfor %}
                                     {% endif%}
