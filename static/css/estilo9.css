@@ -72,20 +72,14 @@ header.sticky {
 }
 
 #pie.container-fluid, #encabezado.container-fluid {
-    background-color:#6d08b1;
-    color:white;
+    background-color:#6d08b1!important;
+    color:white!important;
 }
 #rowlogo.row{
     background-color:#340951;
     color:white;
 }
-h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
-    font-family: inherit;
-    line-height: 1.1;
-    color: inherit;
-    font-weight:bold;
 
-}
 
  footer {
     background: #336699;

@@ -4,9 +4,7 @@
 
 {% block barra %}
 <ul class="sidebar sidebar-1">
-    <font size="2">
         <li><a href="{%url 'cajero'%}" class="current"><font color="white">Cajero</font> </a></li>
-    </font>
 </ul>
 {% endblock %}
 
@@ -42,7 +40,7 @@
                                         <label>Medidas : {{ tramite.medidas }}</label><br>
                                         <br><br>
                                         <label>Total : $ {{tramite.monto_a_pagar}}</label><br>
-                                        <label> Subtotal: <label> $ </label> <label id="subtotal"></label></label><br>
+                                        <label> Subtotal: $ <label id="subtotal"></label></label><br>
                                         <label> Numero de cuotas: {{tramite.pago.cantidadCuotas}}</label>
                                     </div>
                                 </div>

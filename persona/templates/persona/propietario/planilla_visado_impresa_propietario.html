@@ -12,8 +12,8 @@
 {% endblock %}
 
 {%block contenido%}
-<div id="printReady">
     <div class="container-fluid" style="background:white;">
+<div id="printReady">
         <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" >
             <div class="row">
                 <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
@@ -21,14 +21,18 @@
                         <img src="/media/imagenes/Escudobanner.png" class="img-responsive" alt="Escudo banner" width="100" height="100">
                     </div>
                     <br>
-                    <div id="municipalidadVisado" align="justify" style="font-size:9px; text-align:left;">
+                    <div id="municipalidadVisado" align="justify" style="color:black; font-size:10px; text-align:left;">
                         <br> &nbsp; MUNICIPALIDAD DE TRELEW
                         <br>
                         &nbsp; Rivadavia 390 <br>
                         &nbsp; 9100 TRELEW- Provincia del Chubut
+                        <br>
+                        <br>
+                        <br>
                         <h3 id="planillaVisado" align="center" style="color: black">
                             PLANILLA DE VISADO &nbsp;  &nbsp;
                         </h3>
+                        <br>
                         <hr style="border-width:">
                         <br>
                         <div class="row">
@@ -80,10 +84,9 @@
                             </div>
                         </div>
                     </div>
-                </div>
-            </div>
+
             <div class="table-responsive">
-                <table align="center" class="table table-bordered table-striped table-hover table-condensed" style="text-align:center;" data-paging="false">
+                <table id="tabla1" align="center" class="table table-bordered table-striped table-hover table-condensed" style="text-align:center;" data-paging="false">
                     <thead>
                     <tr id="columnasVisado">
                         <th> </th>
@@ -123,7 +126,7 @@
                 </table>
                 <br>
                 <div class="table-responsive">
-                    <table class="table-bordered table-striped table-hover table-condensed" style="text-align:center;">
+                    <table id="tabla2" class="table-bordered table-striped table-hover table-condensed" style="text-align:center;">
                         <thead>
                         <tr id="columnaBalance">
                             <th></th>
@@ -147,7 +150,7 @@
                         {% endif %}
                         {% endfor %}
                         </tbody>
-                        <table class="table table-bordered table-striped table-hover table-condensed" style="text-align:center;">
+                        <table id="tabla3" class="table table-bordered table-striped table-hover table-condensed" style="text-align:center;">
                             <thead>
                             <tr>
                                 <th>OBSERVACION</th>
@@ -162,10 +165,12 @@
             </div>
         </div>
     </div>
-</div>
 <hr>
-<br>
+        </div>
+                  </div>
+            </div>
 <div class="container-fluid" id="botones_visado" >
+<br>
 
     <div class="row">
         <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-center">
@@ -177,6 +182,7 @@
     </div>
 </div>
 
+
 <br>
 <!--input, button, select, textarea, input.btn-xs {
           display: none!important;
@@ -184,10 +190,6 @@
 <style>
        .dataTables_length, .dataTables_filter, .dataTables_info,.dataTables_wrapper .dataTables_paginate .paginate_button.disabled, .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:hover, .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:active {
           display: none !important;
-       }
-       th{
-          background-color:#2c3e50;
-          color:red;
        }
        .dataTables_wrapper .dataTables_paginate .paginate_button.current, .dataTables_wrapper .dataTables_paginate .paginate_button.current:hover {
           display: none;
@@ -210,7 +212,7 @@
     var $printSection = document.createElement("div");
     $printSection.id = "printSection";
     $printSection.appendChild(domClone);
-    $('head').append('<style> select{ display:none;}  .table-bordered > thead > tr > th, .table-bordered > thead > tr > td {background-color:white; color:black;}  #noImprimir{display:none} #boton_ayuda,#botones_visado{display:none;} .dataTables_wrapper .dataTables_length, .dataTables_wrapper .dataTables_filter, .dataTables_wrapper .dataTables_info, .dataTables_wrapper .dataTables_processing, .dataTables_wrapper .dataTables_paginate label{display: none;} .dataTables_wrapper .dataTables_paginate .paginate_button.disabled, .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:hover, .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:active{display: none;} .dataTables_wrapper .dataTables_paginate .paginate_button{display: none!important;}</style>');
+    $('head').append('<style> select, #botonesVisado{ display:none;}  .table-bordered > thead > tr > th, .table-bordered > thead > tr >  h5 {background-color:white; color:black;}  #noImprimir{display:none} #boton_ayuda,#botones_visado{display:none;} .dataTables_wrapper .dataTables_length, .dataTables_wrapper .dataTables_filter, .dataTables_wrapper .dataTables_info, .dataTables_wrapper .dataTables_processing, .dataTables_wrapper .dataTables_paginate label{display: none;} .dataTables_wrapper .dataTables_paginate .paginate_button.disabled, .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:hover, .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:active{display: none;} .dataTables_wrapper .dataTables_paginate .paginate_button{display: none!important;} #tabla1, #tabla3  {page-break-before: avoid;} #tabla2{page-break-before: always; } th, td{background-color:white!important; color:black!important;}  </style>');
     //document.body.insertBefore($printSection, document.body.firstChild);
 
     window.print();

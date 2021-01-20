@@ -137,19 +137,8 @@ h6 {
     font-weight: bold;
         font-size: 12px;
 }
-h4, .h4, h5, .h5, h6, .h6 {
-    margin-top: 10px;
-    margin-bottom: 10px;
-        font-weight: bold; /*cambio*/
 
-}
-h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
-    font-family: inherit;
-    line-height: 1.1;
-    color: inherit;
-    font-weight:bold;
 
-}
 
  footer {
     background: #336699;
@@ -488,16 +477,11 @@ background-color:transparent!important;
     color: inherit;
 }
 
-
 h5 {
-    display: block;
-    font-size: 0.83em;
-    -webkit-margin-before: 1.67em;
-    -webkit-margin-after: 1.67em;
-    -webkit-margin-start: 0px;
-    -webkit-margin-end: 0px;
-    font-weight: bold;
+    font-weight: bolder;
+    color:black!important;
 }
+
 .panel-title > a, .panel-title > small, .panel-title > .small, .panel-title > small > a, .panel-title > .small > a {
     color: black;
 }

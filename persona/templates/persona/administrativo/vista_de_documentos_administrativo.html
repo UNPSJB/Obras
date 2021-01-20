@@ -31,20 +31,46 @@
                     <div class="row">
                         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="color: white;">
                             <div class="container-fluid">
-                                <div class=" col-xs-4 col-sm-4 col-md-4 col-lg-4">
-                                    <ol>
-                                        <label>Datos catastrales:</h2></label><br>
-                                        <label>Parcela:</label>
-                                        <li> {{tramite.parcela}}</li>
-                                        <label>Sector:</label>
-                                        <li> {{tramite.sector}}</li>
-                                        <label>Manzana:</label>
-                                        <li> {{tramite.manzana}}</li>
-                                        <label>Circunscripcion:</label>
-                                        <li> {{tramite.circunscripcion}}</li>
-                                    </ol>
-                                </div>
+                                <div class="row">
+                                     <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4" style="color: white;">
+                                        <ol>
+                                                 {% if tramite %}
 
+                                            <label>NUMERO DE TRAMITE:</label>
+                                            <li> {{tramite.id}}</li>
+                                            <label>PROPIETARIO:</label>
+                                            <li> {{tramite.propietario.persona}}</li>
+                                            <label>PROFESIONAL:</label>
+                                            <li> {{tramite.profesional.persona}}</li>
+                                            <label>TIPO DE OBRA:</label>
+                                            <li> {{tramite.tipo_obra}}</li>
+                                            <label>MEDIDAS:</label>
+                                            <li> {{tramite.medidas}}</li>
+                                            <label>ESTADO ACTUAL:</label>
+                                            <li> {{tramite.estado}}</li>
+                                            <label>DATOS CATASTRALES:</label>
+
+                                                <table align="center" >
+                                                    <thead>
+                                                    <th>Parcela</th>
+                                                    <th>Circunscripcion</th>
+                                                    <th>Manzana</th>
+                                                    <th>Sector</th>
+                                                    </thead>
+                                                    <tbody>
+                                                    <tr>
+                                                        <td class="col-xs-3" align="center">{{tramite.parcela}}</td>
+                                                        <td class="col-xs-4" align="center">{{tramite.circunscripcion}}</td>
+                                                        <td class="col-xs-5" align="center">{{tramite.manzana}}</td>
+                                                        <td class="col-xs-6" align="center">{{tramite.sector}}</td>
+                                                    </tr>
+                                                    </tbody>
+                                                </table>
+                                            </li>
+                                        </ol>
+                                {% endif%}
+                                     </div>
+                                </div>
                             </div>
                             {% for documento in tramite.documentos.all %}
                             <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">

@@ -1,11 +1,10 @@
-body {
+body  {
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
     min-height: 100vh;
     width: 100%;
     xoverflow: hidden;
     padding-top: 140px;
-    color: #333!important;
-    background: black!important;
+    background-color: black!important;
     font-size: 14px;
     line-height: 1.42857143;
 }
@@ -18,7 +17,9 @@ color:white;
 div#container-visado, div#container-inspeccion{
 background-color:black!important;
 }
-
+#municipalidad{
+    color:white;
+}
 header {
     /* background: #04142b; */
     transition: 0.5s;
@@ -67,7 +68,7 @@ header.sticky {
 }
 #rowlogo.row,#et1.col-xs-12.col-sm-2.col-md-2{
 /* encabezado*/
-    background-color: #191919!important;
+    background-color: #191919;
 }
 
 }
@@ -109,7 +110,6 @@ strong{
     -ms-touch-action: manipulation;
     touch-action: manipulation;
     cursor: pointer;
-    -webkit-user-select: none;
     -moz-user-select: none;
     -ms-user-select: none;
     user-select: none;
@@ -188,10 +188,11 @@ article, aside, details, figcaption, figure, footer, header, hgroup, main, menu,
 }
 
 #tablaOl{
-color:black;
+    color:black;
+    font-weight:bolder;
 }
 
-#DataTables_Table_0_info,DataTables_Table_1_info{{
+#DataTables_Table_0_info,DataTables_Table_1_info{
 color:black;
 }
 
@@ -294,14 +295,14 @@ div.form-inline{
 }
 
 #et1.col-sm-10.col-md-10.col-xs-12{
-    background-color: transparent!important;
+    background-color: transparent;
 
 }
 #et2.col-sm-10.col-md-10.col-xs-12{
-    background-color: transparent!important;  /*ver barra del costado*/
+    background-color: transparent;  /*ver barra del costado*/
 }
 col-xs-12.col-sm-12.col-md-10.col-lg-10{
-    background-color: transparent!important;
+    background-color: transparent;
 
 }
 .navbar-default .navbar-toggle .icon-bar {
@@ -357,13 +358,6 @@ img[Attributes Style] {
     -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, .1);
     box-shadow: inset 0 1px 0 rgba(255, 255, 255, .1);
 }
-div[Attributes Style] {
-    text-align: -webkit-right;
-}
-    margin-right: 3px;
-    font-size: 13px;
-}
-
 label{
     display: inline-block;
     max-width: 100%;
@@ -376,6 +370,10 @@ label{
 
 }
 
+#totalRestante{
+  color:white;
+
+}
 label#propietario{
   color:black;
 
@@ -473,10 +471,10 @@ ul ul, ol ul, ul ol, ol ol {
     background: #000080;
 }
 
-#columnab1.col-xs-12.col-sm-12.col-md-2.col-lg-2,#columnab2.col-xs-12.col-sm-12.col-md-10.col-lg-10{
-background-color:transparent; /*sacar important para impresion */
+/*#columnab1.col-xs-12.col-sm-12.col-md-2.col-lg-2,#columnab2.col-xs-12.col-sm-12.col-md-10.col-lg-10{
+background-color:transparent; /*sacar important para impresion
 }
-
+*/
 .panel-group .panel {
     margin-bottom: 0;
     /* border-radius: 4px; */
@@ -607,7 +605,7 @@ th {
     font-weight: bold;
     text-align: -internal-center;
     vertical-align:middle;
-    color:white!important;
+    color:white;
 }
 td, th {
     display: table-cell;
@@ -616,7 +614,7 @@ td, th {
      font-weight: bold;
     text-align: -internal-center;
     vertical-align:middle;
-    color:white!important;
+    color:white;
     font-color: white;
 }
 
@@ -697,6 +695,7 @@ input {
     width: 100%;
     margin-bottom: 5px;
 }
+
 .text-success {
     color: #3c763d;
 }
@@ -893,7 +892,7 @@ option {
         border-radius: 50%;
     }
 #contenido3{
-background-color:#eae2e2!important;
+background-color:#eae2e2;
 }
 
 .btn-primary{

@@ -7,24 +7,25 @@
 {% block planilla_de_inspeccion %}
 
 <div class="table-responsive">
-    <table class="table table-bordered table-striped table-hover table-condensed" style="text-align:center;">
+    <table class="table table-bordered table-striped table-hover table-condensed" style="text-align:center;" data-paging="false">
       <thead>
         <tr>
           <th></th>
-          {% for item in items %}
-          {% if item.activo == True %}
-            <th>{{item.nombre}}</th>
+          {% for categoria in categorias %}
+        {% if categoria.activo == True %}
+            <th>{{categoria.nombre}}</th>
           {% endif %}
           {% endfor %}
         </tr>
       </thead>
       <tbody>
-        {% for categoria in categorias %}
-        {% if categoria.activo == True %}
+       {% for item in items %}
+          {% if item.activo == True %}
+
           <tr>
-            <td class="col-xs-1">{{ categoria.nombre }}</td>
-            {% for item in items %}
-            {% if item.activo == True %}
+            <td class="col-xs-1">{{ item.nombre }}</td>
+            {% for categoria in categorias %}
+        {% if categoria.activo == True %}
             <td class="col-sm-1">&nbsp;
               {% for detalle in detalles %}
               {% if detalle.activo == True %}
@@ -48,7 +49,7 @@
       <div class="row" style="color:#fff;">
         <div class=" col-xs-12 col-sm-12 col-md-12 col-lg-12">
           <ol>
-            <label>Descripcion de categorias:</h2></label>
+            <label>Descripcion de categorias:</label>
             {% for categoria in categorias %}
             {% if categoria.activo == True %}
             <li> {{categoria.tipo}}</li>

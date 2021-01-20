@@ -121,19 +121,70 @@ class Tramite(models.Model):
             visados = list(self.visados.filter(fecha__lte=estado.timestamp, fecha__gte=primero.timestamp))
             inspecciones = list(self.inspecciones.filter(fecha__lte=estado.timestamp, fecha__gte=primero.timestamp))
             documentos = list(self.documentos.filter(fecha__lte=estado.timestamp))
-            tramites = get_object_or_404(Tramite, pk=self.pk)
             return {'planillas': visados, 'inspecciones': inspecciones, 'documentos': documentos}
         else:
             if previo:
-                visados = list(self.visados.filter(fecha__lte=estado.timestamp, fecha__gte=previo.timestamp))
-                inspecciones = list(self.inspecciones.filter(fecha__lte=estado.timestamp, fecha__gte=previo.timestamp))
-                documentos = list(self.documentos.filter(fecha__lte=estado.timestamp))
-                tramites = get_object_or_404(Tramite, pk=self.pk)
+                if estado.tipo==2 :
+                    anterior = previo.previo()
+                    try:
+                        visados = list(self.visados.filter(fecha__lte=previo.timestamp, fecha__gte=anterior.timestamp))
+                    except:
+                        visados = list(self.visados.filter(fecha__lte=previo.timestamp))
+                    try:
+                        inspecciones = list(
+                            self.inspecciones.filter(fecha__lte=estado.timestamp, fecha__gte=primero.timestamp))
+                    except:
+                        inspecciones = list(self.inspecciones.filter(fecha__lte=previo.timestamp))
+
+                    try:
+                        documentos = list(self.documentos.filter(fecha__lte=estado.timestamp))
+                    except:
+                        pass
+                elif  estado.tipo==4:
+                    anterior=previo.previo()
+                    try:
+                        visados = list(self.visados.filter(fecha__lte=previo.timestamp, fecha__gte=anterior.timestamp))
+                    except:
+                        visados = list(self.visados.filter(fecha__lte=previo.timestamp))
+                    try:
+                        inspecciones = list(self.inspecciones.filter(fecha__lte=estado.timestamp, fecha__gte=primero.timestamp))
+                    except:
+                        inspecciones = list(self.inspecciones.filter(fecha__lte=previo.timestamp))
+
+                    try:
+                        anterior=previo.previo()
+                        documentos = list(self.documentos.filter(fecha__lte=estado.timestamp, fecha__gte=anterior.timestamp))
+                    except:
+                        documentos = list(self.documentos.filter(fecha__lte=estado.timestamp))
+                elif estado.tipo==5:
+                    documentos=None
+                    visados = None
+                    try:
+                        inspecciones = list(self.inspecciones.filter(fecha__lte=primero.timestamp, fecha__gte=estado.timestamp))
+                    except:
+                        inspecciones = None
+                elif estado.tipo==7:
+                    inspecciones = list(self.inspecciones.all())
+                    visados=None
+                    documentos=None
+                elif estado.tipo==8 or estado.tipo==9:
+                    visados = list(self.visados.all())
+                    inspecciones = list(self.inspecciones.all())
+                    documentos = list(self.documentos.all())
+                else:
+                    try:
+                        visados = list(self.visados.filter(fecha__lte=estado.timestamp, fecha__gte=previo.timestamp))
+                        inspecciones = list(self.inspecciones.filter(fecha__lte=estado.timestamp, fecha__gte=previo.timestamp))
+                        documentos = list(self.documentos.filter(fecha__range=(previo.timestamp,estado.timestamp)))
+                    except:
+                        documentos=None
+                        visados=None
+                        inspecciones=None
             else:
                 visados = list(self.visados.filter(fecha=estado.timestamp))
                 inspecciones = list(self.inspecciones.filter(fecha=estado.timestamp))
                 documentos = list(self.documentos.filter(fecha=estado.timestamp))
-                # return visados + inspecciones + documentos
+
             return {'planillas': visados, 'inspecciones': inspecciones, 'documentos': documentos}
 
             #previo = estado.previo()

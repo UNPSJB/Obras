@@ -1,123 +1,137 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
 {% load crispy_forms_tags%}
-{%block comprobante %}
+
+{%block contenido %}
 <div class="container-fluid">
     <div id="printReady">
         <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" >
-            <div class="row" style="background:white;">
-                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+            <div  class="row">
+                <div id="contenedor" class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+
                     <div style="background-color:#2c3e50;">
-                          <img src="/media/imagenes/Escudobanner.png"
-                               class="img-responsive" alt="Imagen responsive" width="100" height="100"/>
+                        <img src="/media/imagenes/Escudobanner.png"
+                             class="img-responsive" alt="Imagen responsive" width="100" height="100"/>
                     </div>
-                       <div align="justify" style="color:white;font-size:9px; text-align:left;">
-                      <br>  &nbsp; MUNICIPALIDAD DE TRELEW
-                      <br>
-                      &nbsp; Rivadavia 390 <br>
-                      &nbsp; 9100 TRELEW- Provincia del Chubut
-                       </div>
-                      <h3 align="center" style="color:white;">
-                          RESUMEN DE PAGO &nbsp;  &nbsp;
-                      </h3>
-                      <hr>
-                    <label style="color:white;"> Tramite: {{ tramite.id }} &nbsp; &nbsp;</label><br>
-                    <label style="color:white;"> Cantidad de Cuotas: {{ pago.cantidadCuotas }} &nbsp; &nbsp; </label>
-                      <hr>
+                    <div id="municipalidad" align="justify" style="font-size:9px; text-align:left;">
+                        <br>  &nbsp; MUNICIPALIDAD DE TRELEW
+                        <br>
+                        &nbsp; Rivadavia 390 <br>
+                        &nbsp; 9100 TRELEW- Provincia del Chubut
+                    </div>
+                    <br>
+                    <br>
+                    <br>
+                    <h3 align="center" style="color:white;" >
+                        RESUMEN DE PAGO &nbsp;  &nbsp;
+                    </h3>
+                    <br>
+                    <br>
+                    <hr>
+                    <label id="labelPropietario"> Tramite: {{ tramite.id }} &nbsp; &nbsp;</label><br>
+                    <label id="labelPropietario"> Cantidad de Cuotas: {{ pago.cantidadCuotas }} &nbsp; &nbsp; </label>
+                    <hr>
 
                     <div class="row">
-                                       <div class="col-sm-6 col-md-6 col-lg-6 col-xs-6">
-                            <label style="color:white;" > &nbsp; Titular: &nbsp;{{ tramite.propietario.persona.apellido}} {{ tramite.propietario.persona.nombre }}</label>
-                            <br><label style="color:white;">  &nbsp;  &nbsp;DNI : {{tramite.propietario.persona.dni}}</label>
-                                       </div>
-                                                                             <div class="col-sm-6 col-md-6 col-lg-6 col-xs-6">
-
-                        <h5 align="right" style="color:white;">Profesional : {{tramite.profesion}} {{tramite.profesional}}</h5>
-                            <h5 align="right" style="color:white;">M.P: {{tramite.profesional.matricula}}</h5><br>
+                        <div class="col-sm-6 col-md-6 col-lg-6 col-xs-6">
+                            <label id="labelPropietario"> &nbsp; Titular: &nbsp;{{ tramite.propietario.persona.apellido}} {{ tramite.propietario.persona.nombre }}</label>
+                            <br><label id="labelPropietario">  &nbsp;  &nbsp;DNI : {{tramite.propietario.persona.dni}}</label>
                         </div>
-                                        <br>
-                                </div>
-                                    <hr>
-                <label style="color:white;"> Domicilio : {{tramite.domicilio}}</label><br>
-                    <label style="color:white;">Tipo de Obra : {{ tramite.tipo_obra }}</label><br>
-                <hr>
-                    <label style="color:white;"> Datos Catastrales: </label><br>
-                <label style="color:white;">  Sector : {{tramite.sector}}  -  </label> &nbsp;
-                <label style="color:white;">Parcela : &nbsp; {{tramite.parcela}}  -  </label> &nbsp;
-                <label style="color:white;">Circunscripción : &nbsp;{{tramite.circunscripcion}}  - </label> &nbsp;
-                <label style="color:white;">Manzana : &nbsp; {{tramite.manzana}}  </label>
-                    <h5 align="right"  style="color:white;">Costo Total del Tramite:<td> {{tramite.monto_a_pagar}}</td></h5>
+                        <div class="col-sm-6 col-md-6 col-lg-6 col-xs-6">
+
+                            <h5 style="color:white;" align="right" >Profesional : {{tramite.profesion}} {{tramite.profesional}}</h5>
+                            <h5 style="color:white;" align="right" >M.P: {{tramite.profesional.matricula}}</h5>
+                        </div>
+                    </div>
+                    <hr>
+                    <label id="labelPropietario"> Domicilio : {{tramite.domicilio}}</label><br>
+                    <label id="labelPropietario">Tipo de Obra : {{ tramite.tipo_obra }}</label><br>
+                    <hr>
+                    <div class="row">
+                        &nbsp;  &nbsp; <label id="labelPropietario"> Datos Catastrales: </label><br>
+
+                        <div class="col-sm-6 col-md-6 col-lg-6 col-xs-6">
+
+                            <label id="labelPropietario">  Sector : {{tramite.sector}}  -  </label> &nbsp;
+                            <label id="labelPropietario">Parcela : &nbsp; {{tramite.parcela}}   </label> &nbsp;
+                        </div>
+                        <div class="col-sm-6 col-md-6 col-lg-6 col-xs-6">
+
+                            <h5 id="labelPropietario" style=" font-weight:bolder;">Circunscripción : &nbsp;{{tramite.circunscripcion}}   </h5> &nbsp;
+                            <h5 id="labelPropietario" style=" font-weight:bolder;">Manzana : &nbsp; {{tramite.manzana}}  </h5>
+                        </div>
+                    </div>
+                    <hr>
+
+                    <h5 align="right" style="color:white;">Costo Total del Tramite: {{tramite.monto_a_pagar}}</h5>
+
                     {% if tramite.saldo_restante_a_pagar <= 0.09 %}
-                    <h5 align="right" style="color:white;">Total Pagado a la Fecha: {{tramite.monto_a_pagar}}</h5>
+                    <h5 align="right"style="color:white;">Total Pagado a la Fecha: {{tramite.monto_a_pagar}}</h5>
 
                     {% else %}
                     <h5 align="right" style="color:white;">Total Pagado a la Fecha: {{tramite.monto_pagado}}</h5>
-                     {% endif %}
-                    <hr>
+                    {% endif %}
 
-                <div class="table-responsive">
-                    <table align="center" class="table table-bordered table-striped table-hover">
-                        <thead>
+                    <div class="table-responsive">
+                        <table align="center" class="table table-bordered table-striped table-hover">
+                            <thead>
                             <tr>
-                                        <th p style="color:#FFFFFF"bgcolor="#2c3e50">Fecha de Vencimiento</th>
-                                        <th p style="color:#FFFFFF"bgcolor="#2c3e50">Numero de Cuota</th>
-                                        <th p style="color:#FFFFFF"bgcolor="#2c3e50">Importe</th>
-                                        <th p style="color:#FFFFFF"bgcolor="#2c3e50">Fecha de Pago</th>
+                                <th p style="color:#FFFFFF"bgcolor="#2c3e50">Fecha de Vencimiento</th>
+                                <th p style="color:#FFFFFF"bgcolor="#2c3e50">Numero de Cuota</th>
+                                <th p style="color:#FFFFFF"bgcolor="#2c3e50">Importe</th>
+                                <th p style="color:#FFFFFF"bgcolor="#2c3e50">Fecha de Pago</th>
 
-                                        <th p style="color:#FFFFFF"bgcolor="#2c3e50">Forma de Pago</th>
+                                <th p style="color:#FFFFFF"bgcolor="#2c3e50">Forma de Pago</th>
 
                             </tr>
-                        </thead>
-                                 {%for c in cuotas %}
+                            </thead>
+                            {%for c in cuotas %}
 
-                        <tbody style="text-align:center">
+                            <tbody style="text-align:center">
                             <tr>
                                 <td>{{ c.fechaVencimiento }}</td>
-                                        <td>{{ c.numeroCuota }}</td>
-                                       <td>{{ c.monto }} </td>
-                                       <td>{{ c.fechaPago }} </td>
+                                <td>{{ c.numeroCuota }}</td>
+                                <td>{{ c.monto }} </td>
+                                <td>{{ c.fechaPago }} </td>
 
-                                        <td>{{ c.tipoPago.nombre }} </td>
+                                <td>{{ c.tipoPago.nombre }} </td>
+
                             </tr>
-                        </tbody>
-                                                           {%endfor%}
+                            </tbody>
+                            {%endfor%}
 
-                    </table>
-
-
-                </div>
+                        </table>
+                    </div>
                     {% if tramite.saldo_restante_a_pagar <= 0.09 %}
-                    <h5 align="right" style="color:white;">Resta Pagar: 0,00 </a></h5>
+                    <h5 align="right" style="color:white;">Resta Pagar: 0,00</h5>
                     {% else %}
 
-                        <hr>
-                    <h5 align="right" style="color:white;">Resta Pagar: <a style="color:white;" id="totalRestante"> </a>
-                    {% endif %}
-                        <hr>
-
+                    <hr>
+                    <h5 align="right" style="color:white;">Resta Pagar: <a id="totalRestante"> </a>
+                        {% endif %}
+                    </h5>
+                    <hr>
+                </div>
             </div>
         </div>
-    </div>
 
-    <div class="container-fluid " id="botones_cajero">
-        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6" align="right">
-           <button type="button" class="btn btn-primary btn-md" onclick="printDiv('printReady')">Imprimir</button>
+        <div class="container-fluid " id="botones_cajero">
+            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6" align="right">
+                <button type="button" class="btn btn-primary btn-md" onclick="printDiv('printReady')">Imprimir</button>
 
+            </div>
+            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
+                <form action='/persona/propietario'>
+                    &nbsp;<Button class="btn btn-primary btn-md" type="submit" value="Atras">Volver</Button>
+                </form>
+            </div>
         </div>
-        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6">
-            <form action='/persona/propietario'>
-            &nbsp;<Button class="btn btn-primary btn-md" type="submit" value="Atras">Volver</Button>
-            </form>
-        </div>
+
     </div>
 </div>
-</div>
+
 <style>
-    body{
-        background:radial-gradient(circle at 1.98% 14.97%,#6699CC, transparent 100%),
-        radial-gradient(circle at 98.02% 52.96%, #66CCFF, transparent 100%),
-        radial-gradient(circle at 50% 50%, #66CCFF,#66CCFF 100%);
-    }
+
     th{
         background-color:#2c3e50;
         color:white;
@@ -140,7 +154,8 @@ var tp= {{tramite.monto_pagado}}
     $("#totalRestante").text((t - tp).toFixed(2))
 });
 
-
+</script>
+<script>
     function printDiv(div) {
     // Create and insert new print section
 
@@ -149,7 +164,8 @@ var tp= {{tramite.monto_pagado}}
     var $printSection = document.createElement("div");
     $printSection.id = "printSection";
     $printSection.appendChild(domClone);
-    $('head').append('<style> #botones_cajero,#noImprimir,select{ display:none;} .dataTables_wrapper .dataTables_length, .dataTables_wrapper .dataTables_filter, .dataTables_wrapper .dataTables_info, .dataTables_wrapper .dataTables_processing, .dataTables_wrapper .dataTables_paginate label{display: none;} .dataTables_wrapper .dataTables_paginate .paginate_button.disabled, .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:hover, .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:active{display: none;} .dataTables_wrapper .dataTables_paginate .paginate_button{display: none!important;}</style>');
+    //#columnab1,
+    $('head').append('<style>  #botones_cajero, #noImprimir,select{ display:none;} #columnab1{display:none!important;}  #municipalidad{color:black!important;} .dataTables_wrapper .dataTables_length, .dataTables_wrapper .dataTables_filter, .dataTables_wrapper .dataTables_info, .dataTables_wrapper .dataTables_processing, .dataTables_wrapper .dataTables_paginate label{display: none;} .dataTables_wrapper .dataTables_paginate .paginate_button.disabled, .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:hover, .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:active{display: none;} .dataTables_wrapper .dataTables_paginate .paginate_button{display: none!important;}  div#contenedor, #totalRestante, #labelPropietario, h5,h3, td, th, tr, tbody, #columnab2, body{ color:black!important; background-color:white!important; } table{page-break-before: always; } div#pie.container-fluid, h6 { color:white!important; } </style>');
     //document.body.insertBefore($printSection, document.body.firstChild);
 
     window.print();

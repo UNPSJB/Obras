@@ -17,12 +17,17 @@
                         &nbsp; Rivadavia 390 <br>
                         &nbsp; 9100 TRELEW- Provincia del Chubut
                     </div>
+                    <br>
+                    <br>
+                    <br>
                     <h3 align="center">
                         RESUMEN DE PAGO &nbsp;  &nbsp;
                     </h3>
+                    <br>
+                    <br>
                     <hr>
-                    <label style="color:black;"> Tramite: {{ tramite.id }} &nbsp; &nbsp;</label><br>
-                    <label style="color:black;"> Cantidad de Cuotas: {{ pago.cantidadCuotas }} &nbsp; &nbsp; </label>
+                    &nbsp; &nbsp;  <label style="color:black;"> Tramite: {{ tramite.id }} &nbsp; &nbsp;</label><br>
+                    &nbsp; &nbsp;  <label style="color:black;"> Cantidad de Cuotas: {{ pago.cantidadCuotas }} &nbsp; &nbsp; </label>
                     <hr>
 
                     <div class="row">
@@ -31,25 +36,32 @@
                             <br><label style="color:black;">  &nbsp;  &nbsp;DNI : {{tramite.propietario.persona.dni}}</label>
                         </div>
                         <div class="col-sm-6 col-md-6 col-lg-6 col-xs-6">
-                            <h5 align="right" style="color:black;">Profesional : {{tramite.profesion}} {{tramite.profesional}}</h5>
-                            <h5 align="right" style="color:black;">M.P: {{tramite.profesional.matricula}}</h5><br>
+                            <h5 align="right" style="color:black; font-weight:bolder;">Profesional : {{tramite.profesion}} {{tramite.profesional}}</h5>
+                            <h5 align="right" style="color:black; font-weight:bolder;">M.P: {{tramite.profesional.matricula}}</h5>
                         </div>
-                        <br>
                     </div>
                     <hr>
                     <label style="color:black;"> Domicilio : {{tramite.domicilio}}</label><br>
                     <label style="color:black;">Tipo de Obra : {{ tramite.tipo_obra }}</label><br>
                     <hr>
-                    <label style="color:black;"> Datos Catastrales: </label><br>
-                    <label style="color:black;">  Sector : {{tramite.sector}}  -  </label> &nbsp;
-                    <label style="color:black;">Parcela : &nbsp; {{tramite.parcela}}  -  </label> &nbsp;
-                    <label style="color:black;">Circunscripción : &nbsp;{{tramite.circunscripcion}}  - </label> &nbsp;
-                    <label style="color:black;">Manzana : &nbsp; {{tramite.manzana}}  </label>
-                    <h5 align="right"  style="color:black;">Costo Total del Tramite:{{tramite.monto_a_pagar}}</h5>
+                    <div class="row">
+                        &nbsp; &nbsp;<label style="color:black;"> Datos Catastrales: </label><br>
+
+                        <div class="col-sm-6 col-md-6 col-lg-6 col-xs-6">
+                            <label style="color:black;">  Sector : {{tramite.sector}}  </label> &nbsp;<br>
+                            <label style="color:black;">Parcela : &nbsp; {{tramite.parcela}}    </label> &nbsp;
+                        </div>
+                        <div class="col-sm-6 col-md-6 col-lg-6 col-xs-6">
+                            <h5 align="right" style="color:black; font-weight:bolder;">Circunscripción : &nbsp;{{tramite.circunscripcion}} </h5>
+                            <h5 align="right" style="color:black; font-weight:bolder;">Manzana : &nbsp; {{tramite.manzana}}  </h5>
+                        </div>
+                    </div>
+                    <hr>
+                    <h5 align="right"  style="color:black;">Costo Total del Tramite: $ {{tramite.monto_a_pagar}}</h5>
                     {% if tramite.saldo_restante_a_pagar <= 0.09 %}
-                    <h5 align="right" style="color:black!Important;">Total Pagado a la Fecha: {{tramite.monto_a_pagar}}</h5>
+                    <h5 align="right" style="color:black!Important;">Total Pagado a la Fecha: $ {{tramite.monto_a_pagar}}</h5>
                     {% else %}
-                    <h5 align="right" style="color:black!Important;">Total Pagado a la Fecha: {{tramite.monto_pagado}}</h5>
+                    <h5 align="right" style="color:black!Important;">Total Pagado a la Fecha: $ {{tramite.monto_pagado}}</h5>
                     {% endif %}
                     <hr>
 
@@ -85,12 +97,12 @@
 
                     </div>
                     {% if tramite.saldo_restante_a_pagar <= 0.09 %}
-                    <h5 align="right" style="color:black;">Resta Pagar: 0,00 </h5>
+                    <h5 align="right" style="color:black;">Resta Pagar: $ 0,00 </h5>
                     {% else %}
 
                     <hr>
-                    <h5 align="right" style="color:black;">Resta Pagar: <div style="color:black;" id="totalRestante"> </div>
-                        <hr>                {% endif %}
+                    <h5 align="right" style="color:black;">Resta Pagar: $ <div style="color:black;" id="totalRestante"> </div></h5>
+                    <hr>                {% endif %}
 
                 </div>
             </div>
@@ -146,7 +158,7 @@ var tp= {{tramite.monto_pagado}}
     var $printSection = document.createElement("div");
     $printSection.id = "printSection";
     $printSection.appendChild(domClone);
-    $('head').append('<style> #botones_cajero,#noImprimir,select{ display:none;} .dataTables_wrapper .dataTables_length, .dataTables_wrapper .dataTables_filter, .dataTables_wrapper .dataTables_info, .dataTables_wrapper .dataTables_processing, .dataTables_wrapper .dataTables_paginate label{display: none;} .dataTables_wrapper .dataTables_paginate .paginate_button.disabled, .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:hover, .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:active{display: none;} .dataTables_wrapper .dataTables_paginate .paginate_button{display: none!important;}</style>');
+    $('head').append('<style> #botones_cajero,#noImprimir,select{ display:none;} .dataTables_wrapper .dataTables_length, .dataTables_wrapper .dataTables_filter, .dataTables_wrapper .dataTables_info, .dataTables_wrapper .dataTables_processing, .dataTables_wrapper .dataTables_paginate label{display: none;} .dataTables_wrapper .dataTables_paginate .paginate_button.disabled, .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:hover, .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:active{display: none;} .dataTables_wrapper .dataTables_paginate .paginate_button{display: none!important;} table{page-break-before: always; }</style>');
     //document.body.insertBefore($printSection, document.body.firstChild);
 
     window.print();

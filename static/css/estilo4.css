@@ -489,13 +489,7 @@ background-color:transparent!important;
 
 
 h5 {
-    display: block;
-    font-size: 0.83em;
-    -webkit-margin-before: 1.67em;
-    -webkit-margin-after: 1.67em;
-    -webkit-margin-start: 0px;
-    -webkit-margin-end: 0px;
-    font-weight: bold;
+    font-weight: bolder;
 }
 .panel-title > a, .panel-title > small, .panel-title > .small, .panel-title > small > a, .panel-title > .small > a {
     color: black;
@@ -573,7 +567,7 @@ th {
     font-weight: bold;
     text-align: -internal-center;
     vertical-align:middle;
-    color:white!important;
+    color:white;
 }
 td, th {
     display: table-cell;
@@ -847,9 +841,6 @@ html {
     .slider.round:before {
         border-radius: 50%;
     }
-#tablaOl{
-color:black;
-}
 #contenido3{
 background-color:#eae2e2!important;
 }

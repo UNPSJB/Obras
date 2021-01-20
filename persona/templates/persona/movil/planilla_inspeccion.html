@@ -46,36 +46,44 @@
                         <td>&nbsp;
                             {% for detalle in detalles %}
                             {% if detalle.activo == True %}
-                            {% if categoria.nombre == detalle.categoria_inspeccion.nombre and item.nombre == detalle.item_inspeccion.nombre %}
-                            <div class="row">
-                                <div class="col-xs-6 col-sm-6 col-md-6">
-                                    {{ detalle.nombre }}
+                            {% if categoria.nombre == detalle.categoria_inspeccion.nombre and item.nombre == detalle.item_inspeccion.nombre  %}
+                           <div class="container-fluid">
+                                        <div class="row">
+                                            <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
+                                                <h6 align="left">
+                                                    {{ detalle.nombre }}
 
-                                </div>
+                                                </h6>
+                                            </div>
+                                            <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
+
                                 {% for name,value in planilla %}
 
-                                <div class="col-xs-4 col-sm-4 col-md-4">
-                                    {% if categoria.nombre == value.categoria_inspeccion.nombre and detalle.nombre == value.nombre and name == 1 %}
-                                    <label class="switch">
-                                        <input name="detalles-{{detalle.pk}}" type="checkbox" checked="checked"><span
-                                            class="slider round"></span>
-                                    </label>
-                                    <hr>
+                                    {% if categoria.nombre == value.categoria_inspeccion.nombre and detalle.nombre == value.nombre and name == 1 and value.categoria_inspeccion_id == categoria.id and value.item_inspeccion_id == item.id %}
+                                                <h6 align="right">
+                                                    <label class="switch">
+                                                        <input name="detalles-{{detalle.pk}}" type="checkbox" checked="checked"><span
+                                                            class="slider round"></span>
+                                                    </label>
+                                                </h6>
+                                                <hr>
 
-                                    {% elif categoria.nombre == value.categoria_inspeccion.nombre and detalle.nombre == value.nombre and name == 0 %}
-                                    <label class="switch">
-                                        <input name="detalles-{{detalle.pk}}" type="checkbox"><span
-                                            class="slider round"></span>
-                                    </label>
-                                    <br>
-                                    <hr>
+                                                {% elif categoria.nombre == value.categoria_inspeccion.nombre and detalle.nombre == value.nombre and name == 0 and value.categoria_inspeccion_id == categoria.id and value.item_inspeccion_id == item.id %}
+                                                <h6 align="right">
+                                                    <label class="switch">
+                                                        <input name="detalles-{{detalle.pk}}" type="checkbox"><span
+                                                            class="slider round"></span>
+                                                    </label>
+                                                </h6>
+                                                <br>
+                                                <hr>
 
-                                    {% endif %}
-
-                                </div>
+                                        {% endif %}
                                 {% endfor %}
+                                            </div>
 
-                            </div>
+                                        </div>
+                           </div>
                             {% endif %}
                             {% endif %}
                             {% endfor %}
@@ -135,30 +143,35 @@
                                 <div class="container-fluid">
                                     <div class="row">
                                         <div class="col-xs-8 col-sm-8 col-md-8 col-lg-8">
+                                            <h6 align="left">
                                             {{ detalle.nombre }}
+                                            </h6>
                                         </div>
-                                        {% for name,value in planilla %}
-
                                         <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
-                                            {% if categoria.nombre == value.categoria_inspeccion.nombre and detalle.nombre == value.nombre and name == 1 %}
-                                            <label class="switch">
-                                                <input name="detalles-{{detalle.pk}}" type="checkbox" checked="checked"><span
-                                                    class="slider round"></span>
-                                            </label>
+
+                                        {% for name,value in planilla %}
+                                            {% if categoria.nombre == value.categoria_inspeccion.nombre and detalle.nombre == value.nombre and name == 1 and value.categoria_inspeccion_id == categoria.id and value.item_inspeccion_id == item.id %}
+                                             <h6 align="right">
+                                                <label class="switch">
+                                                    <input name="detalles-{{detalle.pk}}" type="checkbox" checked="checked"><span
+                                                        class="slider round"></span>
+                                                </label>
+                                             </h6>
                                             <br>
                                             <hr>
-                                            {% elif categoria.nombre == value.categoria_inspeccion.nombre and detalle.nombre == value.nombre and name == 0 %}
-
-                                            <label class="switch">
-                                                <input name="detalles-{{detalle.pk}}" type="checkbox"><span
-                                                    class="slider round"></span>
-                                            </label>
+                                            {% elif categoria.nombre == value.categoria_inspeccion.nombre and detalle.nombre == value.nombre and name == 0 and value.categoria_inspeccion_id == categoria.id and value.item_inspeccion_id == item.id %}
+                                            <h6 align="right">
+                                                <label class="switch">
+                                                    <input name="detalles-{{detalle.pk}}" type="checkbox"><span
+                                                        class="slider round"></span>
+                                                </label>
+                                            </h6>
                                             <br>
                                             <hr>
                                             {% endif %}
-
-                                        </div>
                                         {% endfor %}
+                                        </div>
+
                                     </div>
                                 </div>
                                 {% endif %}

@@ -10,138 +10,143 @@
 {% endblock %}
 
 {%block contenido %}
-<div id="printReady">
-    <div class="container-fluid" id="planillaInspeccionContainer" style="background-color:white;">
-        <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" >
-            <div class="row" style="backgroud-color:white!important" >
-                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                    <div style="background-color:#2c3e50;">
-                        <img src="/media/imagenes/Escudobanner.png" class="img-responsive" alt="Escudo" width="100" height="100">
-                    </div>
+<div id="printReady" style="background-color:white;">
+    <div  class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" >
+        <div class="row" style="backgroud-color:white!important" >
+            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                <div style="background-color:#2c3e50;">
+                    <img src="/media/imagenes/Escudobanner.png" class="img-responsive" alt="Escudo" width="100" height="100">
+                </div>
+                <br>
+                <div id="municipalidadInspeccion" align="justify" style="font-size:9px; color:black; text-align:left; ">
                     <br>
-                    <div id="municipalidadInspeccion" align="justify" style="font-size:9px; color:black; text-align:left; ">
-                        <br>
-                        &nbsp; MUNICIPALIDAD DE TRELEW
-                        <br>
-                        &nbsp; Rivadavia 390 <br>
-                        &nbsp; 9100 TRELEW- Provincia del Chubut
+                    &nbsp; MUNICIPALIDAD DE TRELEW
+                    <br>
+                    &nbsp; Rivadavia 390 <br>
+                    &nbsp; 9100 TRELEW- Provincia del Chubut
+                    <br>
+                    <br>
+                    <br>
+                    <h3 id="planillaInspeccion" style="color:black" align="center">
+                        PLANILLA DE INSPECCION &nbsp;  &nbsp;
+                    </h3>
+                    <br>
+                    <br>
+                    <hr style="border-width:">
+                    <br>
+                    <div class="row" style="color: black;">
+                        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6" >
+                            <h5 align="left" style="color: black">
+                                &nbsp; NUMERO DE TRAMITE:  {{tramite.pk}} &nbsp;
+                            </h5>
+                            <h5 align="left" style="color:black">
+                                &nbsp; PROPIETARIO:  {{tramite.propietario.persona}} &nbsp;  &nbsp;
+                            </h5>
+                            <h5 align="left">
+                                &nbsp;             PROFESIONAL: {{tramite.profesional.persona}}
+                            </h5>
+                            <h5 align="left">
+                                &nbsp;          TIPO DE OBRA: {{tramite.tipo_obra}}
+                            </h5>
+                        </div>
+                        <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6" >
 
-                        <h3 id="planillaInspeccion" style="color:black" align="center">
-                            PLANILLA DE INSPECCION &nbsp;  &nbsp;
-                        </h3>
-                        <hr style="border-width:">
-                        <br>
-                        <div class="row" style="color: black;">
-                            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6" >
-                                <h5 align="left" style="color: black">
-                                    &nbsp; NUMERO DE TRAMITE:  {{tramite.pk}} &nbsp;
-                                </h5>
-                                <h5 align="left" style="color:black">
-                                    &nbsp; PROPIETARIO:  {{tramite.propietario.persona}} &nbsp;  &nbsp;
-                                </h5>
-                                <h5 align="left">
-                                    &nbsp;             PROFESIONAL: {{tramite.profesional.persona}}
-                                </h5>
-                                <h5 align="left">
-                                    &nbsp;          TIPO DE OBRA: {{tramite.tipo_obra}}
-                                </h5>
-                            </div>
-                            <div class="col-xs-6 col-sm-6 col-md-6 col-lg-6" >
-
-                                <h5 align="right" style="color:black">
-                                    FECHA DE INSPECCION:  {{tramite.estado.timestamp}} &nbsp;  &nbsp;
-                                </h5>
-                            </div>
+                            <h5 align="right" style="color:black">
+                                FECHA DE INSPECCION:  {{tramite.estado.timestamp}} &nbsp;  &nbsp;
+                            </h5>
                         </div>
                     </div>
-                    <hr style="border-width:">
-                    <h5 align="left">
-                        DATOS CATASTRALES&nbsp;  &nbsp;
-                    </h5>
-                    <div class="table-responsive">
-                        <table align="center" style="text-align:center;">
-                            <thead>
-                            <tr>
-                                <th>Medidas</th>
-                                <th>Domicilio</th>
-                                <th>Parcela</th>
-                                <th>Circunscripcion</th>
-                                <th>Manzana</th>
-                                <th>Sector</th>
-                            </tr>
-                            </thead>
-                            <tbody>
-                            <tr>
-                                <td class="col-xs-1" align="center">{{tramite.medidas}}</td>
-                                <td class="col-xs-2" align="center">{{tramite.domicilio}}</td>
-                                <td class="col-xs-3" align="center">{{tramite.parcela}}</td>
-                                <td class="col-xs-4" align="center">{{tramite.circunscripcion}}</td>
-                                <td class="col-xs-5" align="center">{{tramite.manzana}}</td>
-                                <td class="col-xs-6" align="center">{{tramite.sector}}</td>
-                            </tr>
-                            </tbody>
-                        </table>
+                </div>
+                <div class="row">
+                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" id="datosCatrastales">
+                        <hr style="border-width:">
+                        <h5 align="left">
+                            DATOS CATASTRALES&nbsp;  &nbsp;
+                        </h5>
+                        <div class="table-responsive">
+                            <table align="center" style="text-align:center;">
+                                <thead>
+                                <tr>
+                                    <th>Medidas</th>
+                                    <th>Domicilio</th>
+                                    <th>Parcela</th>
+                                    <th>Circunscripcion</th>
+                                    <th>Manzana</th>
+                                    <th>Sector</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <tr>
+                                    <td class="col-xs-1" align="center">{{tramite.medidas}}</td>
+                                    <td class="col-xs-2" align="center">{{tramite.domicilio}}</td>
+                                    <td class="col-xs-3" align="center">{{tramite.parcela}}</td>
+                                    <td class="col-xs-4" align="center">{{tramite.circunscripcion}}</td>
+                                    <td class="col-xs-5" align="center">{{tramite.manzana}}</td>
+                                    <td class="col-xs-6" align="center">{{tramite.sector}}</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+                <table class="table table-bordered table-striped table-condensed" id="tabla" data-paging="false">
+                    <thead>
+                    <tr  style="text-align:center;">
+                        <th></th>
 
-            <table class="table table-bordered table-striped table-condensed" id="tabla" data-paging="false">
-                <thead>
-                <tr  style="text-align:center;">
-                    <th></th>
-
-                    {% for categoria in categorias %}
+                        {% for categoria in categorias %}
                         {% if categoria.activo == True %}
-                    <th>{{categoria.nombre}}</th>
-                        {% endif %}
-                    {% endfor %}
-                </tr>
-                </thead>
-                <tbody>
-               {% for item in items %}
-                            {% if item.activo == True %}
-
-                <tr>
-                    <td id="tdColor" class="col-xs-1">{{ item.nombre }}</td>
-                         {% for categoria in categorias %}
-                        {% if categoria.activo == True %}
-                    <td class="col-sm-4">&nbsp;
-                        {% for detalle in detalles %}
-                        {% if detalle.activo == True %}
-                        {% if categoria.nombre == detalle.categoria_inspeccion.nombre and item.nombre == detalle.item_inspeccion.nombre %}
-                        {{ detalle.nombre }}
-                        <br>
-                        {% endif %}
+                        <th>{{categoria.nombre}}</th>
                         {% endif %}
                         {% endfor %}
-                    </td>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for item in items %}
+                    {% if item.activo == True %}
+
+                    <tr>
+                        <td align="center" id="tdColor" class="col-xs-1">{{ item.nombre }}</td>
+                        {% for categoria in categorias %}
+                        {% if categoria.activo == True %}
+                        <td align="center" class="col-sm-4">&nbsp;
+                            {% for detalle in detalles %}
+                            {% if detalle.activo == True %}
+                            {% if categoria.nombre == detalle.categoria_inspeccion.nombre and item.nombre == detalle.item_inspeccion.nombre %}
+                            {{ detalle.nombre }}
+                            <br>
+                            {% endif %}
+                            {% endif %}
+                            {% endfor %}
+                        </td>
+                        {% endif %}
+                        {% endfor %}
+                    </tr>
                     {% endif %}
                     {% endfor %}
-                </tr>
-                {% endif %}
-                {% endfor %}
-                </tbody>
-            </table>
-            <table class="table table-bordered table-striped table-condensed">
-                <thead>
-                <tr>
-                    <th>categoria</th>
-                    <th>tipo</th>
-                    <th>descripcion</th>
-                </tr>
-                </thead>
-                <tbody>
-                {% for categoria in categorias %}
-                {% if categoria.activo == True %}
-                <tr>
-                    <td id="nombre{{categoria.id}}" class="col-xs-1" align="center">{{categoria.nombre}}</td>
-                    <td id="tipo{{categoria.id}}" class="col-xs-1" align="center">{{categoria.tipo}}</td>
-                    <td id="descripcion{{categoria.id}}" class="col-xs-2">{{categoria.descripcion}}</td>
-                </tr>
-                {% endif %}
-                {% endfor %}
-                </tbody>
-            </table>
-        </div>
-        </div>
-        </div>
+                    </tbody>
+                </table>
+                <table class="table table-bordered table-striped table-condensed">
+                    <thead>
+                    <tr>
+                        <th>Categoria</th>
+                        <th>Tipo</th>
+                        <th>Descripcion</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for categoria in categorias %}
+                    {% if categoria.activo == True %}
+                    <tr>
+                        <td id="nombre{{categoria.id}}" class="col-xs-1" align="center">{{categoria.nombre}}</td>
+                        <td id="tipo{{categoria.id}}" class="col-xs-1" align="center">{{categoria.tipo}}</td>
+                        <td id="descripcion{{categoria.id}}" class="col-xs-2" align="center">{{categoria.descripcion}}</td>
+                    </tr>
+                    {% endif %}
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
         </div>
     </div>
 </div>
@@ -191,7 +196,7 @@
     var $printSection = document.createElement("div");
     $printSection.id = "printSection";
     $printSection.appendChild(domClone);
-    $('head').append('<style> select{ display:none;}  #noImprimir{display:none} #botones_inspeccion,#boton_ayuda,#botones_visado{display:none;}  .dataTables_wrapper .dataTables_length, .dataTables_wrapper .dataTables_filter, .dataTables_wrapper .dataTables_info, .dataTables_wrapper .dataTables_processing, .dataTables_wrapper .dataTables_paginate label{display: none;} .dataTables_wrapper .dataTables_paginate .paginate_button.disabled, .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:hover, .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:active{display: none;} .dataTables_wrapper .dataTables_paginate .paginate_button{display: none!important;}</style>');
+    $('head').append('<style> select{ display:none;} #tdColor{color:black!important; background-color:white; font-weight:bolder!important;} td{font-weight:normal!important;}  #noImprimir{display:none} #botones_inspeccion,#boton_ayuda,#botones_visado{display:none;} th, td{background-color:white!important; color:black!important;} .dataTables_wrapper .dataTables_length, .dataTables_wrapper .dataTables_filter, .dataTables_wrapper .dataTables_info, .dataTables_wrapper .dataTables_processing, .dataTables_wrapper .dataTables_paginate label{display: none;} .dataTables_wrapper .dataTables_paginate .paginate_button.disabled, .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:hover, .dataTables_wrapper .dataTables_paginate .paginate_button.disabled:active{display: none;} .dataTables_wrapper .dataTables_paginate .paginate_button{display: none!important;}</style>');
     //document.body.insertBefore($printSection, document.body.firstChild);
 
     window.print();

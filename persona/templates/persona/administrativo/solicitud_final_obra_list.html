@@ -26,11 +26,7 @@
                   <td class="col-xs-1">{{ tramite.medidas }} </td>
                   <td class="col-xs-1">{{ tramite.tipo_obra }}</td>
                   <td class="col-xs-1">{{ tramite.estado }}</td>
-                  <td class="col-xs-2">{{ tramite.profesional }}
-                      {{ tramite.profesional.persona.apellido }}
-                      {{ tramite.profesional.profesion }}
-                      {{ tramite.profesional.matricula }}
-                  </td>
+                  <td class="col-xs-2">{{ tramite.profesional }} </td>
                   <td class="col-xs-2">{{ tramite.propietario.persona}}</td>
                   <td class="col-xs-1">
                     <a href="{% url 'documentos_administrativo' pk_tramite=tramite.id %}">

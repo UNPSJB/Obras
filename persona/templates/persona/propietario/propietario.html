@@ -30,17 +30,17 @@
             <form alt="seleccione un estilo de pagina" action="propietario" method="post" enctype="multipart/form-data">
                 <input type="hidden" name="Aceptar" value="Aceptar">
                 <div class="controls ">
-                    <select title="seleccione un modo para visualizar la pagina" placeholder="seleccione estilo" class="select form-control input-sm " id="estilo" name="estilo"  onchange="this.form.submit();" required>
-                        <option aria-labelledby="selector de tema de alto contraste" value="" selected="">Elegir Modo</option>
-                        <option aria-labelledby="por defecto" value="base">Por defecto</option>
-                        <option aria-labelledby="modo nocturno" value="estilo3">Modo Nocturno</option>
-                        <option aria-labelledby="contraste tierra y rojo" value="estilo4">Alto Constraste Rojo</option>
-                        <option aria-labelledby="contraste azul" value="estilo5">Contraste Azul</option>
-                        <option aria-labelledby="contraste violeta y amarillo" value="estilo6">Contraste Violeta</option>
-                        <option aria-labelledby="alto contraste verde" value="estilo7">Alto Constraste Verde</option>
-                        <option aria-labelledby="alto contraste en blanco y negro" value="estilo8">Alto contraste Blanco y negro</option>
-                        <option aria-labelledby="alto contraste violeta" value="estilo9">Alto contraste Violeta</option>
-                        <option aria-labelledby="alto contraste azul" value="estilo10">Alto contraste azul</option>
+                    <select id="modo" title="seleccione un modo para visualizar la pagina" placeholder="seleccione estilo" class="select form-control input-sm " id="estilo" name="estilo"  onchange="this.form.submit();" required>
+                        <option id="modo" aria-labelledby="selector de tema de alto contraste" value="" selected="">Elegir Modo</option>
+                        <option id="modo" aria-labelledby="por defecto" value="base">Por defecto</option>
+                        <option id="modo" aria-labelledby="modo nocturno" value="estilo3">Modo Nocturno</option>
+                        <option id="modo" aria-labelledby="contraste tierra y rojo" value="estilo4">Alto Constraste Rojo</option>
+                        <option id="modo" aria-labelledby="contraste azul" value="estilo5">Contraste Azul</option>
+                        <option id="modo" aria-labelledby="contraste violeta y amarillo" value="estilo6">Contraste Violeta</option>
+                        <option id="modo" aria-labelledby="alto contraste verde" value="estilo7">Alto Constraste Verde</option>
+                        <option id="modo" aria-labelledby="alto contraste en blanco y negro" value="estilo8">Alto contraste Blanco y negro</option>
+                        <option id="modo" aria-labelledby="alto contraste violeta" value="estilo9">Alto contraste Violeta</option>
+                        <option id="modo" aria-labelledby="alto contraste azul" value="estilo10">Alto contraste azul</option>
                     </select>
                 </div>
             </form>
@@ -187,7 +187,7 @@
 
 {% block scripts %}
 
-    <script async>
+    <script>
         var fontSize = 1;
         // funcion para aumentar la fuente
         function zoomIn() {
@@ -197,7 +197,9 @@
             var i;
             for (i = 0; i < x.length; i++) {
                   x[i].style.fontSize = fontSize + "em";
-            }            Cookies.set("fs",fontSize, {expires: 365, path: '/', SameSite: 'none',secure: true});
+            }
+            Cookies.set("fs",fontSize, {expires: 365, path: '/'});
+            <!--Cookies.set("fs",fontSize, {expires: 365, path: '/', SameSite: 'none',secure: true});-->
         }
         // funcion para disminuir la fuente
         function zoomOut() {
@@ -208,10 +210,11 @@
             for (i = 0; i < x.length; i++) {
                   x[i].style.fontSize = fontSize + "em";
             }
-            Cookies.set("fs",fontSize, {expires: 365, path: '/', SameSite:'None', Secure:'true'});
+            Cookies.set("fs",fontSize, {expires: 365, path: '/'});
+            <!--Cookies.set("fs",fontSize, {expires: 365, path: '/', SameSite:'None', Secure:'true'});-->
         }
     </script>
-    <script async>
+    <script >
         $(document).ready(function() {
             var font=0;
             if (Cookies.get("fs")){

@@ -21,10 +21,8 @@
             <td class="col-sm-1">{{ tramite.id }}</td>
             <td class="col-xs-2">{{ tramite.propietario }}</td>
             <td class="col-xs-3">
+                {{ tramite.profesional.persona.apellido }},
                 {{ tramite.profesional.persona.nombre }}
-                {{ tramite.profesional.persona.apellido }}
-                {{ tramite.profesional.profesion }}
-                {{ tramite.profesional.matricula }}
             </td>
             <td class="col-sm-1">{{ tramite.medidas }}</td>
             <td class="col-xs-1">{{ tramite.tipo_obra }}</td>

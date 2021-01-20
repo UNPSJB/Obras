@@ -118,20 +118,6 @@ h6 {
                 font-weight: bold; /*cambio*/
 
 }
-h4, .h4, h5, .h5, h6, .h6 {
-    margin-top: 10px;
-    margin-bottom: 10px;
-        font-weight: bold; /*cambio*/
-
-}
-h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
-    font-family: inherit;
-    line-height: 1.1;
-    color: inherit;
-            font-weight: bold; /*cambio*/
-
-
-}
 #columna.col-xs-12, #columna.col-sm-12, #columna.col-md-12, #columna.col-lg-12{
     background-color:#179061!important;
 }
@@ -506,14 +492,10 @@ background-color:transparent!important;
 
 
 h5 {
-    display: block;
-    font-size: 0.83em;
-    -webkit-margin-before: 1.67em;
-    -webkit-margin-after: 1.67em;
-    -webkit-margin-start: 0px;
-    -webkit-margin-end: 0px;
-    font-weight: bold!important;
+    font-weight: bolder;
+    color:black!important;
 }
+
 .panel-title > a, .panel-title > small, .panel-title > .small, .panel-title > small > a, .panel-title > .small > a {
     color: inherit;
 }

@@ -99,13 +99,6 @@ h6 {
         font-size: 12px;
 
 }
-h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
-    font-family: inherit;
-    line-height: 1.1;
-    color: inherit;
-    font-weight:bold;
-
-}
 
 #alejar, #acercar{
     background-color:#bdafaf;
@@ -386,8 +379,8 @@ background-color:transparent!important;
 
 
 h5, .h5 {
-
-    font-weight: bold!important;
+    font-weight: bolder;
+    color:black!important;
 }
 
  .panel-custom > .panel-heading-custom {
@@ -429,7 +422,7 @@ tr {
 }
 .table-bordered > thead > tr > th, .table-bordered > thead > tr > td {
     border-bottom-width: 2px;
-    background-color: #5c5353!important;
+    background-color: #5c5353;
 
 }
 
@@ -442,11 +435,11 @@ table thead tr th {
 
 th {
    /* background:#083868!important;*/
-    border-color:black!important;
+    border-color:black;
     font-weight: bold;
     text-align: -internal-center;
     vertical-align:middle;
-    color:white!important;
+    color:white;
 }
 td, th {
     display: table-cell;
@@ -847,6 +840,5 @@ ul, menu, dir {
     border-radius: 0px;
     background: #000000;
 }
-
 
 

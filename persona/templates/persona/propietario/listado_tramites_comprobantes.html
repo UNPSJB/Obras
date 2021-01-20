@@ -27,7 +27,7 @@
                         {% endif %}
                         <td class="col-xs-3">{{ tramite.monto_pagado }}</td>
                         <td>
-                            <a aria-label="Seleccionar tramite" href="{% url 'listado_de_comprobantes_propietario' tramite.id %}">
+                            <a target="_blank" aria-label="Seleccionar tramite" href="{% url 'listado_de_comprobantes_propietario' tramite.id %}">
                                 <button title="boton para comprobantes de tramite seleccionado" type="button" class="btn btn-primary btn-xs" name="lis">
                                     <span class="glyphicon glyphicon-home" aria-hidden="true"> Seleccionar tramite </span>
                                 </button>

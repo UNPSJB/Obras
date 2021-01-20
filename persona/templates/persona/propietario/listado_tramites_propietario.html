@@ -27,7 +27,7 @@
                         {% endif %}
                         <td class="col-xs-3">{{ tramite.monto_pagado }}</td>
                         <td>
-                            <a aria-label="listado de comprobantes de propietario" href="{% url 'listado_comprobantes_propietario' tramite.id %}">
+                            <a target="_blank" aria-label="listado de comprobantes de propietario" href="{% url 'listado_comprobantes_propietario' tramite.id %}">
                                 <button title="boton para ver el comprobante seleccionado" type="button" class="btn btn-primary btn-xs" name="RegistrarPago">
                                     <span class="glyphicon glyphicon-home" aria-hidden="true"> Seleccionar tramite </span>
                                 </button>

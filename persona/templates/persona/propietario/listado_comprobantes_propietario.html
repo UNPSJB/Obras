@@ -4,8 +4,7 @@
 
 {% block barra %}
 <ul class="sidebar sidebar-1">
-        <li><a href="{%url 'propietario'%}" class="current"><label id="propietario">Propietario</label></a></li>
-    </font>
+    <li><a href="{%url 'propietario'%}" class="current"><label id="propietario">Propietario</label></a></li>
 </ul>
 {% endblock %}
 
@@ -13,57 +12,57 @@
 <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true" >
     <div class="panel">
         <div class="panel-heading box" role="tab" id="headingOne">
-	        <h5 class="panel-title">
-				    <font color="#ffffff" size="2">Listado de comprobantes</font>
-		    </h5>
+            <h5 class="panel-title">
+                <font color="#ffffff" size="2">Listado de comprobantes</font>
+            </h5>
         </div>
         <div class="container-fluid">
-    <div class="panel-body">
-        <div class="table-responsive">
-<form method="post" action="/persona/propietario/registrar_pago_propietario.html/">
-        <table class="table table-bordered table-striped table-hover table-condensed" style="background: white;">
-            <thead>
-                <tr>
-                    <th>Id</th>
-                    <th>Fecha Vencimiento</th>
-                    <th>Monto</th>
-                    <th>Numero de Cuota</th>
-                    <th>Fecha de Pago</th>
-                    <th>Mostrar Comprobante</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for cuota in cuotas %}
-                    <tr>
-                        <td class="col-xs-1">{{ cuota.id }}</td>
-                        <td class="col-xs-3">{{ cuota.fechaVencimiento }}</td>
-                        <td class="col-xs-3">{{ cuota.monto }}</td>
-                        <td class="col-xs-3">{{ cuota.numeroCuota }}</td>
-                        <td class="col-xs-3">{{ cuota.fechaPago }}</td>
+            <div class="panel-body">
+                <div class="table-responsive">
+                    <form method="post" action="/persona/propietario/registrar_pago_propietario.html/">
+                        <table class="table table-bordered table-striped table-hover table-condensed" style="background: white;">
+                            <thead>
+                            <tr>
+                                <th>Id</th>
+                                <th>Fecha Vencimiento</th>
+                                <th>Monto</th>
+                                <th>Numero de Cuota</th>
+                                <th>Fecha de Pago</th>
+                                <th>Mostrar Comprobante</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for cuota in cuotas %}
+                            <tr>
+                                <td class="col-xs-1">{{ cuota.id }}</td>
+                                <td class="col-xs-3">{{ cuota.fechaVencimiento }}</td>
+                                <td class="col-xs-3">{{ cuota.monto }}</td>
+                                <td class="col-xs-3">{{ cuota.numeroCuota }}</td>
+                                <td class="col-xs-3">{{ cuota.fechaPago }}</td>
 
-                        <td>
-                             <label class="switch">
-                              <input name="cuotas-{{cuota.id}}" type="checkbox">
-                             </label>
+                                <td>
+                                    <label class="switch">
+                                        <input name="cuotas-{{cuota.id}}" type="checkbox">
+                                    </label>
 
-                        </td>
-                    </tr>
-            {% endfor %}
-            </tbody>
-        </table>
-    <button  type="submit" class="btn btn-primary " name="comprobante_pago_cuota_propietario">Aceptar</button>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                        <button  type="submit" class="btn btn-primary " name="comprobante_pago_cuota_propietario">Aceptar</button>
 
-</form>
-    <div class="col-xs-4 col-sm-4 col-md-12 col-lg-12">
-            <br><form action='/persona/propietario'>
-                &nbsp;<Button class="btn btn-primary btn-md" type="submit" value="Atras">Volver</Button>
-            </form>
+                    </form>
+                    <div class="col-xs-4 col-sm-4 col-md-12 col-lg-12">
+                        <br>
+                        <form action='/persona/propietario'>
+                        &nbsp;<Button class="btn btn-primary btn-md" type="submit" value="Atras">Volver</Button>
+                        </form>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
-    </div>
-</div>
-    </div>
-
 </div>
 <style>
 

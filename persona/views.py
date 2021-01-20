@@ -123,6 +123,7 @@ def propietario_solicita_final_obra(request, pk_tramite):
         messages.add_message(request, messages.ERROR, 'No puede solicitar el final de obra para ese tramite.')
     finally:
         return redirect('propietario')
+
 def ver_historial_tramite(request, pk_tramite):
     estilos = ''
     usuario = request.user
@@ -140,6 +141,16 @@ def ver_historial_tramite(request, pk_tramite):
         fechas_del_estado.append(est.timestamp.strftime("%d/%m/%Y"));
     return render(request, 'persona/propietario/ver_historial_tramite.html', {"tramite": contexto0, "estadosp": contexto1, "fecha":fechas_del_estado,'estilos':estilos})
 
+def documentos_de_estado(request, pk_estado):
+    estilos = ''
+    usuario = request.user
+    propietario = get_object_or_404(Propietario, pk=usuario.persona.propietario.pk)
+    if propietario.estilo:
+        estilos = propietario.estilo
+    estado = get_object_or_404(Estado, pk=pk_estado)
+    documentos = estado.tramite.documentacion_para_estado(estado)
+    return render(request, 'persona/propietario/documentos_de_estado.html', documentos,{'estilos':estilos})
+'''
 def documentos_de_estado(request, pk_estado):
     estilos = ''
     usuario = request.user
@@ -181,7 +192,7 @@ def documentos_de_estado(request, pk_estado):
             'estilos':estilos
         }
     return render(request, 'persona/propietario/documentos_de_estado.html', contexto)
-
+'''
 def listado_tramites_para_financiar_propietario(request):
     estilos = ''
     usuario = request.user
@@ -387,8 +398,7 @@ def listado_comprobantes_propietario(request,pk_tramite):
     if canceladas is None:
         messages.add_message(request, messages.WARNING, 'No hay pagos registrados para el tramite seleccionado.')
     if estilos == value:
-        return render(request, 'persona/propietario/factura_parcial_propietario_modoNocturno.html',
-                      {'cuotas': canceladas, 'tramite': tramite, 'pago': pago, 'estilos': estilos})
+        return render(request, 'persona/propietario/factura_parcial_propietario_modoNocturno.html', {'cuotas': canceladas, 'tramite': tramite, 'pago': pago, 'estilos': estilos})
     return render(request, 'persona/propietario/factura_parcial_propietario.html',
                   {'cuotas': canceladas, 'tramite': tramite, 'pago': pago, 'estilos': estilos})
 
@@ -486,7 +496,6 @@ from planilla_inspeccion.models import PlanillaDeInspeccion
 @login_required(login_url="login")
 @grupo_requerido('profesional')
 def mostrar_profesional(request):
-    print("profesional")
     usuario = request.user
     tipos_de_documentos_requeridos = TipoDocumento.get_tipos_documentos_para_momento(TipoDocumento.INICIAR)
     FormularioDocumentoSet = FormularioDocumentoSetFactory(tipos_de_documentos_requeridos)
@@ -521,7 +530,6 @@ def mostrar_profesional(request):
                 request.POST['sector'],
                 lista
             )
-            print("new tramite")
             tramite_form = FormularioIniciarTramite(initial={'profesional':usuario.persona.profesional.pk})
             propietario_form = None
         else:
@@ -605,17 +613,10 @@ def profesional_solicita_final_obra(request, pk_tramite):
         return redirect('profesional')
 
 def ver_documentos_corregidos(request, pk_tramite):
-    print("ver")
     if request.method == "POST":
-       print("post")
-
-
        if  "Enviar correccion de administrativo" in request.POST:
-            print ("faltan documentos")
             tipo= "correccion visado" #deberia venir por post en un input hidden
-            print(tipo)
             documentos = Documento.objects.filter(tramite_id=pk_tramite)
-            print(documentos)
             enviar_correccioness(request, pk_tramite,tipo)
     else:
         tramite = get_object_or_404(Tramite, pk=pk_tramite)
@@ -628,8 +629,7 @@ def ver_documentos_corregidos(request, pk_tramite):
                     plan = p
                 else:
                     plan = aux
-            planilla = get_object_or_404(PlanillaDeVisado,
-                                         id=plan.id)  # PlanillaDeVisado.objects.filter(tramite_id=tramite.id)# busca las planillas que tengan el id del tramite
+            planilla = get_object_or_404(PlanillaDeVisado, id=plan.id)  # PlanillaDeVisado.objects.filter(tramite_id=tramite.id)# busca las planillas que tengan el id del tramite
         else:
             try:
                 planilla = PlanillaDeVisado.objects.get(tramite_id=pk_tramite)  # PlanillaDeVisado.objects.filter(tramite_id=tramite.id)# busca las planillas que tengan el id del tramite
@@ -685,7 +685,7 @@ def enviar_correcciones(request, pk_tramite):
     tramite.hacer(tramite.CORREGIR, request.user, observacion)
     messages.add_message(request, messages.SUCCESS, 'Tramite con documentos corregidos y enviados')
     return redirect('profesional')
-
+'''
 def documento_de_estado(request, pk_estado):
     estado = get_object_or_404(Estado, pk=pk_estado)
     fecha = estado.timestamp
@@ -721,6 +721,11 @@ def documento_de_estado(request, pk_estado):
             'categorias': categorias,
         }
     return render(request, 'persona/profesional/documento_de_estado.html', contexto)
+'''
+def documento_de_estado(request, pk_estado):
+    estado = get_object_or_404(Estado, pk=pk_estado)
+    documentos = estado.tramite.documentacion_para_estado(estado)
+    return render(request, 'persona/profesional/documento_de_estado.html', documentos)
 
 def planilla_visado_impresa(request, pk_tramite):
     planilla = get_object_or_404(PlanillaDeVisado,id=pk_tramite)
@@ -917,7 +922,6 @@ def crear_usuario(request, pk_persona):
             [persona.mail],
             fail_silently=False,
         )
-        print (password)
     else:
         print("Mando correo informando que se cambio algo en su cuenta de usuario")
     return redirect(usuario.get_view_name())
@@ -967,6 +971,12 @@ def documentos_administrativo(request, pk_tramite):
 
 def documento_de_estado_administrativo(request, pk_estado):
     estado = get_object_or_404(Estado, pk=pk_estado)
+    documentos = estado.tramite.documentacion_para_estado(estado)
+    return render(request, 'persona/administrativo/documento_de_estado_administrativo.html', documentos)
+
+'''
+def documento_de_estado_administrativo(request, pk_estado):
+    estado = get_object_or_404(Estado, pk=pk_estado)
     fecha = estado.timestamp
     fecha_str = date.strftime(fecha, '%d/%m/%Y %H:%M')
     documentos = estado.tramite.documentos.all()
@@ -1000,7 +1010,7 @@ def documento_de_estado_administrativo(request, pk_estado):
             'categorias': categorias,
         }
     return render(request, 'persona/administrativo/documento_de_estado_administrativo.html', contexto)
-
+'''
 def listado_profesionales(request):
     tramites = Tramite.objects.all()  # puse con inspeccion solo para fines de mostrar algo
     profesionales = Profesional.objects.all()
@@ -2340,7 +2350,7 @@ def agendar_inspeccion_final(request,pk_tramite):
 
 def inspeccion_final(request,pk_tramite):
    tramite = get_object_or_404(Tramite, pk=pk_tramite)
-   planilla = PlanillaDeInspeccion.objects.select_related().filter(tramite_id=tramite).last()  # last una sola planilla que se pueda modificar y perder el historial??
+   planilla = PlanillaDeInspeccion.objects.select_related().filter(tramite_id=tramite).last()
    p = []
    detalles = DetalleDeItemInspeccion.objects.all()
    if planilla is not None:
@@ -2899,9 +2909,9 @@ def add_legend(draw_obj, chart, data):
     legend.alignment = 'right'
     legend.x = 10
     legend.y = 95
-    legend.deltax = 60
+    legend.deltax = 3
     legend.dxTextSpace = 3
-    legend.columnMaximum = 6
+    legend.columnMaximum = 5
     legend.colorNamePairs = Auto(obj=chart)
     draw_obj.add(legend)
 
@@ -3060,7 +3070,7 @@ def detalle_de_tramite(request, pk_tramite):
     return render(request, 'persona/director/detalle_de_tramite.html', {"tramite": contexto0, "estados": contexto1, "fecha": fechas_del_estado})
 
 
-
+'''
 def documentos_del_estado(request, pk_estado):
     estado = get_object_or_404(Estado, pk=pk_estado)
     fecha = estado.timestamp
@@ -3102,7 +3112,7 @@ def documentos_del_estado(request, pk_estado):
     estado = get_object_or_404(Estado, pk=pk_estado)
     documentos = estado.tramite.documentacion_para_estado(estado)
     return render(request, 'persona/director/documentos_del_estado.html', documentos)
-'''
+
 def generar_planilla_visado(request):
     filas = FilaDeVisado.objects.all()
     columnas = ColumnaDeVisado.objects.all()
@@ -3314,8 +3324,8 @@ def seleccionar_fecha_item_inspeccion(request):
         totalItems=0
         subtotales=[]
         for l in listaItems:
-            nombre, categoria=l.split('_')
-            i=DetalleDeItemInspeccion.objects.get(nombre=nombre, categoria_inspeccion_id=categoria)
+
+            i=DetalleDeItemInspeccion.objects.get(id=str(l))
             item.append(i)
         for name, value in request.POST.items():
             if (name == 'fecha'):
@@ -3330,9 +3340,8 @@ def seleccionar_fecha_item_inspeccion(request):
                 subtotal=0
                 for t in tramites:
                     try:
-
                         resultado=PlanillaDeInspeccion.objects.filter(fecha=t['fecha__max'],tramite_id=t['tramite_id'], fecha__range=(
-                        datetime.date(year, m, 01), datetime.date(year, m, diaFinal[1])), detalles__nombre=i.nombre, detalles__categoria_inspeccion_id=i.categoria_inspeccion_id)
+                        datetime.date(year, m, 01), datetime.date(year, m, diaFinal[1])), detalles__nombre=i.nombre, detalles__id=i.id)
                         if resultado:
                            subtotal+=1
                     except:
@@ -3342,14 +3351,14 @@ def seleccionar_fecha_item_inspeccion(request):
             datos.append(tuple(cant))
             nombre=str(i.nombre)
             series.append(nombre)
-            totalItems=PlanillaDeInspeccion.objects.filter(detalles__nombre=i.nombre, detalles__categoria_inspeccion_id=i.categoria_inspeccion_id, fecha__range=(datetime.date(year,01, 01), datetime.date(year, 12, 31))).values('tramite_id').distinct().order_by('tramite_id').annotate(Max('fecha')).count()
+            totalItems=PlanillaDeInspeccion.objects.filter(detalles__id=i.id, fecha__range=(datetime.date(year,01, 01), datetime.date(year, 12, 31))).values('tramite_id').distinct().order_by('tramite_id').annotate(Max('fecha')).count()
             # if (totalItems==0):
             #      porcentaje=0
             #      porcentaje1=0
             # else:
             #      porcentaje1= (totalI/float(totalItems))*100
             #      porcentaje = "{0:.2f}".format(porcentaje1)
-            aux = {'nombre':nombre,'categoria':i.categoria_inspeccion_id, 'cantidad': totalItems}
+            aux = {'nombre':nombre,'categoria':i.categoria_inspeccion.nombre,'item':i.item_inspeccion.nombre, 'cantidad': totalItems}
             lista.append(aux)
             cant = []
         titulo = "Items de inspeccion por mes"
@@ -3558,7 +3567,6 @@ def seleccionar_tipoObra_sector(request):
             nombre="Sector "+ str(l[1])
             nombres.append(nombre)
             series.append(nombre)
-        print(list_sectores[0:30])
         titulo = "Sectores con mas obras segun obra seleccionada"
         if len(datos) > 0:
                 grafico = grafico_de_barras_v(datos, nombres, titulo,series)
@@ -3650,7 +3658,8 @@ def tiempo_aprobacion_visados(request):
             planillas= PlanillaDeVisado.objects.filter(fecha__range=(datetime.date(year, 01, 01),(datetime.date(year, 12, 31))))
             for t in tramitesV:
                 aux=filter(lambda p: t==p.tramite_id, planillas)
-                lista.append([t,len(aux)])
+                if (len(aux))!=0:
+                    lista.append([t,len(aux)])
             datos.append(meses)
             porcentajeVisadosAprobados = ((tramitesAprobados.count() / float(tramites)) * 100)
             porcentajeApr = "{0:.2f}".format(porcentajeVisadosAprobados)
@@ -4115,7 +4124,6 @@ def listado_comprobantes(request,pk_tramite):
     cuotas=Cuota.objects.en_estado(Cancelada)
     for cuota in cuotas:
         if cuota.pago==pago:
-            print(type(cuota.fechaVencimiento))
             canceladas.append(cuota)
     if canceladas is None:
         messages.add_message(request, messages.WARNING, 'No hay pagos registrados para el tramite seleccionado.')
@@ -4216,7 +4224,7 @@ def planilla_inspeccion_movil(request,pk_tramite):
             aux=0
             for d in detalles:
                 for i in detallesPlanilla:
-                    if i.categoria_inspeccion.nombre==d.categoria_inspeccion.nombre and i.nombre==d.nombre:
+                    if i.id==d.id:
                         b=[1,d]
                         p.append(b)
                         aux=1

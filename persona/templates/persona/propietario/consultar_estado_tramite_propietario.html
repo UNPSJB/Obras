@@ -46,7 +46,7 @@
                     {% endif %}
                   <td align="center" class="col-xs-1">
                      {%if tramite.estado.tipo > 5 and tramite.estado.tipo <=  7%}
-                        <a aria-label="boton para solicitar final de obra" href="{% url 'propietario_solicita_final_obra' pk_tramite=tramite.id %}">
+                        <a target="_blank" aria-label="boton para solicitar final de obra" href="{% url 'propietario_solicita_final_obra' pk_tramite=tramite.id %}">
                           <button  title="boton para solicitar final de obra"  type="button" class="btn btn-primary btn-xs" name="Solicitar final de obra">
                             <span class="glyphicon glyphicon-home" aria-hidden="true"> Final Obra</span>
                           </button>

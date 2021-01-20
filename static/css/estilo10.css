@@ -17,8 +17,8 @@ b, strong {
     margin-right: 3px;
 }
 h5, .h5 {
-
-    font-weight: bold!important;
+    font-weight: bolder;
+    color:black!important;
 }
 td{
     color:black!important;
@@ -404,12 +404,12 @@ table thead tr th {
 }
 
 th {
-    background:#086edd!important;
+    background:#086edd;
     border-color:black!important;
     font-weight: bold;
     text-align: -internal-center;
     vertical-align:middle;
-    color:white!important;
+    color:white;
 }
 td, th {
     display: table-cell;

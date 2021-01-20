@@ -30,10 +30,10 @@
         </div>
         <div id="collapseFive" class="panel-collapse" role="tabpanel" aria-labelledby="headingFive">
             <div class="panel-body">
+                {%if documentos %}
                 <div class="container-fluid">
                     <div class="row">
                         <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="...">
-
                             {% for documento in documentos %}
                             <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
                                 <div class="thumbnail ">
@@ -53,7 +53,7 @@
                         </div>
                     </div>
 
-                    {% if planillas %}
+                    {% elif planillas %}
                     <table class="table-bordered table-striped table-hover table-condensed">
                         <thead>
                         <tr>
@@ -86,9 +86,7 @@
                         </tbody>
                     </table>
 
-                    {%endif%}
-
-                    {%if inspecciones %}
+                    {%elif inspecciones %}
                     <table class="table-bordered table-striped table-hover table-condensed">
                         <thead>
                         <tr>
@@ -100,7 +98,6 @@
                         <tbody>
                         {% for inspeccion in inspecciones %}
                         <tr>
-                            {% if inspeccion %}
                             <td  class="col-xs-1" align="center">{{inspeccion.id}}</td>
                             <td  class="col-xs-1" align="center">{{inspeccion.tramite_id}}</td>
                             <td>
@@ -115,11 +112,12 @@
 
                                 </div>
                             </td>
-                            {% endif %}
                         </tr>
                         {% endfor %}
                         </tbody>
                     </table>
+                    {% else %}
+               <label>No hay datos para mostrar</label>
                     {%endif%}
 
 

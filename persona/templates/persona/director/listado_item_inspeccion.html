@@ -49,20 +49,15 @@
                                         </thead>
                                         <tbody>
 
-                                        {% for i in items %}
-                                        {% if i.activo == True %}
                                         {%for l in lista%}
-                                         {%if  l.nombre == i.nombre and l.categoria == i.categoria_inspeccion_id %}
                                         <tr>
-                                            <td class="col-xs-1">{{ i.categoria_inspeccion.nombre }}</td>
-                                            <td class="col-xs-1">{{ i.item_inspeccion.nombre }}</td>
-                                            <td class="col-xs-1">{{ i.nombre }}</td>
+                                            <td class="col-xs-1">{{ l.categoria }}</td>
+                                            <td class="col-xs-1">{{ l.item }}</td>
+                                            <td class="col-xs-1">{{ l.nombre }}</td>
                                             <td class="col-xs-1">{{ l.cantidad }}</td>
                                         </tr>
-                                        {%endif%}
                                         {% endfor %}
-                                        {% endif %}
-                                        {% endfor %}
+
                                         </tbody>
                                     </table>
                                 </div>
