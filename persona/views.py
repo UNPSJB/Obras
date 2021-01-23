@@ -3277,10 +3277,17 @@ def grafico_de_barras_v(datos,nombres, titulo,series):
     if tope > 0 and math.log10(tope)>1:
         bc.valueAxis.valueMax = tope+(tope/10)
         bc.groupSpacing = tope/10
+        if max(lista) >1000000:
+            bc.barWidth = 100000
     else:
-        bc.valueAxis.valueMax = 50
-        bc.groupSpacing = 10
-    bc.barSpacing = 1.5
+        if max(lista) <10:
+            bc.valueAxis.valueMax = 15
+            bc.groupSpacing = 10
+            bc.valueAxis.valueStep = 5
+        else:
+            bc.valueAxis.valueMax = 50
+            bc.groupSpacing = 10
+        bc.barSpacing = 1.5
     bc.categoryAxis.labels.boxAnchor = 'ne'
     bc.categoryAxis.labels.dy = -2
     bc.categoryAxis.labels.angle = 30
