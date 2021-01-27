@@ -915,6 +915,7 @@ def crear_usuario(request, pk_persona):
         messages.add_message(request, messages.SUCCESS, 'usuario creado.')
         # Mandar correo al  nuevo usuario con su usurio y clave
         print("Mando correo de creado")
+        print(password)
         send_mail(
             'Usuario habilitado',
             'Usted ya puede acceder al sistema: Nombre de usuario: '+persona.mail+' password: '+password,
