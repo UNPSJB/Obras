@@ -148,8 +148,7 @@ def documentos_de_estado(request, pk_estado):
     if propietario.estilo:
         estilos = propietario.estilo
     estado = get_object_or_404(Estado, pk=pk_estado)
-    documentos = estado.tramite.documentacion_para_estado(estado)
-    return render(request, 'persona/propietario/documentos_de_estado.html', documentos,{'estilos':estilos})
+    return render(request, 'persona/propietario/documentos_de_estado.html', {'documentos':estado.tramite.documentacion_para_estado(estado),'estilos':estilos})
 '''
 def documentos_de_estado(request, pk_estado):
     estilos = ''
@@ -561,16 +560,21 @@ def tramites_corregidos(request):
     tramites = Tramite.objects.all()
     personas = Persona.objects.all()
     usuario = request.user
+    tram_corregidos=[]
     lista_de_persona_que_esta_logueada = filter(lambda persona: (persona.usuario is not None and persona.usuario == usuario), personas)
     persona = lista_de_persona_que_esta_logueada.pop()  #Saco de la lista la persona porque no puedo seguir trabajando con una lista
     profesional = persona.get_profesional() #Me quedo con el atributo profesional de la persona
     tramites_de_profesional = filter(lambda tramite: (tramite.profesional == profesional), tramites)
     tipo = 4
-    try:
-        tram_corregidos = filter(lambda tramite: (tramite.estado().tipo == tipo), tramites_de_profesional)
-        contexto = {'tramites': tram_corregidos}
-    except:
-        contexto={'mensaje':"No hay datos para mostrar"}
+    for t in tramites_de_profesional:
+        try:
+            if t.estado().tipo==tipo:
+                tram_corregidos.append(t)
+        except:
+            pass
+    contexto = {'tramites': tram_corregidos}
+    
+    # contexto={'mensaje':"No hay datos para mostrar"}
     return contexto
 
 def tramites_corregidos_administrativo(request):
@@ -579,11 +583,14 @@ def tramites_corregidos_administrativo(request):
     estado=Estado.objects.select_related().all()
     tram_corregidos=[]
     for e in estado:
-        estadoPrevio = e.previo()
-        estadoSiguiente = e.siguiente()
-        if (e and estadoPrevio):
-            if (e.tipo == tipo and estadoPrevio.tipo == anterior and estadoSiguiente is None):
-                tram_corregidos.append(e.tramite)
+        try:
+            estadoPrevio = e.previo()
+            estadoSiguiente = e.siguiente()
+            if (e and estadoPrevio):
+                if (e.tipo == tipo and estadoPrevio.tipo == anterior and estadoSiguiente is None):
+                    tram_corregidos.append(e.tramite)
+        except:
+            pass
     contexto = {'tramites': tram_corregidos}
     return contexto
 

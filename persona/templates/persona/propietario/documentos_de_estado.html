@@ -24,8 +24,8 @@
                 <div class="row">
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" style="color: white;">
 
-                        {% for documento in documentos%}
-                        <!--{ for documento in documentos.documentos}-->
+                        <!--{for documento in documentos}-->
+                        {% for documento in documentos.documentos%}
                         <div class="col-xs-4 col-sm-4 col-md-4 col-lg-4">
                             <div class="thumbnail ">
                                 <a id="single_image" href="/media/{{documento.file}}" data-fancybox="images" data-caption="{{documento.tipo_documento}}">
@@ -42,8 +42,8 @@
                         </div>
                         {% endfor %}
                     </div>
-                    <!--{if documentos.planillas }-->
-                    {% if planillas %}
+                    {% if documentos.planillas %}
+                    <!--{ if planillas }-->
                     <table class="table-bordered table-striped table-hover table-condensed">
                         <thead>
                         <tr>
@@ -54,8 +54,8 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <!--{ for planilla in documentos.planillas }-->
-                        {% for planilla in planillas %}
+                        {% for planilla in documentos.planillas %}
+                        <!--{ for planilla in planillas }-->
                         <tr>
                             {% if planilla %}
                             <td  class="col-xs-1" align="center">{{planilla.id}}</td>
@@ -83,8 +83,8 @@
                         </tbody>
                     </table>
                     {%endif%}
-                    <!--{if documentos.inspecciones }-->
-                    {%if inspecciones %}
+                    {% if documentos.inspecciones %}
+                    <!--{if inspecciones }-->
                     <table class="table-bordered table-striped table-hover table-condensed">
                         <thead>
                         <tr>
@@ -94,8 +94,8 @@
                         </tr>
                         </thead>
                         <tbody>
-                        <!--{ for inspeccion in documentos.inspecciones }-->
-                        {% for inspeccion in inspecciones %}
+                        {% for inspeccion in documentos.inspecciones %}
+                        <!--{ for inspeccion in inspecciones }-->
                         <tr>
                             {% if inspeccion %}
                             <td  class="col-xs-1" align="center">{{inspeccion.id}}</td>

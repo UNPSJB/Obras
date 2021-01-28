@@ -173,13 +173,17 @@ class Tramite(models.Model):
                     documentos = list(self.documentos.all())
                 else:
                     try:
-                        visados = list(self.visados.filter(fecha__lte=estado.timestamp, fecha__gte=previo.timestamp))
+                        visados = list(self.visados.filter(fecha__range=(previo.timestamp,estado.timestamp)))
+                    except:
+                        visados=None
+                    try:
                         inspecciones = list(self.inspecciones.filter(fecha__lte=estado.timestamp, fecha__gte=previo.timestamp))
-                        documentos = list(self.documentos.filter(fecha__range=(previo.timestamp,estado.timestamp)))
+                    except:
+                        inspecciones=None
+                    try:
+                        documentos = list(self.documentos.filter(fecha__range=(previo.timestamp, estado.timestamp)))
                     except:
                         documentos=None
-                        visados=None
-                        inspecciones=None
             else:
                 visados = list(self.visados.filter(fecha=estado.timestamp))
                 inspecciones = list(self.inspecciones.filter(fecha=estado.timestamp))
