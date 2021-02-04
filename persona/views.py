@@ -369,18 +369,19 @@ def listado_comprobantes_propietario(request,pk_tramite):
     return render(request, 'persona/propietario/factura_parcial_propietario.html',
                   {'cuotas': canceladas, 'tramite': tramite, 'pago': pago, 'estilos': estilos})
 
-def planilla_visado_impresa_propietario(request, pk_tramite):
+def planilla_visado_impresa_propietario(request, pk_planilla):
     estilos = ''
     usuario = request.user
     propietario = get_object_or_404(Propietario, pk=usuario.persona.propietario.pk)
     if propietario.estilo:
         estilos = propietario.estilo
     value = "estilo3"
-    tramite = get_object_or_404(Tramite, pk=planilla.tramite_id)
     filas = FilaDeVisado.objects.all()
     columnas = ColumnaDeVisado.objects.all()
+    planilla = get_object_or_404(PlanillaDeVisado, id=pk_planilla)
+    tramite = get_object_or_404(Tramite, pk=planilla.tramite_id)
     try:
-        planilla = get_object_or_404(PlanillaDeVisado, id=pk_tramite)
+
         elementos = planilla.elementos.all()
         items = planilla.items.all()
         obs = planilla.observacion
@@ -401,7 +402,7 @@ def planilla_visado_impresa_propietario(request, pk_tramite):
     except:
          contexto = {
              'tramite': tramite,
-             'planilla': planilla,
+    #         'planilla': planilla,
              'filas': filas,
              'columnas': columnas,
              'obs': obs,
@@ -420,11 +421,11 @@ def planilla_inspeccion_impresa_propietario(request, pk_tramite):
     if propietario.estilo:
         estilos = propietario.estilo
     value = "estilo3"
-    tramite=get_object_or_404(Tramite, id=planilla.tramite_id)
     items = ItemInspeccion.objects.all()
     categorias = CategoriaInspeccion.objects.all()
     try:
-        planilla = get_object_or_404(PlanillaDeInspeccion, id=pk_tramite)
+        planilla = get_object_or_404(PlanillaDeInspeccion, id=pk_tramite) # en todos los metodos el pk_tramite es el pk de la planilla no el del tramite
+        tramite = get_object_or_404(Tramite, id=planilla.tramite_id)
         detalles = planilla.detalles.all()
         contexto = {
             'tramite': tramite,
@@ -442,8 +443,8 @@ def planilla_inspeccion_impresa_propietario(request, pk_tramite):
 
     except:
         contexto = {
-            'tramite':tramite,
-            'planilla': planilla,
+       #     'tramite':tramite,
+        #    'planilla': planilla,
             'items': items,
             'categorias': categorias,
             'estilos':estilos,
@@ -452,7 +453,7 @@ def planilla_inspeccion_impresa_propietario(request, pk_tramite):
             return render(request, 'persona/propietario/planilla_inspeccion_impresa_propietarioModoNocturno.html',
                           contexto)
 
-        return render(request, 'persona/propietario/planilla_inspeccion_impresa_propietario.html', contexto)
+    return render(request, 'persona/propietario/planilla_inspeccion_impresa_propietario.html', contexto)
 
 
 #-------------------------------------------------------------------------------------------------------------------
