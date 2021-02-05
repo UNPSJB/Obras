@@ -164,70 +164,76 @@
                             <hr>
                             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="center">
                                 <label>Seleccionar Documento Para Correccion </label>
-                            <form action="" method="post" enctype="multipart/form-data">
+                                <form action="" method="post" enctype="multipart/form-data">
+                                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 
 
-                                <label for="tipo_documento.id" class="subir">
-                                <i class="fas fa-cloud-upload-alt"></i> Seleccionar Documento
-                                </label>
-                                <input id="tipo_documento.id" name="documento" onchange='cambiar()' type="file" style='display: none;'/>
-                                    <div id="info"></div>
-                                <button class="btn btn-primary btn-sm" type="submit" value="Enviar correccion de administrativo" title="Enviar correccion de administrativo" name="Enviar correccion de administrativo">
-                                        Enviar correcciones
-                                    </button>
-                                    <a href="javascript:history.back(-1);">
-                                        <button type="button" class="btn btn-primary" value="Volver" name="Volver">
-                                            Volver
-                                        </button>
-                                    </a>
-                            </div>
-                            </div>
-                    </form>
+                                        <label for="tipo_documento.id" class="subir">
+                                            <i class="fas fa-cloud-upload-alt"></i> Seleccionar Documento
+                                        </label>
+                                        <input id="tipo_documento.id" name="documento" onchange='cambiar()' type="file" style='display: none;'/>
 
-                            <!--<label>Cargar documentos corregidos</label>
-                            <input type="file" name="documento" id="tipo_documento.id">
-                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="center">
-                                <button class="btn btn-primary btn-sm" type="submit" value="Enviar correccion de administrativo" title="Enviar correccion de administrativo" name="Enviar correccion de administrativo">
-                                        Enviar correcciones
-                                     <a href="javascript:history.back(-1);">
-                                        <button type="button" class="btn btn-primary" value="Volver" name="Volver">
-                                            Volver
-                                        </button>
-                                    </a>
-                                    </button>
-                                </div>
-                                </form>
-                            <!--<form action="" method="post" enctype="multipart/form-data" id="tipo_documento_id">
-                                {% csrf_token %}
-                                {{ FormularioDocumento }}
-                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-                                    <div class="form-group">
-                                        <label for="">Cargar Documentos corregidos:</label>
-                                        <input type="hidden" id="id_tramite" value="{{tramite.id}}">
-                                        <input name="documento" class="file" id="tipo_documento.id"  type="file" data-preview-file-type="any" title="Cargar documentos corregidos" required />
+                                        <label style="color:white;" id="info"></label>
+                                    <br>
                                     </div>
-                                </div>
-                                <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="center">
+                                    <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 
-                                    <button class="btn btn-primary btn-sm" type="submit" value="Enviar correccion de administrativo" title="Enviar correccion de administrativo" name="Enviar correccion de administrativo">
-                                        Enviar correcciones
-                                    </button>
-                                    <a href="javascript:history.back(-1);">
-                                        <button type="button" class="btn btn-primary" value="Volver" name="Volver">
-                                            Volver
+                                        <button class="btn btn-primary btn-sm" type="submit" value="Enviar correccion de administrativo" title="Enviar correccion de administrativo" name="Enviar correccion de administrativo">
+                                            Enviar correcciones
                                         </button>
-                                    </a>
-                                </div>
-                                <br>
-                                <br>
-                            </form>-->
-
+                                        <a href="javascript:history.back(-1);">
+                                            <button type="button" class="btn btn-primary" value="Volver" name="Volver">
+                                                Volver
+                                            </button>
+                                        </a>
+                                    </div>
+                                </form>
+                            </div>
                         </div>
-                    </div>
+                        <!--<label>Cargar documentos corregidos</label>
+                        <input type="file" name="documento" id="tipo_documento.id">
+                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="center">
+                            <button class="btn btn-primary btn-sm" type="submit" value="Enviar correccion de administrativo" title="Enviar correccion de administrativo" name="Enviar correccion de administrativo">
+                                    Enviar correcciones
+                                 <a href="javascript:history.back(-1);">
+                                    <button type="button" class="btn btn-primary" value="Volver" name="Volver">
+                                        Volver
+                                    </button>
+                                </a>
+                                </button>
+                            </div>
+                            </form>
+                        <!--<form action="" method="post" enctype="multipart/form-data" id="tipo_documento_id">
+                            {% csrf_token %}
+                            {{ FormularioDocumento }}
+                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
+                                <div class="form-group">
+                                    <label for="">Cargar Documentos corregidos:</label>
+                                    <input type="hidden" id="id_tramite" value="{{tramite.id}}">
+                                    <input name="documento" class="file" id="tipo_documento.id"  type="file" data-preview-file-type="any" title="Cargar documentos corregidos" required />
+                                </div>
+                            </div>
+                            <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12" align="center">
+
+                                <button class="btn btn-primary btn-sm" type="submit" value="Enviar correccion de administrativo" title="Enviar correccion de administrativo" name="Enviar correccion de administrativo">
+                                    Enviar correcciones
+                                </button>
+                                <a href="javascript:history.back(-1);">
+                                    <button type="button" class="btn btn-primary" value="Volver" name="Volver">
+                                        Volver
+                                    </button>
+                                </a>
+                            </div>
+                            <br>
+                            <br>
+                        </form>-->
+
                 </div>
             </div>
         </div>
     </div>
+</div>
+</div>
 </div>
 
 
