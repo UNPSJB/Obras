@@ -498,6 +498,8 @@ def mostrar_profesional(request):
                 request.POST['sector'],
                 lista
             )
+            messages.add_message(request, messages.SUCCESS,
+                                 'Solicitud de inicio de tramite exitosa.')
             tramite_form = FormularioIniciarTramite(initial={'profesional':usuario.persona.profesional.pk})
             propietario_form = None
         else:
@@ -587,8 +589,6 @@ def ver_documentos_corregidos(request, pk_tramite):
         tramite = get_object_or_404(Tramite, pk=pk_tramite)
         planillas = PlanillaDeVisado.objects.filter(
             tramite_id=tramite.id)  # busca las planillas que tengan el id del tramite
-        documentos = Documento.objects.filter(tramite_id=pk_tramite)
-
         if (len(planillas) > 1):
             aux = planillas[0]
             for p in planillas:
@@ -596,41 +596,37 @@ def ver_documentos_corregidos(request, pk_tramite):
                     plan = p
                 else:
                     plan = aux
-            planilla = get_object_or_404(PlanillaDeVisado, id=plan.id)  # PlanillaDeVisado.objects.filter(tramite_id=tramite.id)# busca las planillas que tengan el id del tramite
+            planilla = get_object_or_404(PlanillaDeVisado,
+                                         id=plan.id)  # PlanillaDeVisado.objects.filter(tramite_id=tramite.id)# busca las planillas que tengan el id del tramite
         else:
             try:
-                planilla = PlanillaDeVisado.objects.get(tramite_id=pk_tramite)  # PlanillaDeVisado.objects.filter(tramite_id=tramite.id)# busca las planillas que tengan el id del tramite
-
+                planilla = PlanillaDeVisado.objects.get(
+                    tramite_id=pk_tramite)  # PlanillaDeVisado.objects.filter(tramite_id=tramite.id)# busca las planillas que tengan el id del tramite
             except:
-                contexto={'tramite':tramite,'documentos': documentos}
-                return render(request, 'persona/profesional/ver_documentos_corregidos.html', contexto)
-
+                planilla = "No hay planilla para mostrar"
+        filas = FilaDeVisado.objects.all()
+        columnas = ColumnaDeVisado.objects.all()
         try:
-                planilla = PlanillaDeVisado.objects.get(tramite_id=pk_tramite)  # PlanillaDeVisado.objects.filter(tramite_id=tramite.id)# busca las planillas que tengan el id del tramite
-
-                filas = FilaDeVisado.objects.all()
-                columnas = ColumnaDeVisado.objects.all()
-                obs = planilla.observacion
-                elementos = planilla.elementos.all()
-                items = planilla.items.all()
-                contexto = {
-                    'tramite': tramite,
-                    'documentos':documentos,
-                    'planilla': planilla,
-                    'filas': filas,
-                    'columnas': columnas,
-                    'items': items,
-                    'elementos': elementos,
-                    'obs': obs,
-                }
-                return render(request, 'persona/profesional/ver_documentos_corregidos.html', contexto)
+            obs = planilla.observacion
+            elementos = planilla.elementos.all()
+            items = planilla.items.all()
+            contexto = {
+                'tramite': tramite,
+                'planilla': planilla,
+                'filas': filas,
+                'columnas': columnas,
+                'items': items,
+                'elementos': elementos,
+                'obs': obs,
+            }
+            return render(request, 'persona/profesional/ver_documentos_corregidos.html', contexto)
         except:
-                contexto = {
-                    'tramite': tramite,
-                    'documentos':documentos,
-                    'mensaje': "No hay planilla/s para mostrar"  ,
-                }
-                return render(request, 'persona/profesional/ver_documentos_corregidos.html', contexto)
+            contexto = {
+                'tramite': tramite,
+                'mensaje': planilla,
+            }
+            return render(request, 'persona/profesional/ver_documentos_corregidos.html', contexto)
+
     return redirect('profesional')
 
 
