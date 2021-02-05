@@ -7,11 +7,13 @@
 {% endblock %}
 
 {% block barra %}
-	<ul class="sidebar sidebar-1">
-		<font size="2">
-			<li><a href="javascript:history.back(-1);" class="current"><font color="white">Director</font></a></li>
-		</font>
-	</ul>
+	<div id="noImprimir">
+    <ul class="sidebar sidebar-1">
+        <font size="2">
+            <li><a href="{% url 'director'  %}" class="current"><font color="white">Director</font></a></li>
+        </font>
+    </ul>
+</div>
 {% endblock %}
 
 {% block contenido %}

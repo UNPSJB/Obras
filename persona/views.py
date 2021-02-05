@@ -629,6 +629,8 @@ def ver_documentos_corregidos(request, pk_tramite):
         tramite = get_object_or_404(Tramite, pk=pk_tramite)
         planillas = PlanillaDeVisado.objects.filter(
             tramite_id=tramite.id)  # busca las planillas que tengan el id del tramite
+        documentos = Documento.objects.filter(tramite_id=pk_tramite)
+
         if (len(planillas) > 1):
             aux = planillas[0]
             for p in planillas:
@@ -641,6 +643,13 @@ def ver_documentos_corregidos(request, pk_tramite):
             try:
                 planilla = PlanillaDeVisado.objects.get(tramite_id=pk_tramite)  # PlanillaDeVisado.objects.filter(tramite_id=tramite.id)# busca las planillas que tengan el id del tramite
 
+            except:
+                contexto={'tramite':tramite,'documentos': documentos}
+                return render(request, 'persona/profesional/ver_documentos_corregidos.html', contexto)
+
+        try:
+                planilla = PlanillaDeVisado.objects.get(tramite_id=pk_tramite)  # PlanillaDeVisado.objects.filter(tramite_id=tramite.id)# busca las planillas que tengan el id del tramite
+
                 filas = FilaDeVisado.objects.all()
                 columnas = ColumnaDeVisado.objects.all()
                 obs = planilla.observacion
@@ -648,6 +657,7 @@ def ver_documentos_corregidos(request, pk_tramite):
                 items = planilla.items.all()
                 contexto = {
                     'tramite': tramite,
+                    'documentos':documentos,
                     'planilla': planilla,
                     'filas': filas,
                     'columnas': columnas,
@@ -656,12 +666,13 @@ def ver_documentos_corregidos(request, pk_tramite):
                     'obs': obs,
                 }
                 return render(request, 'persona/profesional/ver_documentos_corregidos.html', contexto)
-            except:
+        except:
                 contexto = {
                     'tramite': tramite,
+                    'documentos':documentos,
                     'mensaje': "No hay planilla/s para mostrar"  ,
                 }
-            return render(request, 'persona/profesional/ver_documentos_corregidos.html', contexto)
+                return render(request, 'persona/profesional/ver_documentos_corregidos.html', contexto)
     return redirect('profesional')
 
 

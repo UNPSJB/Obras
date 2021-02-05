@@ -144,9 +144,7 @@
         $("[id^='8 -']").css('width', 90 + '%');
         $("[id^='9 -']").css('width', 100 + '%');
     </script>
-
-    <script>
-
+<script>
         var timeFormat = 'DD/MM/YYYY';
         var datos = [];
         var label_fechas = [];
@@ -158,8 +156,11 @@
         {% for fe in fecha %}
             label_fechas.push("{{fe}}");
         {% endfor %}
-
-        var ctx = document.getElementById("myChart");
+        var yLabels = {
+            1 : 'Iniciado', 2 : 'Aceptado', 3 : 'Visado', 4 : 'Corregido', 5 : 'Agendado',
+            6 : 'Con Inspeccion', 7 : 'Inspeccionado', 8 : 'Final de Obra Solicitado ', 9 : 'Finalizado'
+        }
+        var ctx = document.getElementById("myChart").getContext('2d');
         var myChart = new Chart(ctx, {
             type: 'line',
             data: {
@@ -167,27 +168,37 @@
                 datasets: [{
                 label: 'Estado',
                 data: datos,
-                borderColor: "#273746",
+                borderColor: "black",
                 borderWidth: 3,
+                color:"black",
                 lineTension: 0.3,
-                pointBorderColor: '#2c3e50',
+                pointBorderColor: 'black',
                 pointBackgroundColor: '#2c3e50',
             }]
             },
             options: {
-                responsive: true,
-                title:{
+            responsive:true,
+            title:{
                     display:true,
                     text:'Historial de estados del tramite n° {{tramite.tramite.id}}',
-                    fontSize: 14,
+                    fontSize: 18,
                     padding: 14,
-                    fontColor:"#273746",
+                    fontColor:"black",
                 },
-
+            scales: {
+                    yAxes: [{
+                        ticks: {
+                            callback: function(value, index, values) {
+                                return yLabels[value];
+                            }
+                        },
+                    }],
+                 },
             }
         });
 
     </script>
+
 
 
 {% endblock %}
