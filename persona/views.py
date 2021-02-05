@@ -100,7 +100,7 @@ def tramites_de_propietario(request):
     usuario = request.user
     persona = Persona.objects.get(usuario__isnull=False, usuario_id=usuario)
     #propietario = persona.get_propietario()  # Me quedo con el atributo propietario de la persona
-    tramites_de_propietario = filter(lambda tramite: (tramite.propietario == persona.propietario), tramites)
+    tramites_de_propietario = filter(lambda tramite: (tramite.propietario == persona.propietario, tramite.pago_id is not None), tramites)
     return tramites_de_propietario
 
 def propietario_solicita_final_obra(request, pk_tramite):
