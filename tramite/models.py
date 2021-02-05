@@ -143,7 +143,7 @@ class Tramite(models.Model):
                 elif  estado.tipo==4:
                     anterior=previo.previo()
                     try:
-                        visados = list(self.visados.filter(fecha__lte=previo.timestamp, fecha__gte=anterior.timestamp))
+                        visados = list(self.visados.filter(fecha__range=(previo.timestamp,estado.timestamp)))
                     except:
                         visados = list(self.visados.filter(fecha__lte=previo.timestamp))
                     try:
@@ -187,7 +187,7 @@ class Tramite(models.Model):
             else:
                 visados = list(self.visados.filter(fecha=estado.timestamp))
                 inspecciones = list(self.inspecciones.filter(fecha=estado.timestamp))
-                documentos = list(self.documentos.filter(fecha=estado.timestamp))
+                documentos = list(self.documentos.filter(fecha__lte=estado.timestamp))
 
             return {'planillas': visados, 'inspecciones': inspecciones, 'documentos': documentos}
 
@@ -383,7 +383,7 @@ class Inspeccionado(Estado):
             return FinalObraSolicitado(tramite=tramite, final_obra_total=False)
 
     def finalizar(self, tramite):
-        if (tramite.monto_pagado >= tramite.monto_a_pagar):  # Tramite.objects.get(pk=tramite.pk).pago_completo
+        if (tramite.monto_pagado+1 >= tramite.monto_a_pagar):  # Tramite.objects.get(pk=tramite.pk).pago_completo
             return Finalizado(tramite=tramite)
         else:
             raise Exception("Todavia no se puede otorgar el final de obra")
