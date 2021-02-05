@@ -211,6 +211,10 @@ class Tramite(models.Model):
         if self.estados.exists():
             return self.estados.latest().related()
 
+    def estadosTramite(self):
+        if self.estados.exists():
+            return self.estados.all()
+
     def quien_lo_inspecciono(self):
         agendados = filter(lambda e: isinstance(e, Agendado), self.estados)
         return ", ".join(["%s %s lo inspecciono" % (a.fecha_inspeccion, a.inspector) for a in agendados])

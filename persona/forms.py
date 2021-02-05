@@ -144,7 +144,6 @@ class FormularioUsuarioPersona(FormularioPersona):
     password = forms.CharField()
 
     #ver como armo esto automaticamente y como lo saco fuera para que todos lo conoscan, lo uso mas abajo
-
     grupos = {
         ('1', 'director'),
         ('2', 'administrativo'),
@@ -168,24 +167,20 @@ class FormularioUsuarioPersona(FormularioPersona):
         persona = super(FormularioUsuarioPersona, self).save(commit=False)
         datos = self.cleaned_data
         persona.usuario = Usuario.objects.create_user(username=datos['usuario'], email=datos['mail'], password=datos['password'],)
-
         grupos = {
-            ('1', 'director'),
-            ('2', 'administrativo'),
-            ('3', 'visador'),
-            ('4', 'inspector'),
-            ('7', 'jefeinspector'),
-            ('8', 'cajero')}
-
+            '1': 'director',
+            '2':'administrativo',
+            '3': 'visador',
+            '4': 'inspector',
+            '7': 'jefeinspector',
+            '8': 'cajero'}
         grupo_post = datos['grupo']
-
-        for g in grupos:
-            for gp in grupo_post:
-                if g[0] == gp:
-                    persona.usuario.save()
-                    persona.save()
-                    usuario = persona.usuario
-                    usuario.groups.add(gp)
+        grupo=grupos[grupo_post[0]]
+        if grupo:
+            persona.usuario.save()
+            persona.save()
+            usuario = persona.usuario
+            usuario.groups.add(int(grupo_post[0]))
         return usuario
 
 

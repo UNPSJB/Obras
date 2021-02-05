@@ -74,7 +74,6 @@ def mostrar_propietario(request):
     if request.method == "POST":
         if "Aceptar" in request.POST:
             estilos = request.POST.get('estilo')
-            usuario = request.user
             propietario = Propietario.objects.filter(id=usuario.persona.propietario.pk).update(estilo=estilos)
     else:
         if propietario.estilo:
@@ -89,26 +88,19 @@ def mostrar_propietario(request):
     return render(request, 'persona/propietario/propietario.html', contexto)
 
 def tramites_para_financiar(request):
-    tramites = Tramite.objects.all()
-    personas = Persona.objects.all()
     usuario = request.user
-    lista_de_persona_que_esta_logueada = filter(
-        lambda persona: (persona.usuario is not None and persona.usuario == usuario), personas
-    )
-    persona = lista_de_persona_que_esta_logueada.pop()  # Saco de la lista la persona porque no puedo seguir trabajando con una lista
-    propietario = persona.get_propietario()  # Me quedo con el atributo propietario de la persona        
+    persona = Persona.objects.get(usuario__isnull=False, usuario_id=usuario)
+   # propietario = persona.get_propietario()  # Me quedo con el atributo propietario de la persona
     tramites_propietario = Tramite.objects.en_estado(Visado)
-    tramites = filter(lambda tramite: (tramite.propietario == propietario and tramite.pago is  None), tramites_propietario)
+    tramites = filter(lambda tramite: (tramite.propietario == persona.propietario and tramite.pago is  None), tramites_propietario)
     return tramites
 
 def tramites_de_propietario(request):
     tramites = Tramite.objects.all()
-    personas = Persona.objects.all()
     usuario = request.user
-    lista_de_persona_que_esta_logueada = filter(lambda persona: (persona.usuario is not None and persona.usuario == usuario), personas)
-    persona = lista_de_persona_que_esta_logueada.pop()  # Saco de la lista la persona porque no puedo seguir trabajando con una lista
-    propietario = persona.get_propietario()  # Me quedo con el atributo propietario de la persona
-    tramites_de_propietario = filter(lambda tramite: (tramite.propietario == propietario), tramites)
+    persona = Persona.objects.get(usuario__isnull=False, usuario_id=usuario)
+    #propietario = persona.get_propietario()  # Me quedo con el atributo propietario de la persona
+    tramites_de_propietario = filter(lambda tramite: (tramite.propietario == persona.propietario), tramites)
     return tramites_de_propietario
 
 def propietario_solicita_final_obra(request, pk_tramite):
@@ -132,9 +124,7 @@ def ver_historial_tramite(request, pk_tramite):
         estilos = propietario.estilo
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
     contexto0 = {'tramite': tramite}
-    pk = int(pk_tramite)
-    estados = Estado.objects.all()
-    estados_de_tramite = filter(lambda e: (e.tramite.pk == pk), estados)
+    estados_de_tramite = tramite.estadosTramite()
     contexto1 = {'estados_del_tramite': estados_de_tramite}
     fechas_del_estado = [];
     for est in estados_de_tramite:
@@ -199,18 +189,14 @@ def listado_tramites_para_financiar_propietario(request):
     if propietario.estilo:
         estilos = propietario.estilo
     tramites = Tramite.objects.en_estado([Visado, Agendado, ConInspeccion, Inspeccionado, FinalObraSolicitado])
-    personas = Persona.objects.all()
     usuario = request.user
-    lista_de_persona_que_esta_logueada = filter(
-        lambda persona: (persona.usuario is not None and persona.usuario == usuario), personas)
-    persona = lista_de_persona_que_esta_logueada.pop()  # Saco de la lista la persona porque no puedo seguir trabajando con una lista
-    propietario = persona.get_propietario()  # Me quedo con el atributo propietario de la persona
-    tramites_de_propietario = filter(lambda tramite: (tramite.propietario == propietario), tramites)
-    listado = []
-    for t in tramites_de_propietario:
-        if t.pago is None:
-           listado.append(t)
-    contexto = {'tramites':listado, 'estilos':estilos}
+    persona = Persona.objects.get(usuario__isnull=False, usuario_id=usuario)
+    tramites_de_propietario = filter(lambda tramite: (tramite.propietario == persona.propietario, tramite.pago_id is None), tramites)
+    # listado = []
+    # for t in tramites_de_propietario:
+    #     if t.pago is None:
+    #        listado.append(t)
+    contexto = {'tramites':tramites_de_propietario, 'estilos':estilos}
     return contexto
 
 def listado_de_comprobantes_propietario(request, pk_tramite):
@@ -220,16 +206,9 @@ def listado_de_comprobantes_propietario(request, pk_tramite):
     if propietario.estilo:
         estilos = propietario.estilo
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
-    tramites = Tramite.objects.all()
-    personas = Persona.objects.all()
-    usuario = request.user
-    lista_de_persona_que_esta_logueada = filter(
-        lambda persona: (persona.usuario is not None and persona.usuario == usuario), personas)
-    persona = lista_de_persona_que_esta_logueada.pop()  # Saco de la lista la persona porque no puedo seguir trabajando con una lista
-    propietario = persona.get_propietario()  # Me quedo con el atributo propietario de la persona
-    tramites_de_propietario = filter(lambda tramite: (tramite.propietario == propietario), tramites)
+    tramites = Tramite.objects.filter(propietario = propietario)
     list = []
-    for t in tramites_de_propietario:
+    for t in tramites:
         list.append(t.pago_id)
         pago = tramite.pago
         canceladas = []
@@ -365,19 +344,8 @@ def listado_tramites_propietario(request):
     propietario = get_object_or_404(Propietario, pk=usuario.persona.propietario.pk)
     if propietario.estilo:
         estilos = propietario.estilo
-    tramites = Tramite.objects.all()
-    personas = Persona.objects.all()
-    usuario = request.user
-    lista_de_persona_que_esta_logueada = filter(
-        lambda persona: (persona.usuario is not None and persona.usuario == usuario), personas)
-    persona = lista_de_persona_que_esta_logueada.pop()  # Saco de la lista la persona porque no puedo seguir trabajando con una lista
-    propietario = persona.get_propietario()  # Me quedo con el atributo propietario de la persona
-    tramites_de_propietario = filter(lambda tramite: (tramite.propietario == propietario), tramites)
-    list = []
-    for t in tramites_de_propietario:
-        if (t.pago is not None and t.monto_pagado>0):
-            list.append(t)
-    contexto={'tramites':list, 'estilos':estilos}
+    tramites = Tramite.objects.filter(propietario = propietario, pago_id__isnull=False, monto_pagado__gt=0)
+    contexto={'tramites':tramites, 'estilos':estilos}
     return contexto
 
 def listado_comprobantes_propietario(request,pk_tramite):
@@ -401,18 +369,19 @@ def listado_comprobantes_propietario(request,pk_tramite):
     return render(request, 'persona/propietario/factura_parcial_propietario.html',
                   {'cuotas': canceladas, 'tramite': tramite, 'pago': pago, 'estilos': estilos})
 
-def planilla_visado_impresa_propietario(request, pk_tramite):
+def planilla_visado_impresa_propietario(request, pk_planilla):
     estilos = ''
     usuario = request.user
     propietario = get_object_or_404(Propietario, pk=usuario.persona.propietario.pk)
     if propietario.estilo:
         estilos = propietario.estilo
     value = "estilo3"
-    planilla = get_object_or_404(PlanillaDeVisado,id=pk_tramite)
-    tramite = get_object_or_404(Tramite, pk=planilla.tramite_id)
     filas = FilaDeVisado.objects.all()
     columnas = ColumnaDeVisado.objects.all()
+    planilla = get_object_or_404(PlanillaDeVisado, id=pk_planilla)
+    tramite = get_object_or_404(Tramite, pk=planilla.tramite_id)
     try:
+
         elementos = planilla.elementos.all()
         items = planilla.items.all()
         obs = planilla.observacion
@@ -433,7 +402,7 @@ def planilla_visado_impresa_propietario(request, pk_tramite):
     except:
          contexto = {
              'tramite': tramite,
-             'planilla': planilla,
+    #         'planilla': planilla,
              'filas': filas,
              'columnas': columnas,
              'obs': obs,
@@ -452,11 +421,11 @@ def planilla_inspeccion_impresa_propietario(request, pk_tramite):
     if propietario.estilo:
         estilos = propietario.estilo
     value = "estilo3"
-    planilla = get_object_or_404(PlanillaDeInspeccion, id=pk_tramite)
-    tramite=get_object_or_404(Tramite, id=planilla.tramite_id)
     items = ItemInspeccion.objects.all()
     categorias = CategoriaInspeccion.objects.all()
     try:
+        planilla = get_object_or_404(PlanillaDeInspeccion, id=pk_tramite) # en todos los metodos el pk_tramite es el pk de la planilla no el del tramite
+        tramite = get_object_or_404(Tramite, id=planilla.tramite_id)
         detalles = planilla.detalles.all()
         contexto = {
             'tramite': tramite,
@@ -474,8 +443,8 @@ def planilla_inspeccion_impresa_propietario(request, pk_tramite):
 
     except:
         contexto = {
-            'tramite':tramite,
-            'planilla': planilla,
+       #     'tramite':tramite,
+        #    'planilla': planilla,
             'items': items,
             'categorias': categorias,
             'estilos':estilos,
@@ -484,7 +453,7 @@ def planilla_inspeccion_impresa_propietario(request, pk_tramite):
             return render(request, 'persona/propietario/planilla_inspeccion_impresa_propietarioModoNocturno.html',
                           contexto)
 
-        return render(request, 'persona/propietario/planilla_inspeccion_impresa_propietario.html', contexto)
+    return render(request, 'persona/propietario/planilla_inspeccion_impresa_propietario.html', contexto)
 
 
 #-------------------------------------------------------------------------------------------------------------------
@@ -547,48 +516,39 @@ def mostrar_profesional(request):
 
 def listado_tramites_de_profesional(request):
     tramites = Tramite.objects.all()
-    personas = Persona.objects.all()
     usuario = request.user
-    lista_de_persona_que_esta_logueada = filter(lambda persona: (persona.usuario is not None and persona.usuario == usuario), personas)
-    persona = lista_de_persona_que_esta_logueada.pop()  #Saco de la lista la persona porque no puedo seguir trabajando con una lista
-    profesional = persona.get_profesional() #Me quedo con el atributo profesional de la persona
-    tramites_de_profesional = filter(lambda tramite: (tramite.profesional == profesional), tramites)
+    persona = Persona.objects.get(usuario__isnull=False, usuario_id=usuario)
+    tramites_de_profesional = filter(lambda tramite: (tramite.profesional == persona.profesional), tramites)
     contexto = {'tramites_de_profesional': tramites_de_profesional}
     return contexto
 
 def tramites_corregidos(request):
-    tramites = Tramite.objects.all()
-    personas = Persona.objects.all()
-    usuario = request.user
     tram_corregidos=[]
-    lista_de_persona_que_esta_logueada = filter(lambda persona: (persona.usuario is not None and persona.usuario == usuario), personas)
-    persona = lista_de_persona_que_esta_logueada.pop()  #Saco de la lista la persona porque no puedo seguir trabajando con una lista
-    profesional = persona.get_profesional() #Me quedo con el atributo profesional de la persona
-    tramites_de_profesional = filter(lambda tramite: (tramite.profesional == profesional), tramites)
+    usuario = request.user
+    persona = Persona.objects.get(usuario__isnull=False, usuario_id=usuario)
+    tramites = Tramite.objects.filter(profesional_id=persona.profesional)
     tipo = 4
-    for t in tramites_de_profesional:
+    for t in tramites:
         try:
             if t.estado().tipo==tipo:
                 tram_corregidos.append(t)
         except:
             pass
     contexto = {'tramites': tram_corregidos}
-    
-    # contexto={'mensaje':"No hay datos para mostrar"}
     return contexto
 
 def tramites_corregidos_administrativo(request):
-    tipo = 1
     anterior=4
-    estado=Estado.objects.select_related().all()
     tram_corregidos=[]
-    for e in estado:
+    tram=Tramite.objects.en_estado(Iniciado)
+    for t in tram:
+        estados=t.estadosTramite()
         try:
+            e=estados.last()
             estadoPrevio = e.previo()
             estadoSiguiente = e.siguiente()
-            if (e and estadoPrevio):
-                if (e.tipo == tipo and estadoPrevio.tipo == anterior and estadoSiguiente is None):
-                    tram_corregidos.append(e.tramite)
+            if (estadoSiguiente is None  and estadoPrevio.tipo == anterior):
+                tram_corregidos.append(t)
         except:
             pass
     contexto = {'tramites': tram_corregidos}
@@ -597,9 +557,7 @@ def tramites_corregidos_administrativo(request):
 def ver_documentos_tramite_profesional(request, pk_tramite):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
     contexto0 = {'tramite': tramite}
-    pk = int(pk_tramite)
-    estados = Estado.objects.all()
-    estados_de_tramite = filter(lambda e: (e.tramite.pk == pk), estados)
+    estados_de_tramite = tramite.estadosTramite()
     contexto1 = {'estados_del_tramite': estados_de_tramite}
     fechas_del_estado = [];
     for est in estados_de_tramite:
@@ -864,55 +822,56 @@ class ReporteTramitesProfesionalPdf(View):
 def mostrar_administrativo(request):
 
     contexto = {
-        "ctxprofesional": profesional_list(request),
-        "ctxpropietario": propietario_list(request),
-        "ctxtramitesiniciados": listado_de_tramites_iniciados(request),
-        "ctxtramitescorregidos": tramite_corregidos_list(request),
-        "ctxsolicitudesfinalobra": solicitud_final_obra_list(request),
-        "ctxpago": registrar_pago_tramite(request),
-        "ctxlistprofesional": listado_profesionales(request),
-        'ctxtramcorregidosadministrativo': tramites_corregidos_administrativo(request)
+         "ctxprofesional": profesional_list(request),
+         "ctxpropietario": propietario_list(request),
+         "ctxtramitesiniciados": listado_de_tramites_iniciados(request),
+         "ctxtramitescorregidos": tramite_corregidos_list(request),
+         "ctxsolicitudesfinalobra": solicitud_final_obra_list(request),
+       # "ctxpago": registrar_pago_tramite(request),
+         "ctxlistprofesional": listado_profesionales(request),
+         'ctxtramcorregidosadministrativo': tramites_corregidos_administrativo(request)
 
     }
     return render(request, 'persona/administrativo/administrativo.html', contexto)
 
 def profesional_list(request):
-    personas = Persona.objects.all()
-    profesionales = filter(lambda persona: (persona.usuario is None and persona.profesional is not None), personas)
+    profesionales = Persona.objects.filter(usuario__isnull=True,  profesional_id__isnull = False)
+#    profesionales = filter(lambda persona: (persona.usuario is None and persona.profesional is not None), personas)
     contexto = {'personas': profesionales}
     return contexto
 
 def propietario_list(request):
-    propietarios = Propietario.objects.all()
-    propietarios_sin_usuario = filter(lambda propietario: (propietario.persona.usuario is None and propietario.persona is not None ), propietarios)
+    propietarios_sin_usuario = Propietario.objects.filter(persona__usuario__isnull=True, persona__isnull = False)
+    #propietarios_sin_usuario = filter(lambda propietario: (propietario.persona.usuario is None and propietario.persona is not None ), propietarios)
     contexto = {'propietarios': propietarios_sin_usuario}
     return contexto
-
+#from time import time
 def listado_de_tramites_iniciados(request):
     tramites = Tramite.objects.en_estado(Iniciado)
-    contexto = {'tramites': tramites}
-    return contexto
+    return {'tramites': tramites}
 
 def tramite_corregidos_list(request):
     tramites = Tramite.objects.en_estado(Corregido)
-    contexto = {'tramites': tramites}
-    return contexto
+    return {'tramites': tramites}
 
 def solicitud_final_obra_list(request):
-    estadosFinalObraSolicitado=Estado.objects.filter(tipo=8)
-    tramites_id = []
-    tramites=Tramite.objects.all()
+    estadosFinalObraSolicitado=Estado.objects.filter(tipo=8).select_related()
     tramitesHabilitados=[]
-    for e in estadosFinalObraSolicitado:
-        estado = e.tramite.estados.all()
-        encontrado=[True for i in estado if i.tipo==9]
-        inspeccionado=[True for i in estado if i.tipo==7]
-        if not encontrado and inspeccionado:
-            tramites_id.append(e.tramite_id)
-    for t in tramites:
-        for t_id in tramites_id:
-            if t_id ==t.id:
-                tramitesHabilitados.append(t)
+    for t in estadosFinalObraSolicitado:
+        estados=t.tramite.estadosTramite().values_list('tipo', flat=True)
+        if  9 not in estados and 7 in estados :
+            tramitesHabilitados.append(t.tramite)
+
+    # for e in estadosFinalObraSolicitado:
+    #     estado = e.tramite.estados.all()
+    #     encontrado=[True for i in estado if i.tipo==9]
+    #     inspeccionado=[True for i in estado if i.tipo==7]
+    #     if not encontrado and inspeccionado:
+    #         tramites_id.append(e.tramite_id)
+    # for t in tramites:
+    #     for t_id in tramites_id:
+    #         if t_id ==t.id:
+    #             tramitesHabilitados.append(t)
     contexto = {'tramites': tramitesHabilitados}
     return contexto
 
@@ -979,9 +938,7 @@ def ver_documentos_tramite_administrativo(request, pk_tramite):
 def documentos_administrativo(request, pk_tramite):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
     contexto0 = {'tramite': tramite}
-    pk = int(pk_tramite)
-    estados = Estado.objects.all()
-    estados_de_tramite = filter(lambda e: (e.tramite.pk == pk), estados)
+    estados_de_tramite = tramite.estadosTramite()
     contexto1 = {'estados_del_tramite': estados_de_tramite}
     fechas_del_estado = [];
     for est in estados_de_tramite:
@@ -1031,14 +988,8 @@ def documento_de_estado_administrativo(request, pk_estado):
     return render(request, 'persona/administrativo/documento_de_estado_administrativo.html', contexto)
 '''
 def listado_profesionales(request):
-    tramites = Tramite.objects.all()  # puse con inspeccion solo para fines de mostrar algo
-    profesionales = Profesional.objects.all()
-    personas = []
-    for t in tramites:
-        for p in profesionales:
-            if t.profesional.id == p.id:
-                if p not in personas:
-                    personas.append(p)
+    tramites = Tramite.objects.all().values_list('profesional_id',flat=True) # puse con inspeccion solo para fines de mostrar algo
+    personas = Profesional.objects.filter(id__in=tramites)
     contexto = {
         "profesionales": personas}
     return contexto
@@ -1811,7 +1762,6 @@ def verificarItems(request, pk_tramite, monto_permiso):
             if (item.id == int(i)):
                 listadoItems.append(item)
     for name, value in request.POST.items():
-        print request.POST.items()
         if name.startswith('elemento'):
             ipk = name.split('-')[1]
             listElementos.append(ipk)
@@ -1845,7 +1795,6 @@ def aprobar_visado(request, pk_tramite, monto):
                 planilla.agregar_item(item)
     planilla.save()
     for name, value in request.POST.items():
-        print request.POST.items()
         if name.startswith('elemento'):
             ipk= name.split('-')[1]
             list_elementos.append(ipk)
@@ -2088,17 +2037,16 @@ def mostrar_inspector(request):
         return redirect('movil_')
     contexto = {
         "ctxtramitesvisadosyconinspeccion": tramites_visados_y_con_inspeccion(request),
-        "ctxtramitesinspeccionados": tramites_inspeccionados_por_inspector(request),
-        "ctxtramitesagendados": tramites_agendados_por_inspector(request),
-        "ctxtramis_inspecciones": mis_inspecciones(request),
-        "ctxlistadomensual_inspector": listado_inspecciones_mensuales(request),
-        "ctxlistado_inspector": listado_inspector_movil(request),
+         "ctxtramitesinspeccionados": tramites_inspeccionados_por_inspector(request),
+         "ctxtramitesagendados": tramites_agendados_por_inspector(request),
+         "ctxtramis_inspecciones": mis_inspecciones(request),
+         "ctxlistadomensual_inspector": listado_inspecciones_mensuales(request),
+         "ctxlistado_inspector": listado_inspector_movil(request),
     }
     return render(request, 'persona/inspector/inspector.html', contexto)
 
 def mis_inspecciones(request):
     usuario = request.user
-    estados = Estado.objects.all()
     tipo = 6 #con inspeccion
     tramitesConInspeccion = Tramite.objects.en_estado(ConInspeccion)
     tramites = filter(lambda t: t.estado().usuario == usuario, tramitesConInspeccion)
@@ -2119,16 +2067,14 @@ def tramites_inspeccionados_por_inspector(request):
     estados = Estado.objects.all()
     tipo = 7 #7
     tramites = Tramite.objects.en_estado(ConInspeccion)
-    tramites_del_inspector = filter(lambda t: t.estado().usuario == usuario, tramites)
-    estados_inspeccionados = filter(lambda estado: (estado.usuario is not None and estado.usuario == usuario and estado.tipo == tipo), estados)
-    contexto = {"tramites_del_inspector": tramites_del_inspector}
+    # tramites_del_inspector = filter(lambda t: t.estado().usuario == usuario, tramites)
+    estados_inspeccionados = filter(lambda t: (t.estado().usuario is not None and t.estado().usuario == usuario), tramites)
+  #  contexto = {"tramites_del_inspector": tramites_del_inspector}
     return estados_inspeccionados
 
 def tramites_agendados_por_inspector(request):
     usuario = request.user
-    estados = Estado.objects.all()
     tipo = 5
-    argumentos = [Visado, ConInspeccion]
     tramites = Tramite.objects.en_estado(Agendado)
     tramites_del_inspector = filter(lambda t: t.estado().usuario == usuario and t.estado().rol==2, tramites)
     contexto = {"tramites_del_inspector": tramites_del_inspector}
@@ -2942,7 +2888,7 @@ def pie_chart_with_legend(datos, nombres,titulo):
     pie.y = 170
     pie.data = datos
     longitud=len(datos)
-    col=colores(longitud,10)
+    col=colores(longitud,6)
     if (col is not None):
         for i in range(longitud): pie.slices[i].fillColor = col[i]
     pie.slices.popout = 8
@@ -3080,11 +3026,11 @@ def detalle_de_tramite(request, pk_tramite):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
     contexto0 = {'tramite': tramite}
     pk = int(pk_tramite)
-    estados = Estado.objects.all()
-    estados_de_tramite = filter(lambda e: (e.tramite.pk == pk), estados)
-    contexto1 = {'estados_del_tramite': estados_de_tramite}
+    estados = tramite.estadosTramite()
+   # estados_de_tramite = filter(lambda e: (e.tramite.pk == pk), estados)
+    contexto1 = {'estados_del_tramite': estados}
     fechas_del_estado = [];
-    for est in estados_de_tramite:
+    for est in estados:
         fechas_del_estado.append(est.timestamp.strftime("%d/%m/%Y"));
     return render(request, 'persona/director/detalle_de_tramite.html', {"tramite": contexto0, "estados": contexto1, "fecha": fechas_del_estado})
 
@@ -3259,24 +3205,26 @@ def ver_filtro_obra_fechas(request):
 def colores(longitud,tope):
     if longitud > tope:
         colores = [
-            PCMYKColor(50, 80, 15, 20, alpha=100), PCMYKColor(21, 0, 34, 10, alpha=100),
-            PCMYKColor(0, 88, 37, 15, alpha=100),
-            PCMYKColor(54, 10, 0, 70, alpha=100), PCMYKColor(0, 32, 0, 60, alpha=100),
-            PCMYKColor(20, 40, 0, 25, alpha=100),
-            PCMYKColor(90, 30, 0, 10, alpha=100), PCMYKColor(0, 60, 20, 80, alpha=100),
+            PCMYKColor(90, 30, 0, 10, alpha=100), PCMYKColor(5, 80, 37, 30, alpha=100),
             PCMYKColor(0, 16, 18, 10, alpha=100),
-            PCMYKColor(73, 32, 80, 10, alpha=100), PCMYKColor(0, 90, 20, 10, alpha=100),
-            PCMYKColor(0, 40, 83, 10, alpha=100),
+            PCMYKColor(3, 60, 80, 10, alpha=100), PCMYKColor(0, 90, 20, 10, alpha=100),
             PCMYKColor(60, 0, 70, 10, alpha=100), PCMYKColor(0, 0, 50, 30, alpha=100),
             PCMYKColor(0, 0, 100, 10, alpha=100),
+            PCMYKColor(27, 8, 15, 20, alpha=100), PCMYKColor(21, 0, 34, 10, alpha=100),
+            PCMYKColor(0, 88, 37, 15, alpha=100),
+            PCMYKColor(54, 10, 0, 70, alpha=100),
+            PCMYKColor(0, 32, 0, 60, alpha=100),
+            PCMYKColor(20, 40, 0, 25, alpha=100),
+            PCMYKColor(0, 40, 83, 5, alpha=100),
             PCMYKColor(40, 20, 0, 10, alpha=100), PCMYKColor(30, 0, 0, 12, alpha=100),
             PCMYKColor(100, 67, 0, 23, alpha=100), PCMYKColor(70, 46, 0, 16, alpha=100),
-            PCMYKColor(50, 33, 0, 11, alpha=100), PCMYKColor(30, 20, 0, 7, alpha=100),
-            PCMYKColor(20, 13, 0, 4, alpha=100), PCMYKColor(10, 7, 0, 3, alpha=100),
-            PCMYKColor(0, 0, 0, 100, alpha=100), PCMYKColor(0, 0, 0, 70, alpha=100),
-            PCMYKColor(0, 0, 0, 50, alpha=100), PCMYKColor(0, 0, 0, 30, alpha=100),
-            PCMYKColor(0, 0, 0, 20, alpha=100), PCMYKColor(0, 0, 0, 10, alpha=100),
-            PCMYKColor(0, 21, 0, 15, alpha=100)]
+            PCMYKColor(50, 33, 0, 11, alpha=100), PCMYKColor(80, 5, 0, 5, alpha=100),
+            PCMYKColor(20, 13, 0, 4, alpha=100), PCMYKColor(10, 7, 0, 30, alpha=100),
+            PCMYKColor(0, 78, 0,0, alpha=100),
+            PCMYKColor(30, 80, 70, 20, alpha=100),
+            PCMYKColor(120, 50, 0, 50, alpha=100), PCMYKColor(0, 0, 78, 30, alpha=100),
+            PCMYKColor(0, 45, 0, 20, alpha=100), PCMYKColor(68, 0, 80, 10, alpha=100),
+            PCMYKColor(20, 19, 80, 15, alpha=100)]
         return colores
 
 def grafico_de_barras_v(datos,nombres, titulo,series):
@@ -3300,9 +3248,13 @@ def grafico_de_barras_v(datos,nombres, titulo,series):
             bc.barWidth = 100000
     else:
         if max(lista) <10:
-            bc.valueAxis.valueMax = 15
-            bc.groupSpacing = 10
-            bc.valueAxis.valueStep = 5
+            if max(lista) <5:
+                bc.valueAxis.valueMax = 5
+                bc.valueAxis.valueStep = 2
+            else:
+                bc.valueAxis.valueMax = 15
+                bc.groupSpacing = 10
+                bc.valueAxis.valueStep = 5
         else:
             bc.valueAxis.valueMax = 50
             bc.groupSpacing = 10
@@ -3627,6 +3579,7 @@ def ver_listado_usuarios(request):
 def tiempo_aprobacion_visados(request):
     datos = []
     visados = []
+    auxiliar=[]
     aprobados = []
     tramitesAgendados=[]
     tramitesAprobados=[]
@@ -3645,21 +3598,24 @@ def tiempo_aprobacion_visados(request):
         for name, value in request.POST.items():
             if name.startswith('fecha'):
                 year = int(value)
-        tramites=Estado.objects.filter(timestamp__range=(datetime.date(year, 01, 01),(datetime.date(year, 12, 31))),tipo=1).values_list('tramite', flat="True").distinct().count()
-        tramitesV=Estado.objects.filter(timestamp__range=(datetime.date(year, 01, 01),(datetime.date(year, 12, 31))),tipo=5).values_list('tramite', flat="True").distinct() #todos los tramites que terminaron de ser visados (anuales)
-        tramitesAprobados=Estado.objects.filter(timestamp__range=(datetime.date(year, 01, 01),(datetime.date(year, 12, 31))),tipo=3).values_list('tramite', flat="True").distinct() #todos los tramites que terminaron de ser visados (anuales)
-        tramitesAgendados=Estado.objects.filter(timestamp__range=(datetime.date(year, 01, 01),(datetime.date(year, 12, 31))),tipo=5, tramite_id__in=tramitesAprobados).values_list('tramite', flat="True").distinct().count() #todos los tramites que terminaron de ser visados (anuales)
+        tramites=Estado.objects.filter(timestamp__range=(datetime.date(year, 01, 01),(datetime.date(year, 12, 31))),tipo=1).values_list('tramite', flat="True").distinct()
+        tramitesV=Estado.objects.filter(timestamp__range=(datetime.date(year, 01, 01),(datetime.date(year, 12, 31))),tipo=5,tramite_id__in=tramites).values_list('tramite', flat="True").distinct() #todos los tramites que terminaron de ser visados (anuales)
+        tramitesAprobados=Estado.objects.filter(timestamp__range=(datetime.date(year, 01, 01),(datetime.date(year, 12, 31))),tipo=3,tramite_id__in=tramites).values_list('tramite', flat="True").distinct() #todos los tramites que terminaron de ser visados (anuales)
+        tramitesAgendados=Estado.objects.filter(timestamp__range=(datetime.date(year, 01, 01),(datetime.date(year, 12, 31))),tipo=5, tramite_id__in=tramites).values_list('tramite', flat="True").distinct() #todos los tramites que terminaron de ser visados (anuales)
         listaAg=[]
         for mes in range(12):
             m = mes + 1
             cant = 0
+            agendados=[]
             diaFinal = monthrange(year, m)
-            tEstadoAprobado=Estado.objects.filter(timestamp__range=(datetime.date(year, m, 01), datetime.date(year, m, diaFinal[1])), tipo=(3))#.count()
+            tEstadoAprobado=Estado.objects.filter(timestamp__range=(datetime.date(year, m, 01), datetime.date(year, m, diaFinal[1])), tipo=(3), tramite_id__in=tramites).distinct()#.count()
             tramA=[t.tramite_id for t in tEstadoAprobado]
             aprobados=list(set(tramA))
-            tEstadoAgendado = Estado.objects.filter(timestamp__range=(datetime.date(year, m, 01), datetime.date(year, m, diaFinal[1])),tipo=(5))  # .count()
-            tramAg = [t.tramite_id for t in tEstadoAgendado]
-            agendados = list(set(tramAg))
+            tEstadoAgendado = Estado.objects.filter(timestamp__range=(datetime.date(year, m, 01), datetime.date(year, m, diaFinal[1])),tipo=(5), tramite_id__in=tramites).distinct()  # .count()
+            for t in tEstadoAgendado:
+                if t.tramite_id not in auxiliar:
+                    auxiliar.append(t.tramite_id)
+                    agendados.append(t.tramite_id)
             a={"mes":mes,"aprobados":aprobados}
             b={"mes":mes,"agendados":agendados}
             listaAp.append(a)
@@ -3676,21 +3632,21 @@ def tiempo_aprobacion_visados(request):
                                      meses[diferencia]=cant
                                  except:
                                      pass
-        if tramites == 0:
+        if tramites.count() == 0:
             messages.add_message(request, messages.SUCCESS, 'No hay visados aprobados en el año seleccionado')
             return render(request, 'persona/director/seleccionar_fecha_visados_aprobados.html')
         else:
-            meses=[cant/float(tramites) for cant in meses]
-            planillas= PlanillaDeVisado.objects.filter(fecha__range=(datetime.date(year, 01, 01),(datetime.date(year, 12, 31))))
+            meses=[cant/float(tramites.count()) for cant in meses]
+            planillas= PlanillaDeVisado.objects.filter(fecha__range=(datetime.date(year, 01, 01),(datetime.date(year, 12, 31))), tramite_id__in=tramites)
             for t in tramitesV:
                 aux=filter(lambda p: t==p.tramite_id, planillas)
                 if (len(aux))!=0:
                     lista.append([t,len(aux)])
             datos.append(meses)
-            porcentajeVisadosAprobados = ((tramitesAprobados.count() / float(tramites)) * 100)
+            porcentajeVisadosAprobados = ((tramitesAprobados.count() / float(tramites.count())) * 100)
             porcentajeApr = "{0:.2f}".format(porcentajeVisadosAprobados)
             lista2.append(["Aprobados", porcentajeApr])
-            porcentajeVisadosFinalizados = ((tramitesAgendados / float(tramites)) * 100)
+            porcentajeVisadosFinalizados = ((tramitesAgendados.count() / float(tramites.count())) * 100)
             porcentajeFin = "{0:.2f}".format(porcentajeVisadosFinalizados)
             lista2.append(["Finalizados", porcentajeFin])
             titulo = "Promedio de duracion (en meses) de inicio y finalizacion de visados"
@@ -4230,9 +4186,6 @@ def listado_inspecciones_mensuales(request):
     dia=datetime.date.today().day
     diaFinal=monthrange(year, mes)
     usuario = request.user
-    estados = Estado.objects.all()
-    tipo = 5 #Agendados
-    argumentos = [Visado, ConInspeccion]
     tramites_del_inspector = Tramite.objects.en_estado(Agendado)
     tramites = filter(lambda t: t.estado().usuario == usuario and t.estado().rol==2 and t.estado().fecha.date()<=datetime.date(year,mes,diaFinal[1]) and t.estado().fecha.date()>=datetime.date(year,mes,dia), tramites_del_inspector)
     contexto={'tramites':tramites}

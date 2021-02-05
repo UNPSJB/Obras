@@ -30,7 +30,7 @@ urlpatterns = [
     url(r'^propietario/listado_tramites_comprobantes_propietario$', views.listado_tramites_propietario, name="listado_tramites_propietario"),
     url(r'^propietario/listado_comprobantes_propietario/(?P<pk_tramite>\d+)$', views.listado_comprobantes_propietario, name="listado_comprobantes_propietario"),
     url(r'^planilla_inspeccion_impresa_propietario/(?P<pk_tramite>\d+)/$', views.planilla_inspeccion_impresa_propietario, name="planilla_inspeccion_impresa_propietario"),
-    url(r'^planilla_visado_impresa_propietario/(?P<pk_tramite>\d+)/$', views.planilla_visado_impresa_propietario, name="planilla_visado_impresa_propietario"),
+    url(r'^planilla_visado_impresa_propietario/(?P<pk_planilla>\d+)/$', views.planilla_visado_impresa_propietario, name="planilla_visado_impresa_propietario"),
     url(r'^propietario/seleccionar_modo_pago/(?P<pk_tramite>\d+)$', views.seleccionar_modo_pago,
         name="seleccionar_modo_pago"),
     url(r'^propietario/registrar_pago_propietario.html/(?P<pk_cuota>\d+)/$', views.comprobante_pago_cuota_propietario,  name="comprobante_pago_cuota_propietario"),
