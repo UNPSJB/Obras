@@ -2089,23 +2089,28 @@ def cargar_inspeccion(request, pk_tramite):
     if request.method == "POST":
         if "Agendar" in request.POST:
             tramite = get_object_or_404(Tramite, pk=pk_tramite)
-            id_tramite = int(pk_tramite)
-            planilla = PlanillaDeInspeccion()
-            planilla.tramite = tramite
-            planilla.save()
-            list_detalles=[]
+            list_detalles = []
+            numeroPlanilla=PlanillaDeInspeccion.objects.filter(tramite_id=pk_tramite).count()
+            print(numeroPlanilla)
             for name,value in request.POST.items():
                 if name.startswith('detalle'):
                     ipk=name.split('-')[1]
                     detalle = DetalleDeItemInspeccion.objects.get(id=ipk)
                     list_detalles.append(detalle)
-            for detalle in list_detalles:
-                planilla.agregar_detalle(detalle)
-            planilla.save()
-            usuario = request.user
-            tramite.hacer(tramite.INSPECCIONAR, usuario)
-            tramite.save()
-            messages.add_message(request,messages.SUCCESS,"Inspeccion cargada")
+            if len(list_detalles)<2 and numeroPlanilla==0:
+                messages.add_message(request, messages.ERROR, "Para realizar la inspeccion debe ingresar 2 o mas items de inspeccion")
+            else:
+                planilla = PlanillaDeInspeccion()
+                planilla.tramite = tramite
+                planilla.save()
+                for detalle in list_detalles:
+                    planilla.agregar_detalle(detalle)
+                # planilla.tramite = tramite
+                planilla.save()
+                usuario = request.user
+                tramite.hacer(tramite.INSPECCIONAR, usuario)
+                tramite.save()
+                messages.add_message(request,messages.SUCCESS,"Inspeccion cargada")
         else:
             messages.add_message(request,messages.ERROR,"No se cargo la inspeccion")
     return redirect('inspector')
@@ -3936,7 +3941,7 @@ def elegir_financiacion(request,pk_tramite):
                 contador=contador+31
                 cuota.save()
                 cuota.hacer("Cancelacion")
-            messages.add_message(request, messages.SUCCESS, 'Todo bien =)')
+            messages.add_message(request, messages.SUCCESS, 'Se ha guardado la cantidad de cuotas para el pago seleccionada')
             tramite.pago = pago
             tramite.save()
         return redirect('cajero')
