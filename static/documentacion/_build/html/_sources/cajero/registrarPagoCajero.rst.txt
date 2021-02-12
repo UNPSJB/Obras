@@ -7,4 +7,4 @@ Aqui se ve el pago registrado con todos los datos y puede generar el comprobante
 .. toctree::
    :maxdepth: 6
    
-   comprobantePagoCajero
+   facturaDePagoComprobante

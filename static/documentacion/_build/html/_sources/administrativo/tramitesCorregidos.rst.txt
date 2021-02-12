@@ -18,4 +18,4 @@ Luego que el usuario elige un trámite para analizar, entonces debe clickear el 
 .. toctree::
    :maxdepth: 3
    
-   documentacionTramiteAdministrativo
+   documentacionTramiteAdministrativoCorregido

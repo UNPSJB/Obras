@@ -8,5 +8,5 @@ El usuario puede imprimir la planilla de visado haciendo click sobre el boton "I
 .. toctree::
    :maxdepth: 3
    
-   verVisadoAnterior
+   verVisadoAprobado
    
