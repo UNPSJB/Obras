@@ -112,9 +112,5 @@ class Cancelacion(Estado):
 class Cancelada(Estado):
     TIPO = 2
 
-    def cancelada(self, cuota):
-        return Cancelada(cuota=cuota)
-
-
 for Klass in [Cancelacion, Cancelada]:
     Estado.register(Klass)
