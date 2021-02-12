@@ -428,3 +428,8 @@ background-color:#bdb3b3!important;
    /* outline: gray!important;*/
     box-shadow: inset 0 1px 1px rgb(72 64 64), 0 0 5px 4px rgb(20 39 53)!important;
 }
+
+.panel-body {
+    padding: 15px;
+    background: #2c3e50; /*e0ceed;*//*panel central fondo de tabla table responsive*/
+}
