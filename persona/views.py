@@ -498,6 +498,7 @@ def mostrar_profesional(request):
                                  'Solicitud de inicio de tramite exitosa.')
             tramite_form = FormularioIniciarTramite(initial={'profesional':usuario.persona.profesional.pk})
             propietario_form = None
+            return redirect('profesional')
         else:
             messages.add_message(request, messages.WARNING, 'Propietario no existe, debe darlo de alta para iniciar al tramite.')
     else:

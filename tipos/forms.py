@@ -13,7 +13,7 @@ class FormularioTipoDocumento(forms.ModelForm):
     SUBMIT = 'tipo_documento_submit'
     class Meta:
         model = TipoDocumento
-        fields = ('nombre', 'descripcion', 'activo', 'fecha_alta', 'requerido')
+        fields = ('nombre', 'descripcion', 'activo', 'fecha_alta')
 
     #Esto es para el crispy
     def __init__(self, *args, **kwargs):
@@ -27,9 +27,8 @@ class FormularioTipoDocumento(forms.ModelForm):
             Field('activo', placeholder='Ingresar Activo'),
             Field('fecha_alta', placeholder='Ingresar Fecha de Alta', css_class='datepicker'),
         )
-        self.fields['requerido'] = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple,
-                                                             choices=TipoDocumento.ACCIONES)
-        
+        #self.fields['requerido'] = forms.MultipleChoiceField(widget=forms.CheckboxSelectMultiple,
+
 
     def clean_requerido(self):
         flags = [int(e) for e in self.cleaned_data['requerido']]
