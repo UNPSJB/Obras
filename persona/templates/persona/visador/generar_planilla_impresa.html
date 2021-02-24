@@ -157,9 +157,11 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    <tr>
-                                        <td class="col-xs-1"><font size="2">{{ obs }}</font></td>
-                                    </tr>
+                                    {% if obs %}
+                                    <td class="col-xs-1"><font size="2">{{ obs }}</font></td>
+                                    {% else %}
+                                    <td class="col-xs-1"><font size="2">Sin observaciones</font></td>
+                                    {% endif %}
                                     </tbody>
                                 </table>
                                 {%endif%}

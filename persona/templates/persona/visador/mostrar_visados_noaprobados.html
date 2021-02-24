@@ -121,7 +121,12 @@
                                 <th>OBSERVACIONES</th>
                             </tr>
                         </thead>
-                        <tbody><td class="col-xs-1">{{ observacion }}</td>
+                        <tbody>
+                        {% if observacion %}
+                        <td class="col-xs-1">{{ observacion }}</td>
+                        {% else %}
+                        <td class="col-xs-1">Sin observaciones</td>
+                        {% endif %}
                         </tbody>
                     </table>
                 </div>
