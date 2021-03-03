@@ -16,6 +16,9 @@ class FormularioDocumento(forms.ModelForm):
         widgets = {
             'tipo_documento': forms.HiddenInput()
         }
+    def __init__(self, *args, **kwargs):
+        super(FormularioDocumento, self).__init__(*args, **kwargs)
+        self.fields['file'].required=True
 
     def save(self, commit=True, tramite=None):
         doc = super(FormularioDocumento, self).save(commit=False)
