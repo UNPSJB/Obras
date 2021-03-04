@@ -91,60 +91,65 @@
                             </div>
                         </div>
                     </div>
-                    <table class="table table-bordered table-striped table-hover table-condensed " id="tabla" data-paging="false">
-                        <thead>
-                        <tr  style="text-align:center;">
-                            <th></th>
-                            {% for categoria in categorias %}
-                        {% if categoria.activo == True %}
-                            <th>{{categoria.nombre}}</th>
-                            {% endif %}
-                            {% endfor %}
-                        </tr>
-                        </thead>
-                        <tbody>
-                         {% for item in items %}
-                            {% if item.activo == True %}
-
-                        <tr>
-                            <td id="tdColor" style="background-color:#2c3e50; color:white;" class="col-xs-1">{{ item.nombre }}</td>
-                         {% for categoria in categorias %}
-                        {% if categoria.activo == True %}
-                            <td class="col-sm-4">&nbsp;
-                                {% for detalle in detalles %}
-                                {% if detalle.activo == True %}
-                                {% if categoria.nombre == detalle.categoria_inspeccion.nombre and item.nombre == detalle.item_inspeccion.nombre %}
-                                {{ detalle.nombre }}
-                                <br>
-                                {% endif %}
+                                        <div class="table-responsive">
+                        <table align="center" class="table table-bordered table-striped table-hover table-condensed" style="text-align:center;" data-paging="false">
+                            <thead>
+                            <tr>
+                                <th></th>
+                             {% for categoria in categorias %}
+                            {% if categoria.activo == True %}
+                                <th>{{categoria.nombre}}</th>
                                 {% endif %}
                                 {% endfor %}
-                            </td>
+                            </tr>
+                            </thead>
+                            <tbody>
+                                  {% for item in items %}
+                                {% if item.activo == True %}
+
+                            <tr>
+                                <td align="center" class="col-xs-1" id="tdColor">{{ item }}</td>
+                              {% for categoria in categorias %}
+                            {% if categoria.activo == True %}
+                                <td align="center" class="col-sm-4">
+                                    {% for detalle in detalles %}
+                                    {% if detalle.activo == True %}
+                                    {% if categoria.nombre == detalle.categoria_inspeccion.nombre and item.nombre == detalle.item_inspeccion.nombre %}
+                                    {{ detalle.nombre }}
+                                    <br>
+                                    {% endif %}
+                                    {% endif %}
+                                    {% endfor %}
+                                </td>
+                                {% endif %}
+                                {% endfor %}
+                            </tr>
                             {% endif %}
                             {% endfor %}
-                        </tr>
-                        {% endif %}
-                        {% endfor %}
-                        </tbody>
-                    </table>
-                    <table  class="table-bordered table-striped table-hover">
-                        <thead>
-                        <tr>
-                            <th>categoria</th>
-                            <th>tipo</th>
-                            <th>descripcion</th>
-                        </tr>
-                        </thead>
-                        {% for categoria in categorias %}
-                        {% if categoria.activo == True %}
-                        <tr>
-                            <td id="nombre{{categoria.id}}" class="col-xs-1" align="center">{{categoria.nombre}}</td>
-                            <td id="tipo{{categoria.id}}" class="col-xs-1" align="center">{{categoria.tipo}}</td>
-                            <td id="descripcion{{categoria.id}}" class="col-xs-2" align="center">{{categoria.descripcion}}</td>
-                        </tr>
-                        {% endif %}
-                        {% endfor %}
-                    </table>
+                            </tbody>
+                        </table>
+                        <br>
+                        <table class="table table-bordered table-striped table-hover table-condensed" style="text-align:center;">
+                            <thead>
+                            <tr>
+                                <th>categoria</th>
+                                <th>tipo</th>
+                                <th>descripcion</th>
+                            </tr>
+                            </thead>
+                            <tbody>
+                            {% for categoria in categorias %}
+                            {% if categoria.activo == True %}
+                            <tr>
+                                <td id="nombre{{categoria.id}}" class="col-xs-1" align="center">{{categoria.nombre}}</td>
+                                <td id="tipo{{categoria.id}}" class="col-xs-1" align="center">{{categoria.tipo}}</td>
+                                <td id="descripcion{{categoria.id}}" class="col-xs-2">{{categoria.descripcion}}</td>
+                            </tr>
+                            {% endif %}
+                            {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>
