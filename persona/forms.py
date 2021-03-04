@@ -78,9 +78,6 @@ class FormularioProfesional(FormularioPersona):
         self.fields['matricula'].widget.attrs['placeholder'] = "Ingresar Matricula"
         self.fields['matricula'].widget.attrs['max'] = "100000"
         self.fields['matricula'].widget.attrs['min'] = "1"
-        #self.fields['profesion'].widget.attrs['placeholder'] = "Ingresar Profesion"
-        #self.fields['matricula'].widget.attrs['title'] = "Ingresar Nro de Matricula"
-        #self.fields['profesion'].widget.attrs['title'] = "Ingresar Profesion"
 
     def save(self, commit=False):
         persona = super(FormularioProfesional, self).save(commit=commit)
@@ -107,8 +104,6 @@ class FormularioPropietario(FormularioPersona):
 
     def __init__(self, *args, **kwargs):
         super(FormularioPropietario, self).__init__(*args, **kwargs)
-        # self.fields['estilo'].widget.attrs['placeholder'] = "Ingresar Estilo"
-        # self.fields['estilo'].widget.attrs['title'] = "Ingresar Estilo"
         self.helper = FormHelper()
         self.helper.form_tag = False
 
@@ -128,6 +123,8 @@ class FormularioPropietario(FormularioPersona):
                  propietario = Propietario()
                  propietario.save()
                  persona.propietario = propietario
+                 grupo = Group.objects.get(name="propietario")
+                 persona.usuario.groups.add(grupo)
                  persona.save()
                  return persona.propietario
 
@@ -148,8 +145,6 @@ class FormularioUsuarioPersona(FormularioPersona):
     SUBMIT = 'usuario_persona_submit'
     usuario = forms.CharField()
     password = forms.CharField()
-
-    #ver como armo esto automaticamente y como lo saco fuera para que todos lo conoscan, lo uso mas abajo
     grupos = {
         ('1', 'director'),
         ('2', 'administrativo'),

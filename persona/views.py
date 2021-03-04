@@ -470,6 +470,7 @@ def mostrar_profesional(request):
     tramite_form = FormularioIniciarTramite(initial={'profesional':usuario.persona.profesional.pk})
     propietario_form = FormularioPropietario()
     propietario = None
+    prop=0
     if request.method == "POST":
         personas = Persona.objects.filter(dni=request.POST["propietario"])
         persona = personas.exists() and personas.first() or None
@@ -502,7 +503,19 @@ def mostrar_profesional(request):
             propietario_form = None
             return redirect('profesional')
         else:
-            messages.add_message(request, messages.WARNING, 'Propietario no existe, debe darlo de alta para iniciar al tramite.')
+            if documento_set.is_valid() == False and propietario is None :
+                messages.add_message(request, messages.WARNING, 'El propietario ingresado no existe, debe darlo de alta para iniciar al tramite. ')
+                messages.add_message(request, messages.WARNING, 'Debe ingresar los documentos faltantes')
+                prop=1
+            elif  propietario is None:
+                messages.add_message(request, messages.WARNING, 'El propietario ingresado no existe, debe darlo de alta para iniciar al tramite.')
+                prop=1
+            elif documento_set.is_valid() == False :
+                messages.add_message(request, messages.WARNING, 'Debe ingresar los documentos faltantes')
+                prop = 0
+            else:
+                prop=0
+
     else:
         propietario_form = None
     contexto = {
@@ -512,6 +525,7 @@ def mostrar_profesional(request):
         'propietario_form': propietario_form,
         'documento_set': documento_set,
         'ctxtramcorregidos':tramites_corregidos(request),
+        'prop': prop,
     }
     return render(request, 'persona/profesional/profesional.html', contexto)
 

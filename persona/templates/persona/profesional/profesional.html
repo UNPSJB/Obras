@@ -26,9 +26,9 @@
  			<span class="caret"></span>
 		</button>
 		<ul class="dropdown-menu">
-			<li><li><a target="_blank"  href="{% static "documentacion/_build/html/profesional.html" %}" target="_blank">Ayuda</a></li>
+			<li><li><a target="_blank"  href="{% static 'documentacion/_build/html/profesional.html' %}" target="_blank">Ayuda</a></li>
 			<li role="separator" class="divider"></li>
-			<li><a target="_blank" id="boton_ayuda1" href="{% static "documentacion/Profesional.pdf" %}" target="_blank">Ayuda PDF</a></li>
+			<li><a target="_blank" id="boton_ayuda1" href="{% static 'documentacion/Profesional.pdf' %}" target="_blank">Ayuda PDF</a></li>
 		</ul>
 	</div>
 </div>
@@ -62,7 +62,7 @@
 											{% crispy documento_set %}
 										</div>
 										<div class="col-xs-12 col-sm-12 col-md-4 col-lg-4">
-											{% if propietario_form %}
+											{% if prop %}
 											<font color=white><h5 align="left">Datos de Nuevo Propietario</h5></font>
 											{% crispy propietario_form %}
 											{% endif %}
@@ -173,9 +173,13 @@
 
 <script>
     	$(function () {
-            if($("#id_propietario").val().length >1)
+    		var propietario = {{prop}}
+            if(propietario == 1)
             {
                 $('#collapseOne').collapse();
+            }
+            else{
+             	$('#collapseOne').collapse('hide');
             }
         });
 	</script>
