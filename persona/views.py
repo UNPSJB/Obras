@@ -92,7 +92,7 @@ def tramites_para_financiar(request):
     persona = Persona.objects.get(usuario__isnull=False, usuario_id=usuario)
    # propietario = persona.get_propietario()  # Me quedo con el atributo propietario de la persona
     tramites_propietario = Tramite.objects.en_estado(Visado)
-    tramites = filter(lambda tramite: (tramite.propietario == persona.propietario and tramite.pago is  None), tramites_propietario)
+    tramites = filter(lambda tramite: (tramite.propietario == persona.propietario and tramite.pago is None), tramites_propietario)
     return tramites
 
 def tramites_de_propietario(request):
@@ -100,7 +100,9 @@ def tramites_de_propietario(request):
     usuario = request.user
     persona = Persona.objects.get(usuario__isnull=False, usuario_id=usuario)
     #propietario = persona.get_propietario()  # Me quedo con el atributo propietario de la persona
-    tramites_de_propietario = filter(lambda tramite: (tramite.propietario == persona.propietario and  tramite.pago_id is not None), tramites)
+    #tramites_de_propietario = filter(lambda tramite: (tramite.propietario == persona.propietario and  tramite.pago_id is not None), tramites)
+    tramites_de_propietario = filter(
+        lambda tramite: (tramite.propietario == persona.propietario), tramites)
     return tramites_de_propietario
 
 def propietario_solicita_final_obra(request, pk_tramite):
@@ -495,12 +497,12 @@ def mostrar_profesional(request):
                 request.POST['sector'],
                 lista
             )
+            messages.add_message(request, messages.SUCCESS,
+                                 'Solicitud de inicio de tramite exitosa.')
             tramite_form = FormularioIniciarTramite(initial={'profesional':usuario.persona.profesional.pk})
             propietario_form = None
-            messages.add_message(request, messages.SUCCESS, 'El tramite fue creado con exito')
-
+            return redirect('profesional')
         else:
-
             if documento_set.is_valid() == False and propietario is None :
                 messages.add_message(request, messages.WARNING, 'El propietario ingresado no existe, debe darlo de alta para iniciar al tramite. ')
                 messages.add_message(request, messages.WARNING, 'Debe ingresar los documentos faltantes')
@@ -600,8 +602,6 @@ def ver_documentos_corregidos(request, pk_tramite):
         tramite = get_object_or_404(Tramite, pk=pk_tramite)
         planillas = PlanillaDeVisado.objects.filter(
             tramite_id=tramite.id)  # busca las planillas que tengan el id del tramite
-        documentos = Documento.objects.filter(tramite_id=pk_tramite)
-
         if (len(planillas) > 1):
             aux = planillas[0]
             for p in planillas:
@@ -609,41 +609,37 @@ def ver_documentos_corregidos(request, pk_tramite):
                     plan = p
                 else:
                     plan = aux
-            planilla = get_object_or_404(PlanillaDeVisado, id=plan.id)  # PlanillaDeVisado.objects.filter(tramite_id=tramite.id)# busca las planillas que tengan el id del tramite
+            planilla = get_object_or_404(PlanillaDeVisado,
+                                         id=plan.id)  # PlanillaDeVisado.objects.filter(tramite_id=tramite.id)# busca las planillas que tengan el id del tramite
         else:
             try:
-                planilla = PlanillaDeVisado.objects.get(tramite_id=pk_tramite)  # PlanillaDeVisado.objects.filter(tramite_id=tramite.id)# busca las planillas que tengan el id del tramite
-
+                planilla = PlanillaDeVisado.objects.get(
+                    tramite_id=pk_tramite)  # PlanillaDeVisado.objects.filter(tramite_id=tramite.id)# busca las planillas que tengan el id del tramite
             except:
-                contexto={'tramite':tramite,'documentos': documentos}
-                return render(request, 'persona/profesional/ver_documentos_corregidos.html', contexto)
-
+                planilla = "No hay planilla para mostrar"
+        filas = FilaDeVisado.objects.all()
+        columnas = ColumnaDeVisado.objects.all()
         try:
-                planilla = PlanillaDeVisado.objects.get(tramite_id=pk_tramite)  # PlanillaDeVisado.objects.filter(tramite_id=tramite.id)# busca las planillas que tengan el id del tramite
-
-                filas = FilaDeVisado.objects.all()
-                columnas = ColumnaDeVisado.objects.all()
-                obs = planilla.observacion
-                elementos = planilla.elementos.all()
-                items = planilla.items.all()
-                contexto = {
-                    'tramite': tramite,
-                    'documentos':documentos,
-                    'planilla': planilla,
-                    'filas': filas,
-                    'columnas': columnas,
-                    'items': items,
-                    'elementos': elementos,
-                    'obs': obs,
-                }
-                return render(request, 'persona/profesional/ver_documentos_corregidos.html', contexto)
+            obs = planilla.observacion
+            elementos = planilla.elementos.all()
+            items = planilla.items.all()
+            contexto = {
+                'tramite': tramite,
+                'planilla': planilla,
+                'filas': filas,
+                'columnas': columnas,
+                'items': items,
+                'elementos': elementos,
+                'obs': obs,
+            }
+            return render(request, 'persona/profesional/ver_documentos_corregidos.html', contexto)
         except:
-                contexto = {
-                    'tramite': tramite,
-                    'documentos':documentos,
-                    'mensaje': "No hay planilla/s para mostrar"  ,
-                }
-                return render(request, 'persona/profesional/ver_documentos_corregidos.html', contexto)
+            contexto = {
+                'tramite': tramite,
+                'mensaje': planilla,
+            }
+            return render(request, 'persona/profesional/ver_documentos_corregidos.html', contexto)
+
     return redirect('profesional')
 
 
@@ -1198,7 +1194,7 @@ class ReporteTramitesIniciadosPdf(View):
 
 class ReporteTramitesCorregidosExcel(TemplateView):
     def get(self, request, *args, **kwargs):
-        tramites = Tramite.objects.en_estado(Corregido)
+        tramites = Tramite.objects.en_estado(Iniciado)
         wb = Workbook()
         ws = wb.active
         ws['B1'] = 'REPORTE DE TRAMITES CORREGIDOS'
@@ -1260,7 +1256,7 @@ class ReporteTramitesCorregidosPdf(View):
                         tramite.tipo_obra)
                     for
                     tramite in
-                    Tramite.objects.en_estado(Visado)]
+                    Tramite.objects.en_estado(Iniciado)]
         detalle_orden = Table([encabezados] + detalles, colWidths=[2 * cm, 3 * cm, 3 * cm, 3 * cm])
         detalle_orden.setStyle(TableStyle(
             [

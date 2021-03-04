@@ -1,11 +1,12 @@
-Ver visados aprobados en año seleccionado
-===============================================
+Consultar mis visados aprobados
+====================================
+.. image:: _static/visador/visadosAprobados.png
 
-.. image:: _static/director/visadosAprobados.png
+El usuario puede imprimir la planilla de visado haciendo click sobre el boton "Imprimir" que esta enmarcado en rosa, para volver a la pagina anterior debe hacer click sobre el boton "Volver" que esta enmarcado en rojo.
 
-Permite ver los visados aprobados seleccionando un año de interés “Seleccionar un año”, después debe hacer click sobre el botón “Aceptar” enmarcado en rosa. En caso de que el usuario quiera volver al menú principal, deberá presionar el botón “Volver” enmarcado en rojo o el botón “Director” que se encuentra en el panel lateral izquierdo.
 
 .. toctree::
    :maxdepth: 3
-
-   graficoVisadosAprobados
+   
+   verVisadoAprobado
+   

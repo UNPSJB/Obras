@@ -12,4 +12,4 @@ Este menú muestra todos los tramites que pueden ser inspeccionados. Los datos q
 .. toctree::
    :maxdepth: 3
 
-   inspeccionarInspector
+   inspeccionarInspectorInspeccion

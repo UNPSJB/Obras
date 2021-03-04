@@ -1,6 +1,11 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
 {% load crispy_forms_tags%}
+{% block barra %}
+<ul class="sidebar sidebar-1">
+        <li><a href="{%url 'propietario'%}" class="current"><label id="propietario">Propietario</label></a></li>
+</ul>
+{% endblock %}
 {%block contenido %}
 <div class="container-fluid">
     <div id="printReady">
@@ -56,10 +61,11 @@
                             <label style="color:black;">Parcela : &nbsp; {{tramite.parcela}}    </label> &nbsp;<br>
 
                         </div>
-                        <div class="col-sm-6 col-md-6 col-lg-6 col-xs-6">
+                        <div class="col-sm-6 col-md-6 col-lg-6 col-xs-6" align="right">
 
-                            <h5 style="color:black;  font-weight:bolder;">Circunscripción : &nbsp;{{tramite.circunscripcion}}   </h5> &nbsp;
-                            <h5 style="color:black;  font-weight:bolder;">Manzana : &nbsp; {{tramite.manzana}}  </h5>
+                            <label style="color:black;  font-weight:bolder;">Circunscripción : &nbsp;{{tramite.circunscripcion}}   </h5> &nbsp;
+                            <br>
+                                <label style="color:black;  font-weight:bolder;">Manzana : &nbsp; {{tramite.manzana}}  </h5>
                         </div>
                     </div>
                     <hr>

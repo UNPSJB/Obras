@@ -12,7 +12,7 @@ class FormularioIniciarTramite(forms.ModelForm):
     class Meta:
         model = Tramite
         fields = (
-            'tipo_obra', 
+            'tipo_obra',
             'medidas', 
             'profesional',
             'domicilio',
@@ -30,7 +30,7 @@ class FormularioIniciarTramite(forms.ModelForm):
         self.helper = FormHelper()
         #self.helper.add_input(Submit(self.SUBMIT, 'Guardar Tramite'))
         self.helper.form_tag = False
-        self.fields['tipo_obra'].widget.attrs['placeholder'] = "Ingresar Tipo de Obra"
+        self.fields['tipo_obra'].queryset = TipoObra.objects.filter(activo=True)
         self.fields['medidas'].widget.attrs['placeholder'] = "Ingresar Medidas en m2"
         self.fields['medidas'].widget.attrs['max'] = "100000"
         self.fields['medidas'].widget.attrs['min'] = "1"
@@ -49,7 +49,7 @@ class FormularioIniciarTramite(forms.ModelForm):
         self.fields['sector'].widget.attrs['min'] = "1"
 
         self.fields['domicilio'].widget.attrs['placeholder'] = "Ingresar Domicilio ej calle 1111"
-        self.fields['domicilio'].widget.attrs['pattern'] = "^[A-Za-z]{0,50}[A-Za-z ]{0,50} [0-9]{0,5}$"
+        self.fields['domicilio'].widget.attrs['pattern'] = "^[A-Za-z]{0,50}[A-Za-z ]{3,50} [0-9]{2,5}$"
         self.fields['propietario'].widget.attrs['placeholder'] = "Ingresar Dni de propietario"
         self.fields['propietario'].widget.attrs['max'] = "99999999"
         self.fields['propietario'].widget.attrs['min'] = "9999999"

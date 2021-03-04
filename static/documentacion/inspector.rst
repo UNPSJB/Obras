@@ -9,7 +9,7 @@ Podrá elegir entre las opciones del menú y realizar cualquiera de las siguient
 
    agendarInspeccionInspector
    consultarUltimaInspeccionInspector
-   cargarInspeccionInspector
+   cargarInspeccionNoMensual
    cargarInspeccionesMensualesInspector
 
 

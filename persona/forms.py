@@ -35,15 +35,15 @@ class FormularioPersona(forms.ModelForm):
         self.fields['cuil'].widget.attrs['title'] = "Ingresar Cuil con formato xx-xxxxxxxx/x"
         self.fields['cuil'].widget.attrs['placeholder'] = "Ingresar Cuil - Formato: xx-xxxxxxxx/x"
         self.fields['nombre'].widget.attrs['title'] = "Ingresar Nombre"
-        self.fields['nombre'].widget.attrs['pattern'] = "^[A-Za-z]{0,50}[A-Za-z ]{0,50}"
+        self.fields['nombre'].widget.attrs['pattern'] = "^[A-Za-z]{3,50}"
         self.fields['apellido'].widget.attrs['title'] = "Ingresar Apellido"
-        self.fields['apellido'].widget.attrs['pattern'] = "^[A-Za-z]{0,50}[A-Za-z ]{0,50}"
+        self.fields['apellido'].widget.attrs['pattern'] = "^[A-Za-z]{3,50}"
         self.fields['telefono'].widget.attrs['title'] = "Ingresar Nro de Telefono con codigo de area ej 280154565788"
         self.fields['telefono'].widget.attrs['placeholder'] = "Ingresar Nro de Telefono con codigo de area ej 280154565788"
         self.fields['telefono'].widget.attrs['pattern'] = "^[0-9]{0,15}"
         self.fields['domicilio'].widget.attrs['title'] = "Ingresar Domicilio ej calle 11111"
         self.fields['domicilio'].widget.attrs['placeholder'] = "Ingresar Domicilio ej calle 11111"
-        self.fields['domicilio'].widget.attrs['pattern'] = "^[A-Za-z]{0,50}[A-Za-z ]{0,50} [0-9]{0,5}$"
+        self.fields['domicilio'].widget.attrs['pattern'] = "^[A-Za-z]{0,50}[A-Za-z ]{3,50} [0-9]{2,5}$"
         self.fields['mail'].widget.attrs['title'] = "Ingresar Mail"
         self.fields['mail'].widget.attrs['placeholder'] = "Ingresar Mail - Formato: xxxxxxx@xxx.xxx"
 
@@ -58,6 +58,12 @@ class FormularioPersona(forms.ModelForm):
         if Persona.objects.filter(mail=dato_mail).exists():
             raise ValidationError('El mail ya pertenece a otra persona registrada en el sistema')
         return dato_mail
+
+    def clean_cuil(self):
+        dato_cuil = self.cleaned_data['cuil']
+        if Persona.objects.filter(cuil=dato_cuil).exists():
+            raise ValidationError('El cuil ya pertenece a otra persona registrada en el sistema')
+        return dato_cuil
 
 class FormularioProfesional(FormularioPersona):
     NAME = 'profesional_form'

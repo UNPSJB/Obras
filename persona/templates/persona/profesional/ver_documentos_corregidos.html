@@ -81,7 +81,7 @@
                                     </ol>
                                 </div>
                             </div>
-                            {%if planilla %}
+                            {% if planilla %}
                             <div class="table-responsive">
                                 <table align="center" class="table table-bordered table-striped table-hover table-condensed table-responsive" style="text-align:center;" data-paging="false">
                                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
@@ -168,13 +168,20 @@
                                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 
 
-                                        <label for="tipo_documento.id" class="subir">
+                                        <!--<label for="tipo_documento.id" class="subir">
                                             <i class="fas fa-cloud-upload-alt"></i> Seleccionar Documento
                                         </label>
                                         <input id="tipo_documento.id" name="documento" onchange='cambiar()' type="file" style='display: none;'/>
-
+-->
+                                        <label for="seleccionArchivos" class="subir">
+                                            <i class="fas fa-cloud-upload-alt"></i> Seleccionar Documento
+                                        </label>
+                                        <input id="seleccionArchivos" accept="image/*" name="documento" onchange='cambiar()' type="file" style='display: none;'/>
+                                       <br><br>
+                                    <img id="imagenPrevisualizacion">
                                         <label style="color:white;" id="info"></label>
                                     <br>
+                                        <br>
                                     </div>
                                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
 
@@ -287,6 +294,21 @@
     var pdrs = document.getElementById('tipo_documento.id').files[0].name;
     document.getElementById('info').innerHTML = pdrs;
 }
+
+const $seleccionArchivos = document.querySelector("#seleccionArchivos"),
+  $imagenPrevisualizacion = document.querySelector("#imagenPrevisualizacion");
+
+$seleccionArchivos.addEventListener("change", () => {
+  const archivos = $seleccionArchivos.files;
+  if (!archivos || !archivos.length) {
+    $imagenPrevisualizacion.src = "";
+    return;
+  }
+  const primerArchivo = archivos[0];
+  const objectURL = URL.createObjectURL(primerArchivo);
+  $imagenPrevisualizacion.src = objectURL;
+});
+
 </script>
 
 

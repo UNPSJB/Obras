@@ -34,7 +34,7 @@ class TipoDocumento(models.Model):
     activo = models.BooleanField(default=True)
     fecha_alta = models.DateField()
     fecha_baja = models.DateField(blank=True, null=True)
-    requerido = models.IntegerField(default=0)
+    requerido = models.IntegerField(default=1)
 
     def __str__(self):
         return "{}, {}".format(self.nombre, self.descripcion)

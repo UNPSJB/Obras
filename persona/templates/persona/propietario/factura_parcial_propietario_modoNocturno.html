@@ -1,7 +1,11 @@
 {% extends 'base.html' %}
 {% load staticfiles %}
 {% load crispy_forms_tags%}
-
+{% block barra %}
+<ul class="sidebar sidebar-1">
+        <li><a href="{%url 'propietario'%}" class="current"><label id="propietario">Propietario</label></a></li>
+</ul>
+{% endblock %}
 {%block contenido %}
 <div class="container-fluid">
     <div id="printReady">
@@ -55,10 +59,11 @@
                             <label id="labelPropietario">  Sector : {{tramite.sector}}  -  </label> &nbsp;
                             <label id="labelPropietario">Parcela : &nbsp; {{tramite.parcela}}   </label> &nbsp;
                         </div>
-                        <div class="col-sm-6 col-md-6 col-lg-6 col-xs-6">
+                        <div class="col-sm-6 col-md-6 col-lg-6 col-xs-6" align="right">
 
-                            <h5 id="labelPropietario" style=" font-weight:bolder;">Circunscripción : &nbsp;{{tramite.circunscripcion}}   </h5> &nbsp;
-                            <h5 id="labelPropietario" style=" font-weight:bolder;">Manzana : &nbsp; {{tramite.manzana}}  </h5>
+                            <label id="labelPropietario" style=" font-weight:bolder;color:white;">Circunscripción : &nbsp;{{tramite.circunscripcion}}   </h5> &nbsp;
+                           <br>
+                            <label id="labelPropietario" style=" font-weight:bolder;color:white;">Manzana : &nbsp; {{tramite.manzana}}  </h5>
                         </div>
                     </div>
                     <hr>
