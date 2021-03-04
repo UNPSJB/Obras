@@ -37,7 +37,11 @@
 
                     <td>{{tramite.medidas}}</td>
                     <td>{{tramite.tipo_obra}}</td>
-                    <td>{{tramite.monto_a_pagar}}</td>
+                    {% if tramite.monto_a_pagar != None %}
+                        <td>{{tramite.monto_a_pagar}}</td>
+                    {% else %}
+                        <td>------</td>
+                    {% endif %}
                     <td>{{tramite.monto_pagado}}</td>
                     {% if tramite.saldo_restante_a_pagar >= 0.09 %}
                     <td>{{ tramite.saldo_restante_a_pagar}}</td>
@@ -46,7 +50,7 @@
                     {% endif %}
                   <td align="center" class="col-xs-1">
                      {%if tramite.estado.tipo > 5 and tramite.estado.tipo <=  7%}
-                        <a target="_blank" aria-label="boton para solicitar final de obra" href="{% url 'propietario_solicita_final_obra' pk_tramite=tramite.id %}">
+                        <a aria-label="boton para solicitar final de obra" href="{% url 'propietario_solicita_final_obra' pk_tramite=tramite.id %}">
                           <button  title="boton para solicitar final de obra"  type="button" class="btn btn-primary btn-xs" name="Solicitar final de obra">
                             <span class="glyphicon glyphicon-home" aria-hidden="true"> Final Obra</span>
                           </button>
