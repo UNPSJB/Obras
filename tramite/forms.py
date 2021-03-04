@@ -47,7 +47,7 @@ class FormularioIniciarTramite(forms.ModelForm):
         self.fields['sector'].widget.attrs['placeholder'] = "Ingresar numero de Sector"
         self.fields['sector'].widget.attrs['max'] = "500000"
         self.fields['sector'].widget.attrs['min'] = "1"
-
+        self.fields['domicilio'].widget.attrs['title'] = "Ingresar Domicilio ej calle 11111"
         self.fields['domicilio'].widget.attrs['placeholder'] = "Ingresar Domicilio ej calle 1111"
         self.fields['domicilio'].widget.attrs['pattern'] = "^[A-Za-z]{0,50}[A-Za-z ]{3,50} [0-9]{2,5}$"
         self.fields['propietario'].widget.attrs['placeholder'] = "Ingresar Dni de propietario"
