@@ -115,18 +115,15 @@ class FormularioPropietario(FormularioPersona):
         persona.save()
         return p
 
-    def obtener_o_crear(self, persona=None):
+    def crear(self, persona=None):
         if persona:
-            if persona.propietario:
-                return persona.propietario
-            else:
-                 propietario = Propietario()
-                 propietario.save()
-                 persona.propietario = propietario
-                 grupo = Group.objects.get(name="propietario")
-                 persona.usuario.groups.add(grupo)
-                 persona.save()
-                 return persona.propietario
+           propietario = Propietario()
+           propietario.save()
+           persona.propietario = propietario
+           grupo = Group.objects.get(name="propietario")
+           persona.usuario.groups.add(grupo)
+           persona.save()
+           return persona.propietario
 
         elif self.is_valid():
             return self.save()

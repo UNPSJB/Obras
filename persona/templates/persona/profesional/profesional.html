@@ -73,8 +73,9 @@
 													<button class="btn btn-danger btn-sm" type="reset" title="Borrar datos del formulario">
 														Limpiar
 													</button>
-													<input type="submit" name="tramite_submit" value="Guardar Tramite" class="btn btn-primary" id="submit-id-tramite_submit">
-
+													<button type="submit" name="tramite_submit" value="Guardar Tramite" class="btn btn-primary" id="guahrdar">
+														Guardar Tramite
+													</button>
 												</div>
 											</div>
 										</div>
@@ -176,12 +177,13 @@
     		var propietario = {{prop}}
             if(propietario == 1)
             {
-                $('#collapseOne').collapse();
+                $('#propietario_crispy').collapse();
+		 		$('#id_dni').val($('#id_propietario').val());
             }
             else{
-             	$('#collapseOne').collapse('hide');
+             	$('#propietario_crispy').collapse('hide');
             }
         });
-	</script>
+</script>
 
 {% endblock %}

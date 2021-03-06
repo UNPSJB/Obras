@@ -471,15 +471,40 @@ def mostrar_profesional(request):
     propietario_form = FormularioPropietario()
     propietario = None
     prop=0
+    propietarioValido=0
+    documentosValidos=0
+    crearPropietario=0
+    dniIncorrecto=0
     if request.method == "POST":
         personas = Persona.objects.filter(dni=request.POST["propietario"])
         persona = personas.exists() and personas.first() or None
-        documento_set = FormularioDocumentoSet(request.POST, request.FILES)
         propietario_form = FormularioPropietario(request.POST)
-        tramite_form = FormularioIniciarTramite(request.POST)
         documento_set = FormularioDocumentoSet(request.POST, request.FILES)
-        propietario = propietario_form.obtener_o_crear(persona)
-        if propietario is not None and tramite_form.is_valid() and documento_set.is_valid():
+
+        if documento_set.is_valid():
+            documentosValidos = 1
+        try:
+                propietario = persona.propietario
+                crearPropietario=0
+                propietarioValido=1
+        except:
+                crearPropietario=1
+
+        if documentosValidos == 1 and crearPropietario == 1:
+            try:
+                nuevoPropietario = request.POST["dni"]
+                dniPropietario = request.POST['propietario']
+                if dniPropietario == nuevoPropietario:
+                    propietario = propietario_form.crear(persona)
+                    propietarioValido = 1
+                    dniIncorrecto=0
+                else:
+                    propietarioValido = 0
+                    dniIncorrecto=1
+            except:
+                propietarioValido = 0
+        tramite_form = FormularioIniciarTramite(request.POST)
+        if propietario is not None and tramite_form.is_valid() and propietarioValido == 1 and documentosValidos == 1 :
             tramite = tramite_form.save(propietario=propietario, commit=False)
             lista=[]
             for docForm in documento_set:
@@ -503,16 +528,18 @@ def mostrar_profesional(request):
             propietario_form = None
             return redirect('profesional')
         else:
-            if documento_set.is_valid() == False and propietario is None :
+            if propietarioValido == 0  and dniIncorrecto == 1:
+                messages.add_message(request, messages.WARNING, 'Los numeros de DNI ingresados no coinciden')
+                prop=1
+            elif documentosValidos == 0 and propietario is None :
                 messages.add_message(request, messages.WARNING, 'El propietario ingresado no existe, debe darlo de alta para iniciar al tramite. ')
                 messages.add_message(request, messages.WARNING, 'Debe ingresar los documentos faltantes')
                 prop=1
             elif  propietario is None:
                 messages.add_message(request, messages.WARNING, 'El propietario ingresado no existe, debe darlo de alta para iniciar al tramite.')
                 prop=1
-            elif documento_set.is_valid() == False :
+            elif documentosValidos == 0:
                 messages.add_message(request, messages.WARNING, 'Debe ingresar los documentos faltantes')
-                prop = 0
             else:
                 prop=0
 
@@ -769,7 +796,6 @@ def planilla_inspeccion_impresa(request, pk_tramite):
 class ReporteTramitesProfesionalPdf(View):
 
     def get(self, request, *args, **kwargs):
-
         filename = "Informe de tramites.pdf"
         response = HttpResponse(content_type='application/pdf')
         response['Content-Disposition'] = 'attachment; filename="%s"' % filename
@@ -1115,12 +1141,17 @@ class ReporteTramitesIniciadosExcel(TemplateView):
         wb = Workbook()
         ws = wb.active
         ws['B1'] = 'REPORTE DE TRAMITES INICIADOS'
-        ws.merge_cells('B1:F1')
-        ws['B2'] = 'NRO'
-        ws['C2'] = 'PROPIETARIO'
-        ws['D2'] = 'PROFESIONAL'
-        ws['E2'] = 'MEDIDAS'
-        ws['F2'] = 'TIPO'
+        ws.merge_cells('B1:G1')
+        ws.merge_cells('B2:C2')
+        ws.merge_cells('D2:E2')
+        ws.merge_cells('F2:G2')
+        ws.merge_cells('H2:I2')
+        ws.merge_cells('J2:K2')
+        ws['B2'] = 'NRO DE TRAMITE'
+        ws['D2'] = 'PROPIETARIO'
+        ws['F2'] = 'PROFESIONAL'
+        ws['H2'] = 'MEDIDAS'
+        ws['J2'] = 'TIPO'
         cont = 3
         for tramite in tramites:
             ws.cell(row=cont, column=2).value = str(tramite.id)
@@ -1277,34 +1308,40 @@ class ReporteTramitesCorregidosPdf(View):
 
 class ReporteProfesionalesActivosExcel(TemplateView):
     def get(self, request, *args, **kwargs):
-        tramites = Tramite.objects.all()  # puse con inspeccion solo para fines de mostrar algo
-        personas = Profesional.objects.all()
-        profesionales = []
-        for t in tramites:
-            for p in personas:
-                if t.profesional.id == p.id:
-                    if p not in profesionales:
-                        profesionales.append(p)
+        profesionales = Tramite.objects.select_related().values( 'profesional__persona__nombre',
+                                                                'profesional__persona__apellido',
+                                                                'profesional__persona__telefono',
+                                                                'profesional__profesion',
+                                                                'profesional__matricula',
+                                                                'profesional__persona__domicilio',
+                                                                'profesional__persona__mail').all().distinct()  # puse con inspeccion solo para fines de mostrar algo
         wb = Workbook()
         ws = wb.active
-        ws['A1'] = 'REPORTE DE PROFESIONALES ACTIVOS'
+        ws['B1'] = 'REPORTE DE PROFESIONALES ACTIVOS'
         ws.merge_cells('B1:G1')
+        ws.merge_cells('B2:C2')
+        ws.merge_cells('D2:E2')
+        ws.merge_cells('F2:G2')
+        ws.merge_cells('H2:I2')
+        ws.merge_cells('J2:K2')
+        ws.merge_cells('L2:N2')
+        ws.merge_cells('O2:P2')
         ws['B2'] = 'NOMBRE'
-        ws['C2'] = 'APELLIDO'
-        ws['D2'] = 'TELEFONO'
-        ws['E2'] = 'PROFESION'
-        ws['F2'] = 'MATRICULA'
-        ws['G2'] = 'DOMICILIO'
-        ws['H2'] = 'MAIL'
+        ws['D2'] = 'APELLIDO'
+        ws['F2'] = 'TELEFONO'
+        ws['H2'] = 'MATRICULA'
+        ws['J2'] = 'DOMICILIO'
+        ws['L2'] = 'PROFESION'
+        ws['O2'] = 'MAIL'
         cont = 3
         for profesional in profesionales:
-            ws.cell(row=cont, column=2).value = str(profesional.persona.nombre)
-            ws.cell(row=cont, column=3).value = str(profesional.persona.apellido)
-            ws.cell(row=cont, column=4).value = str(profesional.persona.telefono)
-            ws.cell(row=cont, column=5).value = str(profesional.profesion)
-            ws.cell(row=cont, column=6).value = profesional.matricula
-            ws.cell(row=cont, column=7).value = profesional.persona.domicilio
-            ws.cell(row=cont, column=8).value = str(profesional.persona.mail)
+            ws.cell(row=cont, column=2).value = profesional['profesional__persona__nombre']
+            ws.cell(row=cont, column=4).value = profesional['profesional__persona__apellido']
+            ws.cell(row=cont, column=6).value = profesional['profesional__persona__telefono']
+            ws.cell(row=cont, column=8).value = profesional['profesional__matricula']
+            ws.cell(row=cont, column=10).value = profesional['profesional__persona__domicilio']
+            ws.cell(row=cont, column=12).value = profesional['profesional__profesion']
+            ws.cell(row=cont, column=15).value = profesional['profesional__persona__mail']
             cont = cont + 1
         nombre_archivo = "ReportePersonasExcel.xlsx"
         response = HttpResponse(content_type="application/ms-excel")
@@ -1352,17 +1389,21 @@ class ReporteProfesionalesActivosPdf(View):
         tramites = Tramite.objects.all()  # puse con inspeccion solo para fines de mostrar algo
         personas = Profesional.objects.all()
         profesionales = []
-        for t in tramites:
-            for p in personas:
-                if t.profesional.id == p.id:
-                    if p not in profesionales:
-                        profesionales.append(p)
-        detalles = [(profesional.persona.nombre, profesional.persona.apellido,
-                     profesional.persona.telefono,
-                     profesional.profesion,
-                     profesional.matricula,
-                     profesional.persona.domicilio,
-                     profesional.persona.mail) for
+        profesionales = Tramite.objects.select_related().values('profesional__persona__nombre',
+                                                                'profesional__persona__apellido',
+                                                                'profesional__persona__telefono',
+                                                                'profesional__profesion',
+                                                                'profesional__matricula',
+                                                                'profesional__persona__domicilio',
+                                                                'profesional__persona__mail').all().distinct()  # puse con inspeccion solo para fines de mostrar algo
+
+        detalles = [(profesional['profesional__persona__nombre'],
+                                                                profesional['profesional__persona__apellido'],
+                                                                profesional['profesional__persona__telefono'],
+                                                                profesional['profesional__profesion'],
+                                                                profesional['profesional__matricula'],
+                                                                profesional['profesional__persona__domicilio'],
+                                                                profesional['profesional__persona__mail']) for
                     profesional in
                     profesionales
                     ]
@@ -1390,8 +1431,15 @@ class ReporteSolicitudFinalObraExcel(TemplateView):
         tramites = Tramite.objects.en_estado(FinalObraSolicitado)
         wb = Workbook()
         ws = wb.active
-        ws['A1'] = 'REPORTE DE TRAMITES FINAL OBRA SOLICITADO'
-        ws.merge_cells('B1:G1')
+        ws.merge_cells('B1:G2')
+        ws.merge_cells('B2:C2')
+        ws.merge_cells('D2:E2')
+        ws.merge_cells('F2:G2')
+        ws.merge_cells('H2:I2')
+        ws.merge_cells('J2:K2')
+        ws.merge_cells('L2:N2')
+        ws.merge_cells('O2:P2')
+        ws['B1'] = 'REPORTE DE TRAMITES FINAL OBRA SOLICITADO'
         ws['B2'] = 'NUMERO'
         ws['C2'] = 'MEDIDAS'
         ws['D2'] = 'TIPO'
