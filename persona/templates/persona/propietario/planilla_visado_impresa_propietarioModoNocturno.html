@@ -98,7 +98,7 @@
                                     {% for columna in columnas %}
                                     {% if columna.activo == True %}
                                     <td class="col-sm-1">&nbsp;
-                                        {% for item in planilla.items.all %}
+                                        {% for item in items %}
                                         {% if fila == item.fila_de_visado and columna == item.columna_de_visado %}
 
                                         <input type="checkbox" id="activar"disabled="disabled" checked="checked" name="{{fila}}" value="{{fila}}">
@@ -123,7 +123,7 @@
                                     </tr>
                                     </thead>
                                     <tbody>
-                                    {% for elemento in planilla.elementos.all %}
+                                    {% for elemento in elementos %}
                                     {% if elemento.activo == True %}
                                     <tr id="filasBalance">
                                         <td class="col-xs-1">{{ elemento }}</td>

@@ -86,6 +86,7 @@
                             </div>
                         </div>
                     </div>
+                    {{items |pprint}}
                     <div class="table-responsive">
                         <table id="tabla1" align="center" class="table table-bordered table-striped table-hover table-condensed" style="text-align:center;" data-paging="false">
                             <thead>
@@ -106,7 +107,7 @@
                                 {% for columna in columnas %}
                                 {% if columna.activo == True %}
                                 <td class="col-sm-1">&nbsp;
-                                    {% for item in planilla.items.all %}
+                                    {% for item in items %}
                                     {% if fila == item.fila_de_visado and columna == item.columna_de_visado %}
                                     <label class="switch">
                                         <input type="checkbox" disabled="disabled" checked="checked" name="{{fila}}" value="{{fila}}" checked><span class="slider round"></span>
@@ -131,7 +132,7 @@
                                 </tr>
                                 </thead>
                                 <tbody>
-                                {% for elemento in planilla.elementos.all %}
+                                {% for elemento in elementos %}
                                 {% if elemento.activo == True %}
                                 <tr id="filasBalance">
                                     <td class="col-xs-1">{{ elemento }}</td>

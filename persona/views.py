@@ -380,8 +380,8 @@ def planilla_visado_impresa_propietario(request, pk_planilla):
     tramite = get_object_or_404(Tramite, pk=planilla.tramite_id)
     try:
 
-        elementos = planilla.elementos.all()
-        items = planilla.items.all()
+        elementos = planilla.elementos.filter(activo=1)
+        items = planilla.items.filter(activo=1)
         obs = planilla.observacion
         contexto={'tramite': tramite,
                   'planilla': planilla,
@@ -542,7 +542,6 @@ def mostrar_profesional(request):
                 messages.add_message(request, messages.WARNING, 'Debe ingresar los documentos faltantes')
             else:
                 prop=0
-
     else:
         propietario_form = None
     contexto = {
@@ -745,8 +744,8 @@ def planilla_visado_impresa(request, pk_tramite):
     filas = FilaDeVisado.objects.all()
     columnas = ColumnaDeVisado.objects.all()
     try:
-        elementos = planilla.elementos.all()
-        items = planilla.items.all()
+        elementos = planilla.elementos.filter(activo=1)
+        items = planilla.items.filter(activo=1)
         obs = planilla.observacion
         contexto={'tramite': tramite,
                   'planilla': planilla,
@@ -1040,7 +1039,7 @@ class ReporteProfesionalExcel(TemplateView):
         profesionales = Profesional.objects.all()
         wb = Workbook()
         ws = wb.active
-        ws['A1'] = 'REPORTE DE TRAMITES'
+        ws['A1'] = 'REPORTE DE PROFESIONALES'
         ws.merge_cells('B1:G1')
         ws['B2'] = 'NOMBRE'
         ws['C2'] = 'APELLIDO'
@@ -1074,7 +1073,7 @@ class ReporteProfesionalesPdf(View):
 
     def get(self, request, *args, **kwargs):
 
-        filename = "Informe de tramites.pdf"
+        filename = "Informe de profesionales.pdf"
         response = HttpResponse(content_type='application/pdf')
         response['Content-Disposition'] = 'attachment; filename="%s"' % filename
         doc = SimpleDocTemplate(
@@ -1155,10 +1154,10 @@ class ReporteTramitesIniciadosExcel(TemplateView):
         cont = 3
         for tramite in tramites:
             ws.cell(row=cont, column=2).value = str(tramite.id)
-            ws.cell(row=cont, column=3).value = str(tramite.propietario)
-            ws.cell(row=cont, column=4).value = str(tramite.profesional)
-            ws.cell(row=cont, column=5).value = str(tramite.medidas)
-            ws.cell(row=cont, column=6).value = str(tramite.tipo_obra)
+            ws.cell(row=cont, column=4).value = str(tramite.propietario)
+            ws.cell(row=cont, column=6).value = str(tramite.profesional)
+            ws.cell(row=cont, column=8).value = str(tramite.medidas)
+            ws.cell(row=cont, column=10).value = str(tramite.tipo_obra)
             cont = cont + 1
         nombre_archivo = "ReportePersonasExcel.xlsx"
         response = HttpResponse(content_type="application/ms-excel")
@@ -1225,23 +1224,38 @@ class ReporteTramitesIniciadosPdf(View):
 
 class ReporteTramitesCorregidosExcel(TemplateView):
     def get(self, request, *args, **kwargs):
-        tramites = Tramite.objects.en_estado(Iniciado)
+        tram = Tramite.objects.en_estado(Iniciado)
+        anterior = 4
+        tram_corregidos = []
+        for t in tram:
+            estados = t.estadosTramite()
+            try:
+                e = estados.last()
+                estadoPrevio = e.previo()
+                estadoSiguiente = e.siguiente()
+                if (estadoSiguiente is None and estadoPrevio.tipo == anterior):
+                    tram_corregidos.append(t)
+            except:
+                pass
         wb = Workbook()
         ws = wb.active
         ws['B1'] = 'REPORTE DE TRAMITES CORREGIDOS'
         ws.merge_cells('B1:F1')
+        ws.merge_cells('C1:D1')
+        ws.merge_cells('E1:F1')
+        ws.merge_cells('H1:I1')
         ws['B2'] = 'NRO'
         ws['C2'] = 'PROPIETARIO'
-        ws['D2'] = 'PROFESIONAL'
-        ws['E2'] = 'MEDIDAS'
-        ws['F2'] = 'TIPO'
+        ws['E2'] = 'PROFESIONAL'
+        ws['G2'] = 'MEDIDAS'
+        ws['H2'] = 'TIPO'
         cont = 3
-        for tramite in tramites:
+        for tramite in tram_corregidos:
             ws.cell(row=cont, column=2).value = str(tramite.id)
             ws.cell(row=cont, column=3).value = str(tramite.propietario)
-            ws.cell(row=cont, column=4).value = str(tramite.profesional)
-            ws.cell(row=cont, column=5).value = str(tramite.medidas)
-            ws.cell(row=cont, column=6).value = str(tramite.tipo_obra)
+            ws.cell(row=cont, column=5).value = str(tramite.profesional)
+            ws.cell(row=cont, column=7).value = str(tramite.medidas)
+            ws.cell(row=cont, column=8).value = str(tramite.tipo_obra)
             cont = cont + 1
         nombre_archivo = "ReportePersonasExcel.xlsx"
         response = HttpResponse(content_type="application/ms-excel")
@@ -1283,11 +1297,24 @@ class ReporteTramitesCorregidosPdf(View):
         Story.append(im0)
         Story.append(Spacer(0, cm * 0.5))
         encabezados = ('NRO', 'PROPIETARIO', 'PROFESIONAL', 'MEDIDAS', 'TIPO')
+        tram = Tramite.objects.en_estado(Iniciado)
+        anterior = 4
+        tram_corregidos = []
+        for t in tram:
+            estados = t.estadosTramite()
+            try:
+                e = estados.last()
+                estadoPrevio = e.previo()
+                estadoSiguiente = e.siguiente()
+                if (estadoSiguiente is None and estadoPrevio.tipo == anterior):
+                    tram_corregidos.append(t)
+            except:
+                pass
         detalles = [(tramite.id, tramite.propietario, tramite.profesional, tramite.medidas,
                         tramite.tipo_obra)
                     for
                     tramite in
-                    Tramite.objects.en_estado(Iniciado)]
+                    tram_corregidos]
         detalle_orden = Table([encabezados] + detalles, colWidths=[2 * cm, 3 * cm, 3 * cm, 3 * cm])
         detalle_orden.setStyle(TableStyle(
             [
@@ -1353,7 +1380,7 @@ class ReporteProfesionalesActivosExcel(TemplateView):
 class ReporteProfesionalesActivosPdf(View):
     def get(self, request, *args, **kwargs):
 
-        filename = "Informe de tramites.pdf"
+        filename = "Informe de profesionales activos.pdf"
         response = HttpResponse(content_type='application/pdf')
         response['Content-Disposition'] = 'attachment; filename="%s"' % filename
         doc = SimpleDocTemplate(
@@ -1407,8 +1434,8 @@ class ReporteProfesionalesActivosPdf(View):
                     profesional in
                     profesionales
                     ]
-        detalle_orden = Table([encabezados] + detalles, colWidths=[2 * cm, 2 * cm, 2 * cm, 2 * cm, 2 * cm,
-                                                                   4 * cm])
+        detalle_orden = Table([encabezados] + detalles, colWidths=[1.5 * cm, 1.8 * cm, 1.8 * cm, 3.3 * cm, 2 * cm,3 * cm,
+                                                                   6 * cm])
         detalle_orden.setStyle(TableStyle(
             [
                 ('ALIGN', (0, 0), (0, 0), 'CENTER'),
@@ -1431,29 +1458,26 @@ class ReporteSolicitudFinalObraExcel(TemplateView):
         tramites = Tramite.objects.en_estado(FinalObraSolicitado)
         wb = Workbook()
         ws = wb.active
-        ws.merge_cells('B1:G2')
-        ws.merge_cells('B2:C2')
-        ws.merge_cells('D2:E2')
-        ws.merge_cells('F2:G2')
-        ws.merge_cells('H2:I2')
+        ws.merge_cells('B1:G1')
+        ws.merge_cells('D2:F2')
+        ws.merge_cells('G2:I2')
         ws.merge_cells('J2:K2')
-        ws.merge_cells('L2:N2')
-        ws.merge_cells('O2:P2')
+        ws.merge_cells('L2:M2')
         ws['B1'] = 'REPORTE DE TRAMITES FINAL OBRA SOLICITADO'
         ws['B2'] = 'NUMERO'
         ws['C2'] = 'MEDIDAS'
         ws['D2'] = 'TIPO'
-        ws['E2'] = 'ESTADO'
-        ws['F2'] = 'PROFESIONAL'
-        ws['G2'] = 'PROPIETARIO'
+        ws['G2'] = 'ESTADO'
+        ws['J2'] = 'PROFESIONAL'
+        ws['L2'] = 'PROPIETARIO'
         cont = 3
         for tramite in tramites:
             ws.cell(row=cont, column=2).value = tramite.id
             ws.cell(row=cont, column=3).value = tramite.medidas
             ws.cell(row=cont, column=4).value = str(tramite.tipo_obra)
-            ws.cell(row=cont, column=5).value = str(tramite.estado())
-            ws.cell(row=cont, column=6).value = str(tramite.profesional)
-            ws.cell(row=cont, column=7).value = str(tramite.propietario)
+            ws.cell(row=cont, column=7).value = str(tramite.estado())
+            ws.cell(row=cont, column=10).value = str(tramite.profesional)
+            ws.cell(row=cont, column=12).value = str(tramite.propietario)
             cont = cont + 1
         nombre_archivo = "ReportePersonasExcel.xlsx"
         response = HttpResponse(content_type="application/ms-excel")
@@ -1502,7 +1526,7 @@ class ReporteSolicitudFinalObraPdf(View):
                     for
                     tramite in
                     Tramite.objects.en_estado(FinalObraSolicitado)]
-        detalle_orden = Table([encabezados] + detalles, colWidths=[2 * cm, 2 * cm, 4 * cm, 3 * cm, 3 * cm,
+        detalle_orden = Table([encabezados] + detalles, colWidths=[2 * cm, 2 * cm, 4 * cm, 4 * cm, 3 * cm,
                                                                    3 * cm])
         detalle_orden.setStyle(TableStyle(
             [
@@ -1525,8 +1549,8 @@ def planilla_visado_impresa_administrativo(request, pk_tramite):
     filas = FilaDeVisado.objects.all()
     columnas = ColumnaDeVisado.objects.all()
     try:
-        elementos = planilla.elementos.all()
-        items = planilla.items.all()
+        elementos = planilla.elementos.filter(activo=1)
+        items = planilla.items.filter(activo=1)
         obs = planilla.observacion
         contexto = {'tramite': tramite,
                     'planilla': planilla,
@@ -3159,13 +3183,15 @@ def ver_planilla_inspeccion(request):
 
 
 def planilla_visado_impresa_director(request, pk_tramite):
+    itemsV = ItemDeVisado.objects.filter(activo=True)
+    lista=[]
     planilla = get_object_or_404(PlanillaDeVisado,id=pk_tramite)
     tramite = get_object_or_404(Tramite, pk=planilla.tramite_id)
     filas = FilaDeVisado.objects.all()
     columnas = ColumnaDeVisado.objects.all()
     try:
-        elementos = planilla.elementos.all()
-        items = planilla.items.all()
+        elementos = planilla.elementos.filter(activo=1)
+        items = planilla.items.filter(activo= 1)
         obs = planilla.observacion
         contexto={'tramite': tramite,
                   'planilla': planilla,
@@ -3809,34 +3835,44 @@ class ReporteInspeccionesDirectorExcel(TemplateView):
     def get(self, request, *args, **kwargs):
         wb = Workbook()
         ws = wb.active
-        ws['A1'] = 'REPORTE DE INSPECCIONES ANUALES'
-        ws.merge_cells('B1:G1')
+        ws.merge_cells('B1:Q1')
+        ws.merge_cells('C2:F2')
+        ws.merge_cells('G2:K2')
+        ws.merge_cells('L2:Q2')
+        ws.merge_cells('C3:D3')
+        ws.merge_cells('E3:F3')
+        ws.merge_cells('H3:I3')
+        ws.merge_cells('J3:K3')
+        ws.merge_cells('L3:M3')
+        ws.merge_cells('N3:O3')
+        ws.merge_cells('P3:Q3')
+        ws['B1'] = 'REPORTE DE INSPECCIONES ANUALES'
         ws['C2'] = 'TRAMITE'
+        ws['G2'] = 'PROPIETARIO'
+        ws['L2'] = 'PROFESIONAL'
         ws['B3'] = 'NRO'
         ws['C3'] = 'DOMICILIO'
-        ws['D3'] = 'FECHA'
-        ws['F2'] = 'PROPIETARIO'
-        ws['E3'] = 'DNI'
-        ws['F3'] = 'NOMBRE'
-        ws['G3'] = 'APELLIDO'
-        ws['I2'] = 'PROFESIONAL'
-        ws['H3'] = 'MATRICULA'
-        ws['I3'] = 'NOMBRE'
+        ws['E3'] = 'FECHA'
+        ws['G3'] = 'DNI'
+        ws['H3'] = 'NOMBRE'
         ws['J3'] = 'APELLIDO'
-        cont = 3
+        ws['L3'] = 'MATRICULA'
+        ws['N3'] = 'NOMBRE'
+        ws['P3'] = 'APELLIDO'
+        cont = 4
         year = date.today()
         tramitesEstado = Estado.objects.select_related().values('timestamp', 'tramite__id','tramite__domicilio','tramite__propietario__persona__dni','tramite__propietario__persona__nombre','tramite__propietario__persona__apellido','tramite__profesional__matricula','tramite__profesional__persona__nombre','tramite__profesional__persona__apellido').filter(
             timestamp__range=(datetime.date(year.year, 01, 01), datetime.date(year.year, 12, 12)), tipo=(6)).exclude(id__isnull=True)
         for t in tramitesEstado:
             ws.cell(row=cont, column=2).value = t['tramite__id']
             ws.cell(row=cont, column=3).value = t['tramite__domicilio']
-            ws.cell(row=cont, column=4).value = str(t['timestamp'])
-            ws.cell(row=cont, column=5).value = t['tramite__propietario__persona__dni']
-            ws.cell(row=cont, column=6).value = t['tramite__propietario__persona__nombre']
-            ws.cell(row=cont, column=7).value = t['tramite__propietario__persona__apellido']
-            ws.cell(row=cont, column=8).value = t['tramite__profesional__matricula']
-            ws.cell(row=cont, column=9).value = t['tramite__profesional__persona__nombre']
-            ws.cell(row=cont, column=10).value = t['tramite__profesional__persona__apellido']
+            ws.cell(row=cont, column=5).value = str(t['timestamp'])
+            ws.cell(row=cont, column=7).value = t['tramite__propietario__persona__dni']
+            ws.cell(row=cont, column=8).value = t['tramite__propietario__persona__nombre']
+            ws.cell(row=cont, column=10).value = t['tramite__propietario__persona__apellido']
+            ws.cell(row=cont, column=12).value = t['tramite__profesional__matricula']
+            ws.cell(row=cont, column=14).value = t['tramite__profesional__persona__nombre']
+            ws.cell(row=cont, column=16).value = t['tramite__profesional__persona__apellido']
             cont = cont + 1
         nombre_archivo = "ReporteInspecciones.xlsx"
         response = HttpResponse(content_type="application/ms-excel")
@@ -3847,7 +3883,7 @@ class ReporteInspeccionesDirectorExcel(TemplateView):
 
 class ReporteInspeccionesDirectorPdf(View):
     def get(self, request, *args, **kwargs):
-        filename = "Informe de tramites " + datetime.datetime.now().strftime("%d/%m/%Y") + ".pdf"
+        filename = "Informe de Inspecciones " + datetime.datetime.now().strftime("%d/%m/%Y") + ".pdf"
         response = HttpResponse(content_type='application/pdf')
         response['Content-Disposition'] = 'attachment; filename="%s"' % filename
         doc = SimpleDocTemplate(
@@ -3872,7 +3908,7 @@ class ReporteInspeccionesDirectorPdf(View):
         titulo = 'SISTEMA OBRAS PARTICULARES'
         Story.append(Paragraph(titulo, styles["Titulo"]))
         Story.append(Spacer(0, cm * 0.20))
-        subtitulo = 'Reporte de tramites'
+        subtitulo = 'Reporte de Inspecciones'
         Story.append(Paragraph(subtitulo, styles["Subtitulo"]))
         Story.append(Spacer(0, cm * 0.15))
         Story.append(im0)
