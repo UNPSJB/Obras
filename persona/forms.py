@@ -8,6 +8,7 @@ from tramite.models import *
 from django.forms import ValidationError
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth.models import Group, User
+from django.contrib import messages
 
 class FormularioPersona(forms.ModelForm):
     NAME = 'persona_form'
@@ -159,28 +160,37 @@ class FormularioUsuarioPersona(FormularioPersona):
         self.fields['password'].widget.attrs['placeholder'] = "Ingresar Contrasena"
         self.fields['password'].widget.attrs['pattern'] = ".{6,}"
         self.fields['usuario'].widget.attrs['title'] = "Ingresar Usuario"
-        self.fields['password'].widget.attrs['title'] = "Ingresar Contrasena"
+        self.fields['password'].widget.attrs['title'] = "Ingresar password"
+
+    def clean_usuario(self):
+        dato = self.cleaned_data['usuario']
+        if Usuario.objects.filter(username=dato).exists():
+            raise ValidationError('Nombre de usuario registrado en el sistema, ingrese otro nombre de usuario')
+        return dato
 
     def save(self, commit=False):
         persona = super(FormularioUsuarioPersona, self).save(commit=False)
         datos = self.cleaned_data
-        persona.usuario = Usuario.objects.create_user(username=datos['usuario'], email=datos['mail'], password=datos['password'],)
-        grupos = {
-            '1': 'director',
-            '2':'administrativo',
-            '3': 'visador',
-            '4': 'inspector',
-            '7': 'jefeinspector',
-            '8': 'cajero'}
-        grupo_post = datos['grupo']
-        grupo=grupos[grupo_post[0]]
-        if grupo:
-            persona.usuario.save()
-            persona.save()
-            usuario = persona.usuario
-            usuario.groups.add(int(grupo_post[0]))
-        return usuario
-
+        try:
+            persona.usuario = Usuario.objects.create_user(username=datos['usuario'], email=datos['mail'], password=datos['password'],)
+            grupos = {
+                '1': 'director',
+                '2':'administrativo',
+                '3': 'visador',
+                '4': 'inspector',
+                '7': 'jefeinspector',
+                '8': 'cajero'}
+            grupo_post = datos['grupo']
+            grupo=grupos[grupo_post[0]]
+            if grupo:
+                persona.usuario.save()
+                persona.save()
+                usuario = persona.usuario
+                usuario.groups.add(int(grupo_post[0]))
+            return usuario
+        except:
+            clean_usuario(self)
+            pass
 
 class FormularioArchivoPago(forms.Form):
 

@@ -4,6 +4,7 @@ Documentos del tramite
 .. image:: _static/profesional/documentosDelTramiteCorrecciones1.png
 .. image:: _static/profesional/documentosDelTramiteCorrecciones2.png
 .. image:: _static/profesional/documentosDelTramiteCorrecciones3.png
+.. image:: _static/profesional/documentosDelTramiteCorrecciones4.pgn
 
 Esta opción permite observar los documentos del tramite, ver las planillas de visado y subir las correcciones.
 

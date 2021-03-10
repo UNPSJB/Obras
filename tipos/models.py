@@ -51,9 +51,14 @@ class TipoDocumento(models.Model):
 
 
 class TipoObra(models.Model):
+    CATEGORIAS = [
+        ('1', '1'),
+        ('2', '2'),
+        ('3', '3'),
+    ]
     nombre = models.CharField(max_length=50)
     descripcion = models.CharField(max_length=100)
-    categorias = models.CharField(max_length=100, blank=True, null=True)
+    categorias = models.CharField(max_length=100, choices=CATEGORIAS)
     activo = models.BooleanField(default=True)
 
     def __str__(self):
