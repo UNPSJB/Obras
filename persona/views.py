@@ -3650,7 +3650,16 @@ def seleccionar_tipoObra_sector(request):
          #   return render(request, 'persona/director/sectores_con_mas_obras.html', contexto)
 
     else:
-        tipos_obras = TipoObra.objects.filter(activo=1)
+        tramObras = Tramite.objects.all()
+        tipos_obras = []
+        list = []
+        for tr in tramObras:
+            for ti in tiposObras:
+                if tr.tipo_obra == ti and ti.activo == 1:
+                    list.append(tr.tipo_obra)
+        for l in list:
+            if l not in tipos_obras:
+                tipos_obras.append(l)
         return render(request, 'persona/director/seleccionar_tipoObra_sector.html', {"tipos_obras": tipos_obras})
 
 def ver_listado_usuarios(request):
