@@ -37,7 +37,7 @@
                                 <br>
                                 <label>Fecha Final </label> <br>
                                 <input type="date" id="fechaFinal" name="fechaFinal" min="1980-03-25"
-                                       max="2025-01-01" step="1">
+                                       max="2025-01-01" step="1" >
                                 <br>
                                 <br>
                                 <div class="row">
@@ -90,8 +90,23 @@ function calendario(){
                 }
             }
         }
-        $("#fechaInicial").attr('max',fecha);
-
+        if ($("#fechaFinal").val()) {
+            tope= $("#fechaFinal").val();
+            $("#fechaInicial").attr('max',tope);
+        }
+        else{
+            $("#fechaInicial").attr('max',fecha);
     }
+}
+
+</script>
+<script>
+$(function() {
+    $("#fechaInicial").on("change",function(){
+        var fecha = $(this).val();
+         $("#fechaFinal").attr('min',fecha);
+    });
+});
+
 </script>
 {% endblock %}

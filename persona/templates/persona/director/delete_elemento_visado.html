@@ -3,33 +3,39 @@
 {% load crispy_forms_tags%}
 
 {% block barra %}
-	<ul class="sidebar sidebar-1">
-		<font size="2">
-			<li><a href="javascript:history.back(-1);" class="current"><font color="white">Director</font></a></li>
-		</font>
-	</ul>
+<ul class="sidebar sidebar-1">
+    <font size="2">
+        <li><a href="javascript:history.back(-1);" class="current"><font color="white">Director</font></a></li>
+    </font>
+</ul>
 {% endblock %}
 
 {% block contenido %}
 <div class="panel">
-		  <h5 class="panel-title">
-			  <font color="#ffffff" size="2">
-                  <form method="POST">
-                    {% csrf_token %}
-                    <h4>¿Desea eliminar el elemento de visado: {{elemento.nombre}} ?</h4>
-                      <br>
-                        <br>
-                    <button class="btn btn-danger" type="submit">Si, eliminar</button>
-                      <a href="javascript:history.back(-1);">
-                        <button type="button" class="btn btn-primary" name="Volver">
-                            Cancelar
-                        </button>
-                </form>
-              </font>
-		  </h5>
-    <br>
-</div>
-     </div>
- </div>
+    <div class="panel-heading box" role="tab" id="headingFive">
+        <h4 class="panel-title">
+            <a class="collapsed" role="button" data-parent="#accordion" href="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+                <font color="#ffffff" size="3"> ¿Desea eliminar el elemento de visado: {{elemento.nombre}} ?</font>
+            </a>
+        </h4>
+    </div>
+    <div id="collapseFive" class="panel-collapse" role="tabpanel" aria-labelledby="headingFive">
+        <div class="panel-body">
+            <div class="row" id="fila1">
+                <div class="container-fluid">
+                    <form method="POST">
+                        {% csrf_token %}
+                        <button class="btn btn-danger" type="submit">Si, eliminar</button>
+                        <a href="javascript:history.back(-1);">
+                            <button type="button" class="btn btn-primary" name="Volver">
+                                Cancelar
+                            </button>
+                        </a>
+                    </form>
+                    <br>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 {% endblock %}

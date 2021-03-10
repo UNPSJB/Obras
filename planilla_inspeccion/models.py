@@ -87,7 +87,7 @@ class DetalleDeItemInspeccion(models.Model):
         ordering = ['item_inspeccion', 'categoria_inspeccion']
 
     def __str__(self):
-        return "{categoria}, {item}".format(categoria=self.categoria_inspeccion.nombre, item=self.item_inspeccion.nombre)
+        return " {nombre}, {categoria}, {item}".format(nombre=self.nombre, categoria=self.categoria_inspeccion.nombre, item=self.item_inspeccion.nombre)
 
  # class DocumentoTecnicoInspeccion(models.Model):
  #    nombre = models.CharField(max_length=100)

@@ -25,9 +25,12 @@ class FormularioDocBalanceSuperficie(forms.ModelForm):
 
     def clean_nombre(self):
         nombre = self.cleaned_data['nombre']
-        cargados = Doc_Balance_Superficie.objects.filter(nombre__icontains=nombre)
-        if cargados.exists():
-            raise ValidationError("Ya existe {}".format(cargados.first().nombre))
+        balance = Doc_Balance_Superficie.objects.filter(nombre=nombre)
+        if balance.exists():
+            for b in balance:
+                if b.activo == 0 and b.nombre == nombre:
+                    return b
+            raise ValidationError("Ya existe {}".format(balance.first().nombre))
         return nombre
 
 class FormularioElementoBalanceSuperficie(forms.ModelForm):
@@ -48,7 +51,7 @@ class FormularioElementoBalanceSuperficie(forms.ModelForm):
 
     def clean_nombre(self):
         nombre = self.cleaned_data['nombre']
-        cargados = Elemento_Balance_Superficie.objects.filter(nombre__icontains=nombre)
+        cargados = Elemento_Balance_Superficie.objects.filter(nombre=nombre)
         if cargados.exists():
             if cargados.exists():
                 for col in cargados:
@@ -73,6 +76,12 @@ class FormularioElementoBalanceSuperficieModificado(forms.ModelForm):
         self.fields['nombre'].widget.attrs['placeholder'] = "Ingresar Nombre"
         self.fields['descripcion'].widget.attrs['placeholder'] = "Ingresar Descripcion"
 
+    def clean_nombre(self):
+        nombre = self.cleaned_data['nombre']
+        cargados = Elemento_Balance_Superficie.objects.filter(nombre=nombre)
+        if cargados.exists():
+                raise ValidationError("Ya existe {}".format(cargados.first().nombre))
+        return nombre
 
 class FormularioColumnaVisado(forms.ModelForm):
     NAME = 'columna_visado_form'
@@ -91,7 +100,7 @@ class FormularioColumnaVisado(forms.ModelForm):
 
     def clean_nombre(self):
         nombre = self.cleaned_data['nombre']
-        cargados = ColumnaDeVisado.objects.filter(nombre__icontains=nombre, activo=True)
+        cargados = ColumnaDeVisado.objects.filter(nombre=nombre)
         if cargados.exists():
             for col in cargados:
                 if nombre == col.nombre and  col.activo == 0:
@@ -114,6 +123,13 @@ class FormularioColumnaVisadoModificada(forms.ModelForm):
         self.helper.add_input(Submit(self.SUBMIT, 'Guardar'))
         self.fields['nombre'].widget.attrs['placeholder'] = "Ingresar Nombre columna"
 
+    def clean_nombre(self):
+        nombre = self.cleaned_data['nombre']
+        cargados = ColumnaDeVisado.objects.filter(nombre=nombre)
+        if cargados.exists():
+            raise ValidationError("Ya existe {}".format(cargados.first().nombre))
+        return nombre
+
 class FormularioFilaVisado(forms.ModelForm):
     NAME = 'fila_visado_form'
     SUBMIT = 'fila_visado_submit'
@@ -131,7 +147,7 @@ class FormularioFilaVisado(forms.ModelForm):
 
     def clean_nombre(self):
         nombre = self.cleaned_data['nombre']
-        cargados = FilaDeVisado.objects.filter(nombre__icontains=nombre, activo=True)
+        cargados = FilaDeVisado.objects.filter(nombre=nombre)
         if cargados.exists():
             for col in cargados:
                 if nombre == col.nombre and col.activo == 0:
@@ -154,6 +170,12 @@ class FormularioFilaVisadoModificada(forms.ModelForm):
         self.helper.add_input(Submit(self.SUBMIT, 'Guardar'))
         self.fields['nombre'].widget.attrs['placeholder'] = "Ingresar Nombre fila"
 
+    def clean_nombre(self):
+        nombre = self.cleaned_data['nombre']
+        cargados = FilaDeVisado.objects.filter(nombre=nombre)
+        if cargados.exists():
+            raise ValidationError("Ya existe {}".format(cargados.first().nombre))
+        return nombre
 
 from django.utils.safestring import mark_safe
 
@@ -234,8 +256,11 @@ class FormularioItemDeVisado(forms.ModelForm):
 
     def clean_nombre(self):
         nombre = self.cleaned_data['nombre']
-        cargados = ItemDeVisado.objects.filter(nombre__icontains=nombre)
-        if cargados.exists():
-            raise ValidationError("Ya existe {}".format(cargados.first().nombre))
+        items = ItemDeVisado.objects.filter(nombre=nombre)
+        if items.exists():
+            for i in items:
+                if i.activo == 0 and i.nombre == nombre:
+                    return i
+            raise ValidationError("Ya existe {}".format(items.first().nombre))
         return nombre
 
