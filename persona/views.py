@@ -2684,12 +2684,17 @@ def edit_tipoObra(request, pk_tipoObra):
     if request.method == 'GET':
         form = FormularioTipoObraModificada(instance=tipoObra)
     else:
-        form = FormularioTipoObraModificada(request.POST, instance=tipoObra)
-        if form.is_valid():
-            form.save()
-            messages.add_message(request, messages.SUCCESS, "Tipo de obra modificada correctamente")
-        else:
-            messages.add_message(request, messages.ERROR, "El tipo de obra no pudo ser modificada (nombre existente)")
+        try:
+            form = FormularioTipoObraModificada(request.POST, instance=tipoObra)
+            
+            if form.is_valid():
+                form.save()
+                messages.add_message(request, messages.SUCCESS, "Tipo de obra modificada correctamente")
+            else:
+                messages.add_message(request, messages.ERROR, "El tipo de obra no pudo ser modificada, ya existe un tipo de obra con ese nombre")
+
+        except:
+                messages.add_message(request, messages.ERROR, "El tipo de obra no pudo ser modificada, ya existe un tipo de obra con ese nombre")
         return redirect('director')
     return render(request, 'persona/director/edit_tipoObra.html', {'form':form})
 

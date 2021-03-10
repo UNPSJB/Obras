@@ -25,7 +25,7 @@ class FormularioDocBalanceSuperficie(forms.ModelForm):
 
     def clean_nombre(self):
         nombre = self.cleaned_data['nombre']
-        balance = Doc_Balance_Superficie.objects.filter(nombre=nombre)
+        balance = Doc_Balance_Superficie.objects.filter(nombre__iexact=nombre)
         if balance.exists():
             for b in balance:
                 if b.activo == 0 and b.nombre == nombre:
@@ -51,7 +51,7 @@ class FormularioElementoBalanceSuperficie(forms.ModelForm):
 
     def clean_nombre(self):
         nombre = self.cleaned_data['nombre']
-        cargados = Elemento_Balance_Superficie.objects.filter(nombre=nombre)
+        cargados = Elemento_Balance_Superficie.objects.filter(nombre__iexact=nombre)
         if cargados.exists():
             if cargados.exists():
                 for col in cargados:
@@ -78,7 +78,7 @@ class FormularioElementoBalanceSuperficieModificado(forms.ModelForm):
 
     def clean_nombre(self):
         nombre = self.cleaned_data['nombre']
-        cargados = Elemento_Balance_Superficie.objects.filter(nombre=nombre)
+        cargados = Elemento_Balance_Superficie.objects.filter(nombre__iexact=nombre)
         if cargados.exists():
                 raise ValidationError("Ya existe {}".format(cargados.first().nombre))
         return nombre
@@ -100,10 +100,10 @@ class FormularioColumnaVisado(forms.ModelForm):
 
     def clean_nombre(self):
         nombre = self.cleaned_data['nombre']
-        cargados = ColumnaDeVisado.objects.filter(nombre=nombre)
+        cargados = ColumnaDeVisado.objects.filter(nombre__iexact=nombre)
         if cargados.exists():
             for col in cargados:
-                if nombre == col.nombre and  col.activo == 0:
+                if nombre== col.nombre and  col.activo == 0:
                     return col
             raise ValidationError("Ya existe {}".format(cargados.first().nombre))
         return nombre
@@ -125,7 +125,7 @@ class FormularioColumnaVisadoModificada(forms.ModelForm):
 
     def clean_nombre(self):
         nombre = self.cleaned_data['nombre']
-        cargados = ColumnaDeVisado.objects.filter(nombre=nombre)
+        cargados = ColumnaDeVisado.objects.filter(nombre__iexact=nombre)
         if cargados.exists():
             raise ValidationError("Ya existe {}".format(cargados.first().nombre))
         return nombre
@@ -147,7 +147,7 @@ class FormularioFilaVisado(forms.ModelForm):
 
     def clean_nombre(self):
         nombre = self.cleaned_data['nombre']
-        cargados = FilaDeVisado.objects.filter(nombre=nombre)
+        cargados = FilaDeVisado.objects.filter(nombre__iexact=nombre)
         if cargados.exists():
             for col in cargados:
                 if nombre == col.nombre and col.activo == 0:
@@ -172,7 +172,7 @@ class FormularioFilaVisadoModificada(forms.ModelForm):
 
     def clean_nombre(self):
         nombre = self.cleaned_data['nombre']
-        cargados = FilaDeVisado.objects.filter(nombre=nombre)
+        cargados = FilaDeVisado.objects.filter(nombre__iexact=nombre)
         if cargados.exists():
             raise ValidationError("Ya existe {}".format(cargados.first().nombre))
         return nombre
@@ -256,7 +256,7 @@ class FormularioItemDeVisado(forms.ModelForm):
 
     def clean_nombre(self):
         nombre = self.cleaned_data['nombre']
-        items = ItemDeVisado.objects.filter(nombre=nombre)
+        items = ItemDeVisado.objects.filter(nombre__iexact=nombre)
         if items.exists():
             for i in items:
                 if i.activo == 0 and i.nombre == nombre:

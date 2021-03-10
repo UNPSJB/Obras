@@ -36,9 +36,12 @@ class FormularioTipoDocumento(forms.ModelForm):
 
     def clean_nombre(self):
         nombre = self.cleaned_data['nombre']
-        cargados = TipoDocumento.objects.filter(nombre__icontains=nombre)
+        cargados = TipoDocumento.objects.filter(nombre__iexact=nombre)
         if cargados.exists():
-            raise ValidationError("Ya existe {}".format(cargados.first().nombre))
+             for t in cargados:
+                if nombre == t.nombre and t.activo == 0:
+                    return t
+             raise ValidationError("Ya existe {}".format(cargados.first().nombre))
         return nombre
 
 class FormularioTipoObra(forms.ModelForm):
@@ -65,11 +68,11 @@ class FormularioTipoObra(forms.ModelForm):
 
     def clean_nombre(self):
         nombre = self.cleaned_data['nombre']
-        cargados = TipoObra.objects.filter(nombre__icontains=nombre)
+        cargados = TipoObra.objects.filter(nombre__iexact=nombre)
         if cargados.exists():
             for i in cargados:
                 if nombre == i.nombre and i.activo == 0:
-                    return nombre
+                    return i
             raise ValidationError("Ya existe {}".format(cargados.first().nombre))
         return nombre
 
@@ -93,11 +96,11 @@ class FormularioTipoPago(forms.ModelForm):
 
     def clean_nombre(self):
         tipoPago = self.cleaned_data['nombre']
-        cargados = Tipo_Pago.objects.filter(nombre__icontains=tipoPago)
+        cargados = Tipo_Pago.objects.filter(nombre__iexact=tipoPago)
         if cargados.exists():
               for i in cargados:
                    if tipoPago == i.nombre and i.activo == 0:
-                       return tipoPago
+                       return i
               raise ValidationError("Ya existe {}".format(cargados.first().nombre))
         return tipoPago
 
@@ -123,6 +126,15 @@ class FormularioTipoObraModificada(forms.ModelForm):
             raise ValidationError("Seleccione un tipo de Obra")
         return tipoObra
 
+    def clean_nombre(self):
+        nombre = self.cleaned_data['nombre']
+        cargados = TipoObra.objects.filter(nombre__iexact=nombre)
+        if cargados.exists():
+            for i in cargados:
+                if nombre == i.nombre:
+                    raise ValidationError("Ya existe {}".format(cargados.first().nombre))
+        return nombre
+
 class FormularioTipoPagoModificado(forms.ModelForm):
     NAME = 'tipo_pago_form'
     SUBMIT = 'tipo_de_pago_submit'
@@ -139,3 +151,11 @@ class FormularioTipoPagoModificado(forms.ModelForm):
         self.helper.add_input(Submit(self.SUBMIT, 'Guardar'))
         self.fields['nombre'].widget.attrs['placeholder'] = "Ingresar Nombre"
 
+    def clean_nombre(self):
+        tipoPago = self.cleaned_data['nombre']
+        cargados = Tipo_Pago.objects.filter(nombre__iexact=tipoPago)
+        if cargados.exists():
+            for t in cargados:
+                if tipoPago == t.nombre:
+                    raise ValidationError("Ya existe {}".format(cargados.first().nombre))
+        return tipoPago

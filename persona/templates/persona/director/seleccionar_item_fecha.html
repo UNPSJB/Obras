@@ -47,7 +47,7 @@
                                 <input name="guardar_financiacion" type="hidden">
                                 <div id="div_id_item" class="form-group">
                                     <div class="controls ">
-                                        <select name="item"  placeholder="Ingresar el Item"
+                                        <select name="item" onchange="maxAllowedMultiselect(this, 8);"  placeholder="Ingresar el Item"
                                                 class="form-control multiple input-sm" id="id_item"  required multiple>
                                             <!--<option value="" selected="#">--------</option>-->
                                             {%for c in categorias%}
@@ -89,15 +89,24 @@
             </div>
         </div>
     </div>
-
-{% endblock %}
-{% block script%}
 <script>
-    $("#item").click(function() {
-    if ($("#item:selected").length > 3) {
-        $(this).removeAttr("selected");
-        alert('You can select upto 3 options only');
-    }
-});
+
+
+ function maxAllowedMultiselect(obj, maxAllowedCount) {
+            var selectedOptions = jQuery('#'+obj.id+" option[value!=\'\']:selected");
+            if (selectedOptions.length >= maxAllowedCount) {
+                if (selectedOptions.length > maxAllowedCount) {
+                    selectedOptions.each(function(i) {
+                        if (i >= maxAllowedCount) {
+                            jQuery(this).prop("selected",false);
+                        }
+                    });
+                }
+                jQuery('#'+obj.id+' option[value!=\'\']').not(':selected').prop("disabled",true);
+            } else {
+                jQuery('#'+obj.id+' option[value!=\'\']').prop("disabled",false);
+            }
+        }
+
 </script>
 {% endblock %}

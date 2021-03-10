@@ -24,7 +24,7 @@ class FormularioCategoriaInspeccion(forms.ModelForm):
 
     def clean_nombre(self):
         nombre = self.cleaned_data['nombre']
-        categorias = CategoriaInspeccion.objects.filter(nombre=nombre)
+        categorias = CategoriaInspeccion.objects.filter(nombre__iexact=nombre)
         if categorias.exists():
             for c in categorias:
                 if c.nombre == nombre and c.activo == 0:
@@ -51,7 +51,7 @@ class FormularioCategoriaInspeccionModificada(forms.ModelForm):
 
     def clean_nombre(self):
         nombre = self.cleaned_data['nombre']
-        categorias = CategoriaInspeccion.objects.filter(nombre=nombre)
+        categorias = CategoriaInspeccion.objects.filter(nombre__iexact=nombre)
         if categorias.exists():
             raise ValidationError("Ya existe {}".format(categorias.first().nombre))
         return nombre
@@ -73,7 +73,7 @@ class FormularioItemInspeccion(forms.ModelForm):
 
     def clean_nombre(self):
         nombre = self.cleaned_data['nombre']
-        items = ItemInspeccion.objects.filter(nombre=nombre)
+        items = ItemInspeccion.objects.filter(nombre__iexact=nombre)
         if items.exists():
             for i in items:
                 if i.nombre == nombre and i.activo == 0:
@@ -98,7 +98,7 @@ class FormularioItemInspeccionModificado(forms.ModelForm):
 
     def clean_nombre(self):
         nombre = self.cleaned_data['nombre']
-        items = ItemInspeccion.objects.filter(nombre=nombre)
+        items = ItemInspeccion.objects.filter(nombre__iexact=nombre)
         if items.exists():
             raise ValidationError("Ya existe {}".format(items.first().nombre))
         return nombre
@@ -124,7 +124,7 @@ class FormularioDetalleItem(forms.ModelForm):
         nombre = self.cleaned_data['nombre']
         categoria = self.cleaned_data['categoria_inspeccion']
         item=self.cleaned_data['item_inspeccion']
-        detalles = DetalleDeItemInspeccion.objects.filter(nombre=nombre, categoria_inspeccion = categoria,item_inspeccion=item)
+        detalles = DetalleDeItemInspeccion.objects.filter(nombre__iexact=nombre, categoria_inspeccion = categoria,item_inspeccion=item)
         if detalles.exists():
             for d in detalles:
                 if d.nombre == nombre and d.activo == 0:
@@ -153,7 +153,7 @@ class FormularioDetalleItemModificado(forms.ModelForm):
         nombre = self.cleaned_data['nombre']
         categoria = self.cleaned_data['categoria_inspeccion']
         item = self.cleaned_data['item_inspeccion']
-        detalles = DetalleDeItemInspeccion.objects.filter(nombre=nombre, categoria_inspeccion=categoria, item_inspeccion=item)
+        detalles = DetalleDeItemInspeccion.objects.filter(nombre__iexact=nombre, categoria_inspeccion=categoria, item_inspeccion=item)
         print(nombre)
         print(detalles)
         print(categoria)
