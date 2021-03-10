@@ -2568,40 +2568,46 @@ def mostrar_director(request):
                 resultado=_form.save(commit=False)
                 try:
                     if isinstance(resultado,ColumnaDeVisado):
-                            columna=ColumnaDeVisado.objects.get(nombre=resultado.nombre)
-                            columna.activo=1
-                            columna.save()
+                                columna=ColumnaDeVisado.objects.get(nombre=resultado.nombre)
+                                columna.activo=1
+                                columna.save()
                     elif isinstance(resultado,FilaDeVisado):
-                            fila=FilaDeVisado.objects.get(nombre=resultado.nombre)
-                            fila.activo=1
-                            fila.save()
+                                fila=FilaDeVisado.objects.get(nombre=resultado.nombre)
+                                fila.activo=1
+                                fila.save()
                     elif isinstance(resultado,Tipo_Pago):
-                            tipoPago=Tipo_Pago.objects.get(nombre=resultado.nombre)
-                            tipoPago.activo=1
-                            tipoPago.save()
+                                tipoPago=Tipo_Pago.objects.get(nombre=resultado.nombre)
+                                tipoPago.activo=1
+                                tipoPago.save()
                     elif isinstance(resultado,Elemento_Balance_Superficie):#elemento de visado
-                            elemento=Elemento_Balance_Superficie.objects.get(nombre=resultado.nombre)
-                            elemento.activo=1
-                            elemento.descripcion=resultado.descripcion
-                            elemento.save()
+                                elemento=Elemento_Balance_Superficie.objects.get(nombre=resultado.nombre)
+                                elemento.activo=1
+                                elemento.descripcion=resultado.descripcion
+                                elemento.save()
                     elif isinstance(resultado, TipoObra):
-                            tipoObra = TipoObra.objects.get(nombre=resultado.nombre)
-                            tipoObra.activo = 1
-                            tipoObra.descripcion=resultado.descripcion
-                            tipoObra.categorias=resultado.categorias
-                            tipoObra.save()
+                                tipoObra = TipoObra.objects.get(nombre=resultado.nombre)
+                                tipoObra.activo = 1
+                                tipoObra.descripcion=resultado.descripcion
+                                tipoObra.categorias=resultado.categorias
+                                tipoObra.save()
                     elif isinstance(resultado, CategoriaInspeccion):
-                            categoria = CategoriaInspeccion.objects.get(nombre=resultado.nombre)
-                            categoria.activo = 1
-                            categoria.save()
+                                categoria = CategoriaInspeccion.objects.get(nombre=resultado.nombre)
+                                categoria.activo = 1
+                                categoria.save()
+                                items= DetalleDeItemInspeccion.objects.filter(categoria_inspeccion=categoria).update(activo=1)
+
                     elif isinstance(resultado, ItemInspeccion):
-                            item = ItemInspeccion.objects.get(nombre=resultado.nombre)
-                            item.activo = 1
-                            item.save()
+                                item = ItemInspeccion.objects.get(nombre=resultado.nombre)
+                                item.activo = 1
+                                item.save()
+                                items= DetalleDeItemInspeccion.objects.filter(item_inspeccion=item).update(activo=1)
+
                     elif isinstance(resultado, DetalleDeItemInspeccion):
-                            detalle = DetalleDeItemInspeccion.objects.get(nombre=resultado.nombre)
-                            detalle.activo = 1
-                            detalle.save()
+                                nombre=re.search(re.escape('<DetalleDeItemInspeccion:   ') + "(.*)" + re.escape(','), repr(resultado)).group(1).split(',')
+                                nombre=nombre[0]
+                                detalle = DetalleDeItemInspeccion.objects.get(nombre=nombre,categoria_inspeccion=resultado.categoria_inspeccion, item_inspeccion=resultado.item_inspeccion)
+                                detalle.activo = 1
+                                detalle.save()
                     else:
                          _form.save()
                 except:
@@ -2791,7 +2797,7 @@ def edit_item_inspeccion(request, pk_item):
             form.save()
             messages.add_message(request, messages.SUCCESS, "El item de inspeccion fue modificado correctamente")
         else:
-            messages.add_message(request, messages.ERROR, "El item de inspeccion no pudo ser modificado (nombre existente)")
+            messages.add_message(request, messages.ERROR, "El item de inspeccion no pudo ser modificado, ya existe un item con ese nombre")
         return redirect('director')
     return render(request, "persona/director/edit_item_inspeccion.html", {'form':form})
 
@@ -2855,7 +2861,7 @@ def edit_detalle_inspeccion(request, pk_detalle):
             form.save()
             messages.add_message(request, messages.SUCCESS, "El detalle de inspeccion fue modificado correctamente")
         else:
-            messages.add_message(request, messages.ERROR, "El detalle de inspeccion no pudo ser modificado (nombre existente)")
+            messages.add_message(request, messages.ERROR, "El detalle de inspeccion no pudo ser modificado, ya existe un detalle con ese nombre")
         return redirect('director')
     return render(request, "persona/director/edit_detalle_inspeccion.html", {'form':form})
 

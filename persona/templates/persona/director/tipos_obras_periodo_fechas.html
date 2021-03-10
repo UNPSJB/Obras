@@ -32,43 +32,11 @@
                     <hr style="border-width:">
                     <br>
                     <div class="row">
-{%if grafico %}
-<img src="data:image/png;base64,{{grafico}}" width="800px" height="400px">
-{%else%}
-<h4>No hay datos para mostrar</h4>
-{%endif%}
-
-                        <style>
-
-	.leyendaH {text-align:center;}
-
-	.leyenda  ul {list-style-type:none;padding:0 10px;}
-
-	.leyendaH ul {display:inline-block;}
-
-	.leyenda  ul>li {font-size:14px;}
-
-	.leyendaH ul>li {float:left;margin-right:10px;}
-
-	.leyenda  ul>li>span {width:12px;height:12px;display:inline-block;margin-right:3px;}
-
-
-
-                        </style>
-
-
-                        <!-- <div class="col-xs-4 col-sm-4 col-md-12 col-lg-12" style="float: right; width: 70%;">
-                         <form>
-                             <canvas id="canvas1"></canvas>
-                         </form>
-                         <div class="col-xs-4 col-sm-4 col-md-12 col-lg-12" style="float: right; width: 55%;">
-                             <form>
-                                <h2>Referencias</h2>
-                                 <div id="leyenda1" class="leyenda"></div>
-                             </form>
-                         </div>
-                         </div>
-                     -->
+                        {%if grafico %}
+                        <img src="data:image/png;base64,{{grafico}}" width="800px" height="400px">
+                        {%else%}
+                        <h4>No hay datos para mostrar</h4>
+                        {%endif%}
 
                     </div>
                     <div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
@@ -102,271 +70,7 @@
         </div>
     </div>
 
-
-                        <script>
-
-    /**
-
-    * Clase para generar graficos de pastel
-
-    * Tiene que recibir:
-
-    *	el id del canvas
-
-    *	la anchura y altura del canvas
-
-    *	un array con los valores a mostrar del tipo:
-
-    *		var valores={
-
-    *			"Access":	{valor:10,color:"blue"},
-
-    *			"PHP":		{valor:23,color:"red"},
-
-    *			"Python":	{valor:18,color:"green"},
-
-    *			".NET":		{valor:12,color:"Orange"},
-
-    *			"C++":		{valor:30,color:"Cyan"}
-
-    *		}
-
-    */
-
-    var miPastel=function(canvasId,width,height,valores) {
-
-        this.canvas=document.getElementById(canvasId);;
-
-        this.canvas.width=width;
-
-        this.canvas.height=height;
-
-        this.radio=Math.min(this.canvas.width/2,this.canvas.height/2)
-
-        this.context=this.canvas.getContext("2d");
-
-        this.valores=valores;
-
-        this.tamanoDonut=0;
-
-
-        /**
-
-        * Dibuja un gráfico de pastel
-
-        */
-
-        this.dibujar=function() {
-
-            this.total=this.getTotal();
-
-            var valor=0;
-
-            var inicioAngulo=0;
-
-            var angulo=0;
-
-
-
-            // creamos los quesos del pastel
-
-            for(var i in this.valores)
-
-            {
-
-                valor=valores[i]["valor"];
-
-                color=valores[i]["color"];
-
-                angulo=2*Math.PI*valor/this.total;
-
-                this.context.fillStyle=color;
-
-                this.context.beginPath();
-
-                this.context.moveTo(this.canvas.width/2, this.canvas.height/2);
-
-                this.context.arc(this.canvas.width/2, this.canvas.height/2, this.radio, inicioAngulo, (inicioAngulo+angulo));
-
-                this.context.closePath();
-
-                this.context.fill();
-
-                inicioAngulo+=angulo;
-
-            }
-
-        }
-
-        /**
-
-        * Pone el tanto por ciento de cada uno de los valores
-
-        * Tiene que recibir:
-
-        *	el color del texto
-
-        */
-
-        this.ponerPorCiento=function(color){
-
-            var valor=0;
-
-            var etiquetaX=0;
-
-            var etiquetaY=0;
-
-            var inicioAngulo=0;
-
-            var angulo=0;
-
-            var texto="";
-
-            var incrementar=0;
-
-
-
-            // si hemos dibujado un donut, tenemos que incrementar el valor del radio
-
-            // para que quede centrado
-
-            if(this.tamanoDonut)
-
-                incrementar=(this.radio*this.tamanoDonut)/2;
-
-            this.context.font="bold 12pt Calibri";
-
-            this.context.fillStyle=color;
-
-            for(var i in this.valores)
-
-            {
-
-                valor=valores[i]["valor"];
-
-                angulo=2*Math.PI*valor/this.total;
-
-                // calculamos la posición del texto
-
-                etiquetaX=this.canvas.width/2+(incrementar+this.radio/2)*Math.cos(inicioAngulo+angulo/2);
-
-                etiquetaY=this.canvas.height/2+(incrementar+this.radio/2)*Math.sin(inicioAngulo+angulo/2);
-
-
-                texto=Math.round(100*valor/this.total);
-
-
-
-                // movemos la posición unos pixels si estamos en la parte izquierda
-
-                // del pastel para que quede mas centrado
-
-                if(etiquetaX<this.canvas.width/2)
-
-                    etiquetaX-=10;
-
-
-                // ponemos los valores
-
-                this.context.beginPath();
-
-                this.context.fillText(texto+"%", etiquetaX, etiquetaY);
-
-                this.context.stroke();
-
-                inicioAngulo+=angulo;
-
-            }
-
-        }
-
-
-
-        /**
-
-        * Function que devuelve la suma del total de los valores recibidos en el array
-
-        */
-
-        this.getTotal=function() {
-
-            var total=0;
-
-            for(var i in this.valores)
-
-            {
-                total+=valores[i]["valor"];
-            }
-
-            return total;
-
-        }
-
-
-
-        /**
-
-        * Función que devuelve una lista (<ul><li>) con la leyenda
-
-        * Tiene que recibir el id donde poner la leyenda
-
-        */
-
-        this.ponerLeyenda=function(leyendaId) {
-
-            var codigoHTML="<ul class='leyenda'>";
-
-            for(var i in this.valores)
-
-            {
-
-                codigoHTML+="<li>"+i+"<span style='background-color:"+valores[i]["color"]+"'></span></li>";
-
-            }
-
-            codigoHTML+="</ul>";
-
-            document.getElementById(leyendaId).innerHTML=codigoHTML;
-
-        }
-
-    }
-
-
-
-    // definimos los valores de nuestra gráfica
-    function getRandomColor() {
-        var letters = '0123456789ABCDEF';
-        var color = '#';
-        for (var i = 0; i < 3; i++) {
-            color += letters[Math.floor(Math.random() * 6)];
-        }
-  	    return color;
-    }
-
-    var valores={
-        {% for name,value in tipos_obras %}
-            {% if value != 0 %}
-                "{{name}}":{valor:{{ value }},color:getRandomColor()},
-            {% endif %}
-        {% endfor %}
-    }
-
-    // generamos el primer pastel
-
-    var pastel=new miPastel("canvas1",300,300,valores);
-
-    pastel.dibujar();
-
-    pastel.ponerPorCiento("white");
-
-    pastel.ponerLeyenda("leyenda1");
-
-
-
-                        </script>
-
- <div class="container-fluid " id="botones_director">
+    <div class="container-fluid " id="botones_director">
         <div class="row">
             <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12 text-center">
                 <button type="button" class="btn btn-primary btn-md" onclick="printDiv('printReady')">Imprimir</button>
@@ -378,7 +82,7 @@
     </div>
     <br>
 </div>
-                        <style>
+<style>
         body{
             background:radial-gradient(circle at 1.98% 14.97%,#6699CC, transparent 100%),
             radial-gradient(circle at 98.02% 52.96%, #66CCFF, transparent 100%),
@@ -397,53 +101,6 @@
 
                         </style>
 
-                        <script language="JavaScript">
-
-    var gAutoPrint = true; // Flag for whether or not to automatically call the print function
-    function printSpecial()
-    {
-        if (document.getElementById != null)
-        {
-            var html = '<HTML>\n<HEAD>\n';
-
-            if (document.getElementsByTagName != null)
-            {
-                var headTags = document.getElementsByTagName("head");
-                if (headTags.length > 0)
-                    html += headTags[0].innerHTML;
-            }
-
-            html += '\n</HE' + 'AD>\n<BODY>\n';
-
-            var printReadyElem = document.getElementById("printReady");
-
-            if (printReadyElem != null)
-            {
-                    html += printReadyElem.innerHTML;
-            }
-            else
-            {
-                alert("Could not find the printReady section in the HTML");
-                return;
-            }
-
-            html += '\n</BO' + 'DY>\n</HT' + 'ML>';
-
-            var printWin = window.open("","printSpecial");
-            printWin.document.open();
-            printWin.document.write(html);
-            printWin.document.close();
-            if (gAutoPrint)
-                printWin.print();
-        }
-        else
-        {
-            alert("Sorry, the print ready feature is only available in modern browsers.");
-        }
-    }
-
-
-                        </script>
 <script>
     function printDiv(div) {
     // Create and insert new print section
@@ -467,4 +124,4 @@
 }
 
 </script>
-                        {%endblock%}
+{%endblock%}
