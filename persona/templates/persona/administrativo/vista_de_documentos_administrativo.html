@@ -97,9 +97,9 @@
                             </a>
                             <script>
                             function prueba(){
-                                obs = $("#id_observaciones").val();
-                                id_tramite = $("#id_tramite").val();
-                                url = '/persona/rechazar_tramite/'+id_tramite+'/?msg='+obs;
+                              //  obs = $("#id_observaciones").val();
+                                var id_tramite = {{tramite.id}};
+                                url = '/persona/rechazar_tramite/'+id_tramite+'/?msg='+"dsdsds";
                                 location.href = url;
                             }
                         </script>
