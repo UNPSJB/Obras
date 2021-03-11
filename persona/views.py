@@ -2182,7 +2182,7 @@ def cargar_inspeccion(request, pk_tramite):
                     ipk=name.split('-')[1]
                     detalle = DetalleDeItemInspeccion.objects.get(id=ipk)
                     list_detalles.append(detalle)
-            if len(list_detalles)<2 and numeroPlanilla==0:
+            if len(list_detalles)<2 :
                 messages.add_message(request, messages.ERROR, "Para realizar la inspeccion debe ingresar 2 o mas items de inspeccion")
             else:
                 planilla = PlanillaDeInspeccion()
@@ -2428,28 +2428,32 @@ def inspeccion_final(request,pk_tramite):
 def completar_inspeccion_final(request,pk_tramite):
     if "Guardar" in request.POST:
         tramite = get_object_or_404(Tramite, pk=pk_tramite)
-        planilla = PlanillaDeInspeccion()
-        planilla.tramite = tramite
-        planilla.save()
         list_detalles=[]
         for name,value in request.POST.items():
             if name.startswith('detalle'):
                 ipk=name.split('-')[1]
                 list_detalles.append(ipk)
-        detalles = DetalleDeItemInspeccion.objects.all()
-        for detalle in detalles:
-            for i in list_detalles:
-                if (detalle.id == int(i)):
-                    planilla.agregar_detalle(detalle)
-        planilla.save()
-        u = request.user
-        try:
-            tramite.hacer(Tramite.INSPECCIONAR, usuario=u)#ConInspeccion->Inspeccionado
-            tramite.hacer(Tramite.INSPECCIONAR, usuario=u)  # ConInspeccion->Inspeccionado
-            tramite.save()
-            messages.add_message(request, messages.SUCCESS, 'Inspeccion Finalizada')
-        except:
-            messages.add_message(request, messages.WARNING, "La inspeccion ya fue cargada")
+        if len(list_detalles) < 2:
+            messages.add_message(request, messages.ERROR,
+                                 "Para realizar la inspeccion debe ingresar 2 o mas items de inspeccion")
+        else:
+            planilla = PlanillaDeInspeccion()
+            planilla.tramite = tramite
+            planilla.save()
+            detalles = DetalleDeItemInspeccion.objects.all()
+            for detalle in detalles:
+                for i in list_detalles:
+                    if (detalle.id == int(i)):
+                        planilla.agregar_detalle(detalle)
+            planilla.save()
+            u = request.user
+            try:
+                tramite.hacer(Tramite.INSPECCIONAR, usuario=u)#ConInspeccion->Inspeccionado
+                tramite.hacer(Tramite.INSPECCIONAR, usuario=u)  # ConInspeccion->Inspeccionado
+                tramite.save()
+                messages.add_message(request, messages.SUCCESS, 'Inspeccion Finalizada')
+            except:
+                messages.add_message(request, messages.WARNING, "La inspeccion ya fue cargada")
     return redirect('jefeinspector')
 
 def aceptar_inspeccion_final(request,pk_tramite):
