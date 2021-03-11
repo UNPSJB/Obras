@@ -109,7 +109,7 @@ def propietario_solicita_final_obra(request, pk_tramite):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
     try:
         if tramite.estados.filter(tipo=8):
-            messages.add_message(request, messages.WARNING,"El final de obra ya fue otorgado anteriormente")
+            messages.add_message(request, messages.WARNING,"La solicitud de final de obra ya fue otorgada anteriormente")
         else:
             tramite.hacer(Tramite.SOLICITAR_FINAL_OBRA, request.user)
             messages.add_message(request, messages.SUCCESS, 'final de obra solicitado.')
@@ -609,7 +609,7 @@ def profesional_solicita_final_obra(request, pk_tramite):
     tramite = get_object_or_404(Tramite, pk=pk_tramite)
     try:
         if tramite.estados.filter(tipo=8):
-            messages.add_message(request, messages.WARNING, "El final de obra ya fue otorgado anteriormente")
+            messages.add_message(request, messages.WARNING, "La solicitud de final de obra ya fue otorgada anteriormente")
         else:
             tramite.hacer(Tramite.SOLICITAR_FINAL_OBRA, request.user)
             messages.add_message(request, messages.SUCCESS, 'final de obra solicitado.')

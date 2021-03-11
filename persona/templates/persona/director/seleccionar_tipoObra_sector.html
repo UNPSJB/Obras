@@ -49,11 +49,13 @@
                                     <div class="controls ">
                                     <select name="obra" placeholder="Ingresar el Item"  class="form-control input-sm" id="id_item1" required>
                                         <option value="" selected="#">---------</option>
-                                        {%for obra in tipos_obras%}
+                                        {% for obra in tipos_obras %}
+                                        {% if obra %}
                                         {% if obra.activo == True %}
                                         <option value="{{obra.pk}}">{{obra.nombre}}</option>
                                         {% endif %}
-                                        {%endfor%}
+                                        {% endif %}
+                                        {% endfor %}
                                     </select>
                                 </div>
                                      <br>

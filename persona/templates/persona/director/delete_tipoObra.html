@@ -24,6 +24,7 @@
         <div class="panel-body">
             <div class="row" id="fila1">
                 <div class="container-fluid">
+                    <form method="POST">
                     {% csrf_token %}
                     <button class="btn btn-danger" type="submit">Si, eliminar</button>
                     <a href="javascript:history.back(-1);">
