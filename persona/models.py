@@ -38,7 +38,7 @@ class Propietario(Rol):
         try:
             return str(self.persona)
         except:
-            return "PONEME UNA PERSONA.... ANIMAL"
+            return "Ingrese una persona"
 
     def obtener_persona(self):
         return Persona.get_self().nombre
@@ -84,7 +84,7 @@ class Persona(models.Model):
         aux_usuario = None
         if self.usuario is None:
             password = generar_password()
-            aux_usuario = Usuario.objects.create_user(username=self.mail, email=self.mail, password=password)
+            aux_usuario = Usuario.objects.create_user(username=self.mail, email=self.mail, password=password, first_name=self.nombre, last_name=self.apellido)
             created = True
         self.usuario = aux_usuario
         if self.profesional is not None:
