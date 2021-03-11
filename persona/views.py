@@ -2662,7 +2662,7 @@ def editar_tipoPago(request, pk_tipoPago):
             form.save()
             messages.add_message(request, messages.SUCCESS, "Tipo de pago modificado correctamente")
         else:
-            messages.add_message(request, messages.ERROR, "El tipo de pago no pudo ser modificado (nombre existente)")
+            messages.add_message(request, messages.ERROR, "El tipo de pago no pudo ser modificado, ya existe un tipo de pago con ese nombre")
         return redirect('director')
     return render(request, 'persona/director/editar_tipoPago.html', {'form':form})
 
@@ -2721,7 +2721,7 @@ def edit_fila_visado(request, pk_fila):
             form.save()
             messages.add_message(request, messages.SUCCESS, "La fila de visado fue modificada correctamente")
         else:
-            messages.add_message(request, messages.ERROR, "La fila de visado no pudo ser modificada (nombre existente)")
+            messages.add_message(request, messages.ERROR, "La fila de visado no pudo ser modificada, ya existe una fila con ese nombre")
         return redirect('director')
     return render(request, "persona/director/edit_fila_visado.html", {'form':form})
 
@@ -2748,7 +2748,7 @@ def edit_columna_visado(request, pk_columna):
             form.save()
             messages.add_message(request, messages.SUCCESS, "La columna de visado fue modificada correctamente")
         else:
-            messages.add_message(request, messages.ERROR, "La columna de visado no pudo ser modificada (nombre existente)")
+            messages.add_message(request, messages.ERROR, "La columna de visado no pudo ser modificada, ya existe una columna con ese nombre")
         return redirect('director')
     return render(request, "persona/director/edit_columna_visado.html", {'form':form})
 
@@ -2775,7 +2775,7 @@ def edit_elemento_visado(request, pk_elemento):
             form.save()
             messages.add_message(request, messages.SUCCESS, "El elemento de visado fue modificado correctamente")
         else:
-            messages.add_message(request, messages.ERROR, "El elemento de visado no pudo ser modificado (nombre existente)")
+            messages.add_message(request, messages.ERROR, "El elemento de visado no pudo ser modificado, ya existe un elemento con ese nombre")
         return redirect('director')
     return render(request, "persona/director/edit_elemento_visado.html", {'form':form})
 
@@ -2834,7 +2834,7 @@ def edit_categoria_inspeccion(request, pk_categoria):
             form.save()
             messages.add_message(request, messages.SUCCESS, "La categoria de inspeccion fue modificada correctamente")
         else:
-            messages.add_message(request, messages.ERROR, "La categoria de inspeccion no pudo ser modificada (nombre existente)")
+            messages.add_message(request, messages.ERROR, "La categoria de inspeccion no pudo ser modificada, ya existe una categoria con ese nombre")
         return redirect('director')
     return render(request, "persona/director/edit_categoria_inspeccion.html", {'form':form})
 
@@ -3656,15 +3656,8 @@ def seleccionar_tipoObra_sector(request):
 
     else:
         tramObras = Tramite.objects.all()
-        tipos_obras = []
-        list = []
-        for tr in tramObras:
-            for ti in tiposObras:
-                if tr.tipo_obra == ti and ti.activo == 1:
-                    list.append(tr.tipo_obra)
-        for l in list:
-            if l not in tipos_obras:
-                tipos_obras.append(l)
+        tramites = Tramite.objects.all().values_list('tipo_obra_id', flat="True").distinct()
+        tipos_obras = TipoObra.objects.filter(id__in=tramites)
         return render(request, 'persona/director/seleccionar_tipoObra_sector.html', {"tipos_obras": tipos_obras})
 
 def ver_listado_usuarios(request):
